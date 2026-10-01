@@ -1,6 +1,20 @@
 # Esito del collaudo locale dei riassunti — 2026-10-01
 
-## Verifica successiva nel browser: selezione delle fonti non superata
+## Verifica del percorso nel browser superata
+
+Dopo l'installazione di update_retrieval.py dal commit fbc7dd36ca4fdcf0697398935c84135edeead23f (cinque file fissati al commit sorgente e540a871c2f42d0a8d3a47e573fd18e9dd96eb47), l'installazione e il riavvio sul Mac sono riusciti.
+
+Ripetendo la stessa domanda naturale, la nota KPI nominata è ora il primo risultato: 320 risultati, 364 note controllate, 3304 ms. La risposta riporta letteralmente il campo richiesto, cita N1 e mostra la fonte attiva con le righe originali. Il testo corrisponde all'estratto aggiornato; non aggiunge vendite, royalty o informazioni dalle trascrizioni. È il percorso dei campi espliciti, senza sintesi generativa. Non sono stati consultati sistemi esterni.
+
+**Sono superati i sei casi sintetici fissati e il controllo di ricerca e risposta sulle note reali per questa domanda.** Collegamento e lettura delle note erano già verificati. I risultati certificano questi percorsi e criteri, non l'intero significato del vault o ogni risposta libera del modello. Fonti con lo stesso titolo restano possibili evidenze discordanti; i dati esterni non sono certificati dalla citazione.
+
+Il miglioramento osservato è la pertinenza della prima fonte. La durata della ricerca, 3304 ms contro 3189 ms della precedente esecuzione, non dimostra un miglioramento della latenza; sono singole rilevazioni. La durata della risposta o del primo testo nel browser non è stata cronometrata.
+
+Resta la raccolta separata dei tempi già prevista: tre richieste di chat breve e tre sintesi sulla nota KPI, usando il client di controllo. Include le misure della ricerca/preparazione e del percorso di generazione, non la futura pipeline audio. I contenuti del vault e della risposta non vengono conservati nel risultato timings. Il modello non viene cambiato o scaricato dalla memoria. Lo stato freddo/caldo non viene dedotto.
+
+Nessuno screenshot, testo della nota, titolo privato di libro o report KDP viene pubblicato con questa registrazione.
+
+## Verifica precedente nel browser: selezione delle fonti non superata
 
 Dopo i sei casi sintetici corretti, una domanda naturale sui libri pubblicati nei KPI dell'attività ha prodotto 320 risultati, 364 note controllate e 3189 ms. Nello screenshot locale i primi due risultati erano la scheda di un singolo libro e una trascrizione di formazione, non la nota KPI nominata. Questo è un limite del recupero delle fonti, che gli estratti sintetici già forniti non esercitavano. Nessuna risposta con quelle fonti è stata approvata e la fase complessiva sul vault reale non è conclusa.
 
