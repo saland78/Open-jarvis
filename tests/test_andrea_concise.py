@@ -1,9 +1,9 @@
-"""Response styling is scoped to note synthesis and never trims stream text."""
+"""Source and stream boundaries retained after reverting the brevity candidate."""
 import json
 import unittest
 
 import test_andrea_vault as base
-from runtime import NOTES_RESPONSE_STYLE
+from runtime import notes_messages
 
 
 class ConciseBoundaryTests(unittest.IsolatedAsyncioTestCase):
@@ -20,7 +20,7 @@ class ConciseBoundaryTests(unittest.IsolatedAsyncioTestCase):
         events = await self.invoke(self.payload("Bilancio"))
         evidence = json.loads(events[1]["body"].decode().split("data: ", 1)[1])
         messages = self.calls[-1]["messages"]
-        self.assertTrue(messages[0]["content"].endswith(NOTES_RESPONSE_STYLE))
+        self.assertEqual(messages, notes_messages("Bilancio", evidence["sources"]))
         self.assertEqual(json.loads(messages[1]["content"])["estratti"], evidence["sources"])
         self.assertEqual(self.calls[-1]["max_tokens"], 512)
 
