@@ -1,5 +1,7 @@
 # Revisione dei sei casi con sintesi breve — 2026-10-01
 
+**Aggiornamento successivo:** anche la raccolta dei tempi è completata; [concise-timing-review-2026-10-01.md](concise-timing-review-2026-10-01.md) documenta il confronto. Resta il riassunto nell'interfaccia sulle fonti reali.
+
 ## Esito del controllo di qualità
 
 Dopo l'installazione di update_concise.py dal commit 722748cec97254f69f778f9b4d51a90be59b9fb4, tre file fissati al commit 519b0d085cf302ac38155986a32c5dc4e64a1911, hash e backup sono confermati sul Mac. Il server locale risponde HTTP 200 e il vault risulta disponibile in sola lettura.
@@ -38,7 +40,7 @@ Consultati nuovamente quality_cases.json del commit installato e tests/evals/sco
 
 ## Stato del collaudo previsto
 
-Installazione, disponibilità del server e sei casi di qualità sono confermati. Restano la raccolta confrontabile di tre chat brevi e tre sintesi con la stessa ricerca, poi un riassunto della nota reale confrontato con gli estratti. Non si dichiara ancora superato il criterio di miglioramento del tempo totale o conclusa la verifica della nuova modifica.
+Installazione, disponibilità del server e sei casi di qualità sono confermati. In questa revisione iniziale restavano la raccolta dei tempi e il riassunto reale. La raccolta successiva, collegata sopra, verifica una riduzione del tempo totale; resta il confronto del riassunto nell'interfaccia con gli estratti reali prima di concludere la nuova modifica.
 
 La baseline precedente resta in [search-work-mac-review-2026-10-01.md](search-work-mac-review-2026-10-01.md). La preparazione e i criteri del nuovo intervento restano in [concise-synthesis-2026-10-01.md](concise-synthesis-2026-10-01.md). I precedenti fallimenti semantici non vengono cancellati o riclassificati.
 
