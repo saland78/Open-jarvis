@@ -59,6 +59,17 @@ class ControlClientTests(unittest.TestCase):
         self.assertFalse(checks["noUnknownCitations"])
         self.assertFalse(checks["expectedCitationsPresent"])
 
+    def test_brief_suite_is_separate_and_requests_quotes_without_certifying_quality(self):
+        with patch.object(sys, "argv", ["collaudo.py", "brief"]), patch.object(collaudo, "run_request") as run, patch("sys.stdout", new_callable=io.StringIO) as output:
+            run.return_value = {"answer": "Un passaggio [N1] [N2].", "done": True, "finishReason": "stop"}
+            collaudo.main()
+        raw = output.getvalue()
+        data = json.loads(raw[raw.index('{\n'):])
+        self.assertEqual(len(data["rows"]), 7)
+        self.assertTrue(all(call.args[0]["notes_brief"] is True for call in run.call_args_list))
+        self.assertTrue(all(row["qualityVerdict"] == "pending_review" for row in data["rows"]))
+        self.assertIn("Non è il precedente test", raw)
+
 
 if __name__ == "__main__":
     unittest.main()

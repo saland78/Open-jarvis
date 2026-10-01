@@ -77,7 +77,7 @@ def formal_checks(case, result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("quality", "timings"))
+    parser.add_argument("mode", choices=("quality", "brief", "timings"))
     parser.add_argument("--notes-query", default="kpi self publishing")
     parser.add_argument("--repeats", type=int, default=3, choices=range(1, 11))
     parser.add_argument("--case", choices=("explicit", "unknown", "conflict", "historical", "opinion", "no_answer"))
@@ -85,16 +85,20 @@ def main():
     if args.case and args.mode != "quality":
         parser.error("--case è disponibile soltanto con quality")
     rows = []
-    if args.mode == "quality":
-        cases = json.loads(Path(__file__).with_name("quality_cases.json").read_text())
+    if args.mode in {"quality", "brief"}:
+        cases_file = "brief_cases.json" if args.mode == "brief" else "quality_cases.json"
+        cases = json.loads(Path(__file__).with_name(cases_file).read_text())
         if args.case:
             cases = [case for case in cases if case["id"] == args.case]
+        if args.mode == "brief":
+            print("Modalità passaggi brevi: citazioni originali, senza generazione del modello. Non è il precedente test della sintesi libera.", flush=True)
         print(f"Casi sintetici selezionati: {len(cases)}. Nessuna nota personale letta. Stesso percorso delle risposte sulle note, con estratti forniti; i campi espliciti possono rispondere senza modello. La qualità richiede revisione delle risposte.", flush=True)
         for i, case in enumerate(cases, 1):
             print(f"Caso {i}/{len(cases)}: {case['id']}…", flush=True)
             result = run_request({"model": MODEL, "stream": True,
                                   "messages": [{"role": "user", "content": case["query"]}],
-                                  "notes_query": case["query"], "notes_sources": case["sources"]}, keep_answer=True)
+                                  "notes_query": case["query"], "notes_sources": case["sources"],
+                                  "notes_brief": args.mode == "brief"}, keep_answer=True)
             rows.append({"case": case["id"], "criteria": case["criteria"], "result": result,
                          "formalChecks": formal_checks(case, result), "qualityVerdict": "pending_review"})
     else:

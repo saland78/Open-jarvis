@@ -8,6 +8,7 @@ export interface ChatRequest {
   temperature?: number;
   max_tokens?: number;
   notes_query?: string;
+  notes_brief?: boolean;
 }
 
 export async function* streamChat(

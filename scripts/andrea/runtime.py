@@ -9,6 +9,7 @@ import time
 
 from measurements import LocalMeasurements, RequestMeasurement
 from evidence import explicit_count_answer, supplied_sources
+from brief import brief_answer
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -114,6 +115,8 @@ class LocalMode:
                 if "notes_query" not in payload:
                     raise ValueError("Gli estratti forniti richiedono una domanda sulle note.")
                 payload["notes_sources"] = supplied_sources(payload["notes_sources"])
+            if "notes_brief" in payload and (type(payload["notes_brief"]) is not bool or "notes_query" not in payload):
+                raise ValueError("La modalità breve richiede una domanda sulle note e un valore booleano.")
             if "notes_query" in payload and (not isinstance(payload["notes_query"], str) or not payload["notes_query"].strip() or len(payload["notes_query"]) > 200):
                 raise ValueError("Domanda sulle note non valida.")
         except (ValueError, KeyError, TypeError) as exc:
@@ -134,8 +137,12 @@ class LocalMode:
                 else:
                     evidence = await asyncio.to_thread(self.notes.grounding, payload["notes_query"])
                     evidence["origin"] = "vault"
-                direct_answer = explicit_count_answer(payload["notes_query"], evidence["sources"])
-                evidence["answerMode"] = "explicit_fields" if direct_answer is not None else "model_synthesis"
+                if payload.get("notes_brief"):
+                    direct_answer = brief_answer(evidence["sources"])
+                    evidence["answerMode"] = "brief_quotes"
+                else:
+                    direct_answer = explicit_count_answer(payload["notes_query"], evidence["sources"])
+                    evidence["answerMode"] = "explicit_fields" if direct_answer is not None else "model_synthesis"
                 measurement.retrieval(retrieval_started, evidence)
                 measurement.record["answerMode"] = evidence["answerMode"]
                 measurement.record["inferenceUsed"] = direct_answer is None

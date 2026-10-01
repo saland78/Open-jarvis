@@ -10,7 +10,7 @@ interface Source {
 }
 interface VaultStatus { available: boolean; configured: boolean; vault?: string; detail?: string }
 interface SearchResult { query: string; results: Source[]; scanned: number; total: number; excluded: number; partial: boolean; skipped: number; elapsedMs: number }
-interface Evidence { query: string; sources: Source[]; excluded: number; partial: boolean }
+interface Evidence { answerMode?: string; query: string; sources: Source[]; excluded: number; partial: boolean }
 interface Note { path: string; title: string; text: string; status: string; modifiedAt: string }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -81,13 +81,13 @@ export function AndreaNotesPage() {
       if (id === revision.current) setNote(data);
     } catch (err) { failed(err, abort, id); } finally { finished(id); }
   }
-  async function summarize() {
+  async function summarize(brief = false) {
     if (!result) return;
     const { abort, id } = start('summary');
     setAnswer(''); setEvidence(null); setNote(null);
     let text = '';
     try {
-      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query }, abort.signal)) {
+      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief }, abort.signal)) {
         if (id !== revision.current) break;
         const data = JSON.parse(event.data);
         if (event.event === 'local_sources') setEvidence(data);
@@ -131,13 +131,14 @@ export function AndreaNotesPage() {
           </article>)}
           {result.total === 0 ? <p>Nessuna corrispondenza. Prova una parola diversa.</p> : null}
           {!canSummarize && result.total > 0 ? <p>Nessuna fonte attiva con contenuto utilizzabile per il riassunto.</p> : null}
-          <button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Rispondi usando gli estratti con Jarvis</button>
-          {!model ? <p>La ricerca funziona senza inferenza. Per il riassunto serve il modello locale configurato.</p> : null}
+          <div className="flex flex-wrap gap-2"><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize(true)}>Passaggi brevi dalle fonti</button><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Sintesi del modello</button></div>
+          <p>I passaggi brevi conservano il testo originale e il suo contesto. La sintesi del modello può introdurre errori e va confrontata con le fonti.</p>
+          {!model ? <p>La ricerca funziona senza inferenza. Per la sintesi libera serve il modello locale configurato.</p> : null}
         </section> : null}
         {busy === 'summary' ? <div className="flex gap-3 items-center"><p role="status">Jarvis sta elaborando gli estratti…</p><button className={button} onClick={stop}>Interrompi risposta</button></div> : null}
         {answer || evidence ? <section aria-label="Riassunto delle fonti" className="border border-[var(--color-border)] rounded-lg p-4 flex flex-col gap-3">
-          <h2 className="font-semibold">Risposta di Jarvis</h2><p className="whitespace-pre-wrap break-words">{answer || 'In attesa del primo testo…'}</p>
-          <p>La risposta usa estratti, non le note intere. I conteggi riconosciuti possono essere riportati direttamente dalle fonti; le altre risposte sono sintesi del modello da verificare. Una citazione non dimostra che il dato della fonte sia vero o aggiornato.</p>
+          <h2 className="font-semibold">{evidence?.answerMode === 'brief_quotes' ? 'Passaggi brevi dalle fonti' : 'Risposta di Jarvis'}</h2><p className="whitespace-pre-wrap break-words">{answer || 'In attesa del primo testo…'}</p>
+          <p>{evidence?.answerMode === 'brief_quotes' ? 'Questi passaggi sono copiati dalle fonti, senza generazione del modello. Sono una selezione parziale degli estratti, non una verifica dei dati o una risposta esaustiva.' : 'La risposta usa estratti, non le note intere. I conteggi riconosciuti possono essere riportati direttamente dalle fonti; le altre risposte sono sintesi del modello da verificare. Una citazione non dimostra che il dato della fonte sia vero o aggiornato.'}</p>
           {missingCitations || unknownCitations.length > 0 ? <p role="alert">Le citazioni della risposta sono mancanti o non corrispondono alle fonti fornite. Il riassunto va verificato.</p> : null}
           {evidence?.excluded ? <p>{evidence.excluded} note non utilizzabili escluse.</p> : null}
           {evidence?.partial ? <p>Anche le fonti del riassunto provengono da una ricerca parziale.</p> : null}
