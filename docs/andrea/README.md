@@ -73,3 +73,7 @@ npm exec --yes --package=npm@11.19.0 -- npm test -- src/lib/andrea-local.test.ts
 Nuovi file: launcher, `scripts/andrea/`, profilo e policy, test mirati e questa documentazione. Moduli frontend adattati: `App.tsx` (invito leaderboard), `api.ts` (origine locale e modello), `analytics.ts` e `supabase.ts` (servizi esterni disattivati), `sse.ts` (propagazione errori e chiusura lettore streaming). Nessuna modifica alla licenza o al codice Rust upstream.
 
 Il fork è pubblico. Non committare conversazioni, credenziali, note, dati fiscali, email, database, audio o configurazioni personali.
+
+## Interpretazione del budget nell'interfaccia
+
+Il campo `suggested_max_tokens` proviene dal classificatore di complessità upstream. Può indicare 1024 anche quando il runtime locale impone 512 all'engine, che lo trasmette a Ollama come `options.num_predict`. Il pannello delle risposte ora lo etichetta `Suggested budget`, per distinguerlo dal limite applicato. Non rappresenta il numero di token generati né una misura del tempo di risposta. Le conversazioni precedenti conservano il valore suggerito originario.
