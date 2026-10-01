@@ -30,7 +30,7 @@ host = "127.0.0.1"
 port = 8008
 agent = "simple"
 model = "qwen3:4b-instruct-2507-q4_K_M"
-cors_origins = ["http://127.0.0.1:5178"]
+cors_origins = []
 
 [analytics]
 enabled = false

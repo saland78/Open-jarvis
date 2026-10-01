@@ -69,6 +69,8 @@ const getSettingsApiUrl = (): string => {
 };
 
 export const getBase = (): string => {
+  // Personal fork local build: keep requests on the local page's origin.
+  if (import.meta.env.VITE_ANDREA_LOCAL === 'true') return '';
   const settingsUrl = getSettingsApiUrl();
   if (settingsUrl) return settingsUrl;
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
@@ -189,6 +191,12 @@ export async function fetchModels(): Promise<ModelInfo[]> {
   const res = await apiFetch(`/v1/models`);
   if (!res.ok) throw new Error(`Failed to fetch models: ${res.status}`);
   const data = await res.json();
+  if (import.meta.env.VITE_ANDREA_LOCAL === 'true') {
+    const info = await apiFetch('/v1/info');
+    if (!info.ok) throw new Error('Profilo locale non disponibile.');
+    const configured = await info.json();
+    return (data.data || []).filter((m: ModelInfo) => m.id === configured.model);
+  }
   return data.data || [];
 }
 

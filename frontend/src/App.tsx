@@ -119,6 +119,7 @@ export default function App() {
 
   // Show opt-in modal on first visit
   useEffect(() => {
+    if (import.meta.env.VITE_ANDREA_LOCAL === 'true') return;
     if (!optInModalSeen) {
       setOptInModalOpen(true);
       markOptInModalSeen();
@@ -194,7 +195,7 @@ export default function App() {
       </Routes>
       <Toaster position="bottom-right" />
       {commandPaletteOpen && <CommandPalette />}
-      {optInModalOpen && (
+      {optInModalOpen && import.meta.env.VITE_ANDREA_LOCAL !== 'true' && (
         <OptInModal onClose={() => setOptInModalOpen(false)} />
       )}
     </>

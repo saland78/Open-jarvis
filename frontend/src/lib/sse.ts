@@ -46,6 +46,12 @@ export async function* streamChat(
         } else if (line.startsWith('data: ')) {
           const data = line.slice(6);
           if (data === '[DONE]') return;
+          // Local timeouts and upstream failures must reach the chat's error UI.
+          let parsed: { error?: { message?: string } | string } | undefined;
+          try { parsed = JSON.parse(data); } catch { /* Keep non-JSON events. */ }
+          if (parsed?.error) {
+            throw new Error(typeof parsed.error === 'string' ? parsed.error : parsed.error.message || 'Generation failed');
+          }
           yield { event: currentEvent, data };
           currentEvent = undefined;
         } else if (line.trim() === '') {
@@ -54,6 +60,7 @@ export async function* streamChat(
       }
     }
   } finally {
+    await reader.cancel().catch(() => {});
     reader.releaseLock();
   }
 }

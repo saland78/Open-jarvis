@@ -1,46 +1,75 @@
-# Fork personale: base separata e prima integrazione
+# OpenJarvis personale: prima chat locale separata
 
-Repository di lavoro: https://github.com/saland78/Open-jarvis
+Repository: https://github.com/saland78/Open-jarvis
 
-Sorgente: https://github.com/open-jarvis/OpenJarvis
+Sorgente: https://github.com/open-jarvis/OpenJarvis, commit `c4da16e1ca3d21f4cc1905d4200063e564104f0f` (1 ottobre 2026). Il fork conserva storia, licenza Apache-2.0 e relazione upstream. `main` conserva la base; queste modifiche sono su `feature/andrea-local-profile`, PR draft #1. Il precedente Jarvis rimane in un'altra repository e cartella.
 
-Base importata: `c4da16e1ca3d21f4cc1905d4200063e564104f0f`, 1 ottobre 2026. Fork GitHub completo con storia originale, licenza Apache-2.0 e relazione upstream. `main` conserva la sorgente; le personalizzazioni iniziali sono su `feature/andrea-local-profile`. L'altra repository Jarvis rimane separata.
+## Prima versione
 
-## Cosa è pronto
+`Avvia-OpenJarvis.command` prepara un ambiente Python nel progetto, compila l'estensione Rust e l'interfaccia quando le sorgenti cambiano, quindi avvia la chat su **http://127.0.0.1:8008**. Il browser si apre dopo il controllo di salute del backend. Lascia aperto quel Terminale; Control+C ferma OpenJarvis. Un'altra istanza sulla stessa porta produce un messaggio e non viene terminata.
 
-- Sorgente completa del progetto, non una ricostruzione dei suoi moduli.
-- Profilo `profiles/andrea-local.toml`: Ollama loopback, modello non thinking 4B, italiano, risposte brevi, porta API 8008, agente semplice e ambiente iniziale senza memoria automatica, scheduler, apprendimento, skill discovery o analytics esterni.
-- Permessi runtime abilitati con default deny, senza bypass locali. Il profilo shared concede una baseline upstream di lettura/rete/memoria in assenza di policy esplicita: non è una sandbox senza accessi. Prima dei connettori reali definire radici e policy specifiche e verificarle.
+Il profilo usa esclusivamente Ollama a `127.0.0.1:11434`, con `qwen3:4b-instruct-2507-q4_K_M`, italiano, temperatura 0,4, contesto 4096 e massimo 512 token di risposta. Il backend impone questi limiti anche se le impostazioni del client o la classificazione della complessità upstream suggeriscono altri valori. La lista dell'interfaccia mostra soltanto il modello configurato, se installato. Nessun fallback cloud viene costruito.
 
-Il caricamento della configurazione è verificato usando il codice upstream reale. Il profilo da solo non realizza l'isolamento dei dati o dell'ambiente: l'avvio deve impostare anche i percorsi e gestire le variabili ereditate.
+Dati e cache di compilazione sono in `~/.openjarvis-andrea`, distinti dai dati del precedente Jarvis. L'avvio non importa il vecchio `.env`, i database, le skill o le note Obsidian. L'ambiente runtime non eredita credenziali cloud o altre configurazioni OpenJarvis. Le conversazioni della UI sono conservate dal browser per questa origine; ciò non costituisce apprendimento del modello.
 
-## Avvio da preparare e collaudare
+Questa fase abilita **chat di testo**, con streaming, timeout di 90 secondi e una generazione per volta. Le altre richieste di modifica vengono rifiutate; gli strumenti hanno una policy esplicita senza concessioni e con deny globale. Memoria automatica, scheduler, canali, apprendimento, skill discovery e connettori restano disattivati. Il codice completo upstream rimane disponibile per le integrazioni successive. I relativi menu originali possono essere ancora visibili: la loro presenza non indica che la funzione sia già attiva.
 
-La prima installazione sul Mac va guidata in una nuova cartella, con un Terminale identificato esplicitamente. Non sovrascrivere la cartella del Jarvis esistente. Non copiare il suo `.env`, il suo SQLite o il vault nel fork.
+La build locale ignora URL API esterni salvati o configurati e disattiva analytics, leaderboard e relativo invito alla condivisione. Il codice originale resta disponibile nelle normali build upstream. Questo profilo non è una sandbox del sistema operativo: i processi Python/Rust hanno i permessi dell'utente che li avvia.
 
-Per un launcher ripetibile servono:
+## Installazione sul Mac: prima verificare i requisiti
 
-1. Python supportato (3.10–3.13; preferire 3.12), uv e verifica dell'estensione Rust `openjarvis_rust`. Installare le dipendenze server con il lock upstream; costruire o installare l'estensione nativa con la procedura upstream prima dell'avvio protetto.
-2. `OPENJARVIS_HOME` in una cartella dati nuova, fuori dalla sorgente e distinta da `~/.jarvis-local` e da eventuali installazioni OpenJarvis precedenti.
-3. `OPENJARVIS_CONFIG` al percorso assoluto di `profiles/andrea-local.toml`, prima di importare moduli OpenJarvis; `JARVIS_NUM_CTX=4096` nell'ambiente del processo.
-4. Ambiente di esecuzione senza credenziali cloud ereditate o importate. `engine.default=ollama` e `--engine ollama` non bastano: `jarvis serve` può costruire un MultiEngine se trova credenziali cloud. Il controllo versioni CLI effettua inoltre una richiesta esterna se non viene usato `--quiet`.
-5. Porta API 8008 e, per l'interfaccia upstream, porta frontend 5178. Verificare occupazione e identità del processo; non terminare processi generici sulla sola porta.
-6. Verificare modello, streaming, timeout, annullamento e gestione errori prima di dichiarare funzionante la chat. Nessun benchmark reale sul Mac è stato eseguito per il fork.
+Non sostituire la cartella del Jarvis attuale. Scaricare in seguito **il branch della PR**, in una nuova cartella; `main` non contiene ancora il launcher. Non copiare configurazioni o dati personali nel fork pubblico.
 
-Non usare ancora questo profilo come sostituzione del Jarvis funzionante. I campi max_tokens e temperatura dell'intelligence non sostituiscono i valori predefiniti della richiesta HTTP: il client deve inviare esplicitamente il budget concordato. Il modello indicato è non thinking; il comportamento effettivo va verificato nella richiesta Ollama.
+Requisiti da controllare prima dell'avvio:
 
-## Prossime integrazioni, in ordine
+- Node >=22.22 e npm disponibile. Il launcher usa npm **11.19.0 per questo progetto**, senza aggiornare globalmente la versione già installata.
+- `uv` disponibile. Il launcher richiede Python 3.12 con le dipendenze server del lock upstream; uv può scaricare Python se necessario.
+- Cargo/Rust >=1.88 e gli strumenti di compilazione Apple/Xcode Command Line Tools. Il launcher segnala Cargo assente senza installarlo automaticamente.
+- Ollama avviato e il modello configurato installato.
 
-1. Launcher isolato e ciclo chat locale, con test su errori e cancellazione.
-2. Obsidian in sola lettura: estratti dal corpo, citazioni con percorsi/righe, stato delle note, aggiornamenti ed eliminazioni. Il connettore upstream non va considerato equivalente alla correzione sviluppata nell'altro Jarvis senza verificarlo.
-3. Memoria esplicita e revocabile. Migrare soltanto attraverso esportazione/importazione con schema e provenienza, mai copiando il vecchio database in una posizione prevista da un altro schema.
-4. Skill personali adattate al formato supportato e provate su casi sintetici. Nessuna importazione indiscriminata o sincronizzazione automatica.
-5. Strumenti, scheduler e feedback dopo i controlli del ciclo base, con permessi e limiti specifici.
+La prima preparazione scarica dipendenze e compila codice nativo, quindi richiede Internet e può durare diversi minuti. Rust viene compilato in una cache nuova, separata dai target di altre build. `uv sync --inexact` conserva l'estensione compilata localmente. L'avvio del modello e la sua latenza dipendono dal Mac; non usare simultaneamente i due Jarvis per un confronto delle prestazioni.
 
-Il fork rende tutti i componenti disponibili; la prima configurazione attiva solo quelli necessari al collaudo. Aggiungere funzioni non dimostra minore latenza: confrontare prima risposta, totale, qualità e fonti a parità di modello e carico.
+Procedere con installazione e primo avvio sul Mac soltanto dopo il controllo guidato dei requisiti. Non è ancora disponibile un collaudo macOS Intel della nuova versione.
 
-## Stato dei controlli
+## Verifiche completate
 
-Ambiente di sviluppo Linux, Python 3.12: installazione delle dipendenze server con `uv sync --locked --extra server --no-dev` completata. Verifica esplicita `RUST_AVAILABLE=False`: l'estensione Rust non è presente nell'ambiente di prova, quindi l'avvio con capability enforcement non è ancora validato. Non disabilitare i controlli per nascondere questo requisito. Caricamento del profilo e isolamento dei percorsi verificati, senza usare note, account o ricordi reali. Questo non prova l'inferenza Ollama, il frontend, le integrazioni o l'installazione sul Mac Intel.
+Ambiente di sviluppo Linux x86_64, Python 3.12.14, Rust 1.88.0. Nessun dato personale o modello reale utilizzato.
 
-Il fork è pubblico, come il progetto di origine. Non committare configurazioni locali, percorsi del vault, conversazioni, chiavi, email, ricordi, database o audio. La licenza originale rimane integra; documentare ogni modifica ai moduli upstream.
+| Controllo | Esito e limite |
+| --- | --- |
+| Dipendenze Python server con lock upstream | Installazione completata |
+| Estensione Rust reale | Compilazione release con Cargo.lock, import e costruzione del backend riusciti |
+| Build frontend | TypeScript e Vite completati; rimangono avvisi upstream sulle dimensioni dei bundle |
+| Test runtime | 7 passati: ambiente, origine, policy delle richieste, budget, concorrenza, timeout e cancellazione |
+| Test frontend | 5 passati: URL locali, analytics, leaderboard, modello configurato e errore streaming |
+| Chat nel browser | Chromium: invio UI → backend upstream reale con Rust → Ollama simulato → testo visualizzato; conversazione presente dopo ricaricamento |
+| Richiesta ricevuta dal simulatore | Modello configurato, prompt italiano, `think=false`, `num_ctx=4096`, `num_predict=512`, nessuno strumento |
+| Errori browser e richieste esterne nel percorso chat provato | Nessuno osservato |
+| API reali e porta occupata | Modello cloud 400, modifica strumenti 403, origine esterna 403; launcher rifiuta una porta occupata senza fermare il server |
+| Ollama reale e Mac Intel | **Da verificare**: installazione, qualità, latenza, arresto/riavvio e annullamento in HTTP reale |
+
+Il simulatore restituisce testo e tempi sintetici: questi risultati non sono un benchmark del modello. Per la verifica browser si è usato Playwright/Chromium dopo che il daemon agent-browser non ha potuto aprire il socket nell'ambiente di prova. Non è stata eseguita l'intera suite upstream, che comprende numerose integrazioni non abilitate in questa fase.
+
+Ripetizione dei controlli mirati dopo l'installazione delle dipendenze:
+
+```bash
+.venv/bin/python -m unittest discover -s tests -p test_andrea_local.py -v
+cd frontend
+npm exec --yes --package=npm@11.19.0 -- npm test -- src/lib/andrea-local.test.ts
+```
+
+`tests/andrea_fixture_server.py` è un server di prova manuale con Ollama simulato, da eseguire nella venv con l'estensione Rust disponibile. Serve la UI già compilata, usa dati temporanei e la porta 8008; non avviarlo insieme al launcher sulla stessa porta. Non usare la sua risposta o i suoi tempi per valutare il modello.
+
+## Integrazioni successive
+
+1. Primo avvio e benchmark sul Mac, stesso modello e carico: tempo del primo testo, totale, correttezza e annullamento.
+2. Obsidian in sola lettura: estratti dal corpo, citazioni con percorsi/righe, stato delle note, aggiornamenti ed eliminazioni. Il connettore upstream va confrontato con i controlli già sviluppati nell'altro Jarvis.
+3. Memoria esplicita, consultabile e cancellabile. Migrazione tramite esportazione/importazione con schema e provenienza, senza copiare database tra schemi diversi.
+4. Skill personali adattate e provate con casi sintetici, prima di autorizzare strumenti e radici di file.
+5. Feedback sugli errori con valutazioni ripetibili; poi strumenti, scheduler e automazioni con permessi specifici. Salvare una lezione non dimostra che il modello l'abbia appresa o applicata.
+
+## Modifiche alla sorgente
+
+Nuovi file: launcher, `scripts/andrea/`, profilo e policy, test mirati e questa documentazione. Moduli frontend adattati: `App.tsx` (invito leaderboard), `api.ts` (origine locale e modello), `analytics.ts` e `supabase.ts` (servizi esterni disattivati), `sse.ts` (propagazione errori e chiusura lettore streaming). Nessuna modifica alla licenza o al codice Rust upstream.
+
+Il fork è pubblico. Non committare conversazioni, credenziali, note, dati fiscali, email, database, audio o configurazioni personali.
