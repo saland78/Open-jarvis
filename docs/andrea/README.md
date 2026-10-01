@@ -158,7 +158,23 @@ L'evento local_sources e le misure distinguono answerMode explicit_fields/model_
 
 L'interfaccia conserva i riferimenti e la lettura delle note, ma evita di affermare che ogni risposta abbia usato il modello. Le sole modifiche frontend sono quattro testi; nessuna modifica a Suggested budget, al modello, ai limiti di generazione, alla memoria o alle dipendenze.
 
-Validazione: 11 nuovi test sul campo di applicazione, sui conflitti, sulla fedeltà delle citazioni, sulle misure e sul confine ASGI effettivo; 8 test delle misure; 3 del client; 6 della transazione di aggiornamento; 13 regressioni dell'adattatore usando il parser scalare upstream isolato. Totale 41 verifiche mirate riuscite. Nella checkout parziale di revisione l'esecuzione generale dei test che importano il pacchetto OpenJarvis completo richiede il modulo non installato; il backend Rust completo non è stato eseguito. Sintassi Python verificata e differenza frontend limitata ai testi controllata. La build completa del frontend e il browser non sono stati eseguiti per questa modifica; il launcher sul Mac ricompila l'interfaccia. I risultati con Ollama reale e il vault reale restano da verificare sul Mac: la nuova correzione non è ancora installata.
+Validazione originaria: 41 verifiche mirate riuscite sul campo di applicazione, ASGI, misure, client, aggiornamento e adattatore con parser scalare upstream isolato. Il backend Rust completo non è stato eseguito nella checkout parziale. Sul Mac sono poi confermati l'installazione, la build frontend in 1,55 secondi e i sei casi sintetici del sistema, revisionati come corretti. Il controllo successivo nel browser ha mostrato un limite distinto nella selezione delle fonti di una domanda naturale; è documentato in quality-review-2026-10-01.md e affrontato nella sezione seguente.
+
+## Titoli delle note dentro le domande
+
+Una domanda naturale può nominare una nota, per esempio chiedere il conteggio riportato nei KPI di una specifica attività. Il conteggio delle parole nel corpo di note lunghe faceva salire trascrizioni e rinvii prima della nota richiesta. Il solo caso di ricerca uguale al titolo non copriva questa domanda.
+
+named_paths riconosce titoli completi come sequenze ordinate di parole, ignorando articoli e preposizioni già dichiarati in STOP. I titoli con una sola parola richiedono una ricerca uguale al titolo. Un titolo breve contenuto in uno più lungo nominato non aggiunge una seconda fonte; menzioni separate di più titoli e copie con lo stesso titolo restano candidati. Non esistono percorsi o nomi di note personali fissati nel codice.
+
+La ricerca dà precedenza ai titoli nominati prima di tagliare i primi dieci risultati. La risposta usa soltanto le fonti attive appartenenti a quel gruppo, massimo tre. Se il gruppo richiesto è escluso per stato o privo di contenuto, non viene sostituito silenziosamente da una trascrizione. Una ricerca generica mantiene la selezione per parole e più fonti. Questa è una regola lessicale con ambito dichiarato: non risolve sinonimi, titoli non nominati, negazioni complesse o tutti i conflitti della banca dati.
+
+Il controllo dei campi riconosce anche la forma esplicita «I libri pubblicati sono **47**», copiandola per intero. Negazioni, stime e unità scalate restano escluse, anche dopo marcatori Markdown. Non vengono aggiunti numeri o informazioni mancanti alla nota.
+
+Consultati tests/memory/test_retrieval_quality.py, tests/memory/test_bm25.py, tests/connectors/test_obsidian.py e src/openjarvis/tools/storage/bm25.py dell'upstream, commit c4da16e1ca3d21f4cc1905d4200063e564104f0f. Si mantengono il parser upstream già in uso e i controlli separati su ordinamento, fonte, limiti e risultati multipli. Il backend BM25 completo passa dal bridge Rust e pubblica eventi: non viene attivato insieme a ingestion, database o memoria automatica per correggere questo adattatore in sola lettura. Non si dichiara eseguita l'intera suite upstream.
+
+La regressione è stata riprodotta prima della modifica con una nota sintetica e quindici trascrizioni. Dopo la correzione sono passati 21 controlli dell'adattatore, 12 delle evidenze, 8 delle misure, 3 del client e 6 dell'aggiornamento: 50 verifiche mirate. È coperto anche il percorso ASGI che legge file sintetici reali, seleziona la nota nominata e risponde dal conteggio senza chiamare il modello. Modello, prompt, budget, frontend e dati rimangono quelli precedenti. Restano da verificare sul Mac l'installazione di questa correzione, la precedenza della nota richiesta e la risposta nell'interfaccia sul vault effettivo.
+
+scripts/andrea/update_retrieval.py applica cinque file fissati a un commit, verificando baseline e SHA-256, con la transazione di backup e rollback già usata. Richiede OpenJarvis fermo sulla porta 8008; non modifica note, database, profilo, dipendenze o il Jarvis originale.
 
 ## Procedura richiesta per ogni nuovo intervento
 

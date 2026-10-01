@@ -1,6 +1,18 @@
 # Esito del collaudo locale dei riassunti — 2026-10-01
 
-## Esito attuale: sei casi superati dopo il controllo dei campi espliciti
+## Verifica successiva nel browser: selezione delle fonti non superata
+
+Dopo i sei casi sintetici corretti, una domanda naturale sui libri pubblicati nei KPI dell'attività ha prodotto 320 risultati, 364 note controllate e 3189 ms. Nello screenshot locale i primi due risultati erano la scheda di un singolo libro e una trascrizione di formazione, non la nota KPI nominata. Questo è un limite del recupero delle fonti, che gli estratti sintetici già forniti non esercitavano. Nessuna risposta con quelle fonti è stata approvata e la fase complessiva sul vault reale non è conclusa.
+
+La correzione di sviluppo riconosce il titolo completo di una nota dentro una domanda, dà precedenza a quel gruppo prima del taglio dei risultati e lo usa per le fonti della risposta. Mantiene fonti distinte con lo stesso titolo, il rifiuto degli stati esclusi e della scansione parziale. Una fonte nominata esclusa non viene sostituita da una trascrizione incidentale. Il riconoscimento è lessicale, non una comprensione generale di tutte le domande o una certificazione dei dati. Non contiene percorsi personali o conteggi corretti fissati nel codice.
+
+Sono coperti la forma esplicita dei campi con «sono», anche in Markdown, e il rifiuto delle unità scalate dopo marcatori di formattazione. Le righe restano citazioni testuali.
+
+La regressione è stata riprodotta prima della modifica con un corpus sintetico comprendente quindici trascrizioni. Dopo la correzione sono passate 50 verifiche mirate: 21 sull'adattatore usando il parser upstream isolato, 12 sulle evidenze, 8 sulle misure, 3 sul client, 6 sulla transazione di aggiornamento. È coperto il flusso ASGI che legge file sintetici reali, seleziona la nota e riporta il conteggio senza inferenza. Consultati i test upstream di recupero, BM25 e Obsidian; la suite completa Rust non è stata eseguita.
+
+La correzione non è ancora installata sul Mac e il nuovo controllo nell'interfaccia con il vault reale resta pendente. I sei casi sintetici della sezione seguente conservano il loro esito positivo; non sostituiscono questa prova del recupero delle note. Lo screenshot, titoli privati e testi delle note non sono inclusi nel repository.
+
+## Collaudo sintetico: sei casi superati dopo il controllo dei campi espliciti
 
 Revisione del collaudo eseguito sul Mac il 2026-10-01 dopo l'installazione di update_evidence.py dal commit 0c0dda8441e6dbfa42b69e7c672b1e981f4d1c56. I sette file sorgenti sono fissati al commit 6e9d83435fdeb95c1d5d6970dcb6997b44005d8a. L'installazione ha completato verifiche e backup; la compilazione dell'interfaccia sul Mac è riuscita in 1,55 secondi.
 

@@ -35,6 +35,31 @@ def words(text):
     return re.findall(r"[^\W_]+", normalized(text))
 
 
+def named_paths(query, sources):
+    """Find complete note titles mentioned in a query, ignoring stop words.
+
+    Multi-word titles are matched as ordered contiguous token sequences, not
+    incidental body/path mentions. A one-word title needs an exact query.
+    A shorter title contained in a longer mentioned title is not a second
+    requested note. Distinct mentions and duplicate titles remain candidates.
+    This lexical scope rule does not establish source truth or freshness.
+    """
+    query_terms = tuple(t for t in words(query) if t not in STOP)
+    found = {}
+    for source in sources:
+        title = tuple(t for t in words(source["title"]) if t not in STOP)
+        if not title or (len(title) == 1 and title != query_terms):
+            continue
+        spans = {(i, i+len(title)) for i in range(len(query_terms)-len(title)+1)
+                 if query_terms[i:i+len(title)] == title}
+        if spans:
+            found[source["path"]] = spans
+    all_spans = set().union(*found.values()) if found else set()
+    return {path for path, spans in found.items() if any(
+        not any(other != span and other[0] <= span[0] and other[1] >= span[1]
+                for other in all_spans) for span in spans)}
+
+
 class VaultError(ValueError):
     def __init__(self, detail, status=400):
         super().__init__(detail)
@@ -280,7 +305,8 @@ class VaultNotes:
             if partial:
                 break
         self.cache = {key: value for key, value in self.cache.items() if key in seen}
-        results.sort(key=lambda pair: (-pair[0], not pair[1]["eligible"], pair[1]["path"]))
+        named = named_paths(query, [item for _, item in results])
+        results.sort(key=lambda pair: (pair[1]["path"] not in named, not pair[1]["eligible"], -pair[0], pair[1]["path"]))
         matches = [item for _, item in results]
         return {"query": query.strip(), "vault": str(root), "results": matches[:10], "total": len(matches), "scanned": scanned, "skipped": skipped, "partial": partial, "excluded": sum(not m["eligible"] for m in matches), "elapsedMs": round((time.monotonic()-started)*1000)}
 
@@ -290,10 +316,10 @@ class VaultNotes:
         if result["partial"]:
             raise VaultError("Ricerca incompleta: il riassunto non è stato avviato. Restringi la ricerca o controlla i limiti di scansione.")
         candidates = [s for s in result["results"] if s["eligible"]]
-        terms = list(dict.fromkeys(t for t in words(query) if t not in STOP))[:16]
-        # A query naming a note is more precise than incidental body mentions.
-        exact = [s for s in candidates if list(dict.fromkeys(t for t in words(s["title"]) if t not in STOP)) == terms]
-        sources = (exact or candidates)[:3]
+        # Use the same named-note scope as search, including inactive notes so
+        # an unavailable requested source cannot silently become a course.
+        named = named_paths(query, result["results"])
+        sources = ([s for s in candidates if s["path"] in named] if named else candidates)[:3]
         if not sources:
             raise VaultError("Nessuna fonte attiva con contenuto utilizzabile. Leggi le note o modifica la ricerca.")
         return {"query": query, "sources": [{**s, "id": f"N{i+1}"} for i, s in enumerate(sources)], "excluded": result["excluded"], "partial": result["partial"]}

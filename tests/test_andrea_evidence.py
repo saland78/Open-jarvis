@@ -15,6 +15,16 @@ def source(sid, text, **extra):
 
 
 class EvidenceScopeTests(unittest.TestCase):
+    def test_natural_explicit_field_is_quoted_but_negation_and_estimates_abstain(self):
+        for line in ("I libri pubblicati sono **47**.", "I titoli pubblicati sono 11.", "Copie vendute sono 19."):
+            query = "Quante copie sono vendute?" if "Copie" in line else "Quanti libri risultano pubblicati?"
+            with self.subTest(line=line):
+                self.assertIn(f"«{line}» [N1]", explicit_count_answer(query, [source("N1", line)]))
+        for line in ("I libri pubblicati non sono 47.", "I libri pubblicati sono circa 47.", "I libri pubblicati sono 47 mila.",
+                     "I libri pubblicati sono **47** mila.", "I libri pubblicati sono **47**%.", "I libri pubblicati sono **47**/100."):
+            with self.subTest(line=line):
+                self.assertIsNone(explicit_count_answer("Quanti libri risultano pubblicati?", [source("N1", line)]))
+
     def test_conflicting_counts_keep_both_and_do_not_resolve_by_file_timestamp(self):
         sources = [source("N1", "titoli_pubblicati: 14", modifiedAt="2026-10-01"),
                    source("N2", "Titoli pubblicati: 3. Periodo non indicato.", modifiedAt="2026-01-01")]

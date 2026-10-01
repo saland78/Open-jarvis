@@ -71,13 +71,14 @@ def explicit_count_answer(query, sources):
                 continue
             for key in wanted:
                 _, label, _ = FIELDS[key]
-                pattern = r"(?<!\w)" + label + r"(?:\s+(?:nel|per|a|al)\s+[^:\n|]{1,45})?[\s*:=|]+(\d{1,9})(?!\w|[.,]\d)"
+                pattern = r"(?<!\w)" + label + r"(?:\s+sono)?(?:\s+(?:nel|per|a|al)\s+[^:\n|]{1,45})?[\s*:=|]+(\d{1,9})(?!\w|[.,]\d)"
                 matches = list(re.finditer(pattern, line_norm))
                 for match in matches:
                     # Negated statements cannot be reduced to a positive field.
                     if re.search(r"\b(?:non|nessun|nessuno)\b", line_norm[:match.start()]):
                         continue
-                    if re.match(r"\s*(?:[-–—/+]|(?:o|oppure|mila|k|euro)\b|milion\w*\b|miliard\w*\b|%|€|dollar\w*\b)", line_norm[match.end():]):
+                    tail = line_norm[match.end():].lstrip("*_`")
+                    if re.match(r"\s*(?:[-–—/+]|(?:o|oppure|mila|k|euro)\b|milion\w*\b|miliard\w*\b|%|€|dollar\w*\b)", tail):
                         continue
                     rows.append({"field": key, "value": int(match.group(1)), "id": source["id"], "quote": line})
     if {row["field"] for row in rows} != wanted:
