@@ -1,6 +1,50 @@
 # Esito del collaudo locale dei riassunti — 2026-10-01
 
-## Stato
+## Esito attuale: sei casi superati dopo il controllo dei campi espliciti
+
+Revisione del collaudo eseguito sul Mac il 2026-10-01 dopo l'installazione di update_evidence.py dal commit 0c0dda8441e6dbfa42b69e7c672b1e981f4d1c56. I sette file sorgenti sono fissati al commit 6e9d83435fdeb95c1d5d6970dcb6997b44005d8a. L'installazione ha completato verifiche e backup; la compilazione dell'interfaccia sul Mac è riuscita in 1,55 secondi.
+
+**La suite finita di sei casi è superata nella revisione umana del significato.** Il raccoglitore conserva correttamente qualityVerdict: pending_review: non effettua da solo questa valutazione. Tutti gli stream sono completi, non troncati e con citazioni formalmente valide.
+
+Dataset e criteri non sono cambiati. È cambiato il percorso sottoposto a prova: le richieste usano ora il backend delle note con estratti sintetici forniti esplicitamente. I casi explicit, conflict e opinion riportano campi riconosciuti senza inferenza; unknown, historical e no_answer usano il modello. È un risultato del sistema nel suo insieme, non una prova che il modello abbia imparato o che la sua accuratezza generale sia migliorata.
+
+| Caso | Modalità osservata | Revisione del significato |
+|---|---|---|
+| explicit | explicit_fields; inferenceUsed: false | Riporta letteralmente due libri, Italia e Stati Uniti e la fotografia al 2026-08-20, citando N1. |
+| unknown | model_synthesis; inferenceUsed: true | Limita il dato non verificato agli estratti; non deduce zero, l'assenza dei dati esterni o un report mai scaricato. |
+| conflict | explicit_fields; inferenceUsed: false | Segnala 0 e 2, cita entrambe le fonti e non sceglie un conteggio in base alla data del file o alla separazione delle schede. |
+| historical | model_synthesis; inferenceUsed: true | Descrive il problema del codice a barre come risolto e limita l'assenza di problemi successivi agli estratti. |
+| opinion | explicit_fields; inferenceUsed: false | Riporta soltanto due copie nel settembre 2026 come campo dichiarato nella nota, citando N1; non introduce percentuali o contenuti estranei. |
+| no_answer | model_synthesis; inferenceUsed: true | Le royalty di ottobre non risultano negli estratti; nessun importo inventato né estensione del limite alle fonti esterne. |
+
+Le due copie del caso opinion sono **un dato sintetico**. Nessun report personale, dashboard KDP o vendita reale è stato verificato da questa suite.
+
+### Tempi osservati in questa esecuzione
+
+| Caso | Primo testo client, ms | Totale client, ms | Inferenza |
+|---|---:|---:|---|
+| explicit | 24,42 | 24,50 | No |
+| unknown | 17101,58 | 24431,97 | Sì |
+| conflict | 2,38 | 2,45 | No |
+| historical | 2250,63 | 14378,91 | Sì |
+| opinion | 3,51 | 3,62 | No |
+| no_answer | 1670,04 | 4714,72 | Sì |
+
+Per i tre casi senza modello generationMs e generationFirstTextMs sono null, come previsto; answerMode e inferenceUsed distinguono i percorsi. I tempi sono misurati nel Terminale. Gli estratti sono forniti, quindi i valori non includono una scansione del vault o il rendering del browser. Non si confrontano i millisecondi delle risposte senza inferenza con il TTFT del modello. L'attesa di 17,10 secondi del caso unknown è osservata, ma la causa e lo stato freddo/caldo non sono determinati.
+
+### Ambito della conclusione e lavoro rimasto
+
+Il risultato certifica soltanto questi sei esempi e i criteri fissati. Il modulo riconosce un insieme dichiarato di campi e può mostrare valori discordanti; non risolve automaticamente tutti i conflitti del vault e non garantisce ogni sintesi libera. Citare una nota non dimostra che il suo contenuto sia vero o aggiornato.
+
+Restano il controllo di questo nuovo percorso nell'interfaccia con note reali e la raccolta separata di tempi chat/risposte sulle note. Il collaudo del browser per questa modifica non è ancora documentato. Non è autorizzata alcuna unione della PR draft a main.
+
+Per questa revisione sono stati consultati nuovamente scripts/andrea/quality_cases.json al commit installato e tests/evals/scorers/test_doc_qa.py dell'upstream. Le verifiche dei fatti e delle citazioni rimangono distinte dalla revisione del significato. Non si dichiara eseguita l'intera suite upstream.
+
+## Esito precedente conservato
+
+La sezione seguente documenta l'esito negativo prima dell'introduzione di evidence.py. Il difetto osservato spiega la correzione; non viene rimosso o riclassificato retroattivamente.
+
+## Stato del collaudo precedente
 
 La suite di accuratezza **non è superata**. Il prompt installato proviene dal commit 30a32f82c559345c1a960627bc5d961975e6cef1; l'aggiornatore è pubblicato nel commit 648799093aff63b1dfcbe3f28f4ace7d02cbd220.
 
@@ -32,7 +76,7 @@ Riferimento esaminato: open-jarvis/OpenJarvis, commit c4da16e1ca3d21f4cc1905d420
 
 Il collegamento a documenti e l'esistenza dei test upstream non risolvono automaticamente i difetti osservati del modello locale.
 
-## Vincoli per il prossimo intervento
+## Vincoli emersi dal collaudo precedente
 
 Non ripetere la suite invariata per cercare una risposta favorevole. Non dichiarare il collaudo concluso. Non cambiare criteri, conteggi o modello per nascondere il fallimento.
 
