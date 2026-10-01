@@ -301,14 +301,18 @@ class VaultNotes:
                 matches = set(terms) & (body_terms | title_terms)
                 if matches:
                     score = len(matches)*10 + len(set(terms)&body_terms)*2 + len(set(terms)&title_terms)*8
-                    results.append((score, self.fragment(note, terms)))
+                    # Rank all matching notes before the expensive line/window
+                    # scan. Only the ten returned results need a snippet; full
+                    # counts and eligibility still cover every scanned match.
+                    results.append((score, {**note, "eligible": note["hasContent"] and note["status"] in CURRENT}))
             if partial:
                 break
         self.cache = {key: value for key, value in self.cache.items() if key in seen}
         named = named_paths(query, [item for _, item in results])
         results.sort(key=lambda pair: (pair[1]["path"] not in named, not pair[1]["eligible"], -pair[0], pair[1]["path"]))
         matches = [item for _, item in results]
-        return {"query": query.strip(), "vault": str(root), "results": matches[:10], "total": len(matches), "scanned": scanned, "skipped": skipped, "partial": partial, "excluded": sum(not m["eligible"] for m in matches), "elapsedMs": round((time.monotonic()-started)*1000)}
+        previews = [self.fragment(note, terms) for note in matches[:10]]
+        return {"query": query.strip(), "vault": str(root), "results": previews, "total": len(matches), "scanned": scanned, "skipped": skipped, "partial": partial, "excluded": sum(not m["eligible"] for m in matches), "elapsedMs": round((time.monotonic()-started)*1000)}
 
     @locked
     def grounding(self, query):
