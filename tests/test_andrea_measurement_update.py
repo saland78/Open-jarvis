@@ -81,11 +81,12 @@ class UpdateTests(unittest.TestCase):
         with self.assertRaises(ValueError):self.run_update()
         self.assertEqual((self.project/'old.py').read_bytes(),b'old content')
 
-    def test_pinned_manifest_matches_sources_and_known_baseline(self):
+    def test_pinned_manifest_has_digests_and_known_baseline(self):
         self.assertEqual(updater.REVISION, '87d77ecd64a537433faa6ab26f1a7ce228ab9b97')
         self.assertEqual(len(updater.MANIFEST), 7)
         for item in updater.MANIFEST:
-            self.assertEqual(updater.digest(ROOT / item['path']), item['sha256'])
+            self.assertRegex(item['sha256'], r'^[0-9a-f]{64}$')
+        self.assertEqual(len({item['path'] for item in updater.MANIFEST}), 7)
         runtime = next(item for item in updater.MANIFEST if item['path'] == 'scripts/andrea/runtime.py')
         self.assertEqual(runtime['before'], '0c87d03fcc70cba47d7e1cf71b78c856ba41ab03ef5e14f2c3506e0ce6ebd62f')
 

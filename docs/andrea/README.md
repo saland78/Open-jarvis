@@ -131,3 +131,14 @@ I tempi firstTextClientMs e totalClientMs riguardano il client di controllo nel 
 
 Validazione di questa modifica: 8 test su misure, protocollo ASGI e privacy; 3 test sul client e sulla separazione dei verdetti; 13 regressioni dell'adattatore con parser upstream isolato e dati sintetici. Il backend Rust completo, il modello reale e il browser non sono stati eseguiti per questa modifica. Nessuna modifica frontend; nessuna nuova dipendenza. La sintassi Python e il caricamento dei casi JSON sono verificati. Qualità del modello e latenza reale restano da misurare sul Mac.
 
+
+## Domande con presupposti falsi e ripetizione di un solo caso
+
+Il collaudo reale dei sei casi sintetici ha rilevato una risposta contraddittoria nel caso historical: il modello ha presentato un problema come ancora aperto e subito dopo come risolto, benché la fonte documentasse soltanto la risoluzione. La suite di accuratezza non è superata. I controlli formali di citazioni e completamento erano positivi: non costituiscono una verifica del significato.
+
+Il prompt condiviso precisa ora che la domanda non è una fonte di fatti e può contenere un presupposto falso. Un problema documentato come risolto non va dichiarato ancora aperto senza evidenza di riapertura; la conclusione va limitata agli estratti. Questa istruzione è una correzione mirata da verificare con il modello reale, non una garanzia di correttezza né un addestramento.
+
+collaudo.py quality --case historical raccoglie soltanto quel caso usando i medesimi estratti e criteri già fissati. Senza --case rimangono i sei casi originali. La selezione è disponibile solo per quality. Nessun criterio è stato cambiato dopo la risposta. Dopo una modifica al prompt globale, il controllo del caso fallito non sostituisce la verifica degli altri cinque prima di dichiarare superata la suite.
+
+Il test del manifest dell'aggiornamento precedente verifica la struttura e la versione di partenza, anziché confrontare i sorgenti attuali con hash appartenenti a un commit precedente. Gli hash dei download restano verificati dall'aggiornatore e dalla rilettura al commit pubblicato.
+

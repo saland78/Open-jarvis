@@ -82,13 +82,18 @@ def main():
     parser.add_argument("mode", choices=("quality", "timings"))
     parser.add_argument("--notes-query", default="kpi self publishing")
     parser.add_argument("--repeats", type=int, default=3, choices=range(1, 11))
+    parser.add_argument("--case", choices=("explicit", "unknown", "conflict", "historical", "opinion", "no_answer"))
     args = parser.parse_args()
+    if args.case and args.mode != "quality":
+        parser.error("--case è disponibile soltanto con quality")
     rows = []
     if args.mode == "quality":
         cases = json.loads(Path(__file__).with_name("quality_cases.json").read_text())
-        print("Sei casi sintetici. Nessuna nota personale letta. La qualità richiede revisione delle risposte.", flush=True)
+        if args.case:
+            cases = [case for case in cases if case["id"] == args.case]
+        print(f"Casi sintetici selezionati: {len(cases)}. Nessuna nota personale letta. La qualità richiede revisione delle risposte.", flush=True)
         for i, case in enumerate(cases, 1):
-            print(f"Caso {i}/6: {case['id']}…", flush=True)
+            print(f"Caso {i}/{len(cases)}: {case['id']}…", flush=True)
             result = run_request({"model": MODEL, "stream": True,
                                   "messages": notes_messages(case["query"], case["sources"])}, keep_answer=True)
             rows.append({"case": case["id"], "criteria": case["criteria"], "result": result,
