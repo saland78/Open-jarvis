@@ -8,6 +8,7 @@ from pathlib import Path
 import time
 
 from measurements import LocalMeasurements, RequestMeasurement
+from evidence import explicit_count_answer, supplied_sources
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -109,6 +110,12 @@ class LocalMode:
                 raise ValueError("Conversazione troppo lunga: inizia una nuova chat.")
             if messages[-1]["role"] != "user":
                 raise ValueError("Manca la richiesta dell'utente.")
+            if "notes_sources" in payload:
+                if "notes_query" not in payload:
+                    raise ValueError("Gli estratti forniti richiedono una domanda sulle note.")
+                payload["notes_sources"] = supplied_sources(payload["notes_sources"])
+            if "notes_query" in payload and (not isinstance(payload["notes_query"], str) or not payload["notes_query"].strip() or len(payload["notes_query"]) > 200):
+                raise ValueError("Domanda sulle note non valida.")
         except (ValueError, KeyError, TypeError) as exc:
             return await self.reply(send, 400, str(exc))
         if self.busy:
@@ -116,13 +123,22 @@ class LocalMode:
         self.busy = True
         measurement = RequestMeasurement("notes" if "notes_query" in payload else "chat", self.model, started=request_started)
         evidence = None
+        direct_answer = None
         if "notes_query" in payload:
             retrieval_started = time.perf_counter()
             try:
-                if not self.notes:
+                if "notes_sources" in payload:
+                    evidence = {"query": payload["notes_query"], "sources": payload["notes_sources"], "excluded": 0, "partial": False, "origin": "provided"}
+                elif not self.notes:
                     raise ValueError("Lettura delle note non disponibile.")
-                evidence = await asyncio.to_thread(self.notes.grounding, payload["notes_query"])
+                else:
+                    evidence = await asyncio.to_thread(self.notes.grounding, payload["notes_query"])
+                    evidence["origin"] = "vault"
+                direct_answer = explicit_count_answer(payload["notes_query"], evidence["sources"])
+                evidence["answerMode"] = "explicit_fields" if direct_answer is not None else "model_synthesis"
                 measurement.retrieval(retrieval_started, evidence)
+                measurement.record["answerMode"] = evidence["answerMode"]
+                measurement.record["inferenceUsed"] = direct_answer is None
                 messages = notes_messages(payload["notes_query"], evidence["sources"])
             except ValueError as exc:
                 measurement.retrieval(retrieval_started)
@@ -138,7 +154,8 @@ class LocalMode:
         payload = {"model": self.model, "messages": messages, "stream": True, "temperature": 0.4, "max_tokens": 512}
         sent = False
         started = False
-        measurement.generation()
+        if direct_answer is None:
+            measurement.generation()
         async def replay():
             nonlocal sent
             if not sent:
@@ -159,7 +176,13 @@ class LocalMode:
                 await send({"type": "http.response.body", "body": f"event: local_sources\ndata: {data}\n\n".encode(), "more_body": True})
         try:
             async with asyncio.timeout(self.timeout):
-                await self.app(scope, replay, tracked)
+                if direct_answer is None:
+                    await self.app(scope, replay, tracked)
+                else:
+                    await tracked({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"text/event-stream"), (b"cache-control", b"no-store")]})
+                    data = json.dumps({"choices": [{"index": 0, "delta": {"content": direct_answer}, "finish_reason": None}]}, ensure_ascii=False)
+                    await tracked({"type": "http.response.body", "body": f"data: {data}\n\n".encode(), "more_body": True})
+                    await tracked({"type": "http.response.body", "body": b'data: {"choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}\n\ndata: [DONE]\n\n', "more_body": False})
         except TimeoutError:
             measurement.record["status"] = "timeout"
             if started:

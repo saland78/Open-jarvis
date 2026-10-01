@@ -142,3 +142,26 @@ collaudo.py quality --case historical raccoglie soltanto quel caso usando i mede
 
 Il test del manifest dell'aggiornamento precedente verifica la struttura e la versione di partenza, anziché confrontare i sorgenti attuali con hash appartenenti a un commit precedente. Gli hash dei download restano verificati dall'aggiornatore e dalla rilettura al commit pubblicato.
 
+## Conteggi espliciti e protezione dai conflitti
+
+Il collaudo completo documentato in quality-review-2026-10-01.md resta negativo per la versione precedente: citazioni formalmente corrette non hanno impedito una negazione del conflitto e una parafrasi non sostenuta dalla fonte.
+
+scripts/andrea/evidence.py aggiunge un percorso limitato per domande semplici sui titoli/libri pubblicati e sulle copie vendute. Riconosce solo campi espliciti e valori interi, compresi gli alias dichiarati nel modulo. Copia le righe originali con le citazioni: date, periodi e marketplace restano nella citazione e non vengono ricostruiti da modifiedAt. Valori differenti vengono mostrati insieme senza scegliere, sommare o supporre che la separazione delle schede risolva il problema. Periodo e ambito devono essere chiariti: valori di periodi diversi possono essere entrambi validi.
+
+Dati mancanti, stime, frazioni, valori scalati, negazioni, metriche sconosciute e domande operative restano fuori da questo percorso. Non è un verificatore generale della semantica né delle fonti esterne. Le altre richieste continuano a usare il prompt e il modello già configurati; le loro sintesi restano da verificare. Il controllo non addestra il modello e non prova che un fatto dichiarato dalla nota sia vero.
+
+Per le domande quantitative gestite il testo di una trascrizione privo di un campo pertinente non viene aggiunto alla risposta. Non si applica una percentuale minima di parole coincidenti per certificare l'accuratezza. La selezione delle fonti nel vault, le esclusioni per stato e il rifiuto di una scansione parziale sono conservati.
+
+Il raccoglitore quality ora attraversa lo stesso percorso backend delle risposte sulle note, con notes_sources contenente soltanto i tre estratti sintetici già pubblicati. Non legge il vault e non cambia i sei estratti o i criteri. notes_sources è un ingresso locale limitato, protetto da Host/Origin e validazione delle dimensioni; non ammette percorsi di file o stati arbitrari. L'origine provided è distinta da vault. I casi explicit, conflict e opinion possono usare il percorso dei campi espliciti; gli altri continuano a interrogare il modello. Un esito futuro della suite verifica il sistema completo, non dimostra che il modello da solo abbia corretto i propri errori.
+
+L'evento local_sources e le misure distinguono answerMode explicit_fields/model_synthesis e inferenceUsed. Se il modello non viene invocato, generationMs e generationFirstTextMs rimangono null. La velocità di una risposta estratta non va presentata come un miglioramento della velocità di Ollama. Nessun testo delle note o della risposta viene aggiunto allo storico delle misure.
+
+L'interfaccia conserva i riferimenti e la lettura delle note, ma evita di affermare che ogni risposta abbia usato il modello. Le sole modifiche frontend sono quattro testi; nessuna modifica a Suggested budget, al modello, ai limiti di generazione, alla memoria o alle dipendenze.
+
+Validazione: 11 nuovi test sul campo di applicazione, sui conflitti, sulla fedeltà delle citazioni, sulle misure e sul confine ASGI effettivo; 8 test delle misure; 3 del client; 6 della transazione di aggiornamento; 13 regressioni dell'adattatore usando il parser scalare upstream isolato. Totale 41 verifiche mirate riuscite. Nella checkout parziale di revisione l'esecuzione generale dei test che importano il pacchetto OpenJarvis completo richiede il modulo non installato; il backend Rust completo non è stato eseguito. Sintassi Python verificata e differenza frontend limitata ai testi controllata. La build completa del frontend e il browser non sono stati eseguiti per questa modifica; il launcher sul Mac ricompila l'interfaccia. I risultati con Ollama reale e il vault reale restano da verificare sul Mac: la nuova correzione non è ancora installata.
+
+## Procedura richiesta per ogni nuovo intervento
+
+Prima di modificare codice, verificare lo stato del fork e consultare i test upstream pertinenti in https://github.com/open-jarvis/OpenJarvis/tree/main/tests. Fissare il riferimento esaminato e documentare cosa si recupera, cosa viene adattato e quali controlli non certificano il risultato richiesto. Non sostituire il collaudo locale con la semplice presenza di test upstream.
+
+Per questo intervento sono stati letti tests/connectors/test_obsidian.py e tests/evals/scorers/test_doc_qa.py, al commit c4da16e1ca3d21f4cc1905d4200063e564104f0f. Si mantiene il parser Obsidian upstream e il modello di verifiche separate su contenuto, citazioni e protocollo. Lo scorer documentale controlla corrispondenze di parole e citazioni: non viene usato per dichiarare vere le affermazioni. I nuovi test coprono il controllo conservativo dei campi e il mancato avvio dell'inferenza quando non serve.

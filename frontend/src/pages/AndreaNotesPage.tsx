@@ -96,7 +96,7 @@ export function AndreaNotesPage() {
           setAnswer(text);
         }
       }
-      if (!text && !abort.signal.aborted) setError('Il modello non ha generato una risposta.');
+      if (!text && !abort.signal.aborted) setError('Nessun testo ricevuto per la risposta.');
     } catch (err) { failed(err, abort, id); } finally { finished(id); }
   }
   function stop() { controller.current?.abort(); revision.current += 1; setBusy(''); setError('Risposta interrotta. Gli eventuali estratti e il testo parziale restano visibili.'); }
@@ -131,19 +131,19 @@ export function AndreaNotesPage() {
           </article>)}
           {result.total === 0 ? <p>Nessuna corrispondenza. Prova una parola diversa.</p> : null}
           {!canSummarize && result.total > 0 ? <p>Nessuna fonte attiva con contenuto utilizzabile per il riassunto.</p> : null}
-          <button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Riassumi gli estratti con Jarvis</button>
+          <button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Rispondi usando gli estratti con Jarvis</button>
           {!model ? <p>La ricerca funziona senza inferenza. Per il riassunto serve il modello locale configurato.</p> : null}
         </section> : null}
         {busy === 'summary' ? <div className="flex gap-3 items-center"><p role="status">Jarvis sta elaborando gli estratti…</p><button className={button} onClick={stop}>Interrompi risposta</button></div> : null}
         {answer || evidence ? <section aria-label="Riassunto delle fonti" className="border border-[var(--color-border)] rounded-lg p-4 flex flex-col gap-3">
           <h2 className="font-semibold">Risposta di Jarvis</h2><p className="whitespace-pre-wrap break-words">{answer || 'In attesa del primo testo…'}</p>
-          <p>Il modello ha ricevuto questi estratti, non le note intere. Verifica la risposta confrontandola con le fonti.</p>
+          <p>La risposta usa estratti, non le note intere. I conteggi riconosciuti possono essere riportati direttamente dalle fonti; le altre risposte sono sintesi del modello da verificare. Una citazione non dimostra che il dato della fonte sia vero o aggiornato.</p>
           {missingCitations || unknownCitations.length > 0 ? <p role="alert">Le citazioni della risposta sono mancanti o non corrispondono alle fonti fornite. Il riassunto va verificato.</p> : null}
           {evidence?.excluded ? <p>{evidence.excluded} note non utilizzabili escluse.</p> : null}
           {evidence?.partial ? <p>Anche le fonti del riassunto provengono da una ricerca parziale.</p> : null}
           {evidence?.sources.map(s => <article key={s.id} className="border-t pt-3">
             <h3 className="font-semibold">[{s.id}] {s.title}</h3><p className="text-sm break-words">{s.path} · righe {s.startLine}–{s.endLine} · stato dichiarato: {s.status}</p>
-            <p className="text-sm">Estratto fornito al modello il cui file risultava aggiornato a: {s.modifiedAt}</p>
+            <p className="text-sm">Estratto consultato per la risposta; il file risultava aggiornato a: {s.modifiedAt}</p>
             <pre className="whitespace-pre-wrap break-words font-sans my-2">{s.text}</pre><button className={button} disabled={Boolean(busy)} onClick={() => void read(s.path)}>Leggi nota aggiornata</button>
           </article>)}
         </section> : null}
@@ -156,3 +156,4 @@ export function AndreaNotesPage() {
     </section>
   );
 }
+

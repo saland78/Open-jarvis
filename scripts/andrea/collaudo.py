@@ -14,8 +14,6 @@ import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from runtime import notes_messages
-
 BASE = "http://127.0.0.1:8008"
 MODEL = "qwen3:4b-instruct-2507-q4_K_M"
 
@@ -91,11 +89,12 @@ def main():
         cases = json.loads(Path(__file__).with_name("quality_cases.json").read_text())
         if args.case:
             cases = [case for case in cases if case["id"] == args.case]
-        print(f"Casi sintetici selezionati: {len(cases)}. Nessuna nota personale letta. La qualità richiede revisione delle risposte.", flush=True)
+        print(f"Casi sintetici selezionati: {len(cases)}. Nessuna nota personale letta. Stesso percorso delle risposte sulle note, con estratti forniti; i campi espliciti possono rispondere senza modello. La qualità richiede revisione delle risposte.", flush=True)
         for i, case in enumerate(cases, 1):
             print(f"Caso {i}/{len(cases)}: {case['id']}…", flush=True)
             result = run_request({"model": MODEL, "stream": True,
-                                  "messages": notes_messages(case["query"], case["sources"])}, keep_answer=True)
+                                  "messages": [{"role": "user", "content": case["query"]}],
+                                  "notes_query": case["query"], "notes_sources": case["sources"]}, keep_answer=True)
             rows.append({"case": case["id"], "criteria": case["criteria"], "result": result,
                          "formalChecks": formal_checks(case, result), "qualityVerdict": "pending_review"})
     else:

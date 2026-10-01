@@ -46,7 +46,11 @@ class ControlClientTests(unittest.TestCase):
         self.assertEqual(len(data["rows"]), 6)
         self.assertTrue(all(r["qualityVerdict"] == "pending_review" for r in data["rows"]))
         self.assertTrue(all("criteria" in r for r in data["rows"]))
-        self.assertTrue(all("notes_query" not in c.args[0] for c in run.call_args_list))
+        cases = json.loads(Path(collaudo.__file__).with_name("quality_cases.json").read_text())
+        for call, case in zip(run.call_args_list, cases):
+            self.assertEqual(call.args[0]["notes_query"], case["query"])
+            self.assertEqual(call.args[0]["notes_sources"], case["sources"])
+            self.assertEqual(call.args[0]["messages"], [{"role": "user", "content": case["query"]}])
 
     def test_unknown_and_missing_citations_fail_formal_checks(self):
         case = {"sources":[{"id":"N1"}], "expectedCitations":["N1"]}
