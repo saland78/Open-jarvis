@@ -10,7 +10,7 @@ Ripetendo la stessa domanda naturale, la nota KPI nominata è ora il primo risul
 
 Il miglioramento osservato è la pertinenza della prima fonte. La durata della ricerca, 3304 ms contro 3189 ms della precedente esecuzione, non dimostra un miglioramento della latenza; sono singole rilevazioni. La durata della risposta o del primo testo nel browser non è stata cronometrata.
 
-Resta la raccolta separata dei tempi già prevista: tre richieste di chat breve e tre sintesi sulla nota KPI, usando il client di controllo. Include le misure della ricerca/preparazione e del percorso di generazione, non la futura pipeline audio. I contenuti del vault e della risposta non vengono conservati nel risultato timings. Il modello non viene cambiato o scaricato dalla memoria. Lo stato freddo/caldo non viene dedotto.
+La raccolta separata dei tempi è ora completata: tre chat brevi e tre sintesi sulla nota, tutte completate senza timeout o troncamenti. Mediane client: chat 154,43 ms al primo testo e 387,31 ms totali; note 2046,98 ms al primo testo e 25785,20 ms totali. La ricerca/preparazione ha mediana 1895,92 ms. Le prime richieste sono più lente; la causa e lo stato freddo/caldo non sono determinati. [latency-baseline-2026-10-01.md](latency-baseline-2026-10-01.md) conserva le sei misure e i limiti di interpretazione, senza testi delle note o risposte. Il collaudo finito previsto per questa fase è concluso; la successiva ottimizzazione non è ancora applicata.
 
 Nessuno screenshot, testo della nota, titolo privato di libro o report KDP viene pubblicato con questa registrazione.
 
