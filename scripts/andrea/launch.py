@@ -30,6 +30,7 @@ def main():
     probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
         probe.bind(("127.0.0.1", 8008))
+        probe.listen(1)
     except OSError:
         probe.close()
         raise RuntimeError("Porta 8008 occupata. Nessun processo è stato fermato: comunica questo messaggio.")

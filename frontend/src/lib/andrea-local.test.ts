@@ -42,4 +42,18 @@ describe('personal local build', () => {
     const consume = async () => { for await (const _ of streamChat({ model: 'fixture', messages: [], stream: true })) { /* drain */ } };
     await expect(consume()).rejects.toThrow('Timeout di prova');
   });
+  it('preserves source event identity across transport chunk boundaries', async () => {
+    vi.stubEnv('VITE_ANDREA_LOCAL', 'true');
+    vi.stubGlobal('localStorage', { getItem: () => null });
+    const encoder = new TextEncoder();
+    const body = new ReadableStream({ start(controller) {
+      for (const part of ['event: local_sources\n', 'data: {"sources":[{"id":"N1"}]}\n\n', 'data: [DONE]\n\n']) controller.enqueue(encoder.encode(part));
+      controller.close();
+    }});
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(body)));
+    const { streamChat } = await import('./sse');
+    const events = [];
+    for await (const event of streamChat({ model: 'fixture', messages: [], stream: true })) events.push(event);
+    expect(events).toEqual([{ event: 'local_sources', data: '{"sources":[{"id":"N1"}]}' }]);
+  });
 });
