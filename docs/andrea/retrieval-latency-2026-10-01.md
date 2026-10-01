@@ -1,5 +1,7 @@
 # Estratti preparati dopo la selezione — 2026-10-01
 
+**Esito successivo sul Mac:** installazione, riavvio, ricerca e raccolta dei tempi sono completati. [search-work-mac-review-2026-10-01.md](search-work-mac-review-2026-10-01.md) documenta il confronto. Le sezioni seguenti conservano il collaudo di sviluppo precedente all'installazione.
+
 ## Problema e modifica
 
 La baseline sul Mac registra circa 1,90 secondi di ricerca/preparazione prima della sintesi. Il codice preparava un estratto per ogni nota trovata, prima di selezionare i dieci risultati restituiti. Questa modifica completa prima ricerca e ordinamento usando contenuto, titolo, percorso e stato; prepara gli estratti soltanto per i dieci risultati restituiti.
@@ -35,6 +37,6 @@ In tutte le prove: 364 note controllate, 364 corrispondenze, 14 escluse, ricerca
 
 scripts/andrea/update_search_work.py applica soltanto vault.py, i tre nuovi controlli e questo documento da un commit fissato. Verifica hash e baseline della versione installata, rifiuta modifiche incompatibili, richiede porta 8008 libera e conserva backup e rollback. Nessuna modifica a frontend, prompt, modello, budget, dipendenze, configurazioni, database o note. Suggested budget resta una proposta; il massimo del profilo resta 512 token.
 
-La modifica è preparata e collaudata in sviluppo. Installazione e beneficio sul Mac restano da verificare. Il collaudo Obsidian precedente rimane documentato separatamente e non viene ripetuto per cercare una risposta favorevole. Dopo l'installazione è sufficiente una raccolta confrontabile dei tempi e il controllo delle fonti restituite per la stessa ricerca.
+Al momento della preparazione, la modifica era collaudata soltanto in sviluppo. Installazione e beneficio sul Mac erano ancora da verificare; il rapporto successivo collegato sopra registra l'esito. Il collaudo Obsidian precedente rimane documentato separatamente e non viene ripetuto per cercare una risposta favorevole. Dopo l'installazione è sufficiente una raccolta confrontabile dei tempi e il controllo delle fonti restituite per la stessa ricerca.
 
 PR draft, senza unione a main. Jarvis originale sulla porta 7778 resta separato. Questa modifica non addestra il modello, non verifica dati KDP e non implementa la pipeline vocale.
