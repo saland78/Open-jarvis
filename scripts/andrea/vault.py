@@ -218,7 +218,13 @@ class VaultNotes:
         lines = note["text"].split("\n")
         start = note["bodyStart"]
         if start < len(lines):
-            start = max(range(start, len(lines)), key=lambda i: sum(t in words("\n".join(lines[i:i+4])) for t in terms) * 10 + sum(t in words(lines[i]) for t in terms))
+            line_terms = [set(words(line)) for line in lines[start:]]
+            scores = [
+                sum(t in set().union(*line_terms[i:i+4]) for t in terms) * 10
+                + sum(t in line_terms[i] for t in terms)
+                for i in range(len(line_terms))
+            ]
+            start += max(range(len(scores)), key=scores.__getitem__)
         chosen, count = [], 0
         for line in lines[start:]:
             if count >= limit:
@@ -247,13 +253,13 @@ class VaultNotes:
         for folder, dirs, files in os.walk(root, followlinks=False):
             dirs[:] = sorted(d for d in dirs if not d.startswith(".") and d not in SKIP and not (Path(folder)/d).is_symlink())
             entries += len(dirs) + len(files)
-            if entries > self.MAX_ENTRIES or time.monotonic()-started > 2:
+            if entries > self.MAX_ENTRIES or time.monotonic()-started > 10:
                 partial = True
                 break
             for name in sorted(files):
                 if name.startswith(".") or not name.lower().endswith(".md"):
                     continue
-                if scanned >= self.MAX_FILES or total_bytes >= self.MAX_BYTES or time.monotonic()-started > 2:
+                if scanned >= self.MAX_FILES or total_bytes >= self.MAX_BYTES or time.monotonic()-started > 10:
                     partial = True
                     break
                 relative = (Path(folder)/name).relative_to(root).as_posix()
@@ -269,7 +275,7 @@ class VaultNotes:
                 title_terms = set(words(note["title"] + " " + relative))
                 matches = set(terms) & (body_terms | title_terms)
                 if matches:
-                    score = len(matches)*10 + len(set(terms)&body_terms)*2 + len(set(terms)&title_terms)
+                    score = len(matches)*10 + len(set(terms)&body_terms)*2 + len(set(terms)&title_terms)*8
                     results.append((score, self.fragment(note, terms)))
             if partial:
                 break
@@ -281,7 +287,13 @@ class VaultNotes:
     @locked
     def grounding(self, query):
         result = self.search(query)
-        sources = [s for s in result["results"] if s["eligible"]][:3]
+        if result["partial"]:
+            raise VaultError("Ricerca incompleta: il riassunto non è stato avviato. Restringi la ricerca o controlla i limiti di scansione.")
+        candidates = [s for s in result["results"] if s["eligible"]]
+        terms = list(dict.fromkeys(t for t in words(query) if t not in STOP))[:16]
+        # A query naming a note is more precise than incidental body mentions.
+        exact = [s for s in candidates if list(dict.fromkeys(t for t in words(s["title"]) if t not in STOP)) == terms]
+        sources = (exact or candidates)[:3]
         if not sources:
             raise VaultError("Nessuna fonte attiva con contenuto utilizzabile. Leggi le note o modifica la ricerca.")
         return {"query": query, "sources": [{**s, "id": f"N{i+1}"} for i, s in enumerate(sources)], "excluded": result["excluded"], "partial": result["partial"]}

@@ -102,3 +102,13 @@ Il campo `suggested_max_tokens` proviene dal classificatore di complessità upst
 `scripts/andrea/update_notes.py` prepara un aggiornamento dei soli sorgenti di questa integrazione. Scarica i file da un commit fissato, verifica tutti gli SHA-256 prima di modificare il progetto e controlla i file principali contro la versione di partenza. Differenze locali inattese, file collegati o un server ancora in ascolto sulla porta 8008 interrompono l'operazione. Non termina processi.
 
 Il backup dei sorgenti esistenti viene creato in `~/.openjarvis-andrea/update-backups/`. Un errore durante le sostituzioni ripristina i file già aggiornati; i nuovi file applicati sono rimossi nel rollback. `.env`, `.venv`, database, vault e altre configurazioni non vengono copiati o sostituiti. Le dipendenze e la compilazione sono gestite successivamente dal launcher esistente. Il collaudo dell'aggiornamento su macOS va confermato dall'utente prima di dichiararlo applicato al suo Mac.
+
+## Correzioni del collaudo: ricerca e riassunti
+
+La scansione ha un limite di 10 secondi, mantenendo gli altri limiti di file, byte e accesso. La scelta dell'estratto tokenizza ogni riga una sola volta e riusa gli insiemi di parole, preservando il criterio della finestra di quattro righe. Titolo e percorso hanno un peso maggiore nell'ordinamento.
+
+Quando la richiesta corrisponde esattamente alle parole significative del titolo di una nota, il riassunto usa le fonti attive con quel titolo (massimo tre), anziché aggiungere menzioni incidentali da altri documenti. La ricerca continua a mostrare gli altri risultati. Questo è un riassunto mirato alla nota nominata, non un controllo di tutte le possibili contraddizioni nel vault. In assenza di titolo esatto si mantiene la selezione dei primi risultati utilizzabili.
+
+Una ricerca parziale ora impedisce l'avvio dell'inferenza, con un errore visibile. Il prompt richiede citazioni per le singole affermazioni, conflitti espliciti, distinzione tra dati mancanti e zero, attribuzione delle date dichiarate e delle opinioni della fonte. La data di modifica del file non stabilisce quale fatto sia vero o attuale. Queste istruzioni non costituiscono un validatore della correttezza del modello.
+
+Validazione di questa correzione: 13 test mirati dell'adattatore, con dati sintetici e il parser scalare upstream eseguito isolatamente. Comprendono sei regressioni nuove su titolo esatto, fonti con lo stesso titolo ma dati discordanti, rifiuto di scansioni parziali prima dell'inferenza e numero di tokenizzazioni con righe lunghe. Nessun Ollama reale o backend Rust completo utilizzato in questa esecuzione; nessuna modifica frontend. La qualità delle nuove risposte e la latenza complessiva restano da collaudare sul Mac.
