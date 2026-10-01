@@ -20,7 +20,9 @@ Il branch torna al runtime precedente alla guida di stile breve, SHA-256 fb30f0b
 
 restore_concise.py applica soltanto runtime.py e il relativo file di prove, da un commit fissato. Accetta esclusivamente le versioni previste, verifica hash, richiede porta 8008 libera e crea backup con rollback. La ricerca con estratti preparati dopo la selezione, già collaudata sul Mac, resta attiva. Conteggi diretti, modello, parametri, frontend, dati, dipendenze e Jarvis originale non vengono modificati.
 
-Il ripristino è preparato in sviluppo; l'applicazione sul Mac resta da confermare. Non si dichiara che il runtime precedente elimini ogni possibile errore della sintesi libera.
+Il ripristino sul Mac è completato e verificato il 2026-10-02 (Europe/Rome). Lo script ha confermato due file applicati e backup creato. Dopo il riavvio, GET /api/andrea/notes/status risponde HTTP 200 con vault configurato, disponibile e in sola lettura.
+
+La verifica locale SHA-256 conferma runtime.py = fb30f0b3f179b73cd8976e706653c898fa4da9bfe5739ba0706dfbdef2895ff3 e vault.py = 3dd17ba664504f12ee02e72962ff6358db1be5d56b085ff755ff8f93971a78bd: runtime precedente ripristinato e ottimizzazione della ricerca conservata. Questa verifica chiude il ripristino, non un nuovo collaudo semantico. Non si dichiara che il runtime precedente elimini ogni possibile errore della sintesi libera.
 
 ## Direzione successiva
 
