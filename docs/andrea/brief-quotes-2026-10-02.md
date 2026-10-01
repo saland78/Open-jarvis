@@ -38,6 +38,14 @@ Il controllo TypeScript è passato con il compilatore JavaScript 5.9.3 nel solo 
 
 L'aggiornamento modifica soltanto sorgenti, test e questo documento, con commit fissato, SHA-256, baseline, backup e rollback. Non modifica vault, database, profili, dipendenze, modello o Jarvis originale. L'ottimizzazione della ricerca resta attiva.
 
-Installazione sul Mac non ancora eseguita. Criteri finali: riavvio e build riusciti; suite brief di sette casi rivista; nello stesso pannello Note Obsidian, ricerca della nota già usata e pulsante Passaggi brevi dalle fonti. Il passaggio deve conservare il testo corrente, la data e il limite di verifica della nota, senza scadenza inventata né fusione con dati storici. Selezione e fonte devono essere confrontate; nessun nuovo dato esterno viene certificato. Nessuna nuova serie di misure del modello è richiesta, perché questo percorso non usa inferenza. Il verdetto complessivo resta aperto finché questi controlli sul Mac non sono conclusi.
+**Collaudo previsto concluso e superato sul Mac il 2026-10-02 (Europe/Rome), per la modalità Passaggi brevi dalle fonti.**
+
+L'aggiornamento ha applicato nove file da a07ae299d03fc8d8a8bedb85a8b313ca8cda5361 con hash dello script confermato e backup creato. Riavvio e build standard del Mac sono riusciti, inclusi TypeScript, Vite e generazione PWA; gli avvisi sui chunk e sugli import dinamici non hanno impedito il completamento. Nessuna dipendenza è stata aggiornata dallo script.
+
+Il client brief sul Mac ha raccolto tutti e sette i casi, completati con finishReason stop, tutte le verifiche formali vere, answerMode brief_quotes e inferenceUsed false. I testi coincidono con i passaggi sintetici già rivisti secondo i criteri della tabella. La revisione semantica è quindi superata per questi sette casi; qualityVerdict rimane pending_review nel raccoglitore, senza attribuirgli un giudizio automatico.
+
+Nel browser del Mac il nuovo pulsante è stato usato sulla stessa ricerca e sulla fonte reale prevista. Il passaggio selezionato coincide con il blocco corrente, conserva data dichiarata, limiti di verifica nella nota, negazioni e distinzione dalla fotografia storica. Non introduce scadenze né fonde il blocco storico con quello corrente; citazione e file/righe della fonte sono presenti. Screenshot, testi personali e log integrali non vengono pubblicati.
+
+Questo chiude l'aggiornamento e il suo collaudo finito. Non trasforma in superato il precedente test negativo della sintesi generativa breve, non certifica tutti i passaggi del vault o ogni domanda e non verifica dashboard o report esterni. La sintesi libera resta separata e da verificare. Non sono richieste nuove misure Ollama per questo percorso senza inferenza; non si attribuisce un miglioramento alla generazione del modello.
 
 PR draft, non unire a main. Memoria salvata non significa addestramento o apprendimento verificato.
