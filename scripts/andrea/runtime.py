@@ -10,6 +10,7 @@ import time
 from measurements import LocalMeasurements, RequestMeasurement
 from evidence import explicit_count_answer, supplied_sources
 from brief import brief_answer
+from status_scope import status_scope_answer
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -143,6 +144,10 @@ class LocalMode:
                 else:
                     direct_answer = explicit_count_answer(payload["notes_query"], evidence["sources"])
                     evidence["answerMode"] = "explicit_fields" if direct_answer is not None else "model_synthesis"
+                    if direct_answer is None:
+                        direct_answer = status_scope_answer(evidence["sources"])
+                        if direct_answer is not None:
+                            evidence["answerMode"] = "status_scope_quotes"
                 measurement.retrieval(retrieval_started, evidence)
                 measurement.record["answerMode"] = evidence["answerMode"]
                 measurement.record["inferenceUsed"] = direct_answer is None
