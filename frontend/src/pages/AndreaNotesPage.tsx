@@ -12,7 +12,7 @@ interface Source {
 }
 interface VaultStatus { available: boolean; configured: boolean; vault?: string; detail?: string }
 interface SearchResult { query: string; results: Source[]; scanned: number; total: number; excluded: number; partial: boolean; skipped: number; elapsedMs: number }
-interface Evidence { answerMode?: string; query: string; sources: Source[]; excluded: number; partial: boolean }
+interface Evidence { answerMode?: string; inferenceUsed?: boolean; query: string; sources: Source[]; excluded: number; partial: boolean }
 interface Note { path: string; title: string; text: string; status: string; modifiedAt: string }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -103,7 +103,7 @@ export function AndreaNotesPage() {
       if (id === revision.current) setNote(data);
     } catch (err) { failed(err, abort, id); } finally { finished(id); }
   }
-  async function summarize(brief = false) {
+  async function summarize(brief = false, structured = false) {
     if (!result) return;
     const measurement = new BrowserNoteMeasurement(undefined, document.visibilityState === 'visible');
     const { abort, id } = start('summary');
@@ -113,12 +113,12 @@ export function AndreaNotesPage() {
     let done = false;
     let reason: unknown = null;
     try {
-      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief }, abort.signal,
+      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief, notes_structured: structured }, abort.signal,
         { headers: requestId => measurement.headers(requestId), done: () => { done = true; } })) {
         if (id !== revision.current) break;
         const data = JSON.parse(event.data);
         if (event.event === 'local_sources') {
-          setEvidence(data); measurement.mode(data.answerMode);
+          setEvidence(data); measurement.mode(data.answerMode, data.inferenceUsed);
         } else {
           if (data.choices?.[0]?.finish_reason) reason = data.choices[0].finish_reason;
           if (data.choices?.[0]?.delta?.content) {
@@ -150,7 +150,7 @@ export function AndreaNotesPage() {
     setBusy(''); setError('Risposta interrotta. Gli eventuali estratti e il testo parziale restano visibili.');
   }
   const canSummarize = Boolean(result?.results.some(s => s.eligible));
-  const missingCitations = busy !== 'summary' && answer && evidence && !evidence.sources.some(s => answer.includes(`[${s.id}]`));
+  const missingCitations = !['structured_refused', 'structured_abstained'].includes(evidence?.answerMode || '') && busy !== 'summary' && answer && evidence && !evidence.sources.some(s => answer.includes(`[${s.id}]`));
   const unknownCitations = busy !== 'summary' ? answer.match(/\[N\d+\]/g)?.filter(id => !evidence?.sources.some(s => `[${s.id}]` === id)) || [] : [];
 
   return (
@@ -180,14 +180,14 @@ export function AndreaNotesPage() {
           </article>)}
           {result.total === 0 ? <p>Nessuna corrispondenza. Prova una parola diversa.</p> : null}
           {!canSummarize && result.total > 0 ? <p>Nessuna fonte attiva con contenuto utilizzabile per il riassunto.</p> : null}
-          <div className="flex flex-wrap gap-2"><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize(true)}>Passaggi brevi dalle fonti</button><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Sintesi del modello</button></div>
-          <p>I passaggi brevi conservano il testo originale e il suo contesto. La sintesi del modello può introdurre errori e va confrontata con le fonti.</p>
+          <div className="flex flex-wrap gap-2"><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize(true)}>Passaggi brevi dalle fonti</button><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize(false, true)}>Sintesi strutturata</button><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Sintesi libera del modello</button></div>
+          <p>I passaggi brevi conservano il testo originale e il suo contesto. La sintesi strutturata viene mostrata dopo i controlli di formato, fonti e date; può ancora contenere errori di significato. Entrambe le sintesi vanno confrontate con le fonti.</p>
           {!model ? <p>La ricerca funziona senza inferenza. Per la sintesi libera serve il modello locale configurato.</p> : null}
         </section> : null}
         {busy === 'summary' ? <div className="flex gap-3 items-center"><p role="status">Jarvis sta elaborando gli estratti…</p><button className={button} onClick={stop}>Interrompi risposta</button></div> : null}
         {times ? <AndreaResponseTimes times={times} /> : null}
         {answer || evidence ? <section aria-label="Riassunto delle fonti" className="border border-[var(--color-border)] rounded-lg p-4 flex flex-col gap-3">
-          <h2 className="font-semibold">{evidence?.answerMode === 'status_scope_quotes' ? 'Qualifiche datate dalle fonti' : evidence?.answerMode === 'brief_quotes' ? 'Passaggi brevi dalle fonti' : 'Risposta di Jarvis'}</h2><p className="whitespace-pre-wrap break-words">{answer || 'In attesa del primo testo…'}</p>
+          <h2 className="font-semibold">{evidence?.answerMode === 'structured_synthesis' ? 'Sintesi strutturata da verificare' : evidence?.answerMode === 'structured_refused' ? 'Sintesi strutturata non mostrata' : evidence?.answerMode === 'structured_abstained' ? 'Astensione dalla sintesi' : evidence?.answerMode === 'status_scope_quotes' ? 'Qualifiche datate dalle fonti' : evidence?.answerMode === 'brief_quotes' ? 'Passaggi brevi dalle fonti' : 'Risposta di Jarvis'}</h2><p className="whitespace-pre-wrap break-words">{answer || (evidence?.answerMode === 'structured_synthesis' ? 'Generazione e controllo del JSON in corso. Il testo compare solo dopo i controlli.' : 'In attesa del primo testo…')}</p>
           <p>{evidence?.answerMode === 'status_scope_quotes' ? 'Protezione attiva: nessuna sintesi del modello generata. Intestazioni ed etichette sono copiate dagli estratti e possono riguardare dati diversi. Leggi le note per il contesto completo; nessun dato esterno verificato.' : evidence?.answerMode === 'brief_quotes' ? 'Questi passaggi sono copiati dalle fonti, senza generazione del modello. Sono una selezione parziale degli estratti, non una verifica dei dati o una risposta esaustiva.' : 'La risposta usa estratti, non le note intere. I conteggi riconosciuti possono essere riportati direttamente dalle fonti; le altre risposte sono sintesi del modello da verificare. Una citazione non dimostra che il dato della fonte sia vero o aggiornato.'}</p>
           {missingCitations || unknownCitations.length > 0 ? <p role="alert">Le citazioni della risposta sono mancanti o non corrispondono alle fonti fornite. Il riassunto va verificato.</p> : null}
           {evidence?.excluded ? <p>{evidence.excluded} note non utilizzabili escluse.</p> : null}

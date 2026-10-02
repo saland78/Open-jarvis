@@ -1,6 +1,9 @@
 // Local, bounded numerical observations. No query, source, answer or path storage.
 export type BrowserStatus = 'running' | 'completed' | 'truncated' | 'incomplete' | 'cancelled' | 'error';
 export interface ServerTimes {
+  structuredFirstJsonMs?: number | null; structuredGenerationMs?: number | null;
+  structuredValidationMs?: number | null; structuredAcceptedTextMs?: number | null;
+  structuredOutcome?: 'accepted' | 'rejected' | 'abstained' | null;
   retrievalMs: number | null; firstTextMs: number | null;
   generationFirstTextMs: number | null; generationMs: number | null;
   totalMs: number | null; status: BrowserStatus | 'timeout' | 'retrieval_error' | null;
@@ -12,7 +15,7 @@ export interface BrowserTimes {
   totalStreamMs: number | null; status: BrowserStatus;
   backgroundObserved: boolean; server: ServerTimes | null;
 }
-const MODES = new Set(['model_synthesis', 'brief_quotes', 'explicit_fields', 'status_scope_quotes']);
+const MODES = new Set(['model_synthesis', 'brief_quotes', 'explicit_fields', 'status_scope_quotes', 'structured_synthesis', 'structured_refused', 'structured_abstained']);
 const SERVER_STATUSES = new Set(['running', 'completed', 'truncated', 'incomplete', 'cancelled', 'error', 'timeout', 'retrieval_error']);
 const records: BrowserTimes[] = [];
 function duration(value: unknown): number | null {
@@ -43,10 +46,10 @@ export class BrowserNoteMeasurement {
     this.value.headersMs = this.elapsed();
     this.value.requestId = id && /^[a-f0-9]{32}$/.test(id) ? id : null;
   }
-  mode(mode: unknown) {
+  mode(mode: unknown, inferenceUsed?: unknown) {
     if (typeof mode !== 'string' || !MODES.has(mode) || this.value.status !== 'running') return;
     this.value.answerMode = mode;
-    this.value.inferenceUsed = mode === 'model_synthesis';
+    this.value.inferenceUsed = mode.startsWith('structured_') && typeof inferenceUsed === 'boolean' ? inferenceUsed : mode === 'model_synthesis' || mode === 'structured_synthesis';
   }
   content() {
     if (this.value.status === 'running' && this.value.firstContentMs === null) this.value.firstContentMs = this.elapsed();
@@ -78,6 +81,13 @@ export class BrowserNoteMeasurement {
       retrievalMs: duration(matched.retrievalMs), firstTextMs: duration(matched.firstTextMs),
       generationFirstTextMs: duration(matched.generationFirstTextMs), generationMs: duration(matched.generationMs),
       totalMs: duration(matched.totalMs),
+      ...(this.value.answerMode?.startsWith('structured_') ? {
+        structuredFirstJsonMs: duration(matched.structuredFirstJsonMs),
+        structuredGenerationMs: duration(matched.structuredGenerationMs),
+        structuredValidationMs: duration(matched.structuredValidationMs),
+        structuredAcceptedTextMs: duration(matched.structuredAcceptedTextMs),
+        structuredOutcome: ['accepted', 'rejected', 'abstained'].includes(matched.structuredOutcome) ? matched.structuredOutcome : null,
+      } : {}),
       status: typeof matched.status === 'string' && SERVER_STATUSES.has(matched.status) ? matched.status : null,
     };
   }

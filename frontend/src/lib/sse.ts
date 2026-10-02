@@ -9,6 +9,7 @@ export interface ChatRequest {
   max_tokens?: number;
   notes_query?: string;
   notes_brief?: boolean;
+  notes_structured?: boolean;
 }
 
 export async function* streamChat(

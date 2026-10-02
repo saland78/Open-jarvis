@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import unittest
+from andrea_historical_runtime import historical_messages
 from contextlib import redirect_stdout
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,7 +33,7 @@ class ScopeProbeTests(unittest.TestCase):
     def test_paired_payloads_only_change_system_and_never_mutate_runtime(self):
         runtime = ROOT / 'scripts/andrea/runtime.py'
         before = runtime.read_bytes()
-        make = probe.messages_from_runtime(ROOT)
+        make = historical_messages(probe, ROOT)
         opener = Opener()
         with redirect_stdout(io.StringIO()): result = probe.collect(opener, make)
         self.assertEqual(len(opener.requests), 12)
@@ -63,7 +64,7 @@ class ScopeProbeTests(unittest.TestCase):
 
     def test_error_stops_finite_collection_without_retry_or_error_leak(self):
         opener = Opener([{'error': 'PRIVATE'}])
-        with redirect_stdout(io.StringIO()): result = probe.collect(opener, probe.messages_from_runtime(ROOT))
+        with redirect_stdout(io.StringIO()): result = probe.collect(opener, historical_messages(probe, ROOT))
         self.assertEqual(len(opener.requests), 1)
         self.assertEqual(result['attempted'], 1)
         self.assertEqual(result['automaticRetries'], 0)
@@ -108,7 +109,7 @@ class ScopeProbeTests(unittest.TestCase):
         previous = probe.BASE
         try:
             probe.BASE = f'http://127.0.0.1:{server.server_port}'
-            with redirect_stdout(io.StringIO()): result = probe.collect(build_opener(ProxyHandler({})), probe.messages_from_runtime(ROOT))
+            with redirect_stdout(io.StringIO()): result = probe.collect(build_opener(ProxyHandler({})), historical_messages(probe, ROOT))
             self.assertEqual(len(calls), 12)
             self.assertTrue(all(r['status']=='completed' for r in result['rows']))
             self.assertIs(result['vaultRead'], False)

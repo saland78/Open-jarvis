@@ -103,12 +103,31 @@ class KeepAliveTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(payload['options'], {'temperature': .4, 'num_predict': 512, 'num_ctx': 4096})
             self.assertIs(payload['think'], False)
 
+    async def test_rich_and_text_stream_forward_explicit_json_mode_only(self):
+        engine = engine_class()()
+        transport = Transport()
+        engine._get_async_client = lambda: transport
+        async def run_stream(payload, messages, **kwargs):
+            transport.payloads.append(payload)
+            yield 'rich-synthetic'
+        engine._run_stream = run_stream
+        for kwargs in ({}, {'response_format': {'type': 'json_object'}}):
+            for method in (engine.stream, engine.stream_full):
+                result = [v async for v in method([], model='selected', **kwargs)]
+                self.assertTrue(result)
+                payload = transport.payloads[-1]
+                if kwargs: self.assertEqual(payload['format'], 'json')
+                else: self.assertNotIn('format', payload)
+                self.assertNotIn('response_format', payload['options'])
+
     def test_production_prompt_unchanged_from_verified_baseline(self):
         import hashlib
-        # The only runtime difference must be this one optional retention value.
-        data = (ROOT / 'scripts/andrea/runtime.py').read_text()
-        old = data.replace(', "keep_alive": "15m"}', '}')
-        self.assertEqual(hashlib.sha256(old.encode()).hexdigest(), 'af38a56db92227dc2e2f4034792cc4cd474c161b034a9368c62477478c42f68c')
+        tree = ast.parse((ROOT / 'scripts/andrea/runtime.py').read_text())
+        nodes = [n for n in tree.body if
+            isinstance(n, ast.Assign) and any(getattr(t, 'id', None) == 'NOTES_PROMPT' for t in n.targets)
+            or isinstance(n, ast.AugAssign) and getattr(n.target, 'id', None) == 'NOTES_PROMPT'
+            or isinstance(n, ast.FunctionDef) and n.name == 'notes_messages']
+        self.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=nodes, type_ignores=[])).encode()).hexdigest(), 'a24a8d151f1bb5cd1c57a6be22c486557bb10cc60185815bceaf41493a297057')
 
     def test_reuse_check_keeps_two_requests_and_semantic_review_pending(self):
         spec = importlib.util.spec_from_file_location('reuse_check', ROOT / 'scripts/andrea/check_reuse.py')

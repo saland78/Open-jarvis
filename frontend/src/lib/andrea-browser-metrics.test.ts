@@ -64,4 +64,16 @@ describe('local browser timings', () => {
     expect(m.snapshot().backgroundObserved).toBe(true);
     clearBrowserMeasurements(); expect(browserMeasurements()).toEqual([]);
   });
+  it('keeps JSON timing separate from accepted text and rejects private outcome fields', () => {
+    const m = new BrowserNoteMeasurement(() => 0); m.headers('a'.repeat(32)); m.mode('structured_refused', true);
+    m.correlate([{id:'a'.repeat(32),structuredFirstJsonMs:5,structuredGenerationMs:30,
+      structuredValidationMs:1,structuredAcceptedTextMs:null,structuredOutcome:'rejected',
+      rawJson:'PRIVATE_JSON',sources:'PRIVATE_SOURCES'}]);
+    expect(m.snapshot().server).toMatchObject({structuredFirstJsonMs:5,structuredAcceptedTextMs:null,structuredOutcome:'rejected'});
+    expect(m.snapshot().inferenceUsed).toBe(true);
+    expect(JSON.stringify(browserMeasurements())).not.toContain('PRIVATE');
+    m.correlate([{id:'a'.repeat(32),structuredFirstJsonMs:-1,structuredOutcome:'PRIVATE'}]);
+    expect(m.snapshot().server).toMatchObject({structuredFirstJsonMs:null,structuredOutcome:null});
+  });
+
 });

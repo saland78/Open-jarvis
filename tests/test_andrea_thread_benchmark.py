@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import unittest
+from andrea_historical_runtime import historical_messages
 from contextlib import redirect_stdout
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,7 +35,7 @@ class Opener:
 
 class ThreadBenchmarkTests(unittest.TestCase):
     def test_exact_balanced_nine_calls_default_last_and_parameters_unchanged(self):
-        opener = Opener(); messages = bench.messages_from_runtime(ROOT)
+        opener = Opener(); messages = historical_messages(bench, ROOT)
         with redirect_stdout(io.StringIO()): report = bench.collect(opener, messages)
         self.assertEqual(len(opener.requests), 9)
         self.assertEqual([r['options'].get('num_thread') for r in opener.requests], list(bench.ORDER))
@@ -103,7 +104,7 @@ class ThreadBenchmarkTests(unittest.TestCase):
         thread=Thread(target=server.serve_forever,daemon=True);thread.start();previous=bench.BASE
         try:
             bench.BASE=f'http://127.0.0.1:{server.server_port}'
-            with redirect_stdout(io.StringIO()): report=bench.collect(build_opener(ProxyHandler({})),bench.messages_from_runtime(ROOT))
+            with redirect_stdout(io.StringIO()): report=bench.collect(build_opener(ProxyHandler({})),historical_messages(bench, ROOT))
             self.assertEqual(len(calls),9)
             self.assertTrue(all(r['status']=='completed' for r in report['rows']))
             self.assertTrue(all(g['included']==3 for g in report['summary'].values()))

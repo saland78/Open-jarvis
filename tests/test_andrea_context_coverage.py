@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import unittest
+from andrea_historical_runtime import historical_messages
 from contextlib import redirect_stdout
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -49,12 +50,12 @@ class CoverageTests(unittest.TestCase):
     def test_ambiguous_contexts_refused_before_inference_and_natural_date_not_guessed(self):
         bad=[dict(SOURCES[0],text=SOURCES[0]['text']+' Evento il 2026-09-01.')]
         self.assertEqual(probe.required_contexts(bad)['status'],'ambiguous')
-        with self.assertRaises(ValueError):probe.make_coverage_messages(probe.messages_from_runtime(ROOT),dict(probe.CASES[0],sources=bad))
+        with self.assertRaises(ValueError):probe.make_coverage_messages(historical_messages(probe, ROOT),dict(probe.CASES[0],sources=bad))
         natural=[dict(SOURCES[0],text=SOURCES[0]['text'].replace('2026-10-01','1 ottobre 2026'))]
         self.assertEqual(probe.required_contexts(natural)['status'],'ambiguous')
 
     def test_previous_three_inputs_prompt_and_validator_unchanged(self):
-        make=probe.messages_from_runtime(ROOT)
+        make=historical_messages(probe, ROOT)
         for case in probe.CASES[1:]:
             expected=make(case['query'],case['sources']);expected[0]['content']+=probe.CONTRACT_PROMPT
             self.assertEqual(probe.make_coverage_messages(make,case),expected)
@@ -77,7 +78,7 @@ class CoverageTests(unittest.TestCase):
         previous=probe.BASE;before=(ROOT/'scripts/andrea/runtime.py').read_bytes()
         try:
             probe.BASE=f'http://127.0.0.1:{server.server_port}'
-            with redirect_stdout(io.StringIO()):r=probe.collect(build_opener(ProxyHandler({})),probe.messages_from_runtime(ROOT))
+            with redirect_stdout(io.StringIO()):r=probe.collect(build_opener(ProxyHandler({})),historical_messages(probe, ROOT))
             self.assertEqual(len(calls),1);self.assertEqual(r['requested'],1);self.assertEqual(r['automaticRetries'],0)
             self.assertEqual(r['rows'][0]['contract']['semanticVerdict'],'pending_review')
             self.assertEqual(len(json.loads(calls[0]['messages'][1]['content'])['mandatory_contexts']),2)

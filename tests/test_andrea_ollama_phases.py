@@ -92,7 +92,7 @@ def test_verified_prompt_uses_real_function_without_importing_runtime():
     with tempfile.TemporaryDirectory() as tmp:
         folder = Path(tmp) / 'scripts/andrea'
         folder.mkdir(parents=True)
-        original = (ROOT / 'scripts/andrea/runtime.py').read_text().replace(', "keep_alive": "15m"}', '}')
+        original = (ROOT / 'tests/fixtures/runtime-before-structured.txt').read_text().replace(', "keep_alive": "15m"}', '}')
         (folder / 'runtime.py').write_text(original)
         messages = diag.messages_from_runtime(Path(tmp))
     assert messages[0]['role'] == 'system'

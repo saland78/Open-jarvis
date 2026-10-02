@@ -11,8 +11,6 @@ from measurements import LocalMeasurements, RequestMeasurement
 from evidence import explicit_count_answer, supplied_sources
 from brief import brief_answer
 from status_scope import status_scope_answer
-from synthesis_contract import make_coverage_messages, render_contract
-from structured_stream import collect as collect_structured, until_disconnect
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -48,10 +46,9 @@ def notes_messages(query, sources):
 
 class LocalMode:
     """First milestone: same-origin text chat; other mutations remain unavailable."""
-    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None):
+    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None):
         self.app, self.model, self.port, self.timeout = app, model, port, timeout
         self.notes = notes
-        self.structured_stream = structured_stream
         self.busy = False
         self.measurements = LocalMeasurements()
 
@@ -121,10 +118,6 @@ class LocalMode:
                 payload["notes_sources"] = supplied_sources(payload["notes_sources"])
             if "notes_brief" in payload and (type(payload["notes_brief"]) is not bool or "notes_query" not in payload):
                 raise ValueError("La modalità breve richiede una domanda sulle note e un valore booleano.")
-            if "notes_structured" in payload and (type(payload["notes_structured"]) is not bool or "notes_query" not in payload):
-                raise ValueError("La sintesi strutturata richiede una domanda sulle note e un valore booleano.")
-            if payload.get("notes_brief") and payload.get("notes_structured"):
-                raise ValueError("Seleziona una sola modalità di risposta.")
             if "notes_query" in payload and (not isinstance(payload["notes_query"], str) or not payload["notes_query"].strip() or len(payload["notes_query"]) > 200):
                 raise ValueError("Domanda sulle note non valida.")
         except (ValueError, KeyError, TypeError) as exc:
@@ -133,7 +126,6 @@ class LocalMode:
             return await self.reply(send, 429, "Jarvis sta già rispondendo. Interrompi o attendi.")
         self.busy = True
         measurement = RequestMeasurement("notes" if "notes_query" in payload else "chat", self.model, started=request_started)
-        structured = payload.get("notes_structured") is True
         evidence = None
         direct_answer = None
         if "notes_query" in payload:
@@ -156,22 +148,10 @@ class LocalMode:
                         direct_answer = status_scope_answer(evidence["sources"])
                         if direct_answer is not None:
                             evidence["answerMode"] = "status_scope_quotes"
-                if structured and direct_answer is None:
-                    evidence["answerMode"] = "structured_synthesis"
-                    if self.structured_stream is None:
-                        raise ValueError("Sintesi strutturata non disponibile in questo avvio.")
-                    try:
-                        messages = make_coverage_messages(notes_messages, {"query": payload["notes_query"], "sources": evidence["sources"]})
-                    except ValueError:
-                        direct_answer = render_contract({"status": "rejected"})
-                        evidence["answerMode"] = "structured_refused"
-                        measurement.record["structuredOutcome"] = "rejected"
-                evidence["inferenceUsed"] = direct_answer is None
                 measurement.retrieval(retrieval_started, evidence)
                 measurement.record["answerMode"] = evidence["answerMode"]
                 measurement.record["inferenceUsed"] = direct_answer is None
-                if not structured or direct_answer is not None:
-                    messages = notes_messages(payload["notes_query"], evidence["sources"])
+                messages = notes_messages(payload["notes_query"], evidence["sources"])
             except ValueError as exc:
                 measurement.retrieval(retrieval_started)
                 self.measurements.add(measurement.finish("retrieval_error"))
@@ -208,20 +188,7 @@ class LocalMode:
                 await send({"type": "http.response.body", "body": f"event: local_sources\ndata: {data}\n\n".encode(), "more_body": True})
         try:
             async with asyncio.timeout(self.timeout):
-                if structured and direct_answer is None:
-                    await tracked({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"text/event-stream"), (b"cache-control", b"no-store")]})
-                    result, text = await until_disconnect(collect_structured(self.structured_stream, messages, evidence["sources"], measurement), receive)
-                    outcome = measurement.record["structuredOutcome"]
-                    evidence["answerMode"] = {"accepted": "structured_synthesis", "abstained": "structured_abstained", "rejected": "structured_refused"}[outcome]
-                    measurement.record["answerMode"] = evidence["answerMode"]
-                    data = json.dumps(evidence, ensure_ascii=False)
-                    await tracked({"type": "http.response.body", "body": f"event: local_sources\ndata: {data}\n\n".encode(), "more_body": True})
-                    if outcome == "accepted":
-                        measurement.record["structuredAcceptedTextMs"] = round((time.perf_counter()-request_started)*1000, 2)
-                    data = json.dumps({"choices": [{"index": 0, "delta": {"content": text}, "finish_reason": None}]}, ensure_ascii=False)
-                    await tracked({"type": "http.response.body", "body": f"data: {data}\n\n".encode(), "more_body": True})
-                    await tracked({"type": "http.response.body", "body": b'data: {"choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}\n\ndata: [DONE]\n\n', "more_body": False})
-                elif direct_answer is None:
+                if direct_answer is None:
                     await self.app(scope, replay, tracked)
                 else:
                     await tracked({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"text/event-stream"), (b"cache-control", b"no-store")]})
@@ -281,16 +248,7 @@ def build_app(ollama_host: str | None = None):
     engine = BudgetOllama(host=ollama_host or cfg.engine.ollama.host, timeout=90)
     sec = setup_security(cfg, engine, bus)
     app = create_app(sec.engine, cfg.server.model, config=cfg, bus=bus, engine_name="ollama", agent_name="", capability_policy=sec.capability_policy, rate_limiter=sec.rate_limiter, audit_logger=sec.audit_logger, cors_origins=[])
-    from openjarvis.core.types import Message, Role
-    async def structured_stream(messages):
-        converted = [Message(role=Role(m["role"]), content=m["content"]) for m in messages]
-        iterator = sec.engine.stream_full(converted, model=cfg.server.model, response_format={"type": "json_object"})
-        try:
-            async for chunk in iterator:
-                yield chunk
-        finally:
-            await iterator.aclose()
-    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream)
+    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])))
 
 
 if __name__ == "__main__":

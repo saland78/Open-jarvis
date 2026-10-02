@@ -48,7 +48,7 @@ describe('notes measurement lifecycle ownership', () => {
       await first.promise; yield { data: '{"choices":[{"delta":{"content":"Synthetic answer."}}]}' };
       await last.promise; yield { data: '{"choices":[{"delta":{},"finish_reason":"stop"}]}' }; observer.done();
     });
-    button(render(), 'Sintesi del modello')!(); await flush();
+    button(render(), 'Sintesi libera del modello')!(); await flush();
     expect(browserMeasurements()[0].firstContentMs).toBeNull();
     first.release(); await flush();
     expect(browserMeasurements()[0].firstContentMs).not.toBeNull(); expect(browserMeasurements()[0].firstCommitMs).toBeNull();
@@ -68,7 +68,7 @@ describe('notes measurement lifecycle ownership', () => {
       yield { data: '{"choices":[{"delta":{"content":"NEW ANSWER"}}]}' };
       yield { data: '{"choices":[{"delta":{},"finish_reason":"stop"}]}' }; observer.done();
     });
-    button(render(), 'Sintesi del modello')!(); await flush();
+    button(render(), 'Sintesi libera del modello')!(); await flush();
     button(render(), 'Interrompi risposta')!();
     button(render(), 'Passaggi brevi dalle fonti')!(); await flush(); render();
     first.release(); await flush(); render();
@@ -80,8 +80,34 @@ describe('notes measurement lifecycle ownership', () => {
 
   it('labels an EOF without DONE as incomplete while retaining partial text', async () => {
     h.stream.mockImplementation(async function* () { yield { data: '{"choices":[{"delta":{"content":"Partial."}}]}' }; });
-    button(render(), 'Sintesi del modello')!(); await flush(); render();
+    button(render(), 'Sintesi libera del modello')!(); await flush(); render();
     expect(browserMeasurements()[0].status).toBe('incomplete'); expect(h.states[6]).toBe('Partial.');
     expect(h.states[7]).toBe('Risposta incompleta o troncata: non considerarla conclusa.');
   });
+  it('opts in to structured generation and waits for accepted text', async () => {
+    const validation = gate();
+    h.stream.mockImplementation(async function* (payload, _signal, observer) {
+      expect(payload.notes_structured).toBe(true); expect(payload.notes_brief).toBe(false);
+      observer.headers('a'.repeat(32));
+      yield { event: 'local_sources', data: '{"answerMode":"structured_synthesis","inferenceUsed":true,"sources":[]}' };
+      await validation.promise;
+      yield { data: '{"choices":[{"delta":{"content":"Validated synthesis [N1]."}}]}' };
+      yield { data: '{"choices":[{"delta":{},"finish_reason":"stop"}]}' }; observer.done();
+    });
+    button(render(), 'Sintesi strutturata')!(); await flush(); render();
+    expect(h.states[6]).toBe(''); expect(browserMeasurements()[0].firstContentMs).toBeNull();
+    validation.release(); await flush(); render();
+    expect(h.states[6]).toBe('Validated synthesis [N1].');
+    expect(browserMeasurements()[0]).toMatchObject({status:'completed',answerMode:'structured_synthesis',inferenceUsed:true});
+  });
+  it('displays structured refusal with its actual inference flag', async () => {
+    h.stream.mockImplementation(async function* (_payload, _signal, observer) {
+      yield { event: 'local_sources', data: '{"answerMode":"structured_refused","inferenceUsed":false,"sources":[]}' };
+      yield { data: '{"choices":[{"delta":{"content":"Sintesi strutturata non mostrata."}}]}' };
+      yield { data: '{"choices":[{"delta":{},"finish_reason":"stop"}]}' }; observer.done();
+    });
+    button(render(), 'Sintesi strutturata')!(); await flush(); render();
+    expect(browserMeasurements()[0]).toMatchObject({answerMode:'structured_refused',inferenceUsed:false});
+  });
+
 });

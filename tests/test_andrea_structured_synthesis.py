@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import unittest
+from andrea_historical_runtime import historical_messages
 from contextlib import redirect_stdout
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -69,7 +70,7 @@ class ContractTests(unittest.TestCase):
         previous=probe.BASE;before=(ROOT/'scripts/andrea/runtime.py').read_bytes()
         try:
             probe.BASE=f'http://127.0.0.1:{server.server_port}'
-            with redirect_stdout(io.StringIO()): report=probe.collect(build_opener(ProxyHandler({})),probe.messages_from_runtime(ROOT))
+            with redirect_stdout(io.StringIO()): report=probe.collect(build_opener(ProxyHandler({})),historical_messages(probe, ROOT))
             self.assertEqual(len(calls),4)
             self.assertEqual((ROOT/'scripts/andrea/runtime.py').read_bytes(),before)
             for call in calls:
@@ -94,7 +95,7 @@ class ContractTests(unittest.TestCase):
             def open(self,*args,**kwargs):
                 self.calls+=1;return Response(b'{"error":"PRIVATE ERROR"}\n')
         opener=Opener()
-        with redirect_stdout(io.StringIO()): r=probe.collect(opener,probe.messages_from_runtime(ROOT))
+        with redirect_stdout(io.StringIO()): r=probe.collect(opener,historical_messages(probe, ROOT))
         self.assertEqual(opener.calls,1);self.assertEqual(r['automaticRetries'],0)
         self.assertEqual(r['rows'][0]['contract']['status'],'rejected')
         self.assertNotIn('PRIVATE',json.dumps(r))

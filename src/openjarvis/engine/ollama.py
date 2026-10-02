@@ -304,6 +304,8 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         # Per-request retention; leave Ollama's default untouched when absent.
         if kwargs.get("keep_alive") is not None:
             payload["keep_alive"] = kwargs["keep_alive"]
+        if kwargs.get("response_format") == {"type": "json_object"}:
+            payload["format"] = "json"
         try:
             # ASYNC streaming: ``httpx.AsyncClient`` + ``aiter_lines`` never
             # blocks the event loop between tokens (the previous SYNC
@@ -406,6 +408,9 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         tools = kwargs.get("tools")
         if tools:
             payload["tools"] = tools
+
+        if kwargs.get("response_format") == {"type": "json_object"}:
+            payload["format"] = "json"
 
         async for chunk in self._run_stream(
             payload, messages, retry_without_tools=bool(tools)

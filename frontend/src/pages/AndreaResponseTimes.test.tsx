@@ -24,4 +24,13 @@ describe('response timing disclosure', () => {
     expect(html).toContain('Interrotta'); expect(html).toContain('secondo piano');
     expect(html).toContain('Non disponibile'); expect(html).not.toContain('Completata');
   });
+  it('does not call completed transport a successful structured answer', () => {
+    const m = new BrowserNoteMeasurement(() => 0); m.headers('a'.repeat(32)); m.mode('structured_refused', true);
+    m.content(); m.finish('success',true,'stop');
+    m.correlate([{id:'a'.repeat(32),structuredOutcome:'rejected',status:'completed'}]);
+    const html = renderToStaticMarkup(<AndreaResponseTimes times={m.snapshot()} />);
+    expect(html).toContain('sintesi rifiutata'); expect(html).toContain('non la qualità');
+    expect(html).toContain('Primo frammento JSON'); expect(html).toContain('Primo testo accettato');
+  });
+
 });
