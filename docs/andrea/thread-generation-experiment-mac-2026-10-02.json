@@ -1,0 +1,218 @@
+{
+  "schema": 1,
+  "mode": "synthetic_thread_comparison",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "requested": 9,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "observer": "direct_ollama_not_openjarvis_or_browser",
+  "runtimeChanged": false,
+  "coldWarmState": "not_determined_from_loaded_snapshot",
+  "finalAutomaticRequestCompleted": true,
+  "rows": [
+    {
+      "ordinal": 1,
+      "numThreadRequested": null,
+      "status": "completed",
+      "firstContentClientMs": 12783.049,
+      "totalClientMs": 24397.746,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 24396.328,
+        "loadMs": 4827.919,
+        "prompt_evalMs": 7929.704,
+        "evalMs": 11614.407,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 89,
+        "evalTokensPerSecond": 7.663
+      }
+    },
+    {
+      "ordinal": 2,
+      "numThreadRequested": 4,
+      "status": "completed",
+      "firstContentClientMs": 19865.442,
+      "totalClientMs": 32586.361,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 32585.355,
+        "loadMs": 5644.448,
+        "prompt_evalMs": 14186.73,
+        "evalMs": 12720.198,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 87,
+        "evalTokensPerSecond": 6.84
+      }
+    },
+    {
+      "ordinal": 3,
+      "numThreadRequested": 8,
+      "status": "completed",
+      "firstContentClientMs": 15910.504,
+      "totalClientMs": 28854.608,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 28853.557,
+        "loadMs": 5618.9,
+        "prompt_evalMs": 10261.516,
+        "evalMs": 12944.116,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 86,
+        "evalTokensPerSecond": 6.644
+      }
+    },
+    {
+      "ordinal": 4,
+      "numThreadRequested": 8,
+      "status": "completed",
+      "firstContentClientMs": 196.236,
+      "totalClientMs": 14769.444,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 14768.015,
+        "loadMs": 3.983,
+        "prompt_evalMs": 154.846,
+        "evalMs": 14572.904,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 566,
+        "eval_count": 99,
+        "evalTokensPerSecond": 6.793
+      }
+    },
+    {
+      "ordinal": 5,
+      "numThreadRequested": null,
+      "status": "completed",
+      "firstContentClientMs": 14116.28,
+      "totalClientMs": 25569.063,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 25568.034,
+        "loadMs": 5116.093,
+        "prompt_evalMs": 8973.114,
+        "evalMs": 11453.005,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 86,
+        "evalTokensPerSecond": 7.509
+      }
+    },
+    {
+      "ordinal": 6,
+      "numThreadRequested": 4,
+      "status": "completed",
+      "firstContentClientMs": 19386.638,
+      "totalClientMs": 31668.861,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 31667.684,
+        "loadMs": 5088.216,
+        "prompt_evalMs": 14266.686,
+        "evalMs": 12282.379,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 86,
+        "evalTokensPerSecond": 7.002
+      }
+    },
+    {
+      "ordinal": 7,
+      "numThreadRequested": 4,
+      "status": "completed",
+      "firstContentClientMs": 170.207,
+      "totalClientMs": 12628.719,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 12627.737,
+        "loadMs": 2.213,
+        "prompt_evalMs": 138.639,
+        "evalMs": 12458.764,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 566,
+        "eval_count": 87,
+        "evalTokensPerSecond": 6.983
+      }
+    },
+    {
+      "ordinal": 8,
+      "numThreadRequested": 8,
+      "status": "completed",
+      "firstContentClientMs": 13585.168,
+      "totalClientMs": 24710.229,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 24708.854,
+        "loadMs": 4842.933,
+        "prompt_evalMs": 8714.686,
+        "evalMs": 11125.23,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 86,
+        "evalTokensPerSecond": 7.73
+      }
+    },
+    {
+      "ordinal": 9,
+      "numThreadRequested": null,
+      "status": "completed",
+      "firstContentClientMs": 13912.36,
+      "totalClientMs": 27015.146,
+      "doneReason": "stop",
+      "qualityVerdict": "pending_review",
+      "native": {
+        "totalMs": 27014.013,
+        "loadMs": 4858.333,
+        "prompt_evalMs": 9026.509,
+        "evalMs": 13102.656,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 98,
+        "evalTokensPerSecond": 7.479
+      }
+    }
+  ],
+  "summary": {
+    "automatic": {
+      "attempted": 3,
+      "included": 3,
+      "excluded": 0,
+      "medianEvalTokensPerSecond": 7.509
+    },
+    "4": {
+      "attempted": 3,
+      "included": 3,
+      "excluded": 0,
+      "medianEvalTokensPerSecond": 6.983,
+      "gainVsAutomaticPercent": -7.0,
+      "meetsExploratorySpeedThreshold": false
+    },
+    "8": {
+      "attempted": 3,
+      "included": 3,
+      "excluded": 0,
+      "medianEvalTokensPerSecond": 6.793,
+      "gainVsAutomaticPercent": -9.54,
+      "meetsExploratorySpeedThreshold": false
+    }
+  },
+  "decision": "retain_automatic_no_runtime_change",
+  "manualReview": {
+    "historicalResolutionRecognized": 9,
+    "scopePrecisionConcernOrdinals": [
+      4
+    ],
+    "universalQualityCertification": false,
+    "syntheticAnswersPublished": false
+  }
+}

@@ -63,5 +63,44 @@ Verifica di sviluppo: sette test passati, inclusa una serie di nove richieste
 streaming HTTP contro Ollama simulato; payload, ordine finito, default finale,
 mediane e soglia, errori senza retry, contatori mancanti, EOF/troncamento e
 limiti controllati. Nessuna inferenza reale eseguita nel contenitore.
-Raccolta Mac ancora da eseguire, nessun guadagno o qualità migliore dichiarati.
+Raccolta Mac conclusa: risultati e decisione riportati sotto.
 Script autonomo temporaneo: non richiede installazione o arresto OpenJarvis.
+
+## Raccolta Mac conclusa: nessuna candidata adottata
+
+Nove richieste completed/stop, tre per impostazione, nessuna esclusione o
+ripetizione. Ultima richiesta automatica completata. Confronto ricalcolato dai
+contatori nativi e verificato sull'ordine prefissato.
+
+| Impostazione richiesta | Campioni validi | Mediana token/s | Differenza rispetto ad automatico |
+|---|---:|---:|---:|
+| Automatico (opzione omessa) | 3 | 7.509 | riferimento |
+| 4 thread | 3 | 6.983 | -7.00% |
+| 8 thread | 3 | 6.793 | -9.54% |
+
+Nessuna alternativa raggiunge la soglia esplorativa del +15%; entrambe sono
+più lente in questa serie. **Esperimento concluso, scelta automatica mantenuta.**
+Nessuna modifica a runtime, profilo, prompt o modello; keep_alive=15m conservato.
+Non servono ulteriori ripetizioni per decidere sull'adozione di queste candidate.
+
+Le richieste consecutive con la stessa impostazione (4 e 7) indicano 566 token
+in cache e primo testo rispettivamente 196.236 e 170.207 ms. Le altre indicano
+cache zero e caricamenti nell'ordine di 4.8–5.6 s: primo testo e totale non vanno
+interpretati come solo throughput di generazione. Non sono misurati carico o
+temperatura del Mac, né verificati i thread effettivi; non si attribuisce una
+causa alla differenza rispetto alle serie precedenti. Questa prova diretta
+non misura rendering browser o latenza dell'intero percorso OpenJarvis.
+
+Revisione delle nove risposte sintetiche: tutte riconoscono la risoluzione
+storica e indicano l'assenza di problemi successivi negli estratti. Restano
+formulazioni da rendere più circoscritte: in particolare il campione 4 conclude
+con un'affermazione generale senza citazione, dopo un contesto qualificato.
+L'assenza di documentazione non prova l'assenza di problemi reali. Nessuna
+certificazione universale della sintesi libera; il precedente esito negativo
+non viene riclassificato. Il mancato guadagno basta a scartare entrambe le
+candidate, senza ulteriore installazione o collaudo del server.
+
+[Numeri filtrati della raccolta](thread-generation-experiment-mac-2026-10-02.json):
+nessuno storico del Terminale, risposta, nota personale o request ID pubblicato.
+Consultato nuovamente il test runtime_options upstream prima della chiusura.
+PR #1 sempre aperta e draft, senza merge.
