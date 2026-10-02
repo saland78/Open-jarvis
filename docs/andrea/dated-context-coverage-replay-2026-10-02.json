@@ -1,0 +1,41 @@
+{
+  "mode": "offline_replay_of_collected_synthetic_answers",
+  "newInferenceExecuted": false,
+  "vaultRead": false,
+  "runtimeChanged": false,
+  "rows": [
+    {
+      "case": "dated_qualifications",
+      "previousContractStatus": "valid_structure_pending_semantic_review",
+      "replayedContractStatus": "rejected",
+      "promptUnchanged": false,
+      "reason": "missing_or_merged_dated_context",
+      "newInferenceExecuted": false
+    },
+    {
+      "case": "reopened",
+      "previousContractStatus": "valid_structure_pending_semantic_review",
+      "replayedContractStatus": "valid_structure_pending_semantic_review",
+      "promptUnchanged": true,
+      "reason": null,
+      "newInferenceExecuted": false
+    },
+    {
+      "case": "opinion",
+      "previousContractStatus": "valid_structure_pending_semantic_review",
+      "replayedContractStatus": "valid_structure_pending_semantic_review",
+      "promptUnchanged": true,
+      "reason": null,
+      "newInferenceExecuted": false
+    },
+    {
+      "case": "missing_with_instruction",
+      "previousContractStatus": "valid_structure_pending_semantic_review",
+      "replayedContractStatus": "valid_structure_pending_semantic_review",
+      "promptUnchanged": true,
+      "reason": null,
+      "newInferenceExecuted": false
+    }
+  ],
+  "newMacResult": "pending"
+}
