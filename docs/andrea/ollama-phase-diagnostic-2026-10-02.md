@@ -53,3 +53,46 @@ versione del prompt, tre richieste senza retry e filtraggio dei dati privati.
 Nove nuovi test e sei regressioni della baseline passati; il nuovo controllo
 include tre richieste streaming HTTP effettive contro Ollama simulato, con
 snapshot di sola lettura. Nessuna inferenza reale eseguita nel contenitore.
+
+## Raccolta Mac conclusa
+
+Script scaricato dal commit 6378bc3e965fa4ab25f92d0d7e0f29a3e8dd4dc3,
+hash verificato 7d05d314f14196886bc2666271b2457a9a1880cd6b6aab5c2c1e57d6dd35f2f9.
+Il rapporto allegato è stato estratto senza pubblicare lo storico del Terminale.
+Tre richieste completed/stop, nessun retry, qualità not_assessed. Controllati
+ordine, tempi e calcolo token/s; pubblicato soltanto lo schema numerico consentito
+in `ollama-phase-diagnostic-mac-2026-10-02.json`.
+
+| Prova | Primo testo client (ms) | Totale client (ms) | Caricamento nativo (ms) | Preparazione contesto nativa (ms) | Generazione nativa (ms) | Token generati | Token/s |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 12503.063 | 22210.953 | 4827.501 | 7649.505 | 9707.271 | 86 | 8.859 |
+| 2 | 149.751 | 9938.353 | 1.919 | 116.429 | 9788.905 | 86 | 8.785 |
+| 3 | 151.702 | 10890.652 | 2.048 | 117.381 | 10739.167 | 95 | 8.846 |
+
+Prima della prova 1 `/api/ps` non elencava il modello scelto; dopo la prova e
+prima/dopo le altre risultava presente, contesto 4096, sizeBytes 3184001022,
+sizeVramBytes 0. Questi numeri non identificano da soli hardware impiegato,
+pressione di memoria, swap o un'impossibilità di accelerazione.
+
+Ollama riporta prompt_eval_count 567 in ciascuna prova e
+prompt_eval_cached_count rispettivamente 0, 566, 566. La preparazione del contesto
+scende da 7649.505 ms a 116.429/117.381 ms con il riuso osservato; il caricamento
+scende da 4827.501 ms a circa 2 ms. Nella prima prova la somma delle due durate
+native è 12477.006 ms, prossima al primo contenuto client 12503.063 ms: questi
+dati spiegano la gran parte dell'attesa iniziale di questa richiesta. Sono
+orologi e confini diversi, non un'identità esatta o una misura del browser.
+
+Nelle due successive il primo contenuto arriva in circa 150 ms e oltre il 98%
+del tempo totale nativo è eval_duration. Il collo di bottiglia osservato dopo
+il primo testo è dunque la generazione di 86/95 token, circa 8.8 token/s.
+La terza risposta contiene più token pur usando la stessa richiesta: temperatura
+invariata 0.4, nessuna uguaglianza del testo o qualità semantica attestata.
+Non trasformare questi risultati in una spiegazione certa delle precedenti
+prove, né in una misura end-to-end o in un miglioramento già applicato.
+
+Consultati nuovamente su GitHub engine Ollama e test runtime_options upstream
+durante la chiusura. Nessuna modifica al runtime Mac, al modello o ai parametri,
+nessuna nuova serie necessaria per chiudere questa diagnosi. La fase è completata.
+Direzione successiva: valutare riuso di modello e contesto sul percorso reale;
+eventuali riduzioni delle risposte devono conservare i controlli di qualità
+e non riproporre come risolta la precedente regressione del prompt breve.
