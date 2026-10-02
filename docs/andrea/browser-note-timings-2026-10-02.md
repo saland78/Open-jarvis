@@ -33,10 +33,24 @@ Consultati stato della PR draft e file correnti prima di modificare codice. Cons
 - 82 test Python/adattatore precedenti passati; parser scalare upstream isolato. Non eseguita l'intera suite upstream o il backend Rust completo.
 - Typecheck frontend e build locale Vite/PWA passati nel contenitore con TypeScript JavaScript 5.9.3 e Workbox development, adattamenti di collaudo non distribuiti.
 
-## Collaudo Mac ancora da eseguire
+## Collaudo Mac concluso
 
-Installazione e build standard prima della verifica reale. Aprire Note Obsidian, con scheda in primo piano, e controllare il riquadro per una risposta diretta già nota: tempi browser presenti, aggiornamenti UI presenti, stato completed, inferenceUsed false e correlazione allo stesso ID. Nessuna richiesta di nuova generazione per certificare il funzionamento del riquadro su quel percorso.
+Installazione del 2026-10-02 riuscita: nove file verificati con backup. Compilazione standard TypeScript, Vite e PWA passata; nuovo bundle della pagina prodotto e avvio sulla porta 8008 raggiunto. La pagina nel browser ha mostrato il riquadro con etichette e dati numerici. Sono stati forniti tre screenshot per i controlli funzionali previsti; nessuno screenshot, testo personale o identificatore di richiesta viene pubblicato.
 
-Successivamente una risposta che dichiari effettivamente model_synthesis deve distinguere primo contenuto dal totale, mantenendo lo stesso modello e i criteri di qualità. Un'interruzione deve avere cancelled e conservare la risposta parziale senza mostrare completed. Se la risposta termina prima del clic di interruzione, non è una prova di cancellazione: usare una richiesta generativa senza ripetere fino a ottenere tempi favorevoli. Questa verifica funzionale non è una serie di benchmark o una certificazione semantica universale.
+| Controllo | Primo contenuto browser | Primo commit UI | Fine streaming browser | Stato | Inferenza | Secondo piano |
+|---|---:|---:|---:|---|---|---|
+| Risposta diretta protetta | 1308,5 ms | 1310,2 ms | 1308,6 ms | completed | false | false |
+| Sintesi generativa completa | 27711,2 ms | 27712,7 ms | 60007,3 ms | completed | true | true |
+| Sintesi generativa interrotta | 1322,6 ms | 1323,3 ms | 5767,5 ms | cancelled | true | false |
 
-La baseline comparativa del piano end-to-end viene dopo l'estensione alla chat e la chiusura di questi confini. Nessun guadagno di latenza dichiarato per questa sola strumentazione. I risultati Mac devono essere registrati prima di considerare concluso il passo. Jarvis originale intatto, note in sola lettura, PR sempre draft senza merge a main.
+Per la risposta diretta il commit finale è 1310,2 ms. Le misure backend correlate sono recupero 1302,87 ms, primo testo ASGI 1303,4 ms, totale 1303,66 ms, generazione e primo testo della generazione nulli. Stato completed su entrambi i lati.
+
+Per la sintesi generativa completa il commit finale è 60008,2 ms. Backend correlato: recupero 1201,29 ms, primo testo ASGI 27705,8 ms, primo testo dall'avvio del percorso generativo 26504,38 ms, generazione 58802,92 ms, totale 60004,34 ms. Stato completed su entrambi i lati. La scheda è stata osservata in secondo piano: il risultato funzionale viene conservato, ma la prova è esclusa dai confronti di latenza dell'interfaccia. Il backend registra anch'esso un primo testo tardivo: non attribuire l'intera attesa al rendering del browser.
+
+La richiesta successiva è stata realmente interrotta mentre c'era testo parziale. UI Interrotta e stato cancelled coerenti, contenuto parziale ancora presente, nessun completed. Commit finale e server risultano nulli/non disponibili come previsto per l'interruzione esplicita con invalidazione della revisione e annullamento della lettura delle misure. Questo verifica l'interruzione nel client e la sua rappresentazione, **non certifica quanto rapidamente il calcolo Ollama si arresti**.
+
+**Collaudo funzionale circoscritto delle misure sulla pagina Note Obsidian concluso e superato:** percorso diretto, percorso generativo e interruzione distinguibili; correlazione backend presente sulle risposte completate; scheda in secondo piano dichiarata; dati mancanti non trasformati in zeri. Nessun ulteriore ciclo di richieste identiche per ottenere un risultato favorevole.
+
+Non è una baseline comparativa e non certifica la qualità semantica della sintesi libera. La differenza fra il primo testo tardivo della richiesta completa e quello rapido della successiva interrotta è osservata; causa e stato caldo/freddo del modello non sono determinati. Non dichiarato alcun guadagno di velocità per questa strumentazione.
+
+La fase successiva resta l'estensione delle misure alla chat generale, poi la baseline finita del piano end-to-end. Voce non attivata, Jarvis originale intatto, note in sola lettura, PR sempre draft senza merge a main.
