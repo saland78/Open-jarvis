@@ -19,11 +19,15 @@ Consultati nuovamente PR draft e sorgenti prima di modificare codice. Consultati
 - Riprodotto il fallimento della nuova regressione sul runtime precedente: attivava model_synthesis invece della risposta protetta.
 - 82 test mirati passati, inclusi dieci nuovi controlli per date e qualifiche separate, ordine delle fonti, timestamp irrilevanti, righe tagliate, riferimenti ambigui, intestazioni limitate, integrazione ASGI con recupero reale sintetico, estratti forniti, precedenza dei conteggi, chat e modalità estrattiva, etichetta UI e misure senza testo privato.
 - Suite adattatore usa il parser scalare upstream isolato. Non eseguita l'intera suite upstream né il backend Rust completo.
-- Typecheck frontend e build Vite locale passati. Il contenitore richiede TypeScript JavaScript 5.9.3 e Workbox development; queste due impostazioni di collaudo non vengono distribuite. Build standard sul Mac ancora da verificare per questa modifica.
+- Typecheck frontend e build Vite locale passati. Il contenitore richiede TypeScript JavaScript 5.9.3 e Workbox development; queste due impostazioni di collaudo non vengono distribuite. Build standard sul Mac successivamente riuscita; esito riportato sotto.
 - Nessun browser Mac o nota privata consultato durante queste prove. Nessuna nuova misura di latenza Ollama è giustificata per il percorso senza inferenza.
 
-## Chiusura sul Mac ancora da eseguire
+## Collaudo sul Mac concluso
 
-Installare l'aggiornamento verificato a porta 8008 ferma, riavviare e verificare disponibilità del vault in sola lettura. Eseguire una sola richiesta di Sintesi del modello sugli stessi KPI: deve apparire Qualifiche datate dalle fonti, con due contesti datati separati, nessuna frase che fonde le qualifiche e nessuna pretesa di generazione. Confrontare le due etichette con la nota aperta. Il collaudo della protezione è superato soltanto dopo questo controllo; non riqualifica come superato il test precedente della sintesi libera.
+Installazione sul Mac completata il 2026-10-02: cinque file verificati e backup creato. Compilazione standard TypeScript, Vite e PWA riuscita; log arrivato all'avvio sulla porta 8008. Il browser inizialmente richiedeva un vecchio modulo della pagina: dopo l'istruzione di ricaricamento, il risultato aggiornato è stato mostrato e fornito da Andrea. Nessuna modifica aggiuntiva al codice per questo inconveniente.
+
+La richiesta sul caso reale ha mostrato Qualifiche datate dalle fonti, con intestazione dell'aggiornamento e della fotografia separate e ciascuna associata alla propria etichetta e citazione. Non compare la frase che fonde le due qualifiche; la risposta e l'interfaccia dichiarano esplicitamente che la sintesi libera non è stata generata, che la selezione è parziale e che non sono stati verificati sistemi esterni. Il testo corrisponde al percorso deterministico già collaudato in sviluppo. La lettura della nota e le qualifiche erano state fornite nei passaggi precedenti; non è stata richiesta una nuova serie di prove identiche.
+
+**Collaudo circoscritto della protezione concluso e superato.** Questo esito verifica l'alternativa dichiarata sul caso riconosciuto; non riclassifica il precedente test negativo della sintesi libera, non certifica tutte le parafrasi generative e non verifica dati attuali in dashboard esterne. Nessuna nuova misura delle prestazioni Ollama su un percorso senza inferenza. Nessun testo personale o screenshot pubblicato.
 
 Note, database, profili e dipendenze non fanno parte dell'aggiornamento. Jarvis originale resta separato e intatto. PR draft: non unire a main. Nessun testo personale, screenshot o report KDP pubblicato.
