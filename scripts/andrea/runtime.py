@@ -232,7 +232,7 @@ def build_app(ollama_host: str | None = None):
     class BudgetOllama(OllamaEngine):
         @staticmethod
         def bounded(kwargs):
-            return {**kwargs, "max_tokens": 512, "num_ctx": 4096, "think": False, "temperature": 0.4}
+            return {**kwargs, "max_tokens": 512, "num_ctx": 4096, "think": False, "temperature": 0.4, "keep_alive": "15m"}
 
         def generate(self, messages, **kwargs):
             return super().generate(messages, **self.bounded(kwargs))
