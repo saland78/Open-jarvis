@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "mode": "synthetic_dated_context_coverage",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "requested": 1,
+  "attempted": 1,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "runtimeChanged": false,
+  "observer": "direct_ollama_not_openjarvis_or_browser",
+  "deterministicGuardsExercised": false,
+  "decision": "targeted_case_passed_production_integration_pending",
+  "row": {
+    "ordinal": 1,
+    "case": "dated_qualifications",
+    "status": "completed",
+    "firstContentClientMs": 21713.083,
+    "totalClientMs": 36135.35,
+    "doneReason": "stop",
+    "native": {
+      "totalMs": 36127.817,
+      "loadMs": 7097.297,
+      "prompt_evalMs": 14543.974,
+      "evalMs": 14423.85,
+      "prompt_eval_count": 969,
+      "prompt_eval_cached_count": 0,
+      "eval_count": 112,
+      "evalTokensPerSecond": 7.765
+    },
+    "collectedQualityVerdict": "pending_review",
+    "collectedContractStatus": "valid_structure_pending_semantic_review",
+    "collectedSemanticVerdict": "pending_review",
+    "contextCoverage": "complete_for_recognized_conventions",
+    "manualSemanticReview": {
+      "verdict": "passed_for_case_criteria",
+      "dateQualificationPairsPreserved": true,
+      "qualificationsKeptSeparate": true,
+      "absenceScopedToSource": true,
+      "noExternalValueOrVerificationInvented": true
+    }
+  },
+  "selectedCaseSet": {
+    "dated_qualifications": "passed_new_targeted_request",
+    "reopened": "passed_previous_collection_unchanged_path",
+    "opinion": "passed_previous_collection_unchanged_path",
+    "missing_with_instruction": "passed_previous_collection_unchanged_path",
+    "sameFourRequestRun": false
+  },
+  "productionInstalled": false,
+  "universalQualityCertification": false,
+  "syntheticAnswersPublished": false
+}
