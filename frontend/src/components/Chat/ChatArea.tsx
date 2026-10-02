@@ -235,7 +235,8 @@ export function ChatArea() {
               return (
                 <MessageBubble
                   key={msg.id}
-                  message={msg}
+              message={msg}
+              conversationId={activeId}
                   isLive={isLastAssistant && isCurrentChatStreaming}
                 />
               );

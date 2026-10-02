@@ -4,6 +4,12 @@ import { BrowserNoteMeasurement } from '../lib/andrea-browser-metrics';
 import { AndreaResponseTimes } from './AndreaResponseTimes';
 
 describe('response timing disclosure', () => {
+  it('distinguishes chat from note retrieval and warns about conversation switches', () => {
+    const m = new BrowserNoteMeasurement(() => 0); m.content(); m.finish('cancelled');
+    const html = renderToStaticMarkup(<AndreaResponseTimes times={m.snapshot()} chat ownerAway />);
+    expect(html).toContain('Chat locale con modello'); expect(html).toContain('un’altra conversazione');
+    expect(html).not.toContain('Recupero delle note'); expect(html).not.toContain('dopo la ricerca');
+  });
   it('labels received content, DOM update and transport completion as distinct boundaries', () => {
     const m = new BrowserNoteMeasurement(() => 0); m.mode('brief_quotes'); m.content(); m.finish('success', true, 'stop'); m.commit(true, true);
     const html = renderToStaticMarkup(<AndreaResponseTimes times={m.snapshot()} />);

@@ -14,10 +14,12 @@ import { XRayFooter } from './XRayFooter';
 import { SpeakMessageButton } from './SpeakMessageButton';
 import type { ChatMessage } from '../../types';
 import { stripThinkTags } from '../../lib/message-text';
+import { AndreaChatTimes } from './AndreaChatTimes';
 
 interface Props {
   message: ChatMessage;
   isLive?: boolean;
+  conversationId?: string | null;
 }
 
 function getTextContent(node: any): string {
@@ -96,7 +98,7 @@ function CopyMessageButton({ content }: { content: string }) {
   );
 }
 
-export function MessageBubble({ message, isLive = false }: Props) {
+export function MessageBubble({ message, isLive = false, conversationId }: Props) {
   const isUser = message.role === 'user';
 
   const cleanContent = useMemo(() => stripThinkTags(message.content), [message.content]);
@@ -186,6 +188,8 @@ export function MessageBubble({ message, isLive = false }: Props) {
         telemetry={message.telemetry}
         isResearch={message.isResearch}
       />
+      {import.meta.env.VITE_ANDREA_LOCAL === 'true' && conversationId && !message.isResearch ?
+        <AndreaChatTimes conversationId={conversationId} messageId={message.id} hasText={Boolean(cleanContent.trim())} isLive={isLive} /> : null}
     </div>
   );
 }
