@@ -32,3 +32,9 @@ Un solo stream viene accumulato entro 32000 caratteri e 4096 chunk, completato e
 Dopo aggiornamento e riavvio, `check_structured.py` invia sei richieste pubbliche sintetiche attraverso OpenJarvis: qualifiche datate, riapertura, opinione irrilevante, importo assente con istruzione nella fonte, problema storico e conteggi discordanti. Nessuna nota personale letta. Conserva risposte sintetiche solo per revisione umana nel risultato locale; elimina request ID e contenuti non selezionati dalle misure. `qualityVerdict=pending_review` non significa superato. Una protezione deterministica resta distinguibile dalla generazione del modello.
 
 Poi verificare una risposta nella pagina Note Obsidian e il riquadro dei tempi. La fase sarà conclusa soltanto dopo questi risultati; non sono dichiarati miglioramenti di latenza o accuratezza universale. PR #1 sempre draft, nessun merge; Jarvis originale, note, profili, database e dipendenze non modificati.
+
+## Aggiornamento verificato
+
+`update_structured.py` installa 10 file sorgenti dal commit `f9555f0b76428e9ba424cada882b35a827fbedcf`, senza note, database, configurazioni o dipendenze. Richiede la porta 8008 libera, verifica gli hash di download e le sei baseline dei file esistenti, crea backup e ripristina i file già sostituiti in caso di errore. I quattro moduli/dati nuovi non possono sovrascrivere file locali diversi. SHA-256 dello script: `892259e659cb2a3c4659b1ddbff729b59290575071f5a61c7ac9b1262a071de6`.
+
+Manifest reale verificato per applicazione, backup, sentinelle private sintetiche, ripetizione idempotente, rollback al terzo rimpiazzo, hash errato, baseline incompatibile e porta occupata. Tutti i 23 file del commit sorgenti riletti da GitHub e confrontati esattamente con quelli collaudati. Installazione Mac e i sei risultati reali restano da raccogliere.
