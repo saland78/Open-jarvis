@@ -37,8 +37,8 @@ i trasporti/dependenze, omissione dell'opzione per altri chiamanti, valore 0,
 parametri locali invariati e due richieste di controllo senza retry. Ottantadue
 regressioni del profilo locale passate, inclusi citazioni, fonti, qualifiche e
 misure. Il prompt di produzione è verificato identico tramite hash del runtime
-dopo la rimozione della sola opzione aggiunta. Nessun benchmark Mac del nuovo
-comportamento ancora eseguito e nessuna suite Rust/upstream completa dichiarata.
+dopo la rimozione della sola opzione aggiunta. Il collaudo Mac circoscritto è
+registrato sotto; nessuna suite Rust/upstream completa dichiarata.
 
 `check_reuse.py` riusa il client collaudo installato verificato via hash. Due
 richieste notes_generated con gli stessi estratti sintetici della baseline;
@@ -65,8 +65,49 @@ baseline locale incompatibile e porta occupata. Profili, .env e sentinelle dei
 dati conservati. Lo script scarica da un commit preciso e rifiuta modifiche locali
 incompatibili prima di sovrascrivere i file.
 
-Collaudo Mac da concludere: installazione, riavvio, due richieste complete sul
-percorso model_synthesis con scadenza osservata, revisione delle due risposte
-che non devono chiamare aperto il problema storico risolto. Timings generativi
-variabili non bastano da soli a dichiarare un miglioramento. Nessuna conclusione
-sulla precedente regressione della sintesi libera viene modificata.
+## Collaudo Mac concluso e superato nell'ambito previsto
+
+Script update_reuse.py scaricato dalla versione
+b931ffe86a9117a5f33140f5210f93994705f196; hash verificato
+01c5a42f29895ffa0375035a2eda52b80a98c45a4793eb406fead235ab277351.
+Primo download interrotto da timeout di connessione, nessuna installazione;
+secondo download riuscito e verificato prima dell'esecuzione. Quattro file
+scaricati/verificati, backup creato, aggiornamento completato. Riavvio confermato
+dal log finale; il KeyboardInterrupt precedente segue Control+C.
+
+check_reuse.py ha effettuato due richieste complete sul percorso model_synthesis,
+senza retry né lettura del vault. Rapporto filtrato in
+`local-model-retention-mac-2026-10-02.json`: niente storico Terminale, percorsi
+personali, risposte o request ID pubblicati. Consultato nuovamente il test
+runtime_options upstream su GitHub durante la revisione.
+
+| Prova | Modello caricato prima | Primo testo client (ms) | Totale client (ms) | Primo testo ASGI (ms) | Totale ASGI (ms) | Scadenza restante dopo (s) |
+|---|---|---:|---:|---:|---:|---:|
+| 1 | no | 13108.83 | 23416.12 | 13092.60 | 23400.72 | 899.98 |
+| 2 | sì | 175.15 | 10820.84 | 173.46 | 10820.13 | 899.98 |
+
+La seconda richiesta vedeva già una scadenza restante di 899.97 s prima della
+generazione; dopo la risposta tornava a 899.98 s. Questa osservazione e i test
+dei payload supportano l'applicazione della richiesta keep_alive=15m nel
+percorso effettivo. Non è stato atteso un periodo inattivo di sei/quindici minuti:
+retentionSurvivalAfterIdle resta not_tested. Scadenza relativa e tempi ASGI/client
+sono osservazioni distinte, non si sommano. Il browser non è misurato qui.
+
+Revisione umana dei due testi sintetici: entrambi descrivono il problema del
+codice a barre come risolto, attribuiscono la copertina corretta alla data della
+fonte e precisano che negli estratti non risultano problemi successivi o ancora
+aperti. Non ripetono il difetto di definire ancora aperto il problema storico.
+Esito passato soltanto per questo caso. Le frasi iniziali non contengono il
+qualificatore "negli estratti", esplicitato subito dopo: non certificano lo stato
+reale esterno. Il rapporto automatico conserva pending_review; il rapporto
+filtrato aggiunge separatamente l'esito della revisione umana circoscritta.
+
+Non è dimostrato un miglioramento causale rispetto alla precedente baseline:
+due prove ravvicinate non testano l'effetto di una pausa lunga, e la prima
+rimane lenta con modello non presente. Questa raccolta non misura le durate
+native delle singole fasi, né i token/s; le precedenti osservazioni restano
+separate. I circa dieci secondi necessari a completare la seconda risposta
+non sono stati eliminati. Timings generativi variabili non bastano da soli a
+dichiarare un miglioramento. Nessuna conclusione sulla precedente regressione
+della sintesi libera viene modificata. Nessun ulteriore test richiesto per
+chiudere questo collaudo circoscritto; PR sempre draft senza merge.
