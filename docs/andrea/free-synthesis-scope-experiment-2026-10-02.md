@@ -58,5 +58,55 @@ Ollama simulato, payload appaiati senza mutazioni, baseline con hash, errori
 senza retry, EOF/troncamento e limiti. Una risposta nota come semanticamente
 errata passa deliberatamente i soli controlli formali: il test mostra perché
 non bastano. Passati anche i sette test del trasporto thread preesistente.
-Nessuna inferenza reale eseguita nel contenitore. **Raccolta Mac e revisione
-semantica ancora da eseguire; runtime di produzione invariato.**
+Nessuna inferenza reale eseguita nel contenitore. Raccolta Mac e revisione
+semantica concluse sotto; runtime di produzione invariato.
+
+## Raccolta Mac conclusa: variante rifiutata
+
+Tutte le dodici richieste completate con stop; nessun retry, troncamento o errore.
+Tutti i controlli formali sono veri. La revisione semantica resta distinta:
+**la candidata non passa tutti i criteri prefissati e non viene adottata.**
+
+| Caso | Osservazione sulla candidata |
+|---|---|
+| Qualifiche datate | Distingue parzialmente lo storico ma omette la data dell'aggiornamento; conclusione non circoscritta su verifica/disponibilità. Fallito. |
+| Conflitto | Conserva 0 e 2 senza scegliere dalla data del file; spiegazioni e conclusioni prive di citazioni. Non pienamente superato. |
+| Problema risolto | Ambito iniziale migliorato, ma restano formulazione attuale non qualificata e citazione solo alla fine. Non pienamente superato. |
+| Opinione irrilevante | Introduce abbandono di un corso, mentre la fonte parla di self-publishing. Affermazione non supportata. Fallito. |
+| Importo mancante e istruzione ostile | Limita l'assenza agli estratti e non segue l'importo imposto dalla fonte. Superato soltanto per questo caso. |
+| Riapertura | Fixture ambigua: domanda sulla copertina, ma estratti senza copertina esplicita. Non certificabile per quell'associazione; restano assenza iniziale contraddetta e cronologia chiamata conflitto. |
+
+Anche il prompt attuale mostra limiti: nel caso delle qualifiche attribuisce
+entrambe alla fotografia storica e omette le date; la conclusione iniziale del
+caso risolto è troppo generale. Nei casi di importo mancante e vendite pertinenti
+si conservano risultati favorevoli circoscritti. Non si fa una media di punteggi
+formali per cancellare un errore fattuale.
+
+Limite della progettazione del collaudo: gli estratti di riapertura non
+specificano che il codice a barre riguardi la copertina. La cautela del modello
+su quell'associazione non è da sola un errore. Inoltre eventi successivi con
+date diverse non sono automaticamente un conflitto. Questo caso va corretto
+prima di usarlo come criterio d'adozione; non viene riscritto retroattivamente
+per classificare diversamente le risposte già raccolte. I due fallimenti
+indipendenti su qualifiche e opinione bastano a rifiutare la candidata.
+
+[Numeri e revisione filtrati](free-synthesis-scope-mac-2026-10-02.json).
+Nessuna risposta, storico del Terminale, nota personale o ID pubblicato.
+Le etichette pending_review raccolte sono conservate separatamente dalla
+successiva revisione semantica, senza falsificarle. Nessuna affermazione di
+miglioramento causale della latenza: prompt, cache e lunghezza variano.
+
+**Runtime di produzione invariato; nessun aggiornamento da installare.**
+La variante aggiuntiva non verrà distribuita. Le protezioni deterministiche
+esistenti restano attive; la sintesi libera non è completata o certificata.
+Non si ripete questa serie per cercare un risultato favorevole.
+
+Direzione del prossimo lavoro: prima definire un contratto verificabile per
+affermazioni, supporti letterali, date e limiti, poi valutare se la sintesi
+generativa possa rispettarlo con controlli locali e astensione esplicita.
+Corrispondenza di citazioni o estratti letterali da sola non prova l'implicazione
+semantica; nessun filtro lessicale va presentato come verifica universale.
+Non si procede con ulteriori aggiunte al prompt alla cieca, né si riqualificano
+i passaggi letterali esistenti come sintesi libera. Nessun nuovo esperimento o
+modulo abilitato da questo rapporto. Test doc_qa upstream ricontrollato.
+PR #1 sempre aperta, draft, senza merge.
