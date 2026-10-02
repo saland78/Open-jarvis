@@ -87,7 +87,14 @@ def test_model_snapshot_filters_other_models_and_private_metadata():
 
 
 def test_verified_prompt_uses_real_function_without_importing_runtime():
-    messages = diag.messages_from_runtime(ROOT)
+    # This diagnostic deliberately pins the pre-retention runtime. Reconstruct
+    # that public fixture; the live application may have the retention update.
+    with tempfile.TemporaryDirectory() as tmp:
+        folder = Path(tmp) / 'scripts/andrea'
+        folder.mkdir(parents=True)
+        original = (ROOT / 'scripts/andrea/runtime.py').read_text().replace(', "keep_alive": "15m"}', '}')
+        (folder / 'runtime.py').write_text(original)
+        messages = diag.messages_from_runtime(Path(tmp))
     assert messages[0]['role'] == 'system'
     assert 'massimo sei frasi' in messages[0]['content']
     assert json.loads(messages[1]['content']) == {'richiesta': diag.QUERY, 'estratti': [diag.SOURCE]}
@@ -139,11 +146,12 @@ def test_real_http_three_streams_and_read_only_snapshots():
     previous = diag.BASE
     try:
         diag.BASE = f'http://127.0.0.1:{server.server_port}'
-        result = diag.collect(build_opener(ProxyHandler({})), diag.messages_from_runtime(ROOT))
+        messages = [{'role': 'system', 'content': 'synthetic'}, {'role': 'user', 'content': 'synthetic'}]
+        result = diag.collect(build_opener(ProxyHandler({})), messages)
         assert len(calls) == 3
         assert all(row['status'] == 'completed' for row in result['rows'])
         assert all(row['loadedBefore']['selectedModelLoaded'] is False for row in result['rows'])
-        assert all(call['messages'] == diag.messages_from_runtime(ROOT) for call in calls)
+        assert all(call['messages'] == messages for call in calls)
     finally:
         diag.BASE = previous
         server.shutdown()

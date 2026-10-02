@@ -28,7 +28,8 @@ nel campo sizeBytes, non un inventario completo della memoria del processo.
 Non promette maggiore velocità di generazione, memoria illimitata, contesto
 sempre in cache o qualità universale. Nessun preload, heartbeat, inferenza
 di riscaldamento, unload o modello diverso. La prima richiesta dopo un vero
-scaricamento può ancora essere lenta. Chiudere OpenJarvis non scarica subito
+scaricamento può ancora essere lenta. Il riuso della cache di inferenza non
+equivale ad apprendimento o addestramento. Chiudere OpenJarvis non scarica subito
 il modello da Ollama: scadrà secondo le regole di Ollama e le altre richieste.
 
 Sei test nuovi verificano i payload effettivi dei tre metodi isolando soltanto
@@ -56,6 +57,13 @@ Installazione prevista con script pin/hash, backup e rollback: quattro file
 sulla porta 8008. Note, frontend, profili, database, dipendenze e Jarvis originale
 non vengono aggiornati. Il vecchio ollama_phases.py rifiuterà il runtime nuovo
 per hash: è un controllo di versione deliberato, non un guasto dell'app.
+I test della diagnosi conclusa usano quindi una fixture della versione pubblica
+precedente, invece di pretendere che il runtime aggiornato abbia il vecchio hash.
+Il manifest reale di update_reuse.py è verificato per applicazione e backup,
+ripetizione idempotente, rollback al terzo rimpiazzo, download con hash errato,
+baseline locale incompatibile e porta occupata. Profili, .env e sentinelle dei
+dati conservati. Lo script scarica da un commit preciso e rifiuta modifiche locali
+incompatibili prima di sovrascrivere i file.
 
 Collaudo Mac da concludere: installazione, riavvio, due richieste complete sul
 percorso model_synthesis con scadenza osservata, revisione delle due risposte
