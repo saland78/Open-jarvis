@@ -29,6 +29,42 @@ Errori, stream incompleti, troncamenti e percorsi diversi da quello atteso resta
 
 Nessun file runtime/frontend modificato: non occorre una nuova build dell'interfaccia per questa raccolta. PR sempre draft senza merge, Jarvis originale intatto.
 
-## Raccolta Mac ancora da eseguire
+## Raccolta Mac conclusa
 
-Scaricare lo script da un commit preciso, verificarne SHA-256, poi eseguirlo nella finestra Controlli con OpenJarvis acceso. Eseguire la serie una volta. Esaminare singole misure, inclusioni/esclusioni e mediane prima di scegliere un componente da ottimizzare. Le nove richieste sul Mac non sono già state eseguite o dichiarate superate. Non confondere i tempi simulati di sviluppo con una baseline del Mac.
+Script scaricato dal commit `26928d7cfad986a00ea2355851f06f5bc2c7a48e`, SHA-256 verificato `d017414bf247fa5cdf4241486a081cd3b19c8429868cf4647ea134003166f1e9`, ed eseguito il 2026-10-02 con il Python del progetto nella finestra Controlli. OpenJarvis è rimasto acceso. Serie conclusa una volta: nove richieste, tutte con DONE, stop, stato backend completed e percorso atteso; nessuna esclusione o retry. L'output ricevuto conteneva anche uno storico del Terminale: è stato estratto esclusivamente il rapporto finale della baseline, senza pubblicare lo storico o dati personali.
+
+### Singole osservazioni
+
+Le durate sono in millisecondi. Primo testo e totale sono misure del client di controllo, non del rendering nel browser. I valori backend sono correlati e hanno un orologio distinto.
+
+| Ordinale | Percorso | Primo testo client | Totale client | Primo testo ASGI | Totale backend |
+|---|---|---:|---:|---:|---:|
+| 1 | Chat | 7003,32 | 7207,70 | 6984,14 | 7189,41 |
+| 2 | Sintesi di estratto fornito | 7952,64 | 17995,86 | 7951,13 | 17995,36 |
+| 3 | Campo esplicito diretto | 4,05 | 4,20 | 2,59 | 2,92 |
+| 4 | Chat | 206,82 | 410,83 | 205,25 | 410,10 |
+| 5 | Sintesi di estratto fornito | 177,11 | 10061,74 | 175,49 | 10060,98 |
+| 6 | Campo esplicito diretto | 1,98 | 2,06 | 0,45 | 0,68 |
+| 7 | Chat | 163,59 | 368,05 | 162,12 | 367,52 |
+| 8 | Sintesi di estratto fornito | 175,98 | 10010,23 | 174,29 | 10009,42 |
+| 9 | Campo esplicito diretto | 2,17 | 2,33 | 0,48 | 0,67 |
+
+### Mediane e limiti
+
+| Percorso | Campioni inclusi | Esclusi | Primo testo client mediano | Totale client mediano |
+|---|---:|---:|---:|---:|
+| Chat | 3 | 0 | 206,82 ms | 410,83 ms |
+| Sintesi di estratto fornito | 3 | 0 | 177,11 ms | 10061,74 ms |
+| Campo esplicito diretto | 3 | 0 | 2,17 ms | 2,33 ms |
+
+Verificati nuovamente numero, ordine, stati, instradamento e calcolo delle mediane sul rapporto ricevuto. [Rapporto numerico filtrato](synthetic-latency-baseline-mac-2026-10-02.json), senza testi, fonti, percorsi privati o request ID. Nessun percentile derivato da tre campioni.
+
+Le prime richieste di chat e sintesi hanno un'attesa iniziale maggiore, presente anche nel backend. Nelle due repliche successive il primo testo è molto più rapido. La differenza è osservata: non sono stati misurati caricamento Ollama, preparazione del contesto, cache, carico esterno o stato caldo/freddo, quindi non le viene attribuita una causa certa. Nessuna nuova configurazione o ottimizzazione è stata applicata durante questa serie.
+
+Le tre sintesi impiegano rispettivamente 10043,22, 9884,63 e 9834,25 ms dal primo testo alla fine del trasporto client. È il tratto successivo al primo contenuto, non una misura isolata del solo calcolo del modello. I contatori token nel rapporto sono nulli: non calcolare token al secondo o confrontare efficienza per token da questi dati. La chat chiede una risposta molto breve, mentre la sintesi ha un contesto e un compito differenti; non trattare i loro totali come confronto fra motori identici a parità di lavoro.
+
+Le risposte dirette hanno explicit_fields, inferenceUsed false e generazione nulla. Il recupero degli estratti forniti è fra 0,05 e 2,14 ms: questi valori non misurano la scansione del vault reale e non sostituiscono le precedenti osservazioni della ricerca nelle note.
+
+**Baseline sintetica finita raccolta e verificata.** L'esito riguarda completezza della serie e misure dei percorsi; qualityVerdict resta not_assessed, perché i testi sono stati scartati. Nessuna verifica semantica universale o miglioramento prestazionale dichiarato. Non ripetere la stessa serie per cancellare i primi campioni lenti.
+
+Il prossimo intervento deve prima distinguere l'attesa iniziale dai costi interni del percorso Ollama e dalla produzione successiva al primo testo. Solo dopo scegliere una modifica isolata con gli stessi casi e criteri di qualità. Nessuna funzione vocale attivata, nessun dato del vault pubblicato, runtime e dipendenze invariati. PR sempre draft senza merge.

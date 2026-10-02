@@ -1,0 +1,287 @@
+{
+  "schema": 1,
+  "mode": "synthetic_baseline",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "requested": 9,
+  "observer": "control_client_not_browser",
+  "modelColdWarmState": "not_determined",
+  "vaultRead": false,
+  "automaticRetries": 0,
+  "rows": [
+    {
+      "ordinal": 1,
+      "round": 1,
+      "kind": "chat",
+      "firstInBatch": true,
+      "firstTextClientMs": 7003.32,
+      "totalClientMs": 7207.7,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": null,
+        "firstTextMs": 6984.14,
+        "generationFirstTextMs": 6984.06,
+        "generationMs": 7189.33,
+        "totalMs": 7189.41,
+        "status": "completed",
+        "answerMode": null,
+        "inferenceUsed": null,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 2,
+      "round": 1,
+      "kind": "notes_generated",
+      "firstInBatch": false,
+      "firstTextClientMs": 7952.64,
+      "totalClientMs": 17995.86,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": 0.44,
+        "firstTextMs": 7951.13,
+        "generationFirstTextMs": 7950.55,
+        "generationMs": 17994.79,
+        "totalMs": 17995.36,
+        "status": "completed",
+        "answerMode": "model_synthesis",
+        "inferenceUsed": true,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 3,
+      "round": 1,
+      "kind": "notes_direct",
+      "firstInBatch": false,
+      "firstTextClientMs": 4.05,
+      "totalClientMs": 4.2,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": 2.14,
+        "firstTextMs": 2.59,
+        "generationFirstTextMs": null,
+        "generationMs": null,
+        "totalMs": 2.92,
+        "status": "completed",
+        "answerMode": "explicit_fields",
+        "inferenceUsed": false,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 4,
+      "round": 2,
+      "kind": "chat",
+      "firstInBatch": false,
+      "firstTextClientMs": 206.82,
+      "totalClientMs": 410.83,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": null,
+        "firstTextMs": 205.25,
+        "generationFirstTextMs": 205.17,
+        "generationMs": 410.02,
+        "totalMs": 410.1,
+        "status": "completed",
+        "answerMode": null,
+        "inferenceUsed": null,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 5,
+      "round": 2,
+      "kind": "notes_generated",
+      "firstInBatch": false,
+      "firstTextClientMs": 177.11,
+      "totalClientMs": 10061.74,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": 0.06,
+        "firstTextMs": 175.49,
+        "generationFirstTextMs": 175.31,
+        "generationMs": 10060.8,
+        "totalMs": 10060.98,
+        "status": "completed",
+        "answerMode": "model_synthesis",
+        "inferenceUsed": true,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 6,
+      "round": 2,
+      "kind": "notes_direct",
+      "firstInBatch": false,
+      "firstTextClientMs": 1.98,
+      "totalClientMs": 2.06,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": 0.09,
+        "firstTextMs": 0.45,
+        "generationFirstTextMs": null,
+        "generationMs": null,
+        "totalMs": 0.68,
+        "status": "completed",
+        "answerMode": "explicit_fields",
+        "inferenceUsed": false,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 7,
+      "round": 3,
+      "kind": "chat",
+      "firstInBatch": false,
+      "firstTextClientMs": 163.59,
+      "totalClientMs": 368.05,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": null,
+        "firstTextMs": 162.12,
+        "generationFirstTextMs": 162.06,
+        "generationMs": 367.46,
+        "totalMs": 367.52,
+        "status": "completed",
+        "answerMode": null,
+        "inferenceUsed": null,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 8,
+      "round": 3,
+      "kind": "notes_generated",
+      "firstInBatch": false,
+      "firstTextClientMs": 175.98,
+      "totalClientMs": 10010.23,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": 0.05,
+        "firstTextMs": 174.29,
+        "generationFirstTextMs": 174.13,
+        "generationMs": 10009.27,
+        "totalMs": 10009.42,
+        "status": "completed",
+        "answerMode": "model_synthesis",
+        "inferenceUsed": true,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    },
+    {
+      "ordinal": 9,
+      "round": 3,
+      "kind": "notes_direct",
+      "firstInBatch": false,
+      "firstTextClientMs": 2.17,
+      "totalClientMs": 2.33,
+      "done": true,
+      "finishReason": "stop",
+      "server": {
+        "retrievalMs": 0.09,
+        "firstTextMs": 0.48,
+        "generationFirstTextMs": null,
+        "generationMs": null,
+        "totalMs": 0.67,
+        "status": "completed",
+        "answerMode": "explicit_fields",
+        "inferenceUsed": false,
+        "usage": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null
+        }
+      },
+      "expectedPathObserved": true,
+      "includedInSummary": true,
+      "qualityVerdict": "not_assessed"
+    }
+  ],
+  "summary": {
+    "chat": {
+      "attempted": 3,
+      "included": 3,
+      "excluded": 0,
+      "firstTextClientMs": 206.82,
+      "totalClientMs": 410.83
+    },
+    "notes_generated": {
+      "attempted": 3,
+      "included": 3,
+      "excluded": 0,
+      "firstTextClientMs": 177.11,
+      "totalClientMs": 10061.74
+    },
+    "notes_direct": {
+      "attempted": 3,
+      "included": 3,
+      "excluded": 0,
+      "firstTextClientMs": 2.17,
+      "totalClientMs": 2.33
+    }
+  }
+}
