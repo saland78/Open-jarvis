@@ -1,8 +1,10 @@
 // Personal fork: explicit local read-only notes, separate from upstream ingestion.
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { authHeaders, getBase } from '../lib/api';
 import { streamChat } from '../lib/sse';
 import { useAppStore } from '../lib/store';
+import { BrowserNoteMeasurement, type BrowserTimes } from '../lib/andrea-browser-metrics';
+import { AndreaResponseTimes } from './AndreaResponseTimes';
 
 interface Source {
   id?: string; path: string; title: string; status: string; text: string;
@@ -32,7 +34,10 @@ export function AndreaNotesPage() {
   const [answer, setAnswer] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState('');
+  const [times, setTimes] = useState<BrowserTimes | null>(null);
   const controller = useRef<AbortController | null>(null);
+  const metricsController = useRef<AbortController | null>(null);
+  const observed = useRef<{ id: number; measurement: BrowserNoteMeasurement } | null>(null);
   const revision = useRef(0);
   const model = useAppStore(s => s.selectedModel);
 
@@ -41,11 +46,28 @@ export function AndreaNotesPage() {
     request<VaultStatus>('/api/andrea/notes/status', { signal: abort.signal })
       .then(data => { if (!abort.signal.aborted) { setStatus(data); setFolder(data.vault || ''); } })
       .catch(err => { if (!abort.signal.aborted) setError(err.message); });
-    return () => { abort.abort(); controller.current?.abort(); revision.current += 1; };
+    const visibility = () => observed.current?.measurement.visibility(document.visibilityState === 'visible');
+    document.addEventListener('visibilitychange', visibility);
+    return () => {
+      abort.abort(); observed.current?.measurement.finish('cancelled');
+      controller.current?.abort(); metricsController.current?.abort(); revision.current += 1;
+      document.removeEventListener('visibilitychange', visibility);
+    };
   }, []);
 
+  useLayoutEffect(() => {
+    const current = observed.current;
+    if (current?.id === revision.current && (answer || times?.status !== 'running' && times)) {
+      if (current.measurement.commit(Boolean(answer.trim()), document.visibilityState === 'visible')) {
+        setTimes(current.measurement.snapshot());
+      }
+    }
+  }, [answer, times?.status]);
+
   function start(kind: string) {
+    observed.current?.measurement.finish('cancelled');
     controller.current?.abort();
+    metricsController.current?.abort();
     const abort = new AbortController();
     controller.current = abort;
     const id = ++revision.current;
@@ -62,12 +84,12 @@ export function AndreaNotesPage() {
     try {
       const data = await request<VaultStatus>('/api/andrea/notes/config', { method: 'POST', body: JSON.stringify({ vault: value }), signal: abort.signal });
       if (id !== revision.current) return;
-      setStatus(data); setFolder(data.vault || ''); setResult(null); setNote(null); setEvidence(null); setAnswer('');
+      setStatus(data); setFolder(data.vault || ''); setResult(null); setNote(null); setEvidence(null); setAnswer(''); setTimes(null);
     } catch (err) { failed(err, abort, id); } finally { finished(id); }
   }
   async function search() {
     const { abort, id } = start('search');
-    setResult(null); setNote(null); setEvidence(null); setAnswer('');
+    setResult(null); setNote(null); setEvidence(null); setAnswer(''); setTimes(null);
     try {
       const data = await request<SearchResult>('/api/andrea/notes/search?q=' + encodeURIComponent(query.trim()), { signal: abort.signal });
       if (id === revision.current) setResult(data);
@@ -83,23 +105,50 @@ export function AndreaNotesPage() {
   }
   async function summarize(brief = false) {
     if (!result) return;
+    const measurement = new BrowserNoteMeasurement(undefined, document.visibilityState === 'visible');
     const { abort, id } = start('summary');
-    setAnswer(''); setEvidence(null); setNote(null);
+    observed.current = { id, measurement };
+    setAnswer(''); setEvidence(null); setNote(null); setTimes(measurement.snapshot());
     let text = '';
+    let done = false;
+    let reason: unknown = null;
     try {
-      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief }, abort.signal)) {
+      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief }, abort.signal,
+        { headers: requestId => measurement.headers(requestId), done: () => { done = true; } })) {
         if (id !== revision.current) break;
         const data = JSON.parse(event.data);
-        if (event.event === 'local_sources') setEvidence(data);
-        else if (data.choices?.[0]?.delta?.content) {
-          text += data.choices[0].delta.content;
-          setAnswer(text);
+        if (event.event === 'local_sources') {
+          setEvidence(data); measurement.mode(data.answerMode);
+        } else {
+          if (data.choices?.[0]?.finish_reason) reason = data.choices[0].finish_reason;
+          if (data.choices?.[0]?.delta?.content) {
+            measurement.content(); text += data.choices[0].delta.content; setAnswer(text);
+          }
         }
       }
+      measurement.finish(abort.signal.aborted || id !== revision.current ? 'cancelled' : 'success', done, reason);
       if (!text && !abort.signal.aborted) setError('Nessun testo ricevuto per la risposta.');
-    } catch (err) { failed(err, abort, id); } finally { finished(id); }
+      else if (id === revision.current && ['incomplete', 'truncated'].includes(measurement.snapshot().status)) setError('Risposta incompleta o troncata: non considerarla conclusa.');
+    } catch (err) {
+      measurement.finish(abort.signal.aborted || id !== revision.current ? 'cancelled' : 'error'); failed(err, abort, id);
+    } finally {
+      if (id === revision.current) {
+        setTimes(measurement.snapshot());
+        // Correlation is a separate read: it never delays text or retries generation.
+        const metricsAbort = new AbortController(); metricsController.current = metricsAbort;
+        void request<{ records: unknown[] }>('/api/andrea/metrics', { signal: metricsAbort.signal })
+          .then(data => { if (id === revision.current && !metricsAbort.signal.aborted) { measurement.correlate(data.records); setTimes(measurement.snapshot()); } })
+          .catch(() => { /* Missing server correlation stays explicitly unavailable. */ });
+      }
+      finished(id);
+    }
   }
-  function stop() { controller.current?.abort(); revision.current += 1; setBusy(''); setError('Risposta interrotta. Gli eventuali estratti e il testo parziale restano visibili.'); }
+  function stop() {
+    observed.current?.measurement.finish('cancelled');
+    if (observed.current) setTimes(observed.current.measurement.snapshot());
+    controller.current?.abort(); metricsController.current?.abort(); revision.current += 1;
+    setBusy(''); setError('Risposta interrotta. Gli eventuali estratti e il testo parziale restano visibili.');
+  }
   const canSummarize = Boolean(result?.results.some(s => s.eligible));
   const missingCitations = busy !== 'summary' && answer && evidence && !evidence.sources.some(s => answer.includes(`[${s.id}]`));
   const unknownCitations = busy !== 'summary' ? answer.match(/\[N\d+\]/g)?.filter(id => !evidence?.sources.some(s => `[${s.id}]` === id)) || [] : [];
@@ -136,6 +185,7 @@ export function AndreaNotesPage() {
           {!model ? <p>La ricerca funziona senza inferenza. Per la sintesi libera serve il modello locale configurato.</p> : null}
         </section> : null}
         {busy === 'summary' ? <div className="flex gap-3 items-center"><p role="status">Jarvis sta elaborando gli estratti…</p><button className={button} onClick={stop}>Interrompi risposta</button></div> : null}
+        {times ? <AndreaResponseTimes times={times} /> : null}
         {answer || evidence ? <section aria-label="Riassunto delle fonti" className="border border-[var(--color-border)] rounded-lg p-4 flex flex-col gap-3">
           <h2 className="font-semibold">{evidence?.answerMode === 'status_scope_quotes' ? 'Qualifiche datate dalle fonti' : evidence?.answerMode === 'brief_quotes' ? 'Passaggi brevi dalle fonti' : 'Risposta di Jarvis'}</h2><p className="whitespace-pre-wrap break-words">{answer || 'In attesa del primo testo…'}</p>
           <p>{evidence?.answerMode === 'status_scope_quotes' ? 'Protezione attiva: nessuna sintesi del modello generata. Intestazioni ed etichette sono copiate dagli estratti e possono riguardare dati diversi. Leggi le note per il contesto completo; nessun dato esterno verificato.' : evidence?.answerMode === 'brief_quotes' ? 'Questi passaggi sono copiati dalle fonti, senza generazione del modello. Sono una selezione parziale degli estratti, non una verifica dei dati o una risposta esaustiva.' : 'La risposta usa estratti, non le note intere. I conteggi riconosciuti possono essere riportati direttamente dalle fonti; le altre risposte sono sintesi del modello da verificare. Una citazione non dimostra che il dato della fonte sia vero o aggiornato.'}</p>
@@ -157,4 +207,3 @@ export function AndreaNotesPage() {
     </section>
   );
 }
-

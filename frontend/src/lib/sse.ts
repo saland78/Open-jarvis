@@ -14,6 +14,7 @@ export interface ChatRequest {
 export async function* streamChat(
   request: ChatRequest,
   signal?: AbortSignal,
+  observer?: { headers?: (requestId: string | null) => void; done?: () => void },
 ): AsyncGenerator<SSEEvent> {
   const base = getBase();
   const response = await fetch(`${base}/v1/chat/completions`, {
@@ -22,6 +23,8 @@ export async function* streamChat(
     body: JSON.stringify(request),
     signal,
   });
+
+  observer?.headers?.(response.headers.get('x-openjarvis-request-id'));
 
   if (!response.ok) {
     let detail = '';
@@ -48,7 +51,7 @@ export async function* streamChat(
           currentEvent = line.slice(7).trim();
         } else if (line.startsWith('data: ')) {
           const data = line.slice(6);
-          if (data === '[DONE]') return;
+          if (data === '[DONE]') { observer?.done?.(); return; }
           // Local timeouts and upstream failures must reach the chat's error UI.
           let parsed: { error?: { message?: string } | string } | undefined;
           try { parsed = JSON.parse(data); } catch { /* Keep non-JSON events. */ }
