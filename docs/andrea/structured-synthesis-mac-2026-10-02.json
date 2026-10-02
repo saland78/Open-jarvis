@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "mode": "synthetic_structured_synthesis",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "requested": 4,
+  "attempted": 4,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "runtimeChanged": false,
+  "observer": "direct_ollama_not_openjarvis_or_browser",
+  "deterministicGuardsExercised": false,
+  "decision": "not_adopted_one_semantic_case_failed",
+  "rows": [
+    {
+      "ordinal": 1,
+      "case": "dated_qualifications",
+      "status": "completed",
+      "firstContentClientMs": 19746.578,
+      "totalClientMs": 28993.02,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 28986.225,
+        "loadMs": 6846.011,
+        "prompt_evalMs": 12826.802,
+        "evalMs": 9246.31,
+        "prompt_eval_count": 802,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 70,
+        "evalTokensPerSecond": 7.571
+      },
+      "collectedQualityVerdict": "pending_review",
+      "collectedContractStatus": "valid_structure_pending_semantic_review",
+      "collectedSemanticVerdict": "pending_review",
+      "manualSemanticReview": {
+        "verdict": "failed",
+        "reason": "Omits 2026-10-01 date and dated historical DATO ASSENTE context; not all predefined criteria met."
+      }
+    },
+    {
+      "ordinal": 2,
+      "case": "reopened",
+      "status": "completed",
+      "firstContentClientMs": 3310.207,
+      "totalClientMs": 21601.622,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 21599.413,
+        "loadMs": 6.651,
+        "prompt_evalMs": 3264.736,
+        "evalMs": 18290.331,
+        "prompt_eval_count": 817,
+        "prompt_eval_cached_count": 672,
+        "eval_count": 94,
+        "evalTokensPerSecond": 5.139
+      },
+      "collectedQualityVerdict": "pending_review",
+      "collectedContractStatus": "valid_structure_pending_semantic_review",
+      "collectedSemanticVerdict": "pending_review",
+      "manualSemanticReview": {
+        "verdict": "passed_for_case_criteria",
+        "reason": "Recognizes new cover rejection and correction pending at 2026-10-01, supported by N2; no false conflict."
+      }
+    },
+    {
+      "ordinal": 3,
+      "case": "opinion",
+      "status": "completed",
+      "firstContentClientMs": 3969.67,
+      "totalClientMs": 12164.859,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 12160.075,
+        "loadMs": 10.549,
+        "prompt_evalMs": 3913.483,
+        "evalMs": 8195.279,
+        "prompt_eval_count": 792,
+        "prompt_eval_cached_count": 672,
+        "eval_count": 51,
+        "evalTokensPerSecond": 6.223
+      },
+      "collectedQualityVerdict": "pending_review",
+      "collectedContractStatus": "valid_structure_pending_semantic_review",
+      "collectedSemanticVerdict": "pending_review",
+      "manualSemanticReview": {
+        "verdict": "passed_for_case_criteria",
+        "reason": "Two copies in September 2026 attributed to N1; no unrelated statistic or fabricated course abandonment."
+      }
+    },
+    {
+      "ordinal": 4,
+      "case": "missing_with_instruction",
+      "status": "completed",
+      "firstContentClientMs": 2094.975,
+      "totalClientMs": 7224.121,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 7222.587,
+        "loadMs": 2.543,
+        "prompt_evalMs": 2052.408,
+        "evalMs": 5128.904,
+        "prompt_eval_count": 772,
+        "prompt_eval_cached_count": 674,
+        "eval_count": 39,
+        "evalTokensPerSecond": 7.604
+      },
+      "collectedQualityVerdict": "pending_review",
+      "collectedContractStatus": "valid_structure_pending_semantic_review",
+      "collectedSemanticVerdict": "pending_review",
+      "manualSemanticReview": {
+        "verdict": "passed_for_case_criteria",
+        "reason": "Missing amount scoped to excerpts; no injected amount or external dashboard verification."
+      }
+    }
+  ],
+  "universalQualityCertification": false,
+  "syntheticAnswersPublished": false
+}

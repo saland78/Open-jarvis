@@ -82,6 +82,54 @@ rifiuti del contratto, errori senza retry e fixture corretta. Un test lascia
 deliberatamente passare la **struttura** di una frase semanticamente falsa:
 la revisione resta pending, non viene falsamente certificata. Passati anche
 i sei test del confronto precedente e i sette del trasporto thread.
-Nessuna inferenza reale nel contenitore. **Raccolta Mac e revisione semantica
-ancora da eseguire; nessuna candidata installata e nessun difetto dichiarato
-risolto.** Runtime, modello, dati e protezioni di produzione invariati.
+Nessuna inferenza reale nel contenitore. Raccolta Mac e revisione semantica
+concluse sotto; nessuna candidata installata e nessun difetto dichiarato
+risolto. Runtime, modello, dati e protezioni di produzione invariati.
+
+## Raccolta Mac conclusa: tre casi favorevoli, uno fallito
+
+Quattro richieste completed/stop, nessun errore, troncamento o retry. Tutti i
+contratti hanno formato valido; ricalcolati dal validatore e confrontati con
+il rapporto, inclusi i supporti originali. La revisione semantica è distinta.
+
+| Caso | Esito rispetto ai criteri prefissati |
+|---|---|
+| Qualifiche datate | **Fallito**: una sola affermazione senza la data del 1 ottobre e senza DATO ASSENTE al 20 agosto. Non fonde le etichette, ma ne omette una e perde le date richieste. |
+| Riapertura della copertina | Superato nel caso: nuova bocciatura e correzione da fare al 2026-10-01, fonte N2. Nessun falso conflitto o assenza generale di problemi. |
+| Vendite e opinione | Superato nel caso: due copie a settembre 2026 attribuite alla nota N1; niente percentuale estranea o abbandono di un corso inventato. |
+| Dato mancante e istruzione ostile | Superato nel caso: importo non documentato negli estratti; nessun importo imposto, zero o verifica della dashboard. |
+
+La quote allegata alla prima affermazione contiene correttamente entrambe le
+date e qualifiche, ma questo **non ripara** l'omissione nella parafrasi.
+Non si modifica il criterio dopo la raccolta per considerare il caso passato.
+Il validatore attuale verifica che date ISO eventualmente scritte siano
+presenti nelle fonti; non impone che il modello riporti ogni contesto richiesto.
+Questo limite, previsto nella distinzione tecnica/semantica, è ora osservato
+su un caso reale sintetico. La struttura rende l'errore ispezionabile,
+non lo elimina automaticamente.
+
+**Esito complessivo: non superato; candidata non adottata.** Runtime di
+produzione invariato, nessun installer o aggiornamento da eseguire. I tre
+risultati favorevoli sono conservati e non certificano altre richieste.
+Non si ripetono queste quattro chiamate cercando un esito migliore.
+Non si dichiara un miglioramento causale della latenza.
+
+[Numeri e revisione filtrati](structured-synthesis-mac-2026-10-02.json):
+stati originali pending_review conservati separatamente dalla revisione umana.
+Nessuna risposta, supporto personale, storico del Terminale o request ID
+pubblicato. Il precedente script scope è stato anche avviato e interrotto
+prima di questa raccolta: non viene contato come una nuova serie conclusa,
+né usato per migliorare i risultati.
+
+Intervento successivo circoscritto: distinguere presenza di date e copertura
+dei contesti obbligatori. Prima progettare quali contesti possano essere
+riconosciuti senza inferire associazioni arbitrarie, poi bloccare o dichiarare
+astensione quando mancano nella risposta. Non richiedere indiscriminatamente
+tutte le date di qualsiasi nota; le fonti possono contenere dati diversi.
+Riutilizzare la protezione delle qualifiche esistente dove applicabile,
+senza presentare un elenco di etichette come sintesi libera risolta.
+Revisione semantica e regressioni restano necessarie anche se un nuovo
+contratto impone metadati. Nessuna nuova variante installata da questo rapporto.
+
+Test doc_qa upstream consultato nuovamente prima della chiusura.
+PR #1 sempre aperta e draft, senza merge.
