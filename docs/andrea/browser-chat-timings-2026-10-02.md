@@ -22,6 +22,24 @@ Prima della modifica verificati branch e PR draft del fork su GitHub. Consultati
 
 Typecheck e build Vite/PWA nel contenitore passati con TypeScript JavaScript 5.9.3 e Workbox development per i limiti dell'ambiente. Questi adattamenti non vengono distribuiti: il Mac mantiene la compilazione standard. L'installer usa la transazione verificata con hash, baseline, backup e rollback, porta 8008 libera; nessuna dipendenza o dato personale incluso.
 
-## Collaudo Mac ancora da eseguire
+## Collaudo Mac concluso
 
-Installazione, build standard e tre controlli funzionali finiti: risposta completa con pannello e correlazione backend; cambio conversazione durante la risposta con proprietà conservata; interruzione dopo il primo testo. Nessuno di questi è già dichiarato superato. Successivamente la baseline end-to-end prevista dal piano usa casi sintetici e distingue primo testo e durata totale, senza riclassificare misure in secondo piano o cancellate come confronti prestazionali validi.
+Installazione del 2026-10-02 completata: dieci file verificati e backup creato. Compilazione standard `tsc -b && vite build` riuscita, 3486 moduli trasformati, build Vite in 1,40 secondi e PWA generata. Il launcher è arrivato all'avvio sulla porta 8008; le successive schermate confermano che l'interfaccia aggiornata è raggiungibile.
+
+I tre controlli funzionali previsti sono stati eseguiti sul Mac. Sono registrate soltanto misure e categorie: screenshot, prompt, risposte e identificativi non vengono pubblicati. Nella tabella i valori sono arrotondati ai millisecondi, come mostrati nel pannello; per la prima prova è disponibile anche il dettaglio numerico.
+
+| Controllo | Primo contenuto browser | Primo commit UI | Fine streaming browser | Stato mostrato | Commit finale |
+|---|---:|---:|---:|---|---:|
+| Risposta completa | 15365 ms | 15382 ms | 15725 ms | Completata | 15744 ms |
+| Cambio conversazione | 944 ms | 952 ms | 55886 ms | Completata | Non disponibile |
+| Interruzione | 743 ms | 754 ms | 4506 ms | Interrotta | Non disponibile |
+
+**Risposta completa:** browser e backend hanno stato `completed`, con correlazione delle misure disponibile. Scheda non osservata in secondo piano. Dettaglio browser: headers 95,5 ms, primo contenuto 15365 ms, primo commit 15381,9 ms, streaming 15724,8 ms, commit finale 15743,7 ms. Backend: primo testo 15361,9 ms, primo testo del percorso generativo 15361,73 ms, generazione 15724,68 ms, totale 15724,84 ms. Recupero note nullo, coerentemente con il percorso di chat.
+
+**Cambio conversazione:** la risposta e il riquadro restano sulla conversazione originaria. Il pannello segnala esplicitamente che è stata aperta un'altra conversazione e che i commit successivi non vengono misurati. Il commit finale non disponibile non viene inventato al ritorno. È mostrato anche l'avviso di scheda in secondo piano: questa prova è esclusa dai confronti di latenza dell'interfaccia. Backend visibile nel pannello: primo testo 938 ms e totale 55882 ms, valori arrotondati.
+
+**Interruzione:** stato UI Interrotta, testo parziale conservato e casella del messaggio nuovamente disponibile. Commit finale e misure backend non disponibili, con relativa spiegazione, senza dichiarare la risposta completa o trasformare i dati mancanti in zeri. Non è mostrato l'avviso di scheda in secondo piano. Questo verifica la cancellazione del client, non la rapidità di arresto del calcolo Ollama.
+
+**Collaudo funzionale circoscritto delle misure della chat generale concluso e superato.** Nessun ulteriore ciclo delle stesse prove per ottenere tempi favorevoli. La variabilità del primo testo è osservata; causa e stato caldo/freddo del modello non sono determinati. Non è una baseline comparativa né una certificazione semantica universale delle risposte. Le precedenti limitazioni e gli esiti negativi della sintesi libera restano documentati.
+
+Il passo successivo è la baseline finita del piano end-to-end: distinguere primo contenuto e tempo totale su casi sintetici comparabili. Nessuna ottimizzazione del modello o funzione vocale viene dichiarata completata da questo collaudo. Consultati nuovamente stato GitHub e test upstream di proprietà dello stream prima di registrare l'esito. Nessun codice ulteriore modificato, PR sempre draft senza merge a main; Jarvis originale intatto.
