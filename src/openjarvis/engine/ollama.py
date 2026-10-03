@@ -427,9 +427,11 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         if response_format is not None:
             payload["format"] = response_format
 
-        async for chunk in self._run_stream(
-            payload, messages, retry_without_tools=bool(tools)
-        ):
+        stream_options: Dict[str, Any] = {"retry_without_tools": bool(tools)}
+        observer = kwargs.get("_native_metrics_callback")
+        if callable(observer):
+            stream_options["_native_metrics_callback"] = observer
+        async for chunk in self._run_stream(payload, messages, **stream_options):
             yield chunk
 
     async def _run_stream(
@@ -438,6 +440,7 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         messages: Sequence[Message],
         *,
         retry_without_tools: bool,
+        _native_metrics_callback=None,
     ) -> AsyncIterator[StreamChunk]:
         """Execute the streaming request and yield parsed StreamChunks."""
         try:
@@ -452,9 +455,10 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
                     # tools-less retry; only OTHER non-2xx responses map to
                     # EngineConnectionError below.
                     payload.pop("tools", None)
-                    async for c in self._run_stream(
-                        payload, messages, retry_without_tools=False
-                    ):
+                    retry_options: Dict[str, Any] = {"retry_without_tools": False}
+                    if callable(_native_metrics_callback):
+                        retry_options["_native_metrics_callback"] = _native_metrics_callback
+                    async for c in self._run_stream(payload, messages, **retry_options):
                         yield c
                     return
                 # ``not is_success`` covers 3xx as well as 4xx/5xx and maps
@@ -521,6 +525,13 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
                             finish_reason = "tool_calls"
 
                     if chunk.get("done", False):
+                        if callable(_native_metrics_callback):
+                            try:
+                                _native_metrics_callback(chunk)
+                            except Exception:
+                                # Optional observation must not change inference;
+                                # do not log exception text or private response data.
+                                pass
                         reported_prompt = chunk.get("prompt_eval_count", 0)
                         est_prompt = estimate_prompt_tokens(messages)
                         full_prompt = max(reported_prompt, est_prompt)

@@ -235,7 +235,9 @@ class LocalMode:
                     await tracked({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"text/event-stream"), (b"cache-control", b"no-store")]})
                     operation = (note_facts.run(self.fact_stream, fact_bundle, self.notes, vault_identity, measurement)
                                  if fact_bundle is not None else collect_structured(self.structured_stream, messages, evidence["sources"], measurement))
-                    result, text = await until_disconnect(operation, receive)
+                    from native_metrics import bind
+                    with bind(measurement):
+                        result, text = await until_disconnect(operation, receive)
                     outcome = measurement.record["structuredOutcome"]
                     evidence["answerMode"] = {"accepted": "structured_synthesis", "abstained": "structured_abstained", "rejected": "structured_refused"}[outcome]
                     measurement.record["answerMode"] = evidence["answerMode"]
@@ -302,7 +304,9 @@ def build_app(ollama_host: str | None = None):
                 yield item
 
         async def stream_full(self, messages, **kwargs):
-            async for item in super().stream_full(messages, **self.bounded(kwargs)):
+            from native_metrics import capture
+            options = {**self.bounded(kwargs), "_native_metrics_callback": capture}
+            async for item in super().stream_full(messages, **options):
                 yield item
 
     engine = BudgetOllama(host=ollama_host or cfg.engine.ollama.host, timeout=90)
