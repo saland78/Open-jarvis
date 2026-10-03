@@ -48,3 +48,7 @@ Sorgenti consultati al commit upstream 1a9c8cf70fbc24872ba2327115040d4c7a99a11a:
 - [test_stream_bridge.py](https://github.com/open-jarvis/OpenJarvis/blob/1a9c8cf70fbc24872ba2327115040d4c7a99a11a/tests/server/test_stream_bridge.py): regressione che conserva il risultato già prodotto senza una seconda inferenza. La stessa regola guida l'eliminazione del lavoro ridondante; non abilita agenti o strumenti nel profilo locale.
 
 Questa consultazione non equivale a esecuzione dei test upstream o collaudo vocale. Nessun codice runtime, dipendenza, profilo o nota modificato per approvare il piano. Jarvis originale resta indipendente; PR draft da non unire.
+
+## Task futuri collegati
+
+La [roadmap dei moduli web, Amazon, controllo Mac e vocali WhatsApp](future-capabilities-roadmap.md) raccoglie i requisiti successivi. Sono task da progettare e collaudare, non funzioni attivate. La priorità immediata resta distinguere caricamento, preparazione del contesto e generazione nella richiesta di sintesi reale, quindi adottare una sola ottimizzazione che mantenga i criteri di qualità.
