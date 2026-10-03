@@ -5,6 +5,55 @@ Keep the standalone historical probes pinned and independent.
 """
 import json
 import re
+from datetime import date
+
+MONTHS = {name: index for index, name in enumerate((
+    'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
+    'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'), 1)}
+ITALIAN_DATE = re.compile(
+    r'\b([0-9]{1,2})\s+(' + '|'.join(MONTHS) +
+    r')\b((?:[ \t]+[0-9]+\b)*)', re.I)
+ISO_DATE = re.compile(r'\b[0-9]{4}-[0-9]{2}-[0-9]{2}\b')
+
+
+def date_values(text, *, strict):
+    """Recognize full ISO and Italian day/month[/year], without inheriting years.
+
+    Other date spellings and the association of a date to a fact remain outside
+    these technical checks. A date elsewhere in a quote is not entailment.
+    """
+    values = set()
+    for match in ISO_DATE.finditer(text):
+        try:
+            parsed = date.fromisoformat(match.group())
+            values.add((parsed.day, parsed.month, parsed.year))
+        except ValueError:
+            if strict:
+                raise ValueError('invalid_date')
+    for match in ITALIAN_DATE.finditer(text):
+        day, month = int(match.group(1)), MONTHS[match.group(2).lower()]
+        tokens = match.group(3).split()
+        try:
+            if len(tokens) > 1 or (tokens and len(tokens[0]) != 4):
+                raise ValueError('invalid_year')
+            year = int(tokens[0]) if tokens else None
+            date(year if year is not None else 2000, month, day)
+            values.add((day, month, year))
+        except ValueError:
+            if strict:
+                raise ValueError('invalid_date')
+    return values
+
+
+def dates_supported(text, quotes):
+    try:
+        stated = date_values(text, strict=True)
+        available = set().union(*(date_values(q, strict=False) for q in quotes))
+        return all(value in available or (value[2] is None and
+            any(candidate[:2] == value[:2] for candidate in available))
+            for value in stated)
+    except ValueError:
+        return False
 
 CONTRACT_PROMPT = (
     ' Per questa prova restituisci soltanto un oggetto JSON, senza Markdown, '
@@ -53,13 +102,18 @@ def validate_base_contract(raw, sources, *, completed):
             if not isinstance(refs, list) or not 1 <= len(refs) <= 3 or any(not isinstance(r, str) or r not in original for r in refs) or len(set(refs)) != len(refs):
                 raise ValueError('unknown_or_duplicate_source')
             # A date somewhere in a supporting quote does not prove its association.
-            dates = set(re.findall(r'\b\d{4}-\d{2}-\d{2}\b', text))
-            supported_dates = set().union(*(set(re.findall(r'\b\d{4}-\d{2}-\d{2}\b', original[r]['text'])) for r in refs))
-            if not dates.issubset(supported_dates):
-                raise ValueError('unsupported_date')
             embedded = set(re.findall(r'\[(N[0-9]+)\]', text))
             if not embedded.issubset(set(refs)):
                 raise ValueError('unknown_embedded_citation')
+            if not dates_supported(text, [original[r]['text'] for r in refs]):
+                # Discard the complete generated answer. Bounded original
+                # excerpts are an explicitly labelled alternative, not a fix
+                # or acceptance of the model's claim. No retry or guessed year.
+                fallback = [{'sourceId': r, 'quote': original[r]['text']}
+                            for r in refs if len(original[r]['text']) <= 1200]
+                return {'status': 'rejected', 'reason': 'date_check_failed',
+                        'claims': [], 'semanticVerdict': 'not_assessed',
+                        'dateFallback': fallback}
             validated.append({'text': text, 'supports': [
                 {'sourceId': r, 'quote': original[r]['text']} for r in refs]})
         return {'status': 'abstained' if not validated else 'valid_structure_pending_semantic_review',
@@ -150,6 +204,17 @@ def render_contract(result):
     if result['status'] == 'abstained':
         return "Gli estratti non permettono una sintesi strutturata. Nessun dato esterno verificato."
     if result['status'] == 'rejected':
+        if result.get('reason') == 'date_check_failed':
+            text = ('Controllo delle date non superato: nessuna sintesi del modello mostrata. '
+                    'Non aggiungo anni mancanti e non correggo date indovinando. '
+                    'Nessuna seconda generazione automatica. Nessun dato esterno verificato.')
+            fallback = result.get('dateFallback', [])
+            if fallback:
+                text += '\n\nPassaggi originali (non generati), selezione parziale:\n' + '\n\n'.join(
+                    '«' + support['quote'] + '» [' + support['sourceId'] + ']' for support in fallback)
+            else:
+                text += ' Consulta gli estratti per il contesto completo.'
+            return text
         return "Sintesi strutturata non mostrata: risposta incompleta o controlli di formato, fonti e date non superati. Nessuna seconda generazione automatica. Consulta gli estratti."
     text = "Sintesi strutturata da confrontare con le fonti. Nessun dato esterno verificato.\n\n" + "\n\n".join(
         claim['text'] + ' ' + ' '.join('[' + support['sourceId'] + ']' for support in claim['supports'])

@@ -185,8 +185,32 @@ class StructuredRuntimeTests(unittest.IsolatedAsyncioTestCase):
         await self.invoke(self.request())
         self.assertEqual(scanned,[True]);self.assertEqual(self.metric()['structuredOutcome'],'accepted')
 
-    def test_extracted_validator_is_identical_to_probe_for_all_four_cases(self):
+    def test_historical_probe_decisions_preserved_with_explicit_date_failure(self):
         for case in CASES:
             for raw in (output(),output('Nel 2030-01-01'),'{"scope":"provided_excerpts","claims":[]}'):
-                self.assertEqual(validate_contract(raw,case['sources'],completed=True),historical_validate(raw,case['sources'],completed=True))
+                current = validate_contract(raw,case['sources'],completed=True)
+                previous = historical_validate(raw,case['sources'],completed=True)
+                if current.get('reason') == 'date_check_failed':
+                    self.assertEqual(previous['status'], 'rejected')
+                    self.assertEqual(current['status'], 'rejected')
+                    self.assertEqual(current['claims'], [])
+                    self.assertEqual(current['semanticVerdict'], 'not_assessed')
+                else:
+                    self.assertEqual(current,previous)
             self.assertIn('scope',make_coverage_messages(notes_messages,case)[0]['content'])
+
+    async def test_bad_italian_date_discarded_with_labelled_source_and_no_retry(self):
+        quote = 'Edizione online dal 21 aprile. Cartaceo dal 4 marzo 2027.'
+        case = {'query': 'Descrivi il volume di esempio.',
+                'sources': [{'id':'N1', 'title':'Volume di esempio', 'text':quote}]}
+        self.engine(output('Edizione online dal 21 aprile 2 2027.'))
+        body = self.body(await self.invoke(self.request(case)))
+        self.assertNotIn('21 aprile 2 2027',body)
+        self.assertIn('Passaggi originali (non generati)',body)
+        self.assertIn(quote,body)
+        self.assertIn('structured_refused',body)
+        self.assertEqual(self.metric()['structuredOutcome'],'rejected')
+        self.assertNotIn('structuredAcceptedTextMs',self.metric())
+        self.assertNotIn('Cartaceo',json.dumps(self.metric()))
+        self.assertEqual(len(self.generated),1)
+        self.assertFalse(self.app.busy)
