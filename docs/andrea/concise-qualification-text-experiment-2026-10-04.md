@@ -1,6 +1,6 @@
 # Candidata di sintesi più concisa: confronto isolato
 
-Stato al 2026-10-04 (Europe/Rome): prova preparata e verificata in sviluppo; raccolta sul modello reale del Mac non ancora eseguita. Nessuna modifica al runtime di produzione, nessuna candidata adottata e nessun miglioramento prestazionale dichiarato.
+Stato al 2026-10-04 (Europe/Rome): quattro richieste reali completate sul Mac. **Candidata non adottata: soglia di prestazioni fallita.** Un riferimento del caso avversariale è rifiutato per unsupported_value_update; il suo JSON grezzo non è conservato. Nessuna modifica al runtime di produzione e nessun miglioramento prestazionale dichiarato.
 
 ## Problema e singola differenza candidata
 
@@ -56,7 +56,7 @@ Nessun modello reale, browser o nota personale utilizzato nel contenitore. Nessu
 
 Consultati per questo task [test_structured_output.py](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/engine/test_structured_output.py) e [test_ollama_runtime_options.py](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/engine/test_ollama_runtime_options.py), oltre ai guard del fork e agli esiti dei prompt precedenti. Si conserva il formato JSON Schema nativo già usato: non si sostituisce con un semplice suggerimento di JSON. Consultazione distinta dall'esecuzione dei test upstream.
 
-## Passaggio Mac successivo
+## Preparazione Mac precedente alla raccolta
 
 Lasciare OpenJarvis in esecuzione nel suo Terminale. In Controlli scaricare lo script da un commit pubblicato preciso e verificarne l'hash prima di eseguirlo con il Python del progetto e la cartella del progetto come unico argomento. Non fermare o aggiornare il server. La guida procede con un solo piccolo passaggio per turno.
 
@@ -66,4 +66,29 @@ Dalla cartella del progetto, dopo la verifica del download:
 .venv/bin/python /tmp/OpenJarvis-concise-qualification-probe.py "$PWD"
 ```
 
-Raccolta reale e revisione delle quattro risposte ancora da eseguire. Non pubblicare lo storico del Terminale o altri contenuti personali; un eventuale rapporto GitHub deve conservare soltanto misure filtrate, categorie e decisione. PR #1 draft e non unita; Jarvis originale intatto.
+La raccolta descritta sopra è ora conclusa: non ripetere questa serie o introdurre nuove varianti per ottenere un campione favorevole. Lo storico del Terminale e i contenuti dell'allegato non sono pubblicati. PR #1 draft e non unita; Jarvis originale intatto.
+
+
+## Chiusura sul Mac: obiettivo di velocità non superato
+
+[Misure filtrate e categorie](concise-qualification-text-mac-2026-10-04.json). Tutti i quattro trasporti terminano con stop; tre contratti sono accettati e uno è rifiutato. Le seguenti durate sono produzione nativa dei token, non tempo del browser.
+
+| Caso | Variante | Token generati | Produzione nativa, ms | Contratto |
+|---|---|---:|---:|---|
+| Ordinario | Produzione | 136 | 14836,539 | Accettato, significato da riesaminare |
+| Ordinario | Concisa | 136 | 14962,566 | Accettato, significato da riesaminare |
+| Avversariale | Concisa | 134 | 14808,403 | Accettato, significato da riesaminare |
+| Avversariale | Produzione | 131 | 14373,091 | Rifiutato: unsupported_value_update |
+
+Nella coppia ordinaria la riduzione dei token è 0% e quella della durata di produzione è -0,849%. Nella coppia avversariale sono rispettivamente -2,290% e -3,029%, oltre al contratto rifiutato del riferimento. La soglia già fissata del 10% per entrambe le quantità in entrambe le coppie non è raggiunta. Il totale inferiore della seconda richiesta ordinaria coincide con caricamento e cache differenti e non dimostra una decodifica più veloce. Nessuna stima statistica o generalizzazione da quattro richieste.
+
+Le due risposte ordinarie accettate hanno lo stesso testo reso: conservano conteggio, variazione per periodo, etichette separate con date, indicazioni di consultazione e ambito nella nota/fotografia. Revisione favorevole limitata a questi criteri. Nel caso avversariale la candidata mantiene conteggio, date, etichette e consultazione, ma la parafrasi non conserva esplicitamente il predicato di persistenza «restano»: non si certifica equivalenza completa del significato. La candidata è comunque esclusa dal risultato prestazionale, senza modificare retroattivamente la soglia.
+
+Il riferimento avversariale non può essere revisionato semanticamente: il raccoglitore scarta modelAnswer anche quando il contratto è rifiutato. Si conosce soltanto la categoria unsupported_value_update. L'ispezione del codice mostra che un predicato con «aggiornati» deve coincidere esattamente all'inizio di una riga della fonte; ad esempio, «sono» al posto di «restano» causa rifiuto. Questo è un esempio riprodotto in sviluppo, **non** una ricostruzione della frase reale ormai scartata. Non si assume un falso positivo e non si rilassa il controllo.
+
+I collaudi favorevoli precedenti sul caso reale della nota scelta e sul riuso restano documentati nel loro ambito. Il nuovo rifiuto evidenzia un limite aggiuntivo: non dimostra che ogni sintesi sia corretta o accettata, né annulla le misure precedenti.
+
+## Diagnosi successiva distinta, una sola richiesta
+
+[Diagnostico del rifiuto](qualification-rejection-diagnostic.md): stessa fonte avversariale sintetica, messaggi di produzione e controlli invariati, conservando il JSON della nuova richiesta esclusivamente per analisi. Nessuna candidata di stile, correzione del testo o modifica del runtime. Un'eventuale accettazione del nuovo campione non riclassifica questa prova fallita e non recupera il JSON scartato. La diagnosi serve a ottenere evidenza della causa, non a scegliere una generazione favorevole.
+

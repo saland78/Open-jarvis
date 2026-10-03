@@ -64,3 +64,11 @@ Prima di un'ulteriore modifica al prompt, il prossimo task è verificare con un 
 Una sola nuova sintesi sul percorso della nota scelta conferma il riuso nel caso esaminato: Ollama dichiara 795 token in cache su 796, caricamento 1,734 ms, valutazione 152,761 ms, produzione 19237,198 ms; totale backend 19433,17 ms. Revisione semantica favorevole dei quattro fatti selezionati. Nessun cambiamento runtime, unload, warm-up forzato o retry. Tempi UI esclusi per scheda osservata in secondo piano, senza nuova prova. [Rapporto completo e numeri](production-native-phases.md#confronto-del-riuso-in-produzione-concluso-e-superato).
 
 Il costo residuo dominante è la produzione dei token. Prossimo candidato, ancora da progettare e collaudare: testi generati più concisi sul solo percorso riconosciuto delle qualifiche datate, preservando i medesimi fatti obbligatori, ambito, qualifiche, date, fonti e validatore. Non sostituire il controllo con troncamento o visualizzazione di JSON non validato. Il precedente esperimento CPU sui thread è concluso senza guadagni utili: automatismo mantenuto e nessuna nuova ripetizione necessaria. Non sono state eseguite prove della candidata per questa chiusura.
+
+
+## Chiusura della candidata di stile e diagnosi del riferimento — 2026-10-04
+
+Il [confronto finito](concise-qualification-text-experiment-2026-10-04.md) non supera le soglie: 136 token contro 136 nell'ordinario, 134 contro 131 nell'avversariale, e durata nativa di produzione leggermente peggiore per entrambe le candidate. Il riferimento avversariale ha un contratto rifiutato per unsupported_value_update. Nessuna modifica della produzione, nessuna nuova prova CPU o ripetizione di questa candidata. I totali influenzati da cache/caricamento non cambiano l'esito.
+
+Prima di progettare un'altra modifica di latenza, ottenere evidenza del rifiuto con [una singola diagnosi sintetica distinta](qualification-rejection-diagnostic.md): il rapporto precedente non conserva il JSON rifiutato e non consente di attribuire la causa a una frase concreta. Un nuovo campione accettato non supera retroattivamente la prova precedente. Test di trasporto e formato restano distinti dall'equivalenza del significato. Non rendere il validatore meno rigoroso per far passare una risposta sconosciuta.
+
