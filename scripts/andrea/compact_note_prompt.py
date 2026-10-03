@@ -11,6 +11,12 @@ SHAPE_INSTRUCTION = (
     'Restituisci esclusivamente JSON nella struttura response_shape; '
     'sostituisci i testi vuoti con le frasi richieste.'
 )
+BOOK_ROLE_INSTRUCTION = (
+    ' Nel profilo conserva il termine specifico della fonte per il tipo di opera '
+    'e la sua classificazione, senza sostituirli con una categoria generica. '
+    'Per le edizioni indica la disponibilità dalla data riportata; '
+    'non trasformarla in un generico inizio o nella data di avvio della produzione.'
+)
 
 
 def messages(case, plan, synthesis):
@@ -30,8 +36,10 @@ def messages(case, plan, synthesis):
             {'contextDate': fact['contextDate']} if 'contextDate' in fact else {}
         ) for fact in plan['facts']
     }}
+    instruction = original[0]['content'].replace(SCHEMA_INSTRUCTION, SHAPE_INSTRUCTION)
+    if any(fact['kind'] == 'book_description' for fact in plan['facts']):
+        instruction += BOOK_ROLE_INSTRUCTION
     return [
-        {'role': 'system', 'content': original[0]['content'].replace(
-            SCHEMA_INSTRUCTION, SHAPE_INSTRUCTION)},
+        {'role': 'system', 'content': instruction},
         {'role': 'user', 'content': json.dumps(body, ensure_ascii=False)},
     ]

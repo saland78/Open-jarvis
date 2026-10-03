@@ -95,8 +95,11 @@ class CompactTests(unittest.TestCase):
             compact_body = json.loads(compact[1]['content'])
             self.assertEqual(compact_body['informazioni_obbligatorie'], original_body['informazioni_obbligatorie'])
             self.assertEqual(compact_body['richiesta'], original_body['richiesta'])
-            self.assertEqual(compact[0]['content'], original[0]['content'].replace(
-                p.compact.SCHEMA_INSTRUCTION, p.compact.SHAPE_INSTRUCTION))
+            expected_instruction = original[0]['content'].replace(
+                p.compact.SCHEMA_INSTRUCTION, p.compact.SHAPE_INSTRUCTION)
+            if kind == 'book':
+                expected_instruction += p.compact.BOOK_ROLE_INSTRUCTION
+            self.assertEqual(compact[0]['content'], expected_instruction)
             self.assertEqual(bundle, before)
             self.assertNotIn('response_schema', compact_body)
             for fact in bundle['plan']['facts']:
@@ -124,6 +127,37 @@ class CompactTests(unittest.TestCase):
                                                     self.modules.synthesis, self.modules.validator, completed=True)
             self.assertEqual(result['status'], 'rejected')
 
+    def test_book_revision_only_adds_role_guidance_and_preserves_kpi_wire(self):
+        for kind in ('book', 'qualifications'):
+            bundle = self.bundle(kind)
+            messages = p.compact.messages(bundle['case'], bundle['plan'], self.modules.synthesis)
+            first_version_system = bundle['messages'][0]['content'].replace(
+                p.compact.SCHEMA_INSTRUCTION, p.compact.SHAPE_INSTRUCTION)
+            first_version_body = json.loads(bundle['messages'][1]['content'])
+            first_version_body.pop('response_schema')
+            first_version_body['response_shape'] = {'records': {
+                fact['id']: {'text': ''} | ({'contextDate': fact['contextDate']} if 'contextDate' in fact else {})
+                for fact in bundle['plan']['facts']}}
+            self.assertEqual(messages[1]['content'], json.dumps(first_version_body, ensure_ascii=False))
+            if kind == 'qualifications':
+                self.assertEqual(messages[0]['content'], first_version_system)
+            else:
+                self.assertEqual(messages[0]['content'], first_version_system + p.compact.BOOK_ROLE_INSTRUCTION)
+                # Generic instructions, not an authored answer or specimen text.
+                for data in ('11 capitoli', '8.500', '4 marzo', '21 aprile', 'Romanzo di avventura'):
+                    self.assertNotIn(data, p.compact.BOOK_ROLE_INSTRUCTION)
+
+    def test_generic_classification_and_ambiguous_start_need_semantic_review(self):
+        bundle = self.bundle('book')
+        value = json.loads(answer(bundle['plan']))
+        value['records']['F1']['text'] = 'Libro di avventura in italiano, 11 capitoli e circa 8.500 parole.'
+        value['records']['F2']['text'] = 'Edizione cartacea iniziata il 4 marzo 2027.'
+        result = self.modules.adapter.validate(json.dumps(value), bundle['case'], bundle['plan'],
+                                                self.modules.synthesis, self.modules.validator, completed=True)
+        self.assertEqual(result['status'], 'valid_structure_pending_semantic_review')
+        self.assertEqual(result['semanticVerdict'], 'pending_review')
+        self.assertFalse(result['externalTruthVerified'])
+
     def test_technical_acceptance_is_not_semantic_success(self):
         bundle = self.bundle('qualifications')
         value = json.loads(answer(bundle['plan']))
@@ -141,6 +175,7 @@ class CompactTests(unittest.TestCase):
         self.assertEqual(report['inferenceRequests'], 4)
         self.assertEqual([r['variant'] for r in report['rows']], ['original', 'compact']*2)
         self.assertEqual(report['qualityVerdict'], 'pending_review')
+        self.assertEqual(report['candidateRevision'], 2)
         self.assertFalse(report['productionAdoption'])
         posts = http.posts()
         for i in (0, 2):
