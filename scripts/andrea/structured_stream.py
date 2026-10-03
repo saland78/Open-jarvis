@@ -23,6 +23,8 @@ async def collect(stream, messages, sources, measurement):
             if getattr(chunk, 'tool_calls', None):
                 break  # no tool execution in this profile
             content = getattr(chunk, 'content', '')
+            if content is None:
+                content = ''  # StreamChunk terminal frames have no text.
             if not isinstance(content, str):
                 break
             if content:

@@ -27,7 +27,7 @@ class StructuredRuntimeTests(unittest.IsolatedAsyncioTestCase):
             yield SimpleNamespace(content=raw[:len(raw)//2],finish_reason=None,tool_calls=tools)
             yield SimpleNamespace(content=raw[len(raw)//2:],finish_reason=None,tool_calls=None)
             if reason:
-                yield SimpleNamespace(content='',finish_reason=reason,tool_calls=None)
+                yield SimpleNamespace(content=None,finish_reason=reason,tool_calls=None)
         self.app.structured_stream = stream
     def body(self, events):
         return b''.join(e.get('body',b'') for e in events).decode()
@@ -179,7 +179,7 @@ class StructuredRuntimeTests(unittest.IsolatedAsyncioTestCase):
         scanned=[]
         async def stream(messages):
             yield SimpleNamespace(content=output(),finish_reason=None,tool_calls=None)
-            yield SimpleNamespace(content='',finish_reason='stop',tool_calls=None)
+            yield SimpleNamespace(content=None,finish_reason='stop',tool_calls=None)
             scanned.append(True)
         self.app.structured_stream=stream
         await self.invoke(self.request())
