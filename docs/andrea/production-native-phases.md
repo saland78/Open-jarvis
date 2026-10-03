@@ -88,3 +88,39 @@ Prima di modificare nuovamente prompt o parametri, verificare il riuso del model
 Preparare un confronto finito con la stessa nota e il medesimo prompt, schema e modello, senza forzare unload, riscaldamenti aggiuntivi o retry. Conservare ogni esito e confrontare separatamente le fasi native e i medesimi criteri semantici. Se la cache non viene riusata, individuare le differenze del payload prima di proporre una modifica; non assumere che aumentare la retention acceleri il calcolo dei token. Nessuna modifica al runtime o nuovo benchmark è stato eseguito per registrare questo esito.
 
 Per la chiusura e la scelta del prossimo task consultati nuovamente [test_ollama.py](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/engine/test_ollama.py), [test_ollama_runtime_options.py](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/engine/test_ollama_runtime_options.py) e il motore upstream allo stesso commit. Il percorso rich streaming è già asincrono: renderlo nuovamente asincrono non è la soluzione dedotta da queste misure. Consultazione distinta dall'esecuzione; nessuna nuova suite richiesta per questo aggiornamento di documentazione. Branch di lavoro verificato prima della modifica, PR #1 draft e non unita.
+
+## Confronto del riuso in produzione: concluso e superato
+
+Raccolta del 2026-10-04 sul Mac: una sola nuova sintesi della stessa nota e gli stessi quattro fatti supportati. Nessuna modifica a runtime, prompt, schema, modello o parametri; nessun warm-up forzato, unload o retry. La configurazione keep_alive=15m era già installata. Il lettore ha eseguito zero inferenze e non ha letto il vault.
+
+La richiesta è completed/accepted. Il confronto separato della nuova risposta con i passaggi originali è favorevole: conteggio e variabilità conservati, qualifica corrente nella nota separata dall'assenza storica, date e riferimenti mantenuti, nessuno zero o stato esterno inventato. Il formato accepted non è stato usato da solo per certificare il significato. Verdetto circoscritto ai fatti selezionati, nessuna verifica esterna o certificazione universale.
+
+| Misura | Prima osservazione | Unica nuova richiesta |
+|---|---:|---:|
+| Caricamento nativo | 5835,091 ms | 1,734 ms |
+| Valutazione nativa del contesto | 14992,081 ms | 152,761 ms |
+| Produzione nativa dei token | 20364,808 ms | 19237,198 ms |
+| Totale nativo | 41231,624 ms | 19424,954 ms |
+| Primo frammento JSON nel backend, non mostrato | 20890,32 ms | 191,11 ms |
+| Primo testo accettato nel backend | 41262,95 ms | 19432,85 ms |
+| Totale nel backend | 41263,37 ms | 19433,17 ms |
+| Token di contesto dichiarati | 796 | 796 |
+| Token di contesto dichiarati in cache | 0 | 795 |
+| Token prodotti | 138 | 138 |
+| Token/s nativi | 6,776 | 7,174 |
+
+Ollama dichiara il riuso del contesto nella seconda richiesta. Il contatore cache e la riduzione dei costi di caricamento/valutazione verificano il riuso in questo caso; non sono una garanzia di permanenza in memoria dopo pause lunghe o altre richieste al modello condiviso. L'identità dei passaggi è stata confrontata nel browser, non dedotta dal solo numero di token.
+
+La seconda prova è marcata dalla UI come osservata in secondo piano: i suoi tempi browser/UI sono esclusi dal confronto della latenza dell'interfaccia. Le misure del backend e le fasi native della medesima richiesta rimangono disponibili. Non occorre una nuova generazione per ricavare un campione UI favorevole: questo task riguarda il riuso osservato nel motore.
+
+Il primo JSON in circa 191 ms non è una risposta verificata o visibile dopo 191 ms. Il testo viene mostrato soltanto dopo che la sintesi completa passa i controlli. Rimangono circa 19,24 s di produzione dei token; retrievalMs=1,69 e structuredValidationMs=1,97 non sono i costi dominanti. Le variazioni di token/s fra questi due campioni non dimostrano una modifica causale della velocità: il runtime è invariato, e il campione è finito.
+
+[Numeri filtrati](production-native-reuse-mac-2026-10-04.json) senza risposte, note, percorsi, screenshot o storico del Terminale. Criterio soddisfatto e confronto chiuso: nessun'altra generazione richiesta per questo task.
+
+## Prossimo candidato: meno token con gli stessi fatti
+
+Valutare una forma più concisa dei soli testi generati per i quattro fatti supportati, mantenendo tutti i fatti obbligatori, le qualifiche con ambito nella nota, le date, le citazioni, gli originali mostrati e l'intero validatore. Limitare la candidata al percorso riconosciuto delle qualifiche datate; il prompt dei libri e la sintesi generale rimangono separati. Nessuna adozione senza confronto finito di qualità e misure native; token ridotti non equivalgono a qualità migliore. Non ridurre il tetto di 512 token per provocare troncamenti e non mostrare JSON parziale privo di controlli.
+
+Il [precedente esperimento sui thread](thread-generation-experiment-2026-10-02.md) è già concluso: quattro e otto thread hanno entrambe mediane token/s inferiori alla scelta automatica e non soddisfano la soglia stabilita. Conservare l'automatismo; non ripetere quell'esperimento per cercare un esito favorevole. Riusare gli esiti già acquisiti evita un nuovo ciclo di tentativi.
+
+Questo candidato è soltanto il prossimo task: nessun prompt, codice runtime, dipendenza o configurazione è stato modificato per chiudere il confronto. Stato del branch e PR draft verificati, test engine/runtime_options upstream già consultati per il task al commit 792131feb3948aca0b54a94e0344f6827ff3129d; consultazione distinta dall'esecuzione. Jarvis originale e note intatti.

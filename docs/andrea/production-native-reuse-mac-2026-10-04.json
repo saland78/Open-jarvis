@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "mode": "production_native_reuse_bounded_review",
+  "date": "2026-10-04",
+  "timezone": "Europe/Rome",
+  "additionalGenerations": 1,
+  "readerInferences": 0,
+  "readerVaultRead": false,
+  "runtimeChanged": false,
+  "scope": "same_selected_note_and_four_supported_facts",
+  "inputIdentityAssessment": "same_original_passages_in_browser_review_not_inferred_from_token_count",
+  "forcedWarmup": false,
+  "forcedUnload": false,
+  "retries": 0,
+  "rows": [
+    {
+      "position": "initial_observation",
+      "transportStatus": "completed",
+      "structuredOutcome": "accepted",
+      "separateSemanticReview": "passed_for_selected_facts",
+      "serverMs": {
+        "retrievalMs": 2.71,
+        "structuredFirstJsonMs": 20890.32,
+        "structuredGenerationMs": 41254.74,
+        "structuredValidationMs": 3.15,
+        "structuredAcceptedTextMs": 41262.95,
+        "firstTextMs": 41263.06,
+        "totalMs": 41263.37
+      },
+      "native": {
+        "source": "ollama_terminal_frame",
+        "durationUnit": "ms",
+        "terminalFrameReceived": true,
+        "totalMs": 41231.624,
+        "loadMs": 5835.091,
+        "promptEvalMs": 14992.081,
+        "evalMs": 20364.808,
+        "promptEvalCount": 796,
+        "promptEvalCachedCount": 0,
+        "evalCount": 138,
+        "evalTokensPerSecond": 6.776
+      }
+    },
+    {
+      "position": "single_repeat",
+      "transportStatus": "completed",
+      "structuredOutcome": "accepted",
+      "separateSemanticReview": "passed_for_selected_facts",
+      "serverMs": {
+        "retrievalMs": 1.69,
+        "structuredFirstJsonMs": 191.11,
+        "structuredGenerationMs": 19428.24,
+        "structuredValidationMs": 1.97,
+        "structuredAcceptedTextMs": 19432.85,
+        "firstTextMs": 19432.9,
+        "totalMs": 19433.17
+      },
+      "native": {
+        "source": "ollama_terminal_frame",
+        "durationUnit": "ms",
+        "terminalFrameReceived": true,
+        "totalMs": 19424.954,
+        "loadMs": 1.734,
+        "promptEvalMs": 152.761,
+        "evalMs": 19237.198,
+        "promptEvalCount": 796,
+        "promptEvalCachedCount": 795,
+        "evalCount": 138,
+        "evalTokensPerSecond": 7.174
+      }
+    }
+  ],
+  "repeatBrowserObservation": {
+    "tabObservedInBackground": true,
+    "excludedFromUiLatencyComparison": true,
+    "uiPaintMeasured": false
+  },
+  "verdict": {
+    "reuseObserved": true,
+    "boundedCheck": "passed",
+    "generalSynthesisCertified": false,
+    "externalTruthVerified": false,
+    "longIdleSurvivalTested": false,
+    "throughputImprovementCausallyEstablished": false,
+    "repeatNeededForThisCheck": false
+  },
+  "nextCandidate": "shorter_generated_text_for_same_supported_facts_not_yet_implemented_or_validated"
+}
