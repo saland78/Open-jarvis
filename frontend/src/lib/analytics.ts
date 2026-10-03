@@ -67,6 +67,8 @@ let cachedAnonId = '';
  * Idempotent — safe to call multiple times.
  */
 export async function initAnalytics(): Promise<void> {
+  // Personal fork local build: no SDK initialization or external analytics.
+  if (import.meta.env.VITE_ANDREA_LOCAL === 'true') return;
   if (initialized) return;
   initialized = true; // claim the slot even on failure paths
 

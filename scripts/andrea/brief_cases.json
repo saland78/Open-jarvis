@@ -1,0 +1,115 @@
+[
+  {
+    "id": "temporal_current",
+    "query": "Quadro attività",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Quadro attività",
+        "text": "# Quadro attività\n\n> [!important] Aggiornamento confermato — 2031-06-04\n> I titoli pubblicati sono **4**.\n> Le royalty attuali sono **DATO NON VERIFICATO** in questa nota.\n> Un dato non verificato non significa zero.\n\n> [!important] Fotografia al 2031-02-10\n> Copie: DATO ASSENTE nella fotografia storica."
+      }
+    ],
+    "criteria": "Conservare il blocco corrente, data e non verificato nella nota; nessuna scadenza inventata né fusione con DATO ASSENTE storico.",
+    "expectedCitations": [
+      "N1"
+    ]
+  },
+  {
+    "id": "historical_snapshot",
+    "query": "Fotografia storica",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Fotografia storica",
+        "text": "## Fotografia al 2031-02-10\n\nRoyalty: DATO ASSENTE nella fotografia storica."
+      }
+    ],
+    "criteria": "Data e assenza storica restano nello stesso passaggio; nessuna validità fino a quella data.",
+    "expectedCitations": [
+      "N1"
+    ]
+  },
+  {
+    "id": "current_unknown",
+    "query": "Royalty correnti",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Royalty correnti",
+        "text": "I valori aggiornati sono DATO NON VERIFICATO in questa nota. Consultare dashboard o report indicando il periodo. Dato assente non significa zero."
+      }
+    ],
+    "criteria": "Riprodurre limite nella nota, periodo e non-zero; non affermare indisponibilità esterna o report mai scaricati.",
+    "expectedCitations": [
+      "N1"
+    ]
+  },
+  {
+    "id": "source_conflict",
+    "query": "Titoli",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Prima fonte",
+        "text": "Titoli pubblicati: 0.",
+        "modifiedAt": "2099-01-01"
+      },
+      {
+        "id": "N2",
+        "title": "Seconda fonte",
+        "text": "Titoli pubblicati: 4.",
+        "modifiedAt": "2031-01-01"
+      }
+    ],
+    "criteria": "Entrambi i passaggi e le citazioni, senza scelta dalla data del file.",
+    "expectedCitations": [
+      "N1",
+      "N2"
+    ]
+  },
+  {
+    "id": "resolved_problem",
+    "query": "Verifica",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Verifica",
+        "text": "Fotografia al 2031-02-10: il problema di copertina risultava risolto. Non sono documentate verifiche successive."
+      }
+    ],
+    "criteria": "Non trasformare risolto in aperto o in certezza attuale; mantenere tutta la qualifica temporale.",
+    "expectedCitations": [
+      "N1"
+    ]
+  },
+  {
+    "id": "attributed_opinion",
+    "query": "Opinione",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Opinione",
+        "text": "Secondo il relatore il 90% abbandona. Questa opinione non è un dato verificato."
+      }
+    ],
+    "criteria": "Restare una citazione attribuita e non un fatto verificato.",
+    "expectedCitations": [
+      "N1"
+    ]
+  },
+  {
+    "id": "cut_excerpt",
+    "query": "Dato incompleto",
+    "sources": [
+      {
+        "id": "N1",
+        "title": "Dato incompleto",
+        "text": "Le royalty attuali sono DATO NON"
+      }
+    ],
+    "criteria": "Rifiutare il passaggio visibilmente troncato, invitare alla lettura, nessun completamento inventato.",
+    "expectedCitations": [
+      "N1"
+    ]
+  }
+]

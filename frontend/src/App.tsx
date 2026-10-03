@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { ChatPage } from './pages/ChatPage';
@@ -16,6 +16,9 @@ import { fetchModels, fetchServerInfo, fetchSavings, submitSavings, isTauri } fr
 import { OptInModal } from './components/OptInModal';
 import { UpdateChecker } from './components/Desktop/UpdateChecker';
 import { track, hashId } from './lib/analytics';
+
+// Personal fork: local evidence page without activating upstream ingestion.
+const AndreaNotesPage = lazy(() => import('./pages/AndreaNotesPage').then(m => ({ default: m.AndreaNotesPage })));
 
 export default function App() {
   const [setupDone, setSetupDone] = useState(!isTauri());
@@ -119,6 +122,7 @@ export default function App() {
 
   // Show opt-in modal on first visit
   useEffect(() => {
+    if (import.meta.env.VITE_ANDREA_LOCAL === 'true') return;
     if (!optInModalSeen) {
       setOptInModalOpen(true);
       markOptInModalSeen();
@@ -187,14 +191,16 @@ export default function App() {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="get-started" element={<GetStartedPage />} />
-          <Route path="data-sources" element={<DataSourcesPage />} />
+          <Route path="data-sources" element={import.meta.env.VITE_ANDREA_LOCAL === 'true'
+            ? <Suspense fallback={<p className="p-6">Caricamento note…</p>}><AndreaNotesPage /></Suspense>
+            : <DataSourcesPage />} />
           <Route path="agents" element={<AgentsPage />} />
           <Route path="logs" element={<LogsPage />} />
         </Route>
       </Routes>
       <Toaster position="bottom-right" />
       {commandPaletteOpen && <CommandPalette />}
-      {optInModalOpen && (
+      {optInModalOpen && import.meta.env.VITE_ANDREA_LOCAL !== 'true' && (
         <OptInModal onClose={() => setOptInModalOpen(false)} />
       )}
     </>

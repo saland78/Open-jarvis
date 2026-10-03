@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "mode": "direct_ollama_phases",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "requested": 3,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "observer": "direct_ollama_not_openjarvis_or_browser",
+  "coldWarmState": "not_determined_from_loaded_snapshot",
+  "rows": [
+    {
+      "ordinal": 1,
+      "status": "completed",
+      "firstContentClientMs": 12503.063,
+      "totalClientMs": 22210.953,
+      "doneReason": "stop",
+      "qualityVerdict": "not_assessed",
+      "loadedBefore": {
+        "available": true,
+        "selectedModelLoaded": false,
+        "contextLength": null,
+        "sizeBytes": null,
+        "sizeVramBytes": null
+      },
+      "loadedAfter": {
+        "available": true,
+        "selectedModelLoaded": true,
+        "contextLength": 4096,
+        "sizeBytes": 3184001022,
+        "sizeVramBytes": 0
+      },
+      "native": {
+        "totalMs": 22210.023,
+        "loadMs": 4827.501,
+        "prompt_evalMs": 7649.505,
+        "evalMs": 9707.271,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 86,
+        "evalTokensPerSecond": 8.859
+      }
+    },
+    {
+      "ordinal": 2,
+      "status": "completed",
+      "firstContentClientMs": 149.751,
+      "totalClientMs": 9938.353,
+      "doneReason": "stop",
+      "qualityVerdict": "not_assessed",
+      "loadedBefore": {
+        "available": true,
+        "selectedModelLoaded": true,
+        "contextLength": 4096,
+        "sizeBytes": 3184001022,
+        "sizeVramBytes": 0
+      },
+      "loadedAfter": {
+        "available": true,
+        "selectedModelLoaded": true,
+        "contextLength": 4096,
+        "sizeBytes": 3184001022,
+        "sizeVramBytes": 0
+      },
+      "native": {
+        "totalMs": 9937.225,
+        "loadMs": 1.919,
+        "prompt_evalMs": 116.429,
+        "evalMs": 9788.905,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 566,
+        "eval_count": 86,
+        "evalTokensPerSecond": 8.785
+      }
+    },
+    {
+      "ordinal": 3,
+      "status": "completed",
+      "firstContentClientMs": 151.702,
+      "totalClientMs": 10890.652,
+      "doneReason": "stop",
+      "qualityVerdict": "not_assessed",
+      "loadedBefore": {
+        "available": true,
+        "selectedModelLoaded": true,
+        "contextLength": 4096,
+        "sizeBytes": 3184001022,
+        "sizeVramBytes": 0
+      },
+      "loadedAfter": {
+        "available": true,
+        "selectedModelLoaded": true,
+        "contextLength": 4096,
+        "sizeBytes": 3184001022,
+        "sizeVramBytes": 0
+      },
+      "native": {
+        "totalMs": 10889.462,
+        "loadMs": 2.048,
+        "prompt_evalMs": 117.381,
+        "evalMs": 10739.167,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 566,
+        "eval_count": 95,
+        "evalTokensPerSecond": 8.846
+      }
+    }
+  ]
+}
