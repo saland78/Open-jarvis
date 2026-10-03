@@ -48,6 +48,12 @@ syntax, collision, concurrent-edit and replacement-failure tests exercise
 the actual manifest. It restores applied files if replacement fails. Notes,
 configuration, databases and dependencies are outside its write manifest.
 
+The updater downloads both runtime files from source commit
+`fa4ed4574218f1fc9dbb3e8428cc7b8f6970c360`, with fixed SHA-256 checks.
+Fifty-nine targeted development checks passed, including ten tests of the
+actual two-file transaction. This does not include a new Mac production or
+browser check. Installation and that final check remain pending.
+
 Consulted upstream [document-QA tests](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/evals/scorers/test_doc_qa.py)
 and [DocQAScorer](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/src/openjarvis/evals/scorers/doc_qa.py).
 Separate fact coverage and citation checks inform the review; heuristic word
