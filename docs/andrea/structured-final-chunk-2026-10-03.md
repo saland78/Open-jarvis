@@ -18,8 +18,14 @@ Nuovi test isolano dagli import nativi il tipo StreamChunk reale e i metodi effe
 
 I test ASGI precedenti sono corretti per usare `None` nei frame terminali. Regressione completa del profilo: **107 test passati**, con nessuna lettura di note personali o inferenza reale nel contenitore. La correzione non modifica l'interfaccia, perciò non richiede una nuova build frontend. Nessun adattamento dev del contenitore distribuito.
 
-Lo script di aggiornamento installerà **un solo file** da un commit preciso, verificando hash e baseline, porta 8008 libera e backup. I test del manifest reale devono comprendere applicazione, backup, sentinelle, ripetizione, errore di sostituzione, hash errato, baseline incompatibile e porta occupata.
+Lo script di aggiornamento installerà **un solo file** da un commit preciso, verificando hash e baseline, porta 8008 libera e backup. I test del manifest reale sono passati per applicazione, backup, sentinelle, ripetizione, errore di sostituzione, hash errato, baseline incompatibile e porta occupata.
 
 ## Chiusura ancora necessaria
 
 Installare sul Mac, riavviare e ripetere una volta la raccolta finita di sei casi con `check_structured.py`. Rivedere le affermazioni rispetto agli estratti originali: completamento, validità strutturale e qualità restano esiti distinti. Poi un controllo della pagina Note Obsidian e dei tempi. Nessun retry automatico, no note/db/profili modificati, niente merge della PR draft. Il precedente esito negativo resta registrato.
+
+## Installer pubblicato
+
+`update_final_chunk.py` scarica un solo file dal commit `ce6f3d5256de38d24ea82d06393b6433f5a599c7`. SHA-256 script: `4e941f726a4d4252887a06e222b183a899adf4bf29d6d7a718d31a1392fb4899`. Baseline del file installato: `b7d87dc3a3a70694c41e1e08313cfbc11d481770e22d43a5ddf4ecd3ff255a0c`; nuovo file: `8a862a3ac5fd1d2d16f609c5e8ab8b16d30d2de38812b8dff2e539ba80c7200d`. Richiede OpenJarvis fermo sulla porta 8008 e conserva il precedente file nel backup.
+
+Cinque file del commit sorgenti riletti da GitHub e confrontati esattamente con quelli collaudati. Nessun contenuto del Terminale personale pubblicato. Correzione ancora da installare e collaudare sul Mac: nessun nuovo esito reale anticipato.
