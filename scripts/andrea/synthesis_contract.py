@@ -151,6 +151,28 @@ def render_contract(result):
         return "Gli estratti non permettono una sintesi strutturata. Nessun dato esterno verificato."
     if result['status'] == 'rejected':
         return "Sintesi strutturata non mostrata: risposta incompleta o controlli di formato, fonti e date non superati. Nessuna seconda generazione automatica. Consulta gli estratti."
-    return "Sintesi strutturata da confrontare con le fonti. Nessun dato esterno verificato.\n\n" + "\n\n".join(
+    text = "Sintesi strutturata da confrontare con le fonti. Nessun dato esterno verificato.\n\n" + "\n\n".join(
         claim['text'] + ' ' + ' '.join('[' + support['sourceId'] + ']' for support in claim['supports'])
         for claim in result['claims'])
+    # Preserve explicit dated resolution context with original wording. This
+    # does not infer current status or repair the model's semantic reasoning.
+    historical = []
+    seen = set()
+    for claim in result['claims']:
+        for support in claim['supports']:
+            quote, source_id = support['quote'], support['sourceId']
+            if source_id in seen or len(quote) > 1200 or not DATE.search(quote):
+                continue
+            if not re.search(r"\b(?:fu|è stat[oa])\s+risolt[oa]\b", quote, re.I):
+                continue
+            if re.search(r"\bnon\s+(?:fu|è stat[oa])\s+risolt[oa]\b", quote, re.I):
+                continue
+            seen.add(source_id)
+            historical.append('«' + quote + '» [' + source_id + ']')
+            if len(historical) == 3:
+                break
+        if len(historical) == 3:
+            break
+    if historical:
+        text += "\n\nContesto storico originale (non generato):\n" + "\n\n".join(historical)
+    return text
