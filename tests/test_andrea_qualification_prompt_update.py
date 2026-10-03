@@ -19,6 +19,10 @@ spec.loader.exec_module(updater)
 OLD_BRIDGE = ROOT/'tests/fixtures/andrea/note_facts_before_qualification.py'
 HELPER = 'scripts/andrea/qualification_prompt.py'
 BRIDGE = 'scripts/andrea/note_facts.py'
+HISTORICAL_GUARDS = {
+    'scripts/andrea/runtime.py': ROOT/'tests/fixtures/andrea/runtime-before-native-phases.py',
+    'src/openjarvis/engine/ollama.py': ROOT/'tests/fixtures/andrea/ollama-before-native-phases.py',
+}
 
 
 class QualificationUpdateTests(unittest.TestCase):
@@ -41,7 +45,7 @@ class QualificationUpdateTests(unittest.TestCase):
         for relative in updater.CHECKS:
             target = self.project/relative
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT/relative, target)
+            shutil.copy2(HISTORICAL_GUARDS.get(relative, ROOT/relative), target)
         shutil.copy2(OLD_BRIDGE, self.project/BRIDGE)
         self.payload = {item['path']: (ROOT/item['path']).read_bytes()
                         for item in updater.MANIFEST}
@@ -111,11 +115,11 @@ class QualificationUpdateTests(unittest.TestCase):
                 self.run_update(port=listener.getsockname()[1], fetch=unexpected_fetch)
         guard = self.project/'scripts/andrea/runtime.py'
         guard.unlink()
-        guard.symlink_to(ROOT/'scripts/andrea/runtime.py')
+        guard.symlink_to(HISTORICAL_GUARDS['scripts/andrea/runtime.py'])
         with self.assertRaisesRegex(ValueError, 'Componente diverso'):
             self.run_update(fetch=unexpected_fetch)
         guard.unlink()
-        shutil.copy2(ROOT/'scripts/andrea/runtime.py', guard)
+        shutil.copy2(HISTORICAL_GUARDS['scripts/andrea/runtime.py'], guard)
         (self.project/'Avvia-OpenJarvis.command').unlink()
         with self.assertRaisesRegex(ValueError, 'non è la cartella'):
             self.run_update(fetch=unexpected_fetch)
@@ -185,7 +189,7 @@ class QualificationUpdateTests(unittest.TestCase):
         self.assertEqual(len(updater.CHECKS), 7)
         self.assertFalse(set(updater.CHECKS) & {HELPER, BRIDGE})
         for relative, expected in updater.CHECKS.items():
-            self.assertEqual(updater.digest(ROOT/relative), expected)
+            self.assertEqual(updater.digest(HISTORICAL_GUARDS.get(relative, ROOT/relative)), expected)
 
 
 if __name__ == '__main__':

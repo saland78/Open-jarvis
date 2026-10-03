@@ -38,7 +38,9 @@ Consultati nuovamente [OllamaEngine upstream](https://github.com/open-jarvis/Ope
 
 ## Installazione e verifica Mac finite
 
-Un installer separato scaricherà quattro sorgenti da un commit preciso, con hash, verifica della baseline, porta 8008 libera, backup e rollback. Non modifica note, configurazioni, database, dipendenze o Jarvis originale. Non eseguire con il server acceso.
+L'installer [update_native_phases.py](../../scripts/andrea/update_native_phases.py) scarica quattro sorgenti dal commit 80dca1e4b367bf026f229f59af5f39bfcaf39b3a, con hash, verifica della baseline, porta 8008 libera, backup e rollback. SHA-256 dello script: 5afeafed2f9b6c271f1a8b5493beb75041fe6e16a0364d85cebbbfa6e025d422. Non modifica note, configurazioni, database, dipendenze o Jarvis originale. Non eseguire con il server acceso.
+
+Dieci test della transazione reale a quattro file passati: backup/sentinelle/permessi/ripetizione, hash errato, file incompatibile o mancante, rollback al terzo e quarto rimpiazzo, porta occupata, symlink, guardie e modifiche concorrenti, sintassi non valida e manifest preciso. Dieci regressioni dell'installer precedente passate usando fixture storiche esatte per runtime ed engine; i suoi hash non sono stati rilassati. Totale di questo task: 81 controlli mirati passati. Sorgenti e distribuzione pubblicati riletti per verificarne l'identità.
 
 Dopo installazione e riavvio:
 

@@ -181,3 +181,10 @@ scripts/andrea/update_retrieval.py applica cinque file fissati a un commit, veri
 Prima di modificare codice, verificare lo stato del fork e consultare i test upstream pertinenti in https://github.com/open-jarvis/OpenJarvis/tree/main/tests. Fissare il riferimento esaminato e documentare cosa si recupera, cosa viene adattato e quali controlli non certificano il risultato richiesto. Non sostituire il collaudo locale con la semplice presenza di test upstream.
 
 Per questo intervento sono stati letti tests/connectors/test_obsidian.py e tests/evals/scorers/test_doc_qa.py, al commit c4da16e1ca3d21f4cc1905d4200063e564104f0f. Si mantiene il parser Obsidian upstream e il modello di verifiche separate su contenuto, citazioni e protocollo. Lo scorer documentale controlla corrispondenze di parole e citazioni: non viene usato per dichiarare vere le affermazioni. I nuovi test coprono il controllo conservativo dei campi e il mancato avvio dell'inferenza quando non serve.
+
+
+## Prossimi task e moduli futuri (2026-10-04)
+
+La [roadmap dei moduli futuri](future-capabilities-roadmap.md) registra ricerca web, confronto Amazon con analisi del prodotto, recensioni, feedback del venditore e vendite dichiarate, controllo Mac e vocali WhatsApp. Sono funzionalità pianificate, non già attive. Quantità vendute non disponibili non vengono dedotte dal numero delle recensioni; nessuna reputazione è garantita da un punteggio. Acquisti e modifiche rilevanti richiedono revisione del risultato pronto.
+
+Il prossimo passo immediato del [piano della latenza](end-to-end-latency-plan.md) è la [raccolta delle fasi native nella stessa sintesi reale](production-native-phases.md): caricamento, contesto e generazione separati senza nuove inferenze. Sviluppo e aggiornamento verificati; installazione e una verifica finita sul Mac restano da eseguire. Nessun miglioramento prestazionale già dichiarato.
