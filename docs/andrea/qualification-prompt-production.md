@@ -25,8 +25,8 @@ This is a prompt change, not a new quality oracle. Structural acceptance
 still requires semantic comparison with the original passages. Failed book
 experiments are not relabelled as passes and are not used in production.
 Single diagnostic observations are not a latency benchmark: cache state,
-loading, order and output length can affect elapsed time. The updated
-production path and browser latency still require the finite Mac check.
+loading, order and output length can affect elapsed time. The finite Mac
+integration review is recorded separately below.
 
 ## Development checks
 
@@ -52,7 +52,30 @@ The updater downloads both runtime files from source commit
 `fa4ed4574218f1fc9dbb3e8428cc7b8f6970c360`, with fixed SHA-256 checks.
 Fifty-nine targeted development checks passed, including ten tests of the
 actual two-file transaction. This does not include a new Mac production or
-browser check. Installation and that final check remain pending.
+browser check. Installation and the finite Mac check were subsequently
+completed, as recorded below.
+
+## Finite Mac integration review
+
+The verified two-file updater completed with a local backup and the server
+restarted. One selected-note qualification synthesis was collected in the
+browser. Transport completed and the response contract was accepted.
+Manual comparison with the separate original support passages passed for
+all four selected facts: the declared count, variability by period, current
+qualification and dated historical qualification. Context dates and scope
+remained separate, citations matched the selected note, and the answer did
+not infer zero or external verification from missing information.
+
+This concludes the planned qualification integration check. It does not
+certify arbitrary free synthesis or a performance improvement. The observed
+wait remains dominated by model generation; this single request does not
+isolate loading, prompt evaluation, cache state or decoding. The original
+book wire message remains unchanged and compact book variants remain
+excluded. No additional book candidate generation was performed.
+
+Only the review status is recorded here. Screenshots, source passages,
+answers, private paths, local backup details and private diagnostic output
+are not published.
 
 Consulted upstream [document-QA tests](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/evals/scorers/test_doc_qa.py)
 and [DocQAScorer](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/src/openjarvis/evals/scorers/doc_qa.py).
