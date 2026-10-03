@@ -52,3 +52,9 @@ Questa consultazione non equivale a esecuzione dei test upstream o collaudo voca
 ## Task futuri collegati
 
 La [roadmap dei moduli web, Amazon, controllo Mac e vocali WhatsApp](future-capabilities-roadmap.md) raccoglie i requisiti successivi. Sono task da progettare e collaudare, non funzioni attivate. La priorità immediata resta distinguere caricamento, preparazione del contesto e generazione nella richiesta di sintesi reale, quindi adottare una sola ottimizzazione che mantenga i criteri di qualità.
+
+## Aggiornamento operativo del 2026-10-04
+
+La [raccolta delle fasi native in produzione](production-native-phases.md) è conclusa: un caso reale della nota scelta, confronto semantico favorevole, contratto accettato e misure dalla stessa inferenza disponibili. Nessuna inferenza aggiuntiva effettuata dal lettore. Caricamento circa 5,84 s, contesto 14,99 s, produzione 20,36 s; contatore cache dichiarato zero. Queste misure non dimostrano un miglioramento o la causa della variabilità precedente.
+
+Prima di un'ulteriore modifica al prompt, il prossimo task è verificare con un confronto finito il riuso del modello e del contesto sul medesimo percorso di produzione. Conservare gli stessi fatti, schema, modello e criteri semantici; niente unload, retry o ripetizioni fino a ottenere un esito favorevole. La raccolta appena conclusa non richiede ulteriori prove per la sua chiusura. Voce, strumenti e moduli futuri seguono il loro ordine separato.

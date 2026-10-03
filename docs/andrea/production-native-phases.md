@@ -1,6 +1,6 @@
 # Fasi native Ollama nella sintesi di produzione
 
-Stato al 2026-10-04 (Europe/Rome): modifica e verifiche di sviluppo pronte; installazione e controllo sul Mac ancora da eseguire. Nessun miglioramento di velocità dichiarato.
+Stato al 2026-10-04 (Europe/Rome): installazione e collaudo finito sul Mac conclusi e superati nell'ambito della nota scelta. Fasi native della stessa richiesta disponibili; nessun miglioramento di velocità dichiarato.
 
 ## Problema e comportamento
 
@@ -52,3 +52,39 @@ Dopo installazione e riavvio:
 Criterio di chiusura: misure della stessa richiesta disponibili e confronto semantico favorevole nell'ambito della nota scelta. In caso di errore raccogliere l'esito e risolverne la causa, senza ripetizioni per ottenere un campione favorevole. Una sola osservazione non dimostra un miglioramento prestazionale; serve per scegliere il successivo intervento misurato. Nessuna dashboard esterna verificata.
 
 La [roadmap dei moduli futuri](future-capabilities-roadmap.md) conserva ricerca web, Amazon, controllo Mac e voce/WhatsApp come task successivi. PR sempre draft senza merge.
+
+## Esito Mac del 2026-10-04: concluso e superato nell'ambito previsto
+
+Installazione verificata dell'installer distribuito al commit a86efaf84746978effee48964b72e25fe5d78fcc, hash dello script corrispondente e quattro file applicati con backup. Riavvio del launcher riuscito. Una sola sintesi della nota scelta nella pagina Note Obsidian, senza ripetizioni per ottenere un campione favorevole.
+
+Trasporto completed e contratto accepted. Confronto umano della risposta visualizzata con i passaggi originali: favorevole per i quattro fatti selezionati. Conteggio dichiarato e variabilità per periodo conservati; qualifica aggiornata non verificata nella nota e assenza nella fotografia storica tenute separate con le rispettive date. Nessuna deduzione di zero, nessun report esterno dichiarato inesistente o mai scaricato, nessuna verifica esterna inventata. Questo esito riguarda quel caso, non una certificazione semantica universale o una verifica della dashboard.
+
+Il lettore ha eseguito zero inferenze e nessuna lettura del vault. Il record più recente della sintesi strutturata ha terminalFrameReceived=true e tutti i contatori/durate attesi. L'output del lettore non valuta la qualità: il verdetto semantico deriva dal confronto separato nel browser. Numeri filtrati disponibili in [production-native-phases-mac-2026-10-04.json](production-native-phases-mac-2026-10-04.json), senza storico del Terminale, screenshot, testo, percorsi delle note, identificativi o dati personali.
+
+| Fase della stessa richiesta | Durata |
+|---|---:|
+| Recupero nel backend | 2,71 ms |
+| Caricamento nativo Ollama | 5835,091 ms |
+| Valutazione nativa del contesto | 14992,081 ms |
+| Produzione nativa dei token | 20364,808 ms |
+| Totale nativo Ollama | 41231,624 ms |
+| Primo frammento JSON nel backend, non mostrato | 20890,32 ms |
+| Intero percorso di generazione nel backend | 41254,74 ms |
+| Controlli del JSON | 3,15 ms |
+| Primo testo accettato nel backend | 41262,95 ms |
+| Totale della richiesta nel backend | 41263,37 ms |
+| Primo aggiornamento della risposta nella UI | 41268 ms |
+
+Contatori dichiarati da Ollama: promptEvalCount=796, promptEvalCachedCount=0, evalCount=138, evalTokensPerSecond=6,776. Il caricamento osservato non identifica da solo la causa o certifica lo stato iniziale della memoria. Lo zero riguarda il contatore di cache dichiarato per questa richiesta: non prova che il riuso sia impossibile. Nessun GET aggiuntivo dello stato Ollama è stato raccolto per questa osservazione.
+
+Il costo principale di questa osservazione è nel motore: valutazione del contesto e produzione dei token, con un contributo di caricamento. Recupero e validazione hanno costi millisecondi. Il primo JSON non è testo accettato: la sintesi protetta viene mostrata dopo il completamento e i controlli. Non sommare i tempi del browser e del backend, né attribuire differenze fra orologi a una fase specifica. Una singola osservazione non dimostra un miglioramento rispetto a campioni precedenti.
+
+Criterio di chiusura soddisfatto: misure native disponibili dalla medesima richiesta e revisione semantica favorevole nel caso scelto. Non sono necessarie altre generazioni per chiudere questo aggiornamento.
+
+## Successivo intervento misurato
+
+Prima di modificare nuovamente prompt o parametri, verificare il riuso del modello e del contesto sul percorso reale della nota scelta: keep_alive=15m è già configurato, ma questa osservazione contiene caricamento e nessun token dichiarato in cache. La vecchia prova sintetica diretta non sostituisce una misura del percorso di produzione.
+
+Preparare un confronto finito con la stessa nota e il medesimo prompt, schema e modello, senza forzare unload, riscaldamenti aggiuntivi o retry. Conservare ogni esito e confrontare separatamente le fasi native e i medesimi criteri semantici. Se la cache non viene riusata, individuare le differenze del payload prima di proporre una modifica; non assumere che aumentare la retention acceleri il calcolo dei token. Nessuna modifica al runtime o nuovo benchmark è stato eseguito per registrare questo esito.
+
+Per la chiusura e la scelta del prossimo task consultati nuovamente [test_ollama.py](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/engine/test_ollama.py), [test_ollama_runtime_options.py](https://github.com/open-jarvis/OpenJarvis/blob/792131feb3948aca0b54a94e0344f6827ff3129d/tests/engine/test_ollama_runtime_options.py) e il motore upstream allo stesso commit. Il percorso rich streaming è già asincrono: renderlo nuovamente asincrono non è la soluzione dedotta da queste misure. Consultazione distinta dall'esecuzione; nessuna nuova suite richiesta per questo aggiornamento di documentazione. Branch di lavoro verificato prima della modifica, PR #1 draft e non unita.

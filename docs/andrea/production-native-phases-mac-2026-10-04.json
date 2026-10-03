@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "mode": "production_native_phases_read_only",
+  "selection": "latest_retained_structured_notes_request",
+  "inferencesIssuedByReader": 0,
+  "vaultReadByReader": false,
+  "browserRendering": "not_measured_by_reader",
+  "qualityVerdict": "not_assessed_by_reader",
+  "separateManualReview": {
+    "scope": "four_selected_facts_from_one_note",
+    "semanticVerdict": "passed",
+    "externalTruthVerified": false,
+    "generalSynthesisCertified": false
+  },
+  "transportStatus": "completed",
+  "structuredOutcome": "accepted",
+  "serverMs": {
+    "retrievalMs": 2.71,
+    "structuredFirstJsonMs": 20890.32,
+    "structuredGenerationMs": 41254.74,
+    "structuredValidationMs": 3.15,
+    "structuredAcceptedTextMs": 41262.95,
+    "firstTextMs": 41263.06,
+    "totalMs": 41263.37
+  },
+  "native": {
+    "source": "ollama_terminal_frame",
+    "durationUnit": "ms",
+    "terminalFrameReceived": true,
+    "totalMs": 41231.624,
+    "loadMs": 5835.091,
+    "promptEvalMs": 14992.081,
+    "evalMs": 20364.808,
+    "promptEvalCount": 796,
+    "promptEvalCachedCount": 0,
+    "evalCount": 138,
+    "evalTokensPerSecond": 6.776
+  },
+  "separateBrowserObservation": {
+    "source": "user_supplied_screenshots",
+    "resolution": "whole_milliseconds",
+    "uiUpdateIsNotPaint": true,
+    "ms": {
+      "firstContent": 41265,
+      "firstUiUpdate": 41268,
+      "streamEnd": 41266,
+      "finalUiUpdate": 41268
+    }
+  },
+  "performanceImprovementEstablished": false
+}
