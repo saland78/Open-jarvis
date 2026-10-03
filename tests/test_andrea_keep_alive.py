@@ -1,11 +1,14 @@
 """Exercise actual engine methods with isolated transports; no real inference."""
 import ast
 import asyncio
+from dataclasses import dataclass, field
 import json
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
 import importlib.util
+import sys
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -16,8 +19,9 @@ def engine_class():
     methods = [n for n in engine.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
                and n.name in ('generate', 'stream', 'stream_full')]
     options = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == '_ollama_request_options')
+    response_format = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == '_ollama_response_format')
     isolated = ast.ClassDef(name='Engine', bases=[], keywords=[], body=methods, decorator_list=[])
-    module = ast.Module(body=[ast.ImportFrom(module='__future__', names=[ast.alias(name='annotations')], level=0), options, isolated], type_ignores=[])
+    module = ast.Module(body=[ast.ImportFrom(module='__future__', names=[ast.alias(name='annotations')], level=0), options, response_format, isolated], type_ignores=[])
     namespace = {'json': json, 'messages_to_dicts': lambda m: [dict(v) for v in m],
                  'estimate_prompt_tokens': lambda m: 10, '_default_num_ctx': lambda: 4096,
                  'httpx': SimpleNamespace(ConnectError=ConnectionError, TimeoutException=TimeoutError, HTTPStatusError=RuntimeError),
@@ -119,6 +123,46 @@ class KeepAliveTests(unittest.IsolatedAsyncioTestCase):
                 if kwargs: self.assertEqual(payload['format'], 'json')
                 else: self.assertNotIn('format', payload)
                 self.assertNotIn('response_format', payload['options'])
+
+    async def test_full_json_schema_reaches_all_three_transports_with_budget(self):
+        schema = {'type': 'object', 'properties': {'date': {'type': 'string', 'enum': ['2027-03-01']}},
+                  'required': ['date'], 'additionalProperties': False}
+        payloads = await self.exercise(bounded_class(), {'response_format': {'type': 'json_schema', 'schema': schema}})
+        for payload in payloads:
+            self.assertEqual(payload['format'], schema)
+            self.assertEqual(payload['options'], {'temperature': .4, 'num_predict': 512, 'num_ctx': 4096})
+            self.assertEqual(payload['keep_alive'], '15m')
+            self.assertIs(payload['think'], False)
+        self.assertEqual(schema['properties']['date']['enum'], ['2027-03-01'])
+
+    async def test_missing_or_invalid_schema_stops_before_any_transport(self):
+        for fmt in ({'type': 'json_schema'}, {'type': 'json_schema', 'schema': {}},
+                    {'type': 'json_schema', 'schema': 'json'}, {'type': 'unexpected'}):
+            engine = engine_class()(); transport = Transport()
+            engine._client = transport; engine._get_async_client = lambda: transport
+            async def run_stream(*args, **kwargs):
+                self.fail('invalid schema reached secured stream')
+                yield
+            engine._run_stream = run_stream
+            with self.assertRaises(ValueError):
+                engine.generate([], model='selected', response_format=fmt)
+            for method in (engine.stream, engine.stream_full):
+                with self.assertRaises(ValueError):
+                    _ = [item async for item in method([], model='selected', response_format=fmt)]
+            self.assertFalse(transport.payloads)
+
+    async def test_upstream_response_format_object_keeps_its_schema(self):
+        tree = ast.parse((ROOT/'src/openjarvis/engine/_stubs.py').read_text())
+        klass = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'ResponseFormat')
+        ns = {'dataclass':dataclass, 'field':field}
+        module = ast.Module(body=[ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0),klass],type_ignores=[])
+        exec(compile(ast.fix_missing_locations(module),'actual_response_format','exec'),ns)
+        schema = {'type':'object','properties':{'value':{'type':'integer'}}}
+        with patch.dict(sys.modules, {'openjarvis.engine._stubs':SimpleNamespace(ResponseFormat=ns['ResponseFormat'])}):
+            payloads = await self.exercise(engine_class(), {'response_format':ns['ResponseFormat'](type='json_schema',schema=schema)})
+            self.assertTrue(all(p['format'] == schema for p in payloads))
+            payloads = await self.exercise(engine_class(), {'response_format':ns['ResponseFormat']()})
+            self.assertTrue(all(p['format'] == 'json' for p in payloads))
 
     def test_production_prompt_unchanged_from_verified_baseline(self):
         import hashlib

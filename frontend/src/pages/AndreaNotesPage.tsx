@@ -9,10 +9,11 @@ import { AndreaResponseTimes } from './AndreaResponseTimes';
 interface Source {
   id?: string; path: string; title: string; status: string; text: string;
   startLine: number; endLine: number; modifiedAt: string; eligible: boolean;
+  passages?: { text: string; startLine: number; endLine: number }[];
 }
 interface VaultStatus { available: boolean; configured: boolean; vault?: string; detail?: string }
 interface SearchResult { query: string; results: Source[]; scanned: number; total: number; excluded: number; partial: boolean; skipped: number; elapsedMs: number }
-interface Evidence { answerMode?: string; inferenceUsed?: boolean; query: string; sources: Source[]; excluded: number; partial: boolean }
+interface Evidence { answerMode?: string; inferenceUsed?: boolean; query: string; sources: Source[]; excluded: number; partial: boolean; selectionScope?: string; synthesisPath?: string }
 interface Note { path: string; title: string; text: string; status: string; modifiedAt: string }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -103,7 +104,7 @@ export function AndreaNotesPage() {
       if (id === revision.current) setNote(data);
     } catch (err) { failed(err, abort, id); } finally { finished(id); }
   }
-  async function summarize(brief = false, structured = false) {
+  async function summarize(brief = false, structured = false, notePath?: string) {
     if (!result) return;
     const measurement = new BrowserNoteMeasurement(undefined, document.visibilityState === 'visible');
     const { abort, id } = start('summary');
@@ -113,7 +114,8 @@ export function AndreaNotesPage() {
     let done = false;
     let reason: unknown = null;
     try {
-      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief, notes_structured: structured }, abort.signal,
+      for await (const event of streamChat({ model, messages: [{ role: 'user', content: result.query }], stream: true, notes_query: result.query, notes_brief: brief, notes_structured: structured,
+        ...(notePath ? { notes_path: notePath } : {}) }, abort.signal,
         { headers: requestId => measurement.headers(requestId), done: () => { done = true; } })) {
         if (id !== revision.current) break;
         const data = JSON.parse(event.data);
@@ -177,25 +179,29 @@ export function AndreaNotesPage() {
             <h2 className="font-semibold">{s.title}</h2><p className="text-sm break-words">{s.path} · righe {s.startLine}–{s.endLine} · stato dichiarato: {s.status}</p>
             <pre className="whitespace-pre-wrap break-words font-sans mt-2">{s.text || 'Nota senza corpo utilizzabile.'}</pre>
             <button className={button + ' mt-3'} disabled={Boolean(busy)} onClick={() => void read(s.path)}>Leggi nota</button>
+            {s.eligible && s.status === 'active' ? <button className={button + ' mt-3 ml-2'} disabled={!model || Boolean(busy)} onClick={() => void summarize(false, true, s.path)}>Sintesi della nota</button> : null}
           </article>)}
           {result.total === 0 ? <p>Nessuna corrispondenza. Prova una parola diversa.</p> : null}
           {!canSummarize && result.total > 0 ? <p>Nessuna fonte attiva con contenuto utilizzabile per il riassunto.</p> : null}
           <div className="flex flex-wrap gap-2"><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize(true)}>Passaggi brevi dalle fonti</button><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize(false, true)}>Sintesi strutturata</button><button className={button} disabled={!canSummarize || !model || Boolean(busy)} onClick={() => void summarize()}>Sintesi libera del modello</button></div>
           <p>I passaggi brevi conservano il testo originale e il suo contesto. La sintesi strutturata viene mostrata dopo i controlli di formato, fonti e date; può ancora contenere errori di significato. Entrambe le sintesi vanno confrontate con le fonti.</p>
+          <p>“Sintesi della nota” usa solo la nota scelta: profilo del libro e date, oppure conteggio dei titoli e qualifiche KPI datate, nei formati riconosciuti. È una selezione parziale dei fatti.</p>
           {!model ? <p>La ricerca funziona senza inferenza. Per la sintesi libera serve il modello locale configurato.</p> : null}
         </section> : null}
         {busy === 'summary' ? <div className="flex gap-3 items-center"><p role="status">Jarvis sta elaborando gli estratti…</p><button className={button} onClick={stop}>Interrompi risposta</button></div> : null}
         {times ? <AndreaResponseTimes times={times} /> : null}
         {answer || evidence ? <section aria-label="Riassunto delle fonti" className="border border-[var(--color-border)] rounded-lg p-4 flex flex-col gap-3">
-          <h2 className="font-semibold">{evidence?.answerMode === 'structured_synthesis' ? 'Sintesi strutturata da verificare' : evidence?.answerMode === 'structured_refused' ? 'Sintesi strutturata non mostrata' : evidence?.answerMode === 'structured_abstained' ? 'Astensione dalla sintesi' : evidence?.answerMode === 'status_scope_quotes' ? 'Qualifiche datate dalle fonti' : evidence?.answerMode === 'brief_quotes' ? 'Passaggi brevi dalle fonti' : 'Risposta di Jarvis'}</h2><p className="whitespace-pre-wrap break-words">{answer || (evidence?.answerMode === 'structured_synthesis' ? 'Generazione e controllo del JSON in corso. Il testo compare solo dopo i controlli.' : 'In attesa del primo testo…')}</p>
+          <h2 className="font-semibold">{evidence?.answerMode === 'structured_synthesis' ? 'Sintesi strutturata da verificare' : evidence?.answerMode === 'structured_refused' ? 'Sintesi strutturata non mostrata' : evidence?.answerMode === 'structured_abstained' ? 'Astensione dalla sintesi' : evidence?.answerMode === 'status_scope_quotes' ? 'Qualifiche datate dalle fonti' : evidence?.answerMode === 'brief_quotes' ? 'Passaggi brevi dalle fonti' : 'Risposta di Jarvis'}</h2><p className="whitespace-pre-wrap break-words">{answer || (evidence?.answerMode === 'structured_synthesis' ? 'Elaborazione e controlli in corso. Il testo compare solo dopo i controlli.' : 'In attesa del primo testo…')}</p>
+          {evidence?.selectionScope === 'selected_note_facts' ? <p>La sintesi riguarda soltanto i fatti selezionati della nota scelta. Le frasi sono scritte dal modello; le intestazioni con le date delle qualifiche provengono dalla nota. I controlli tecnici non certificano il significato della risposta. Nessun dato verificato su sistemi esterni.</p> : null}
           <p>{evidence?.answerMode === 'status_scope_quotes' ? 'Protezione attiva: nessuna sintesi del modello generata. Intestazioni ed etichette sono copiate dagli estratti e possono riguardare dati diversi. Leggi le note per il contesto completo; nessun dato esterno verificato.' : evidence?.answerMode === 'brief_quotes' ? 'Questi passaggi sono copiati dalle fonti, senza generazione del modello. Sono una selezione parziale degli estratti, non una verifica dei dati o una risposta esaustiva.' : 'La risposta usa estratti, non le note intere. I conteggi riconosciuti possono essere riportati direttamente dalle fonti; le altre risposte sono sintesi del modello da verificare. Una citazione non dimostra che il dato della fonte sia vero o aggiornato.'}</p>
           {missingCitations || unknownCitations.length > 0 ? <p role="alert">Le citazioni della risposta sono mancanti o non corrispondono alle fonti fornite. Il riassunto va verificato.</p> : null}
           {evidence?.excluded ? <p>{evidence.excluded} note non utilizzabili escluse.</p> : null}
           {evidence?.partial ? <p>Anche le fonti del riassunto provengono da una ricerca parziale.</p> : null}
           {evidence?.sources.map(s => <article key={s.id} className="border-t pt-3">
-            <h3 className="font-semibold">[{s.id}] {s.title}</h3><p className="text-sm break-words">{s.path} · righe {s.startLine}–{s.endLine} · stato dichiarato: {s.status}</p>
-            <p className="text-sm">Estratto consultato per la risposta; il file risultava aggiornato a: {s.modifiedAt}</p>
-            <pre className="whitespace-pre-wrap break-words font-sans my-2">{s.text}</pre><button className={button} disabled={Boolean(busy)} onClick={() => void read(s.path)}>Leggi nota aggiornata</button>
+            <h3 className="font-semibold">[{s.id}] {s.title}</h3><p className="text-sm break-words">{s.path}{s.passages ? '' : ` · righe ${s.startLine}–${s.endLine}`} · stato dichiarato: {s.status}</p>
+            <p className="text-sm">{s.passages ? 'Passaggi originali separati' : 'Estratto consultato per la risposta'}; il file risultava aggiornato a: {s.modifiedAt}</p>
+            {s.passages ? s.passages.map((p, i) => <div key={i}><p className="text-sm">Righe {p.startLine}–{p.endLine}</p><pre className="whitespace-pre-wrap break-words font-sans my-2">{p.text}</pre></div>) : <pre className="whitespace-pre-wrap break-words font-sans my-2">{s.text}</pre>}
+            <button className={button} disabled={Boolean(busy)} onClick={() => void read(s.path)}>Leggi nota aggiornata</button>
           </article>)}
         </section> : null}
         {note ? <section aria-label="Lettura nota" className="border border-[var(--color-border)] rounded-lg p-4 min-w-0">

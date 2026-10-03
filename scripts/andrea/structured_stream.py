@@ -1,12 +1,13 @@
 """Buffer a single secured engine stream; never expose partial JSON."""
 from __future__ import annotations
 import asyncio
+import inspect
 import time
 
 from synthesis_contract import validate_contract, render_contract
 
 
-async def collect(stream, messages, sources, measurement):
+async def collect(stream, messages, sources, measurement, *, validate=validate_contract, render=render_contract):
     parts = []
     size = 0
     completed = False
@@ -42,10 +43,12 @@ async def collect(stream, messages, sources, measurement):
         await iterator.aclose()
         measurement.record['structuredGenerationMs'] = round((time.perf_counter()-start)*1000, 2)
     validation_started = time.perf_counter()
-    result = validate_contract(''.join(parts), sources, completed=completed)
+    result = validate(''.join(parts), sources, completed=completed)
+    if inspect.isawaitable(result):
+        result = await result
     measurement.record['structuredValidationMs'] = round((time.perf_counter()-validation_started)*1000, 2)
     measurement.record['structuredOutcome'] = ('accepted' if result['status'] == 'valid_structure_pending_semantic_review' else result['status'])
-    return result, render_contract(result)
+    return result, render(result)
 
 
 async def until_disconnect(operation, receive):

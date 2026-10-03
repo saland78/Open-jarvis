@@ -13,6 +13,7 @@ from brief import brief_answer
 from status_scope import status_scope_answer
 from synthesis_contract import make_coverage_messages, render_contract
 from structured_stream import collect as collect_structured, until_disconnect
+import note_facts
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -48,10 +49,11 @@ def notes_messages(query, sources):
 
 class LocalMode:
     """First milestone: same-origin text chat; other mutations remain unavailable."""
-    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None):
+    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None):
         self.app, self.model, self.port, self.timeout = app, model, port, timeout
         self.notes = notes
         self.structured_stream = structured_stream
+        self.fact_stream = fact_stream
         self.busy = False
         self.measurements = LocalMeasurements()
 
@@ -127,6 +129,10 @@ class LocalMode:
                 raise ValueError("Seleziona una sola modalità di risposta.")
             if "notes_query" in payload and (not isinstance(payload["notes_query"], str) or not payload["notes_query"].strip() or len(payload["notes_query"]) > 200):
                 raise ValueError("Domanda sulle note non valida.")
+            if "notes_path" in payload:
+                if not self.notes or payload.get("notes_structured") is not True or "notes_query" not in payload or "notes_sources" in payload:
+                    raise ValueError("La sintesi di una nota scelta richiede la lettura locale e la modalità strutturata.")
+                self.notes.validate_path(payload["notes_path"])
         except (ValueError, KeyError, TypeError) as exc:
             return await self.reply(send, 400, str(exc))
         if self.busy:
@@ -136,17 +142,34 @@ class LocalMode:
         structured = payload.get("notes_structured") is True
         evidence = None
         direct_answer = None
+        fact_bundle = None
+        vault_identity = None
         if "notes_query" in payload:
             retrieval_started = time.perf_counter()
             try:
-                if "notes_sources" in payload:
+                if "notes_path" in payload:
+                    if self.fact_stream is None:
+                        raise ValueError("Sintesi della nota non disponibile in questo avvio.")
+                    vault_identity = str(self.notes.root())
+                    note = await asyncio.to_thread(self.notes.read, payload["notes_path"])
+                    fact_bundle = note_facts.prepare(note)
+                    if fact_bundle is None:
+                        raise ValueError("Questa nota non contiene un profilo del libro con date o qualifiche KPI nel formato supportato, oppure non è attiva. Puoi leggerla o usare le sintesi dei risultati della ricerca.")
+                    evidence = {"query": fact_bundle["case"]["query"], "sources": [note_facts.source_evidence(fact_bundle)],
+                                "excluded": 0, "partial": False, "origin": "vault",
+                                "selectionScope": "selected_note_facts", "synthesisPath": "source_facts",
+                                "answerMode": "structured_synthesis", "qualityVerdict": "pending_review"}
+                    messages = fact_bundle["messages"]
+                elif "notes_sources" in payload:
                     evidence = {"query": payload["notes_query"], "sources": payload["notes_sources"], "excluded": 0, "partial": False, "origin": "provided"}
                 elif not self.notes:
                     raise ValueError("Lettura delle note non disponibile.")
                 else:
                     evidence = await asyncio.to_thread(self.notes.grounding, payload["notes_query"])
                     evidence["origin"] = "vault"
-                if payload.get("notes_brief"):
+                if fact_bundle is not None:
+                    pass  # Selected-note summary uses only its proved facts and its schema.
+                elif payload.get("notes_brief"):
                     direct_answer = brief_answer(evidence["sources"])
                     evidence["answerMode"] = "brief_quotes"
                 else:
@@ -156,7 +179,7 @@ class LocalMode:
                         direct_answer = status_scope_answer(evidence["sources"])
                         if direct_answer is not None:
                             evidence["answerMode"] = "status_scope_quotes"
-                if structured and direct_answer is None:
+                if structured and direct_answer is None and fact_bundle is None:
                     evidence["answerMode"] = "structured_synthesis"
                     if self.structured_stream is None:
                         raise ValueError("Sintesi strutturata non disponibile in questo avvio.")
@@ -210,10 +233,14 @@ class LocalMode:
             async with asyncio.timeout(self.timeout):
                 if structured and direct_answer is None:
                     await tracked({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"text/event-stream"), (b"cache-control", b"no-store")]})
-                    result, text = await until_disconnect(collect_structured(self.structured_stream, messages, evidence["sources"], measurement), receive)
+                    operation = (note_facts.run(self.fact_stream, fact_bundle, self.notes, vault_identity, measurement)
+                                 if fact_bundle is not None else collect_structured(self.structured_stream, messages, evidence["sources"], measurement))
+                    result, text = await until_disconnect(operation, receive)
                     outcome = measurement.record["structuredOutcome"]
                     evidence["answerMode"] = {"accepted": "structured_synthesis", "abstained": "structured_abstained", "rejected": "structured_refused"}[outcome]
                     measurement.record["answerMode"] = evidence["answerMode"]
+                    if fact_bundle is not None:
+                        evidence["qualityVerdict"] = result.get("semanticVerdict", "not_assessed")
                     data = json.dumps(evidence, ensure_ascii=False)
                     await tracked({"type": "http.response.body", "body": f"event: local_sources\ndata: {data}\n\n".encode(), "more_body": True})
                     if outcome == "accepted":
@@ -290,7 +317,16 @@ def build_app(ollama_host: str | None = None):
                 yield chunk
         finally:
             await iterator.aclose()
-    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream)
+    async def fact_stream(messages, schema):
+        converted = [Message(role=Role(m["role"]), content=m["content"]) for m in messages]
+        iterator = sec.engine.stream_full(converted, model=cfg.server.model,
+                                          response_format={"type": "json_schema", "schema": schema})
+        try:
+            async for chunk in iterator:
+                yield chunk
+        finally:
+            await iterator.aclose()
+    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream)
 
 
 if __name__ == "__main__":

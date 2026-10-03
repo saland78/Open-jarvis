@@ -103,6 +103,24 @@ def _ollama_request_options(
     return options
 
 
+def _ollama_response_format(value):
+    """Forward JSON Schema itself, rather than silently reducing it to JSON mode."""
+    if value is None:
+        return None
+    if isinstance(value, dict):
+        kind, schema = value.get("type"), value.get("schema")
+    else:
+        from openjarvis.engine._stubs import ResponseFormat
+        if not isinstance(value, ResponseFormat):
+            raise ValueError("Unsupported Ollama response format")
+        kind, schema = value.type, value.schema
+    if kind == "json_object":
+        return "json"
+    if kind == "json_schema" and isinstance(schema, dict) and schema:
+        return schema
+    raise ValueError("Ollama JSON Schema mode requires a non-empty schema")
+
+
 @EngineRegistry.register("ollama")
 class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
     """Ollama backend via its native HTTP API."""
@@ -184,14 +202,9 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
             payload["tools"] = tools
 
         # Apply structured output / JSON mode
-        response_format = kwargs.get("response_format")
+        response_format = _ollama_response_format(kwargs.get("response_format"))
         if response_format is not None:
-            from openjarvis.engine._stubs import ResponseFormat
-
-            if isinstance(response_format, ResponseFormat):
-                payload["format"] = "json"
-            elif isinstance(response_format, dict):
-                payload["format"] = "json"
+            payload["format"] = response_format
         try:
             resp = self._client.post("/api/chat", json=payload)
             if resp.status_code == 400 and tools:
@@ -304,8 +317,9 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         # Per-request retention; leave Ollama's default untouched when absent.
         if kwargs.get("keep_alive") is not None:
             payload["keep_alive"] = kwargs["keep_alive"]
-        if kwargs.get("response_format") == {"type": "json_object"}:
-            payload["format"] = "json"
+        response_format = _ollama_response_format(kwargs.get("response_format"))
+        if response_format is not None:
+            payload["format"] = response_format
         try:
             # ASYNC streaming: ``httpx.AsyncClient`` + ``aiter_lines`` never
             # blocks the event loop between tokens (the previous SYNC
@@ -409,8 +423,9 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         if tools:
             payload["tools"] = tools
 
-        if kwargs.get("response_format") == {"type": "json_object"}:
-            payload["format"] = "json"
+        response_format = _ollama_response_format(kwargs.get("response_format"))
+        if response_format is not None:
+            payload["format"] = response_format
 
         async for chunk in self._run_stream(
             payload, messages, retry_without_tools=bool(tools)
