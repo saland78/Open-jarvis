@@ -102,7 +102,9 @@ class FactUpdateTests(unittest.TestCase):
         self.assertEqual(len(updater.MANIFEST),7)
         self.assertEqual(len({item['path'] for item in updater.MANIFEST}),7)
         for item in updater.MANIFEST:
-            self.assertEqual(updater.digest(ROOT/item['path']),item['sha256'])
+            source = (ROOT/'tests/fixtures/andrea/note_facts_before_qualification.py'
+                      if item['path'] == 'scripts/andrea/note_facts.py' else ROOT/item['path'])
+            self.assertEqual(updater.digest(source),item['sha256'])
             self.assertTrue(item['path'].endswith(('.py','.tsx')))
         self.assertEqual({item['path'] for item in updater.MANIFEST if item.get('new')}, {
             'scripts/andrea/markdown_fact_adapter.py','scripts/andrea/predicate_context_synthesis.py','scripts/andrea/note_facts.py'})

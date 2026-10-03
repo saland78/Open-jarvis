@@ -9,7 +9,6 @@ import asyncio
 
 import markdown_fact_adapter as adapter
 import predicate_context_synthesis as synthesis
-import qualification_prompt
 import synthesis_contract as validator
 from structured_stream import collect
 
@@ -27,10 +26,8 @@ def prepare(note):
         case = {'query': query, 'sources': [source]}
         plan = adapter.prepare(case, kind)
         if plan['status'] == 'ready':
-            messages = (qualification_prompt.messages(case, plan, synthesis)
-                        if kind == 'qualifications' else synthesis.messages(case, plan))
             candidates.append({'kind': kind, 'case': case, 'plan': plan,
-                               'messages': messages})
+                               'messages': synthesis.messages(case, plan)})
     return candidates[0] if len(candidates) == 1 else None
 
 

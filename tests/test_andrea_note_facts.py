@@ -5,6 +5,7 @@ transport/schema/provenance checks must not be reported as that review.
 """
 import ast
 import asyncio
+import importlib.util
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -87,6 +88,27 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                     self.assertNotIn('16 marzo 2027', self.body(events))
                 self.assertNotIn('Selected note', json.dumps(self.metric()))
                 self.assertGreaterEqual(self.metric()['structuredAcceptedTextMs'], self.metric()['structuredFirstJsonMs'])
+
+    async def test_selected_routes_match_reviewed_messages_and_keep_native_schema(self):
+        root = Path(__file__).resolve().parents[1]
+        spec = importlib.util.spec_from_file_location('prompt_experiment', root/'scripts/andrea/compact_note_prompt_probe.py')
+        experiment = importlib.util.module_from_spec(spec); spec.loader.exec_module(experiment)
+        for kind in ('book', 'qualifications'):
+            payload = self.fixture(kind); self.engine()
+            original = synthesis.messages(self.bundle['case'], self.bundle['plan'])
+            expected = (experiment.compact.messages(self.bundle['case'], self.bundle['plan'], synthesis)
+                        if kind == 'qualifications' else original)
+            events = await self.invoke(payload)
+            self.assertEqual(events[0]['status'], 200)
+            self.assertEqual(self.generated, [(expected, self.bundle['plan']['schema'])])
+            self.assertEqual(self.metric()['structuredOutcome'], 'accepted')
+            self.assertEqual(self.evidence(events)['qualityVerdict'], 'pending_review')
+            if kind == 'book':
+                self.assertEqual(expected, original)
+            else:
+                body = json.loads(expected[1]['content'])
+                self.assertNotIn('response_schema', body)
+                self.assertIn('response_shape', body)
 
     async def test_corrected_source_predicate_passes_without_claiming_values_were_updated(self):
         payload = self.fixture('qualifications')

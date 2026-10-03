@@ -1,7 +1,9 @@
 # Compact message, unchanged native schema
 
-Status: first candidate not adopted; revision 2 diagnostic prepared. The
-revised book instructions still require the finite Mac semantic comparison.
+Status: both compact book candidates remain excluded from production.
+The revised candidate still lost the source's specific work classification.
+The original book message is retained. The reviewed qualification message
+is integrated separately; see [production scope](qualification-prompt-production.md).
 
 The first comparison exposed a meaning problem despite technical acceptance:
 a specific literary classification could become generic, and an availability
@@ -81,8 +83,8 @@ no live Ollama or personal vault is used in development.
 The two additional regressions preserve the KPI wire payload and demonstrate
 that generic work classification and an ambiguous start can pass technical
 validation. They remain semantic failures; guard acceptance is not relabelled
-as a successful synthesis. The next Mac check selects only the book: two
-requests (original and revised compact), without retrying the four-case series.
+as a successful synthesis. The finite book comparison is complete. No
+further candidate book generation is required for this integration.
 
 Consulted upstream
 [Ollama tests](https://github.com/open-jarvis/OpenJarvis/blob/main/tests/engine/test_ollama.py)

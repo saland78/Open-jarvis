@@ -15,11 +15,22 @@ from test_andrea_real_notes_synthesis import BOOK, QUALIFICATIONS, answer, note
 
 ROOT = Path(__file__).resolve().parents[1]
 FILE = ROOT / 'scripts/andrea/compact_note_prompt_probe.py'
+BASELINE_NOTE_FACTS = ROOT / 'tests/fixtures/andrea/note_facts_before_qualification.py'
 spec = importlib.util.spec_from_file_location('compact_probe', FILE)
 p = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(p)
 VAULT = '/example/vault'
 PATHS = ['Books/book.md', 'Numbers/metrics.md']
+
+
+def copy_probe_baseline(root):
+    # Old diagnostics intentionally retain their installed-version pins.
+    # Exercise their original public baseline, not the later production bridge.
+    for relative in p.EXPECTED:
+        destination = root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        original = BASELINE_NOTE_FACTS if relative == 'scripts/andrea/note_facts.py' else ROOT/relative
+        shutil.copyfile(original, destination)
 
 
 class Response(io.BytesIO):
@@ -76,7 +87,11 @@ class LocalHTTP:
 
 class CompactTests(unittest.TestCase):
     def setUp(self):
-        self.modules = p.load_modules(ROOT)
+        self.baseline_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.baseline_dir.cleanup)
+        self.project = Path(self.baseline_dir.name)
+        copy_probe_baseline(self.project)
+        self.modules = p.load_modules(self.project)
 
     def bundle(self, kind):
         return self.modules.bridge.prepare(note(
@@ -171,7 +186,7 @@ class CompactTests(unittest.TestCase):
     def test_actual_payloads_four_calls_same_native_schema_and_options_read_only(self):
         http = LocalHTTP(self.modules)
         with redirect_stdout(io.StringIO()):
-            report = p.collect(http, self.modules, ROOT, VAULT, PATHS)
+            report = p.collect(http, self.modules, self.project, VAULT, PATHS)
         self.assertEqual(report['inferenceRequests'], 4)
         self.assertEqual([r['variant'] for r in report['rows']], ['original', 'compact']*2)
         self.assertEqual(report['qualityVerdict'], 'pending_review')
@@ -200,14 +215,14 @@ class CompactTests(unittest.TestCase):
         for paths in selections:
             http = LocalHTTP(self.modules)
             with self.assertRaises(ValueError):
-                p.collect(http, self.modules, ROOT, VAULT, paths)
+                p.collect(http, self.modules, self.project, VAULT, paths)
             self.assertFalse(http.requests)
 
     def test_unsupported_second_note_prevents_any_inference(self):
         http = LocalHTTP(self.modules)
         http.notes[PATHS[1]] = note('---\nstatus: active\n---\n# Not a supported note\n', PATHS[1])
         with self.assertRaises(ValueError):
-            p.collect(http, self.modules, ROOT, VAULT, PATHS)
+            p.collect(http, self.modules, self.project, VAULT, PATHS)
         self.assertFalse(http.posts())
 
     def test_changed_source_or_timestamp_or_vault_mode_refuses_and_stops_pair(self):
@@ -217,7 +232,7 @@ class CompactTests(unittest.TestCase):
         for mutate in mutations:
             http = LocalHTTP(self.modules); http.after = mutate
             with redirect_stdout(io.StringIO()):
-                report = p.collect(http, self.modules, ROOT, VAULT, [PATHS[0]])
+                report = p.collect(http, self.modules, self.project, VAULT, [PATHS[0]])
             self.assertEqual(report['inferenceRequests'], 1)
             self.assertEqual(report['rows'][0]['contract']['reason'], 'note_changed_or_unavailable')
             self.assertIsNone(report['rows'][0]['renderedAnswer'])
@@ -227,7 +242,7 @@ class CompactTests(unittest.TestCase):
     def test_truncated_output_not_accepted_no_retry_and_missing_metrics_not_zero(self):
         http = LocalHTTP(self.modules); http.reason = 'length'
         with redirect_stdout(io.StringIO()):
-            report = p.collect(http, self.modules, ROOT, VAULT, [PATHS[0]])
+            report = p.collect(http, self.modules, self.project, VAULT, [PATHS[0]])
         self.assertEqual(report['inferenceRequests'], 2)
         self.assertEqual(report['automaticRetries'], 0)
         for row in report['rows']:
@@ -240,7 +255,7 @@ class CompactTests(unittest.TestCase):
         for tools, duplicate in ([{'function': {'name': 'anything'}}], False), (None, True):
             http = LocalHTTP(self.modules); http.tools = tools; http.duplicate_event = duplicate
             with redirect_stdout(io.StringIO()):
-                report = p.collect(http, self.modules, ROOT, VAULT, [PATHS[0]])
+                report = p.collect(http, self.modules, self.project, VAULT, [PATHS[0]])
             self.assertEqual(report['inferenceRequests'], 1)
             self.assertEqual(report['rows'][0]['status'], 'error')
             self.assertIsNone(report['rows'][0]['renderedAnswer'])
@@ -248,10 +263,7 @@ class CompactTests(unittest.TestCase):
     def test_baseline_verified_before_loading_and_no_files_written(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            for relative in p.EXPECTED:
-                destination = root / relative
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(ROOT/relative, destination)
+            copy_probe_baseline(root)
             before = {str(f.relative_to(root)): f.read_bytes() for f in root.rglob('*') if f.is_file()}
             original_modules = {name: sys.modules.get(name) for name in p.LOAD_ORDER}
             modules = p.load_modules(root)
@@ -269,10 +281,7 @@ class CompactTests(unittest.TestCase):
     def test_baseline_change_during_inference_rejects_accepted_text(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            for relative in p.EXPECTED:
-                destination = root / relative
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(ROOT/relative, destination)
+            copy_probe_baseline(root)
             modules = p.load_modules(root)
             http = LocalHTTP(modules)
             http.after = lambda h: (root/'scripts/andrea/runtime.py').write_text('# changed')
