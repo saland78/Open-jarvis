@@ -36,3 +36,10 @@ Consultati nuovamente OpenJarvis al commit a0df94cd93756047c724d803662bc671618b1
 Lasciare **OpenJarvis acceso**. Nel Terminale **Controlli**, scaricare da un commit preciso e verificare l’hash. Poi una sola esecuzione, senza chat/sintesi contemporanee. Condividere soltanto l’output sintetico della prova, senza lo storico del Terminale.
 
 Produzione invariata, nessun installer o riavvio. Eventuale adozione richiede ancora regressioni dei confini di produzione e una sintesi reale con revisione dei fatti selezionati. Nessuna voce, memoria, automazione o modifica al Jarvis originale. PR #1 draft, non unire.
+
+
+## Diagnosi Mac conclusa — 2026-10-04
+
+Le due richieste sono complete. Copertura ammessa: 715/715 token nuovi nel primo campione, 520/523 nel secondo (3 in cache). Riduzione dei nuovi token 27,273% e della durata prefill 25,593%: entrambe le soglie prefissate superate. Revisione manuale delle due risposte favorevole su tutti e quattro i fatti, frase completa, qualifiche, date e ambito. Il [rapporto filtrato con revisione separata](qualification-prefill-isolation-mac-2026-10-04.json) conserva i verdetti tecnici e non include lo storico del Terminale.
+
+Il precedente test di quattro campioni resta non superato per attribuzione del prefill. Il nuovo risultato non certifica cache calda, tempi UI o significatività statistica. Nessuna ripetizione della diagnosi. Preparata [adozione delle sole istruzioni](qualification-context-production.md): regressioni superate; installazione e singolo collaudo reale della nuova versione sul Mac ancora da eseguire.

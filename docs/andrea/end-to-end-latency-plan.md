@@ -107,3 +107,10 @@ Andrea autorizza il punto 1 della roadmap. La [prova delle istruzioni specializz
 ## Esito del contesto e isolamento del prefill — 2026-10-04
 
 La [serie Mac finita](qualification-context-prompt-experiment.md#esito-mac-della-serie-finita--2026-10-04) conserva il verdetto della soglia originale non superata: quattro risposte corrette e circa 29% di token in meno, ma cache nonzero e 161 token nuovi in entrambe le varianti del confronto avversariale. Nessuna adozione o ripetizione della serie. La [diagnosi distinta di due richieste con prefissi isolati](qualification-prefill-isolation-diagnostic.md) verifica il prefill quasi interamente nuovo senza unload, warm-up o perdita di informazioni. Protocollo e limiti della cache fissati prima dei nuovi dati; raccolta Mac ancora da eseguire. Non certifica beneficio con cache calda o latenza UI. Il task contesto rimane aperto; voce e altri moduli non vengono avviati.
+
+
+## Istruzioni specializzate: adozione preparata — 2026-10-04
+
+La [nuova diagnosi conclusa](qualification-prefill-isolation-diagnostic.md#diagnosi-mac-conclusa--2026-10-04) supera i criteri stabiliti prima della raccolta: 715 → 520 token nuovi (−27,273%), 10626,631 → 7906,994 ms di prefill (−25,593%), copertura 100%/99,4264%, due risposte riesaminate favorevolmente. Il vecchio test conserva il mancato superamento per cache. Nessuna serie va ripetuta.
+
+La [adozione selettiva](qualification-context-production.md) cambia soltanto le istruzioni system per qualifiche della nota scelta: 1631 → 824 caratteri, passaggi e schema identici, validazione della risposta invariata, nessun prefisso diagnostico in produzione. 236 controlli pertinenti passati. Restano installazione di un file sul Mac e una sintesi reale con quattro fatti e tempi osservati; caricamento, contesto e produzione vanno letti dalla stessa richiesta senza un nuovo benchmark. Il risultato non certifica cache calda o latenza UI. Memoria, voce e altri moduli restano futuri.
