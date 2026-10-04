@@ -15,7 +15,6 @@ from synthesis_contract import make_coverage_messages, render_contract
 from structured_stream import collect as collect_structured, until_disconnect
 import note_facts
 from manual_memory import ManualMemory, MemoryError
-from memory_provenance import MemoryProvenanceFooter
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -167,7 +166,6 @@ class LocalMode:
         direct_answer = None
         fact_bundle = None
         vault_identity = None
-        memory_supplied = False
         if "notes_query" in payload:
             retrieval_started = time.perf_counter()
             try:
@@ -231,11 +229,7 @@ class LocalMode:
                 raise
         if self.memory and "notes_query" not in payload:
             try:
-                original_messages = messages
                 messages = await asyncio.to_thread(self.memory.messages, messages)
-                memory_supplied = messages is not original_messages
-                measurement.record["memoryContextSupplied"] = memory_supplied
-                measurement.record["memoryProvenanceFooterAdded"] = False
             except (MemoryError, OSError) as exc:
                 self.measurements.add(measurement.finish("memory_error"))
                 self.busy = False
@@ -248,7 +242,6 @@ class LocalMode:
         payload = {"model": self.model, "messages": messages, "stream": True, "temperature": 0.4, "max_tokens": 512}
         sent = False
         started = False
-        memory_footer = None
         if direct_answer is None:
             measurement.generation()
         async def replay():
@@ -258,19 +251,13 @@ class LocalMode:
                 return {"type": "http.request", "body": json.dumps(payload).encode(), "more_body": False}
             return await receive()
         async def tracked(event):
-            nonlocal started, memory_footer
+            nonlocal started
             if event["type"] == "http.response.start":
                 started = True
                 measurement.http_status = event["status"]
-                response_headers = dict(event.get("headers", []))
-                if memory_supplied and event["status"] == 200 and response_headers.get(b"content-type", b"").startswith(b"text/event-stream"):
-                    memory_footer = MemoryProvenanceFooter()
                 event = {**event, "headers": [*event.get("headers", []), (b"x-openjarvis-request-id", measurement.record["id"].encode())]}
             elif event["type"] == "http.response.body":
                 measurement.feed(event.get("body", b""))
-                if memory_footer is not None:
-                    event = {**event, "body": memory_footer.feed(event.get("body", b""), final=not event.get("more_body", False))}
-                    measurement.record["memoryProvenanceFooterAdded"] = memory_footer.added
             await send(event)
             if event["type"] == "http.response.start" and event["status"] == 200 and evidence:
                 data = json.dumps(evidence, ensure_ascii=False)
@@ -376,7 +363,7 @@ def build_app(ollama_host: str | None = None):
                 yield chunk
         finally:
             await iterator.aclose()
-    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"]), identity_prompt=cfg.agent.system_prompt))
+    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"])))
 
 
 if __name__ == "__main__":

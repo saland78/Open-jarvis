@@ -11,7 +11,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/andrea"))
 import check_memory_attribution as baseline
 import check_memory_attribution_roles as candidate
-import manual_memory
+from test_andrea_memory_attribution import manual_memory
 from runtime import LocalMode
 
 ROOT = Path(__file__).resolve().parents[1]

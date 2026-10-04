@@ -1,6 +1,7 @@
 """Finite candidate collection and ASGI delivery, not a semantic model judge."""
 from contextlib import redirect_stdout
 import hashlib
+import importlib.util
 import io
 import json
 from pathlib import Path
@@ -10,10 +11,21 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/andrea"))
 import check_memory_attribution as probe
-import manual_memory
 from runtime import LocalMode
 
 ROOT = Path(__file__).resolve().parents[1]
+spec = importlib.util.spec_from_file_location('historical_memory_formatter', ROOT/'tests/fixtures/andrea/manual_memory_before_memory_roles.py')
+manual_memory = importlib.util.module_from_spec(spec); spec.loader.exec_module(manual_memory)
+
+
+def historical_project(root):
+    for relative in probe.EXPECTED:
+        source = ROOT/relative
+        if relative in {'scripts/andrea/runtime.py', 'scripts/andrea/manual_memory.py'}:
+            source = ROOT/f'tests/fixtures/andrea/{Path(relative).stem}_before_memory_roles.py'
+        target = root/relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(source.read_bytes())
 
 
 class AttributionCollectionTests(unittest.TestCase):
@@ -22,19 +34,22 @@ class AttributionCollectionTests(unittest.TestCase):
             return probe.collect(manual_memory, request, read)
 
     def test_exact_baseline_loaded_and_source_not_changed(self):
-        before = {path: (ROOT/path).read_bytes() for path in probe.EXPECTED}
-        client, memory = probe.load_verified(ROOT)
-        self.assertTrue(callable(client.run_request))
-        for case in probe.CASES:
-            payload = probe.payload(memory, case)
-            self.assertEqual(payload["messages"][1], {"role": "user", "content": case["query"]})
-            raw = payload["messages"][0]["content"].split("\n")[-1]
-            self.assertEqual(json.loads(raw)[0]["text"], case["text"])
-            self.assertNotIn("tools", payload)
-            self.assertNotIn("notes_query", payload)
-        for relative, data in before.items():
-            self.assertEqual((ROOT/relative).read_bytes(), data)
-            self.assertEqual(hashlib.sha256(data).hexdigest(), probe.EXPECTED[relative])
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            historical_project(project)
+            before = {path: (project/path).read_bytes() for path in probe.EXPECTED}
+            client, memory = probe.load_verified(project)
+            self.assertTrue(callable(client.run_request))
+            for case in probe.CASES:
+                payload = probe.payload(memory, case)
+                self.assertEqual(payload["messages"][1], {"role": "user", "content": case["query"]})
+                raw = payload["messages"][0]["content"].split("\n")[-1]
+                self.assertEqual(json.loads(raw)[0]["text"], case["text"])
+                self.assertNotIn("tools", payload)
+                self.assertNotIn("notes_query", payload)
+            for relative, data in before.items():
+                self.assertEqual((project/relative).read_bytes(), data)
+                self.assertEqual(hashlib.sha256(data).hexdigest(), probe.EXPECTED[relative])
 
     def test_three_requests_no_retry_and_success_not_quality_certification(self):
         calls = []

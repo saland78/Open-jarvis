@@ -187,7 +187,7 @@ class MemoryBoundaryTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(self.store.path.exists())
         row = add(self.store, record())['records'][0]
         await self.call(chat, path='/v1/chat/completions')
-        self.assertIn('italiano', self.calls[-1]['messages'][0]['content'])
+        self.assertIn('italiano', self.calls[-1]['messages'][1]['content'])
         self.store.mutate(dict(action='update', revision=1, id=row['id'], record=record('Preferisco francese.', kind='correction')))
         await self.call(chat, path='/v1/chat/completions')
         self.assertNotIn('italiano', str(self.calls[-1]))

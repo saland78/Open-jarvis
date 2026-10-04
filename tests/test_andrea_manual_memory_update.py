@@ -14,6 +14,14 @@ spec = importlib.util.spec_from_file_location('manual_update', ROOT/'scripts/and
 updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater)
 
 
+def published_source(relative):
+    # Preserve the exact sources downloaded by the already published installer.
+    if relative in {'scripts/andrea/runtime.py', 'scripts/andrea/manual_memory.py'}:
+        name = Path(relative).stem
+        return (ROOT/f'tests/fixtures/andrea/{name}_before_memory_roles.py').read_bytes()
+    return (ROOT/relative).read_bytes()
+
+
 def original(relative):
     if relative == 'scripts/andrea/runtime.py':
         return (ROOT/'tests/fixtures/andrea/runtime_before_manual_memory.py').read_bytes()
@@ -49,7 +57,7 @@ class MemoryUpdateTests(unittest.TestCase):
             if data is None: target.unlink(missing_ok=True)
             else: target.write_bytes(data)
 
-    def fetch(self, relative, path): path.write_bytes((ROOT/relative).read_bytes())
+    def fetch(self, relative, path): path.write_bytes(published_source(relative))
 
     def update(self, **kw):
         with redirect_stdout(io.StringIO()):
@@ -68,12 +76,12 @@ class MemoryUpdateTests(unittest.TestCase):
     def test_actual_manifest_backup_repeat_and_no_private_changes(self):
         self.assertEqual(len(updater.MANIFEST), 5)
         for item in updater.MANIFEST:
-            self.assertEqual(hashlib.sha256((ROOT/item['path']).read_bytes()).hexdigest(), item['sha256'])
+            self.assertEqual(hashlib.sha256(published_source(item['path'])).hexdigest(), item['sha256'])
             if 'before' in item:
                 self.assertEqual(hashlib.sha256(self.old[item['path']]).hexdigest(), item['before'])
         backup = self.update()
         for relative, data in self.old.items():
-            self.assertEqual((self.project/relative).read_bytes(), (ROOT/relative).read_bytes())
+            self.assertEqual((self.project/relative).read_bytes(), published_source(relative))
             if data is not None: self.assertEqual((backup/relative).read_bytes(), data)
         self.update(); self.check_private()
 

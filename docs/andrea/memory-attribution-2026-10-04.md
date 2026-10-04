@@ -46,4 +46,30 @@ I tre casi, domande e criteri sono caricati dal precedente diagnostico verificat
 
 Sei nuovi controlli tecnici verificano il candidato effettivamente consegnato al confine ASGI, la conservazione dell'identità del profilo, il JSON e i soggetti letterali, l'assenza di mutazioni dei payload e dei file, il rifiuto di baseline/profilo diversi e la raccolta con gli stessi criteri. Insieme alle 29 regressioni precedenti: **35 esecuzioni superate**, con motore simulato. Nessuna certificazione semantica del modello reale.
 
-**Collaudo del secondo candidato sul Mac ancora da eseguire.** Nessuna correzione installata o qualità già dichiarata superata. Se tutti e tre i criteri passano, preparare l'aggiornamento dell'integrazione con backup, hash e una successiva prova nella chat normale. Se uno fallisce, conservare l'esito e diagnosticare quel caso senza cambiare i criteri o passare ad altri moduli. L'esperimento negativo con la sola policy non viene riclassificato.
+## Esito Mac del secondo candidato: attribuzione corretta, provenienza incompleta
+
+Tre richieste completed/stop, nessun retry, memoria vuota e revisione invariata. Nei due casi con una scelta dell'utente il modello usa correttamente la seconda persona; nel terzo dichiara che la scelta dell'utente non è indicata, senza assegnargli il colore della terza persona. **Il primo caso non supera tutti i criteri:** manca l'indicazione della provenienza dichiarata. Gli altri due casi superano i propri criteri nel risultato osservato. Non classificare quindi l'intera serie come superata e non riclassificare il primo esperimento negativo. Nessun candidato installato sul Mac.
+
+| Caso | Esito | Primo testo client | Totale client |
+|---|---|---:|---:|
+| Scelta utente | Attribuzione corretta, provenienza mancante | 11957,94 ms | 13728,40 ms |
+| Prima persona salvata | Superato nel caso osservato | 1000,97 ms | 2666,55 ms |
+| Terza persona distinta | Superato nel caso osservato | 1222,57 ms | 2165,45 ms |
+
+Nessuna conclusione di velocità, apprendimento o affidabilità universale. È un controllo del candidato e non della versione installata.
+
+## Integrazione pronta per collaudo, non ancora installata
+
+L'integrazione proposta mantiene l'involucro con ruoli separati già provato, usando il prompt effettivo del profilo tramite `build_app`. I prompt system esplicitamente forniti da un chiamante sono conservati e riuniti in un solo system iniziale, coerentemente con il contratto upstream; altrimenti viene usata l'identità configurata. Il JSON delle voci e il resto della conversazione non vengono modificati. Memoria vuota/inattiva lascia lo stesso oggetto dei messaggi in ingresso e quindi il ramo precedente.
+
+La provenienza non viene delegata soltanto al modello. `memory_provenance.py` aggiunge un **avviso del programma** dopo una risposta non vuota terminata con stop, soltanto se il backend ha realmente fornito contesto dalla memoria salvata. L'avviso dichiara il contesto fornito e l'assenza di verifica esterna, senza certificare uso delle singole voci, significato o verità dei dati. Non corregge le affermazioni del modello. Nessun avviso precoce: i frame originali restano l'input delle misure backend; la coda non diventa una falsa misura del primo testo o un token generato. Sono aggiunti soltanto i flag `memoryContextSupplied` e `memoryProvenanceFooterAdded`, senza contenuti o ID di memoria.
+
+Controlli del flusso: frame frammentati fino a un byte e UTF-8; CRLF; frame con testo finale e stop insieme; usage conservato; avviso una volta sola; controllo vuoto, incompleto, troncato, in errore e in presenza di eventi di controllo. Nessuna modifica ai messaggi del modello quando l'avviso non è applicabile. Confine ASGI: contesto fornito, nessuna inferenza aggiuntiva, primo testo originale, note senza memoria/avviso, cancellazione della voce e ritorno al ramo senza contesto.
+
+`check_memory_roles.py` prepara tre richieste di produzione con **gli stessi casi, domande e criteri**. Parte soltanto con memoria vuota; tramite l'API locale crea una voce sintetica attiva, la modifica per i due casi successivi e infine elimina soltanto la propria voce se ID, revisione e contenuto sono rimasti quelli scritti. La revisione globale avanza: non si ripristina un vecchio archivio. Se qualcuno modifica la memoria, il controllo si interrompe conservando gli esiti e non elimina la modifica dell'utente. Nessun reset, retry, lettura del vault o pubblicazione di ID/record privati. La risposta contiene solo la domanda: il contesto è aggiunto dal vero backend, senza sistema candidato inviato dal diagnostico. Trasporto, flag di provenienza e revisione del significato restano separati.
+
+Gli script diagnostici precedenti conservano i loro hash e i criteri originali. I test storici usano gli esatti formatter/runtime archiviati, invece di far passare il nuovo codice per una vecchia baseline. I test dell'installer già pubblicato continuano a scaricare i suoi sorgenti storici nella simulazione.
+
+Verifica finale di sviluppo: **219 esecuzioni Python superate**, comprendenti nove nuovi controlli di ruoli/avviso, cinque del collaudo con voce sintetica posseduta, gli esperimenti storici e regressioni delle note, qualifiche, confini e misure. Motore simulato; non è stata eseguita l'intera suite upstream o una nuova inferenza reale in sviluppo. Frontend e dipendenze invariati, nessuna build dell'interfaccia richiesta da questo aggiornamento.
+
+**Installazione e collaudo della nuova integrazione sul Mac ancora da eseguire.** Restano tre richieste di produzione, revisione di ciascuna risposta e un controllo nel browser della dichiarazione in prima persona e dell'avviso visibile. Nessun risultato generale dichiarato perfetto; il modulo resta aperto fino a questo collaudo circoscritto.
