@@ -1,10 +1,10 @@
 # Prova della sintesi con meno campi generati
 
-Stato al 2026-10-04: **primo avvio sul Mac interrotto prima dell'inferenza; errore di ordine delle definizioni corretto e verificato con 18 test, inclusi lanci del comando in un nuovo processo Python**. Nessuna inferenza reale del confronto eseguita o adozione in produzione. Vedi la [correzione dell'avvio](qualification-compact-wire-startup-fix.md). Il precedente difetto della frase corrente rimane chiuso per il caso reale già riesaminato. Questa prova riguarda la latenza; non riapre quel collaudo né riclassifica gli esperimenti precedenti falliti.
+Stato al 2026-10-04: **confronto reale sul Mac concluso e superato nei due casi sintetici, quattro risposte**. Soglie native di produzione superate in entrambe le coppie e revisione separata del significato favorevole per tutte le risposte. L'errore del primo avvio è stato corretto; quel comando non aveva inviato inferenze. Il trasporto compatto è ora integrato nel solo ponte della nota scelta, con 168 regressioni passate; installazione e misura nel browser del percorso aggiornato restano da eseguire. Vedi l'[integrazione](qualification-compact-wire-production.md) e il [rapporto filtrato](qualification-compact-wire-mac-2026-10-04.json). La preservazione della frase corrente rimane chiusa nel caso reale precedente; gli esperimenti precedenti falliti non sono riclassificati.
 
 ## Problema e candidata
 
-La produzione attuale richiede al modello quattro record JSON. Il testo del record F3 è già una frase letterale obbligatoria, vincolata tramite `const`; le date dei contesti sono anch'esse già ricavate dalle intestazioni originali. Farli emettere al modello richiede comunque output. La candidata evita tale rigenerazione senza omettere quelle informazioni nella risposta.
+La produzione installata prima di questo confronto richiede al modello quattro record JSON. Il testo del record F3 è già una frase letterale obbligatoria, vincolata tramite `const`; le date dei contesti sono anch'esse già ricavate dalle intestazioni originali. Farli emettere al modello richiede comunque output. La candidata evita tale rigenerazione senza omettere quelle informazioni nella risposta.
 
 | Elemento della risposta finale | Produzione attuale | Candidata isolata |
 |---|---|---|
@@ -21,7 +21,7 @@ Il programma ricalcola il piano con l'estrattore di produzione, controlla il tes
 
 ## Ipotesi misurabile
 
-Per i due casi sintetici, i messaggi passano da 3198 a 2288 caratteri e da 3223 a 2289; lo schema nativo serializzato passa rispettivamente da 1126/1138 a 277 caratteri. Sono lunghezze di caratteri, **non misure dei token o della velocità**. Il miglioramento sul Mac resta da misurare.
+Per i due casi sintetici, i messaggi passano da 3198 a 2288 caratteri e da 3223 a 2289; lo schema nativo serializzato passa rispettivamente da 1126/1138 a 277 caratteri. Sono lunghezze di caratteri, **non misure dei token o della velocità**. Il confronto sul Mac è ora riportato sotto; il miglioramento del percorso aggiornato nel browser resta da misurare.
 
 La richiesta reale appena chiusa ha impiegato circa 45,29 s fino all'aggiornamento UI, con recupero della nota scelta di circa 5 ms. La schermata non conteneva le fasi native complete: non si attribuiscono quei 45 s a caricamento, prefill o decoding senza leggere i contatori della stessa richiesta. I tempi del backend e del browser non vanno sommati.
 
@@ -68,3 +68,19 @@ Ollama dichiara totale 45253,159 ms, caricamento 5332,582 ms, contesto 18294,775
 Il contesto e la generazione rappresentano entrambi costi consistenti. Il confronto preparato è pertinente perché riduce i messaggi di contesto e il trasporto generato preservando i quattro fatti finali. Restano da misurare token e durata effettivi della candidata, con gli stessi criteri già fissati; nessuna nuova prova A/B o adozione effettuata. Il caricamento è riportato separatamente e non viene eliminato con unload o richieste di riscaldamento.
 
 [Snapshot numerico filtrato](qualification-compact-wire-native-baseline-2026-10-04.json): nessuna nota, percorso personale, screenshot, ID richiesta o cronologia del Terminale pubblicati. La prima versione al commit `2e8ac5f8a975ec1dfecb75944c0d5273540dc6aa`, SHA-256 `72bd2b65bfceb69dcfbb596bd53b575b016945cf0081642ee7e23ea020e8dfc0`, è ritirata per l'errore di avvio, descritto nella [correzione](qualification-compact-wire-startup-fix.md). Usare il file corretto accompagnato da quel registro. Primo passo successivo: scaricare e verificare la versione corretta; l'esecuzione delle quattro richieste segue dopo la verifica. OpenJarvis resta acceso; non è un aggiornamento dei sorgenti installati.
+
+
+## Confronto reale concluso e superato — 2026-10-04
+
+La versione corretta `bd7ac610a2dfd16121c68e29176fb93599a8c0b7` ha eseguito esattamente le quattro richieste inizialmente previste. Nessun retry, lettura del vault, modifica dei file installati o adozione automatica. Tutti i trasporti terminano con `stop`, quattro fatti coperti, frase corrente e consultazione complete; esiti tecnici distinti dalla revisione manuale.
+
+| Caso | Token riferimento → compatto | Produzione nativa riferimento → compatto | Riduzione token | Riduzione durata produzione |
+|---|---|---|---|---|
+| Ordinario | 140 → 72 | 15734,870 → 7604,012 ms | 48,571% | 51,674% |
+| Avversariale | 145 → 71 | 16471,994 → 7338,029 ms | 51,034% | 55,451% |
+
+Entrambe le coppie superano la soglia prefissata del 20% in entrambe le misure. La revisione di tutte e quattro le risposte conferma conteggi 3/17, variabilità per periodo, qualifica corrente completa con consultazione, qualifica storica separata, date, ambito limitato alla nota e quattro citazioni N1. Nessun dato esterno verificato o importo inventato. Nel testo ordinario compatto rimangono una formulazione grammaticale imperfetta («i royalty») e una data ripetuta; non falliscono i criteri di significato e non sono corrette dal programma.
+
+Totali client: 33937,883/13693,598 ms nell'ordinario; 9916,656/23227,034 ms nell'ordine compatto/riferimento avversariale. Sono osservazioni con contesto, cache e caricamento diversi, non una misura causale end-to-end o statistica. Caricamento del primo riferimento 3815,707 ms; altre richieste circa 2 ms. Prompt 947/668 e 669/956 token; cache 0/270 e 508/549. Il testo accettato nel browser non è misurato dalla prova. I campi automatici `pending_review` rimangono nel [rapporto filtrato](qualification-compact-wire-mac-2026-10-04.json), con la revisione manuale separata. Il rapporto contiene solo queste note sintetiche pubbliche, non la cronologia incollata.
+
+L'adozione riusa esattamente messaggi, schema e funzioni della candidata riesaminata; il docstring del helper descrive ora l'impiego nel ponte. Restano mantenute rilettura della nota dopo lo stream, identità del vault, controlli indipendenti, rifiuto senza retry e origini visibili. Non ripetere il vecchio confronto dopo l'aggiornamento: i suoi hash descrivono deliberatamente la precedente produzione.

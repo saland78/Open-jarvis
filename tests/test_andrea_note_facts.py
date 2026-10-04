@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 import test_andrea_vault as base
 from test_andrea_real_notes_synthesis import BOOK, QUALIFICATIONS as OLD_QUALIFICATIONS, answer
@@ -17,6 +18,7 @@ import note_facts
 import markdown_fact_adapter as adapter
 import predicate_context_synthesis as synthesis
 import qualification_sentence_guard as guard
+import qualification_compact_wire as compact
 
 # The historical probes keep their original, shorter consultation fixture.
 # Production now requires the complete prerequisites recognised by the guard.
@@ -61,7 +63,16 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
             text_field = field['properties']['text']
             if 'const' in text_field:
                 value['records'][key]['text'] = text_field['const']
+        if self.bundle['kind'] == 'qualifications':
+            value = {key: value['records'][key]['text'] for key in compact.MODEL_IDS}
         return json.dumps(value, ensure_ascii=False)
+
+    def expected_wire(self):
+        if self.bundle['kind'] == 'qualifications':
+            modules = SimpleNamespace(**vars(note_facts.MODULES), bridge=note_facts)
+            candidate = compact.prepare(self.bundle, modules)
+            return candidate['messages'], candidate['schema']
+        return self.bundle['messages'], self.bundle['plan']['schema']
 
     def body(self, events):
         return b''.join(e.get('body', b'') for e in events).decode()
@@ -80,7 +91,7 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                 events = await self.invoke(payload)
                 self.assertEqual(events[0]['status'], 200)
                 self.assertEqual(self.metric()['structuredOutcome'], 'accepted')
-                self.assertEqual(self.generated, [(self.bundle['messages'], self.bundle['plan']['schema'])])
+                self.assertEqual(self.generated, [self.expected_wire()])
                 self.assertEqual(self.drained, [True]); self.assertEqual(self.closed, [True])
                 self.assertFalse(self.calls); self.assertFalse(self.app.busy)
                 evidence = self.evidence(events)
@@ -89,6 +100,7 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                 self.assertTrue(evidence['inferenceUsed'])
                 self.assertEqual(evidence['sources'][0]['id'], 'N1')
                 self.assertNotIn('"records"', self.body(events))
+                self.assertNotIn('"F1":', self.body(events))
                 self.assertNotIn('[E', self.body(events))
                 wire = json.dumps(self.generated)
                 for excluded in ('999', '1000', '2030', self.path, 'Invented client-side'):
@@ -122,13 +134,16 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                 baseline = {'kind': kind, 'case': self.bundle['case'], 'plan': plan,
                             'messages': experiment.compact.messages(self.bundle['case'], plan, synthesis)}
                 secured = guard.protect(baseline)
-                expected = secured['messages']
                 self.assertEqual(self.bundle['plan']['schema'], secured['plan']['schema'])
+                # Exact adopted messages/schema, separate from the four-fact
+                # extraction and validation plan. No model-owned F3 or dates.
+                candidate = compact.prepare(secured, SimpleNamespace(**vars(note_facts.MODULES), bridge=note_facts))
+                expected, schema = candidate['messages'], candidate['schema']
             else:
-                expected = original
+                expected, schema = original, self.bundle['plan']['schema']
             events = await self.invoke(payload)
             self.assertEqual(events[0]['status'], 200)
-            self.assertEqual(self.generated, [(expected, self.bundle['plan']['schema'])])
+            self.assertEqual(self.generated, [(expected, schema)])
             self.assertEqual(self.metric()['structuredOutcome'], 'accepted')
             self.assertEqual(self.evidence(events)['qualityVerdict'], 'pending_review')
             if kind == 'book':
@@ -137,16 +152,19 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                 body = json.loads(expected[1]['content'])
                 self.assertNotIn('response_schema', body)
                 self.assertIn('response_shape', body)
-                self.assertEqual(body['protected_qualification']['origin'], 'literal_original_qualification_span')
+                self.assertEqual(body['response_shape'], {'F1': '', 'F2': '', 'F4': ''})
+                self.assertEqual([fact['id'] for fact in body['informazioni_obbligatorie']], ['F1', 'F2', 'F4'])
+                self.assertEqual(schema['required'], ['F1', 'F2', 'F4'])
 
-    async def test_prefix_preserved_but_consultation_incomplete_is_not_accepted(self):
+    async def test_model_cannot_override_literal_qualification_or_supply_old_envelope(self):
         payload = self.fixture('qualifications')
         raw = json.loads(self.model_output())
-        raw['records']['F3']['text'] = 'I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando il periodo.'
-        self.engine(json.dumps(raw)); events = await self.invoke(payload)
-        self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
-        self.assertNotIn(raw['records']['F3']['text'], self.body(events))
-        self.assertEqual(len(self.generated), 1)
+        wrong = 'I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando il periodo.'
+        for value in ({**raw, 'F3': wrong}, {'records': {key: {'text': value} for key, value in raw.items()}}):
+            self.engine(json.dumps(value)); events = await self.invoke(payload)
+            self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
+            self.assertNotIn(wrong, self.body(events))
+            self.assertEqual(len(self.generated), 1)
 
     async def test_real_kdp_source_convention_preserved_with_distinct_origins(self):
         text = QUALIFICATIONS.replace('report indicando', 'report KDP indicando')
@@ -156,18 +174,48 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('consultare dashboard o report KDP indicando periodo, titolo e marketplace.', self.body(events))
         self.assertEqual(self.evidence(events)['qualityVerdict'], 'pending_review')
 
+    async def test_observed_compact_mac_outputs_replay_through_real_asgi_with_all_four_origins(self):
+        """No new inference: retain the two previously observed synthetic answers."""
+        import qualification_compact_wire_probe as experiment
+        root = Path(__file__).resolve().parents[1]
+        report = json.loads((root/'docs/andrea/qualification-compact-wire-mac-2026-10-04.json').read_text())
+        for row in report['rows']:
+            if row['variant'] != 'compact':
+                continue
+            payload = self.fixture('qualifications', experiment.synthetic_note(row['case'])['text'])
+            self.engine(row['diagnosticModelJson'])
+            with patch.object(compact, 'validate', wraps=compact.validate) as validation:
+                events = await self.invoke(payload)
+            self.assertEqual(self.metric()['structuredOutcome'], 'accepted')
+            self.assertEqual(self.generated, [self.expected_wire()])
+            self.assertEqual(self.evidence(events)['qualityVerdict'], 'pending_review')
+            self.assertTrue(validation.call_args.kwargs['completed'])
+            candidate = validation.call_args.args[1]
+            result = compact.validate(row['diagnosticModelJson'], candidate,
+                SimpleNamespace(**vars(note_facts.MODULES), bridge=note_facts), completed=True)
+            self.assertEqual(result['factsCovered'], 4)
+            self.assertEqual(result['literalSourceFactIds'], ['F3'])
+            self.assertEqual(result['modelFactIds'], ['F1', 'F2', 'F4'])
+            self.assertFalse(result['modelTextRepaired'])
+            self.assertIn(row['syntheticAnswer'], self.body(events).replace('\\n', '\n').replace('\\"', '"'))
+            self.assertEqual(self.closed, [True]); self.assertEqual(self.drained, [True])
+
     async def test_wrong_year_count_label_context_predicate_or_cover_role_refuse_without_retry(self):
         variants = [
             ('book', 'F3', 'text', 'Edizione digitale disponibile dal 16 marzo 2027.'),
             ('book', 'F4', 'text', 'Nuova edizione disponibile dal 21 aprile.'),
             ('qualifications', 'F1', 'text', 'I libri pubblicati sono 0.'),
-            ('qualifications', 'F3', 'text', 'Vendite e royalty sono DATO ASSENTE.'),
-            ('qualifications', 'F3', 'contextDate', '2027-03-01'),
-            ('qualifications', 'F3', 'text', 'I valori sono stati aggiornati ma sono DATO NON VERIFICATO.'),
+            ('qualifications', 'F4', 'text', 'Copie e royalty sono DATO NON VERIFICATO.'),
+            ('qualifications', 'F4', 'text', 'Copie e royalty sono DATO ASSENTE al 2030-12-31.'),
+            ('qualifications', 'contextDate', 'text', '2027-03-01'),
+            ('qualifications', 'F4', 'text', 'Copie e royalty sono state aggiornate: DATO ASSENTE.'),
         ]
         for kind, field, key, wrong in variants:
             payload = self.fixture(kind); raw = json.loads(self.model_output())
-            raw['records'][field][key] = wrong
+            if kind == 'qualifications':
+                raw[field] = wrong
+            else:
+                raw['records'][field][key] = wrong
             self.engine(json.dumps(raw)); events = await self.invoke(payload)
             self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
             self.assertNotIn('structuredAcceptedTextMs', self.metric())
@@ -226,13 +274,28 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(self.generated); self.assertFalse(self.app.busy)
 
     async def test_bad_json_tools_truncation_missing_terminal_and_large_json_refused(self):
-        payload = self.fixture()
-        for raw, reason, tools in [('not JSON', 'stop', None), (None, 'length', None),
-                                  (None, None, None), (None, 'stop', ['forbidden']), ('x'*32001, 'stop', None)]:
-            self.engine(raw, reason=reason, tools=tools); events = await self.invoke(payload)
+        for kind in ('book', 'qualifications'):
+            payload = self.fixture(kind)
+            for raw, reason, tools in [('not JSON', 'stop', None), (None, 'length', None),
+                                      (None, None, None), (None, 'stop', ['forbidden']), ('x'*32001, 'stop', None)]:
+                self.engine(raw, reason=reason, tools=tools); events = await self.invoke(payload)
+                self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
+                self.assertNotIn('"records"', self.body(events))
+                self.assertEqual(self.closed, [True]); self.assertEqual(len(self.generated), 1)
+
+    async def test_compact_missing_duplicate_and_extra_keys_never_show_partial_model_prose(self):
+        payload = self.fixture('qualifications')
+        valid = json.loads(self.model_output())
+        wrong = [json.dumps({key: value for key, value in valid.items() if key != missing})
+                 for missing in ('F1', 'F2', 'F4')]
+        wrong.extend([json.dumps({**valid, 'contextDate': '2030-12-31'}),
+                      '{"F1":"PRIVATE","F1":"PRIVATE","F2":"PRIVATE","F4":"PRIVATE"}'])
+        for raw in wrong:
+            self.engine(raw); events = await self.invoke(payload)
             self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
-            self.assertNotIn('"records"', self.body(events))
-            self.assertEqual(self.closed, [True]); self.assertEqual(len(self.generated), 1)
+            self.assertNotIn('PRIVATE', self.body(events))
+            self.assertNotIn('structuredAcceptedTextMs', self.metric())
+            self.assertEqual(len(self.generated), 1)
 
     async def test_disconnect_and_busy_guard_release_secured_generator(self):
         payload = self.fixture(); entered = asyncio.Event(); closed = asyncio.Event()
@@ -288,7 +351,7 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_technical_acceptance_remains_distinct_from_semantic_quality(self):
         payload = self.fixture('qualifications'); raw = json.loads(self.model_output())
-        raw['records']['F2']['text'] = 'Vendite e royalty non variano per periodo.'
+        raw['F2'] = 'Vendite e royalty non variano per periodo.'
         self.engine(json.dumps(raw)); events = await self.invoke(payload)
         # Deliberate counterexample: schema and lexical support are no semantic oracle.
         self.assertEqual(self.metric()['structuredOutcome'],'accepted')

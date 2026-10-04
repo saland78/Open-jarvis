@@ -13,7 +13,6 @@ import markdown_fact_adapter as adapter
 import predicate_context_synthesis as synthesis
 import qualification_prompt
 import qualification_sentence_guard
-import qualification_compact_wire
 import synthesis_contract as validator
 from structured_stream import collect
 
@@ -91,15 +90,6 @@ def render(result):
 
 async def run(stream, bundle, notes, vault_identity, measurement):
     initial = bundle['case']['sources'][0]
-    # The source extractor still produces all four proved facts. Only the wire
-    # representation changes for qualifications: three model strings, with the
-    # full current sentence and dates bound from the source before inference.
-    compact = None
-    messages, schema = bundle['messages'], bundle['plan']['schema']
-    if bundle['kind'] == 'qualifications':
-        modules = SimpleNamespace(**vars(MODULES), bridge=SimpleNamespace(prepare=prepare))
-        compact = qualification_compact_wire.prepare(bundle, modules)
-        messages, schema = compact['messages'], compact['schema']
 
     async def validate(raw, _sources, *, completed):
         if not completed:
@@ -114,12 +104,16 @@ async def run(stream, bundle, notes, vault_identity, measurement):
         except (ValueError, OSError):
             return rejection('note_changed_or_unavailable')
         if bundle['kind'] == 'qualifications':
-            return qualification_compact_wire.validate(raw, compact, modules, completed=completed)
+            result = qualification_sentence_guard.validate(raw, bundle, MODULES, completed=completed)
+            if result['status'] == 'valid_structure_pending_semantic_review':
+                result['freeSynthesis'] = False
+                result['composition'] = 'model_text_with_literal_current_qualification_and_source_bound_dates'
+            return result
         return adapter.validate(raw, bundle['case'], bundle['plan'], synthesis, validator,
                                 completed=completed)
 
     def secured(messages):
-        return stream(messages, schema)
+        return stream(messages, bundle['plan']['schema'])
 
-    return await collect(secured, messages, bundle['case']['sources'], measurement,
+    return await collect(secured, bundle['messages'], bundle['case']['sources'], measurement,
                          validate=validate, render=render)

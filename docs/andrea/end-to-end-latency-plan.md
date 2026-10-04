@@ -85,3 +85,10 @@ Il collaudo della [correzione del solo prefisso](qualification-clause-fix.md#esi
 La [candidata isolata](qualification-compact-wire-experiment.md) richiede soltanto F1/F2/F4 come stringhe. F3 completo e date provengono dai passaggi già comprovati prima dell'inferenza; restano nella risposta e sono dichiarati come contenuti della fonte. Ricomposizione dei quattro record e validatori di produzione invariati, nessuna riparazione del testo del modello. 16 nuovi test e 148 regressioni passati, compreso trasporto HTTP simulato. Nessuna modifica alla produzione o misura reale già eseguita.
 
 Prima leggere le fasi native della richiesta da 45,29 s già presente in RAM: il lettore non genera risposte. Il confronto successivo prevede quattro richieste sintetiche al massimo in ordine A/B e B/A, nessun retry, soglie del 20% su token e decoding in entrambe le coppie e revisione separata dei quattro fatti. Prestazioni native favorevoli non bastano a certificare latenza UI o qualità: l'eventuale adozione richiede il mantenimento della rilettura della fonte e dei confini ASGI e una verifica sul percorso reale. Nessun nuovo task funzionale viene attivato da questa prova.
+
+
+## Adozione del trasporto compatto — 2026-10-04
+
+Il [confronto sintetico finito](qualification-compact-wire-experiment.md#confronto-reale-concluso-e-superato--2026-10-04) supera le soglie del 20% in entrambe le coppie: token di output −48,6/−51,0%, durata nativa di produzione −51,7/−55,5%; quattro risposte riesaminate favorevolmente sui criteri fissati. Si elimina output ridondante già vincolato alla fonte, mantenendo quattro fatti finali. Totali e primo JSON sono riportati separatamente e non dimostrano una riduzione del testo accettato nel browser.
+
+La [integrazione selettiva](qualification-compact-wire-production.md) conserva il motore protetto, nessun retry, validatori indipendenti e rilettura della nota. Restano una installazione verificata di due file sul Mac e una singola sintesi reale nel browser, con recupero delle metriche native già raccolte dalla stessa inferenza. Non avviare un'altra serie A/B, altre prove CPU o voce prima di questo collaudo.

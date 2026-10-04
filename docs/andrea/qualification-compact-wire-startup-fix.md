@@ -26,3 +26,8 @@ I **18 test della prova isolata** passano, inclusi i due nuovi lanci in un proce
 Prima della correzione è stato verificato il branch del fork e consultati nuovamente upstream [test_structured_output.py](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/engine/test_structured_output.py) e [test_standalone_security.py](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/cli/test_standalone_security.py). I test dei launcher mantengono distinti avvio, cablaggio e inferenza; i nuovi controlli qui coprono anche il processo Python reale. Nessuna intera suite upstream eseguita.
 
 Per riprendere sul Mac: lasciare OpenJarvis acceso e usare soltanto il Terminale Controlli per scaricare e verificare la versione corretta. Eseguire poi una volta lo script normale. Nessuna installazione, rebuild o riavvio di OpenJarvis necessario. PR #1 resta draft e non unita; Jarvis originale rimane indipendente.
+
+
+## Chiusura sul Mac
+
+Il lancio normale della versione corretta ha ora completato tutte e quattro le richieste previste, senza errore di avvio o retry. La [raccolta e revisione](qualification-compact-wire-experiment.md#confronto-reale-concluso-e-superato--2026-10-04) supera i criteri prefissati di qualità e produzione nativa per questi casi. La mancata inferenza del primo avvio rimane registrata; non era un precedente confronto prestazionale. Dopo l'adozione del nuovo ponte, il vecchio script A/B deve rifiutare gli hash cambiati: conserva la baseline storica e non viene riutilizzato per misurare la produzione aggiornata.

@@ -1,6 +1,6 @@
-"""Compact transport: model prose only, literal fields from proved sources.
+"""Experimental transport: model prose only, literal fields from proved sources.
 
-Used only for recognised selected-note qualifications. F3 and context dates are bound before inference;
+Not enabled in production. F3 and context dates are bound before inference;
 the model must return F1, F2 and F4 without missing or extra fields. The final
 four-record composition passes the unchanged production validators. Invalid
 model text is never rewritten, shortened or given missing model information.

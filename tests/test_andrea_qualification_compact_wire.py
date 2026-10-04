@@ -14,6 +14,7 @@ import unittest
 from unittest.mock import patch
 
 import qualification_compact_wire_probe as probe
+import andrea_compact_wire_baseline as baseline
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -27,7 +28,9 @@ def texts(case):
 class QualificationCompactTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.modules = probe.load_modules(ROOT)
+        cls.temporary, cls.project = baseline.project(probe)
+        cls.addClassCleanup(cls.temporary.cleanup)
+        cls.modules = probe.load_modules(cls.project)
 
     def setUp(self):
         self.bundle = self.modules.bridge.prepare(probe.synthetic_note('adversarial'))
@@ -214,13 +217,18 @@ class Transport:
 class CompactProbeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.modules = probe.load_modules(ROOT)
+        cls.temporary, cls.project = baseline.project(probe)
+        cls.addClassCleanup(cls.temporary.cleanup)
+        cls.modules = probe.load_modules(cls.project)
 
     def test_embedded_candidate_and_reused_transport_are_byte_exact(self):
         import ast
-        candidate = (ROOT/'scripts/andrea/qualification_compact_wire.py').read_text()
+        candidate = baseline.CANDIDATE.read_text()
         self.assertEqual(probe.CANDIDATE_SOURCE, candidate)
         self.assertEqual(probe.CANDIDATE_SHA256, hashlib.sha256(candidate.encode()).hexdigest())
+        adopted = (ROOT/'scripts/andrea/qualification_compact_wire.py').read_text()
+        definitions = lambda text: ast.dump(ast.Module(body=ast.parse(text).body[1:], type_ignores=[]))
+        self.assertEqual(definitions(candidate), definitions(adopted))
         original = (ROOT/'scripts/andrea/concise_qualification_text_probe.py').read_text()
         current = (ROOT/'scripts/andrea/qualification_compact_wire_probe.py').read_text()
         functions = lambda source: {n.name: ast.get_source_segment(source, n) for n in ast.parse(source).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
@@ -229,10 +237,10 @@ class CompactProbeTests(unittest.TestCase):
             self.assertEqual(a[name], b[name])
 
     def test_four_posts_opposite_order_and_native_schema_without_any_project_writes(self):
-        before = {path: (ROOT/path).read_bytes() for path in probe.EXPECTED}
+        before = {path: (self.project/path).read_bytes() for path in probe.EXPECTED}
         transport = Transport(self.modules)
         with patch('sys.stdout', new_callable=io.StringIO):
-            report = probe.run_check(transport, self.modules, baseline_check=lambda: probe.verified_sources(ROOT))
+            report = probe.run_check(transport, self.modules, baseline_check=lambda: probe.verified_sources(self.project))
         self.assertEqual(len(transport.requests), 4)
         self.assertEqual(report['plannedRequests'], 4)
         self.assertEqual(report['attemptedRequests'], 4)
@@ -254,7 +262,7 @@ class CompactProbeTests(unittest.TestCase):
             self.assertEqual(row['qualityVerdict'], 'pending_review')
             self.assertTrue(row['consultationPreserved'])
             self.assertIsNone(row['acceptedTextClientMs'])
-        self.assertEqual(before, {path: (ROOT/path).read_bytes() for path in probe.EXPECTED})
+        self.assertEqual(before, {path: (self.project/path).read_bytes() for path in probe.EXPECTED})
 
     def test_failure_stops_without_retry_and_missing_metrics_do_not_pass(self):
         for fault in ('count', 'length', 'eof', 'tools', 'metrics'):
@@ -282,16 +290,16 @@ class CompactProbeTests(unittest.TestCase):
     def test_current_hash_guard_and_registry_restoration_before_any_network(self):
         import sys
         prior = sys.modules.get('qualification_sentence_guard')
-        probe.load_modules(ROOT)
+        probe.load_modules(self.project)
         self.assertIs(sys.modules.get('qualification_sentence_guard'), prior)
         with patch.object(probe, 'CANDIDATE_SOURCE', probe.CANDIDATE_SOURCE+'\n'):
             with self.assertRaisesRegex(ValueError, 'embedded_candidate_mismatch'):
-                probe.load_modules(ROOT)
+                probe.load_modules(self.project)
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             for relative in probe.EXPECTED:
                 file = project/relative; file.parent.mkdir(parents=True, exist_ok=True)
-                file.write_bytes((ROOT/relative).read_bytes())
+                file.write_bytes((self.project/relative).read_bytes())
             file = project/'scripts/andrea/note_facts.py'
             file.write_bytes(file.read_bytes()+b'\n')
             with patch.object(sys, 'argv', ['probe', str(project)]), patch.object(probe, 'run_check') as network, patch('sys.stdout', new_callable=io.StringIO):
@@ -301,7 +309,7 @@ class CompactProbeTests(unittest.TestCase):
     def test_native_only_reads_existing_metrics_without_model_requests(self):
         import sys
         report = {'mode': 'production_native_phases_read_only', 'inferencesIssuedByReader': 0}
-        with patch.object(probe, 'load_modules', return_value=self.modules), patch.object(sys, 'argv', ['probe', str(ROOT), '--native-only']), patch.object(self.modules.reader, 'read', return_value=report) as read, patch.object(probe, 'run_check') as model, patch('sys.stdout', new_callable=io.StringIO) as output:
+        with patch.object(probe, 'load_modules', return_value=self.modules), patch.object(sys, 'argv', ['probe', str(self.project), '--native-only']), patch.object(self.modules.reader, 'read', return_value=report) as read, patch.object(probe, 'run_check') as model, patch('sys.stdout', new_callable=io.StringIO) as output:
             self.assertEqual(probe.main(), 0)
         read.assert_called_once_with()
         model.assert_not_called()
@@ -337,8 +345,8 @@ class CompactProbeTests(unittest.TestCase):
     def test_cli_subprocess_prepares_both_fixtures_before_startup_without_any_network(self):
         """Import-based tests did not cover the published main-before-fixtures bug."""
         script = ROOT/'scripts/andrea/qualification_compact_wire_probe.py'
-        before = {path: (ROOT/path).read_bytes() for path in probe.EXPECTED}
-        result = subprocess.run([sys.executable, str(script), str(ROOT), '--check-only'],
+        before = {path: (self.project/path).read_bytes() for path in probe.EXPECTED}
+        result = subprocess.run([sys.executable, str(script), str(self.project), '--check-only'],
                                 cwd=ROOT, capture_output=True, text=True, timeout=10,
                                 env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'})
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -351,7 +359,7 @@ class CompactProbeTests(unittest.TestCase):
         self.assertEqual(report['qualityVerdict'], 'not_assessed')
         self.assertEqual(report['performanceVerdict'], 'not_measured')
         self.assertEqual(result.stderr, '')
-        self.assertEqual(before, {path: (ROOT/path).read_bytes() for path in probe.EXPECTED})
+        self.assertEqual(before, {path: (self.project/path).read_bytes() for path in probe.EXPECTED})
 
     def test_exact_default_cli_subprocess_finishes_all_four_calls_to_a_local_simulator(self):
         """Exercise python script.py project, including __main__, not an import."""
@@ -372,10 +380,10 @@ class CompactProbeTests(unittest.TestCase):
         server = ThreadingHTTPServer(('127.0.0.1', 11434), Handler)
         thread = Thread(target=server.serve_forever, daemon=True)
         thread.start()
-        before = {path: (ROOT/path).read_bytes() for path in probe.EXPECTED}
+        before = {path: (self.project/path).read_bytes() for path in probe.EXPECTED}
         try:
             script = ROOT/'scripts/andrea/qualification_compact_wire_probe.py'
-            result = subprocess.run([sys.executable, str(script), str(ROOT)],
+            result = subprocess.run([sys.executable, str(script), str(self.project)],
                                     cwd=ROOT, capture_output=True, text=True, timeout=15,
                                     env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'})
         finally:
@@ -392,7 +400,7 @@ class CompactProbeTests(unittest.TestCase):
             self.assertEqual(row['factsCovered'], 4)
             self.assertEqual(row['qualityVerdict'], 'pending_review')
             self.assertEqual(row['technicalOutcome'], 'valid_structure_pending_semantic_review')
-        self.assertEqual(before, {path: (ROOT/path).read_bytes() for path in probe.EXPECTED})
+        self.assertEqual(before, {path: (self.project/path).read_bytes() for path in probe.EXPECTED})
 
 
 if __name__ == '__main__':
