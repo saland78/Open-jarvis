@@ -44,6 +44,10 @@ Frontend: controlli su origine locale, contenuto/revisione inviati, errori senza
 
 ## Collaudo Mac finito, da eseguire dopo l'installazione
 
+Aggiornamento: `scripts/andrea/update_manual_memory.py` scarica cinque sorgenti fissati al commit `07c8ce93b0e4c5d486b7a24b26c4763e77b1ae4e`, verificando baseline e SHA-256. Tutte le destinazioni sono controllate prima del primo download, poi ricontrollate prima di applicare i file. Porta 8008 libera richiesta; backup e rollback conservano i file precedenti. Non crea l'archivio della memoria, non modifica note, profilo, database o dipendenze. Il launcher ricompilerà la UI al successivo avvio perché sono cambiati i sorgenti; la normale preparazione della build usa le dipendenze già definite nel lock, senza cambiare le loro versioni.
+
+Sette test dell'aggiornamento superati: manifest effettivo, backup e ripetizione; download errato; modifiche locali; porta occupata senza terminare processi; rollback con rimozione dei nuovi file; file nuovi incompatibili/collegamenti; modifica durante il download. File privati sintetici conservati in tutte queste prove. Nessuna installazione Mac dichiarata già riuscita.
+
 Usare soltanto dati sintetici. Nessun caricamento del vault o benchmark ripetuto fino al successo.
 
 1. Aprire **Memoria e correzioni**. Creare un fatto dichiarato con argomento `Colore test`, testo `Per il progetto sintetico Zefiro il colore scelto è verde.`, attivando **Usa nelle chat**. Ricaricare: voce, stato e testo devono coincidere.
