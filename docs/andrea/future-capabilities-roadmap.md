@@ -6,7 +6,7 @@ La base locale esistente rimane il punto di partenza. Jarvis originale e OpenJar
 
 ## Priorità e dipendenze
 
-1. Proseguire il [piano della latenza end-to-end](end-to-end-latency-plan.md): osservare le fasi native nella sintesi reale, scegliere una modifica in base alle misure e concludere un confronto finito con qualità invariata. Il tempo complessivo attuale non isola caricamento, valutazione del prompt e generazione.
+1. Proseguire il [piano della latenza end-to-end](end-to-end-latency-plan.md): la [adozione del trasporto compatto](qualification-compact-wire-production.md#collaudo-reale-concluso-e-superato--2026-10-04) è installata e collaudata sul Mac, con quattro fatti riesaminati favorevolmente e testo nell’interfaccia a 26,381 s. Il lettore ha isolato le fasi della stessa richiesta: caricamento 5,08 s, contesto 11,90 s, produzione 9,33 s. Il task è chiuso, senza ulteriori ripetizioni. Prossimo intervento proposto: valutare il costo della preparazione del contesto, preservando informazioni, fonti e controlli, con criteri finiti prima di ogni nuova prova. Voce e altri moduli restano futuri.
 2. Progettare memoria e correzioni consultabili ed eliminabili. Una preferenza salvata non equivale ad addestramento del modello; eventuali miglioramenti richiedono prove prima/dopo.
 3. Introdurre progressivamente gli strumenti utili: ricerca web, confronto Amazon e controllo del Mac, ciascuno con limiti e collaudi propri.
 4. Aggiungere prima trascrizione e risposta vocale locali, poi valutare un canale WhatsApp consentito e collaudare il percorso completo.
