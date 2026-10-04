@@ -19,6 +19,7 @@ spec.loader.exec_module(updater)
 OLD_BRIDGE = ROOT/'tests/fixtures/andrea/note_facts_before_qualification.py'
 HELPER = 'scripts/andrea/qualification_prompt.py'
 BRIDGE = 'scripts/andrea/note_facts.py'
+PUBLISHED_BRIDGE = ROOT/'tests/fixtures/andrea/note_facts_before_sentence.py'
 HISTORICAL_GUARDS = {
     'scripts/andrea/runtime.py': ROOT/'tests/fixtures/andrea/runtime-before-native-phases.py',
     'src/openjarvis/engine/ollama.py': ROOT/'tests/fixtures/andrea/ollama-before-native-phases.py',
@@ -47,7 +48,7 @@ class QualificationUpdateTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(HISTORICAL_GUARDS.get(relative, ROOT/relative), target)
         shutil.copy2(OLD_BRIDGE, self.project/BRIDGE)
-        self.payload = {item['path']: (ROOT/item['path']).read_bytes()
+        self.payload = {item['path']: (PUBLISHED_BRIDGE if item['path'] == BRIDGE else ROOT/item['path']).read_bytes()
                         for item in updater.MANIFEST}
         self.manifest = [dict(item) for item in updater.MANIFEST]
 
@@ -185,7 +186,7 @@ class QualificationUpdateTests(unittest.TestCase):
         self.assertTrue(updater.MANIFEST[0]['new'])
         self.assertEqual(updater.MANIFEST[1]['before'], updater.digest(OLD_BRIDGE))
         for item in updater.MANIFEST:
-            self.assertEqual(updater.digest(ROOT/item['path']), item['sha256'])
+            self.assertEqual(updater.digest(PUBLISHED_BRIDGE if item['path'] == BRIDGE else ROOT/item['path']), item['sha256'])
         self.assertEqual(len(updater.CHECKS), 7)
         self.assertFalse(set(updater.CHECKS) & {HELPER, BRIDGE})
         for relative, expected in updater.CHECKS.items():

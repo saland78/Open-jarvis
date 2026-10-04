@@ -1,22 +1,17 @@
 """Production bridge for bounded facts proved against a single active note.
 
 Extraction, prompt, schema and guards are the candidates exercised by the
-read-only probes. The complete current qualification is a source-bound literal;
-the other records are model synthesis. A complete, unchanged source is required;
-original disjoint passages keep their own lines.
+read-only probes. No expected prose is supplied to the model. A complete,
+unchanged source is required; original disjoint passages keep their own lines.
 Technical acceptance is deliberately separate from semantic review.
 """
 import asyncio
-from types import SimpleNamespace
 
 import markdown_fact_adapter as adapter
 import predicate_context_synthesis as synthesis
 import qualification_prompt
-import qualification_sentence_guard
 import synthesis_contract as validator
 from structured_stream import collect
-
-MODULES = SimpleNamespace(adapter=adapter, synthesis=synthesis, validator=validator)
 
 QUERIES = {
     'book': 'Riassumi il profilo del libro e le date delle edizioni e della copertina.',
@@ -36,12 +31,6 @@ def prepare(note):
                         if kind == 'qualifications' else synthesis.messages(case, plan))
             candidates.append({'kind': kind, 'case': case, 'plan': plan,
                                'messages': messages})
-    if len(candidates) == 1 and candidates[0]['kind'] == 'qualifications':
-        try:
-            candidates[0] = qualification_sentence_guard.protect(candidates[0])
-        except ValueError:
-            # Unknown source wording is unsupported, never completed by guessing.
-            return None
     return candidates[0] if len(candidates) == 1 else None
 
 
@@ -67,17 +56,6 @@ def rejection(reason):
 def render(result):
     text = synthesis.render(result)
     if text is not None:
-        if result.get('qualificationSentencePreserved'):
-            literal_ids = set(result['literalSourceFactIds'])
-            parts = []
-            for claim in result['claims']:
-                paragraph = synthesis.render({**result, 'claims': [claim]})
-                if claim['factId'] in literal_ids:
-                    paragraph = 'Frase riportata dalla fonte — ' + paragraph
-                parts.append(paragraph)
-            return ('Qualifica corrente e indicazioni di consultazione riportate dalla fonte. '
-                    'Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. '
-                    'Nessun dato esterno verificato.\n\n' + '\n\n'.join(parts))
         return text
     if result.get('reason') == 'note_changed_or_unavailable':
         return ('Sintesi strutturata non mostrata: la nota è cambiata o non è più accessibile '
@@ -103,12 +81,6 @@ async def run(stream, bundle, notes, vault_identity, measurement):
                 return rejection('note_changed_or_unavailable')
         except (ValueError, OSError):
             return rejection('note_changed_or_unavailable')
-        if bundle['kind'] == 'qualifications':
-            result = qualification_sentence_guard.validate(raw, bundle, MODULES, completed=completed)
-            if result['status'] == 'valid_structure_pending_semantic_review':
-                result['freeSynthesis'] = False
-                result['composition'] = 'model_text_with_literal_current_qualification_and_source_bound_dates'
-            return result
         return adapter.validate(raw, bundle['case'], bundle['plan'], synthesis, validator,
                                 completed=completed)
 

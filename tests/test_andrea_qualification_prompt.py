@@ -10,7 +10,9 @@ from test_andrea_real_notes_synthesis import BOOK, QUALIFICATIONS, note
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'scripts/andrea'))
-import note_facts
+import concise_qualification_text_probe as historical_probe
+from andrea_qualification_baseline import load_modules as historical_modules
+note_facts = historical_modules(historical_probe).bridge
 import predicate_context_synthesis as synthesis
 import qualification_prompt
 

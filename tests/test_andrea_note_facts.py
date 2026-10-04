@@ -12,9 +12,15 @@ from types import SimpleNamespace
 import unittest
 
 import test_andrea_vault as base
-from test_andrea_real_notes_synthesis import BOOK, QUALIFICATIONS, answer
+from test_andrea_real_notes_synthesis import BOOK, QUALIFICATIONS as OLD_QUALIFICATIONS, answer
 import note_facts
+import markdown_fact_adapter as adapter
 import predicate_context_synthesis as synthesis
+import qualification_sentence_guard as guard
+
+# The historical probes keep their original, shorter consultation fixture.
+# Production now requires the complete prerequisites recognised by the guard.
+QUALIFICATIONS = OLD_QUALIFICATIONS.replace('indicando il periodo.', 'indicando periodo, titolo e marketplace.')
 
 
 class NoteFactTests(unittest.IsolatedAsyncioTestCase):
@@ -34,7 +40,7 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         async def stream(messages, schema):
             try:
                 self.generated.append((messages, schema))
-                value = answer(self.bundle['plan']) if raw is None else raw
+                value = self.model_output() if raw is None else raw
                 yield SimpleNamespace(content=value[:len(value)//2], finish_reason=None, tool_calls=tools)
                 yield SimpleNamespace(content=value[len(value)//2:], finish_reason=None, tool_calls=None)
                 if reason:
@@ -45,6 +51,17 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
             finally:
                 self.closed.append(True)
         self.app.fact_stream = stream
+
+    def model_output(self):
+        # Secured fake output obeys the native const; supplied faulty output is
+        # never repaired. Live-model acceptance is a separate Mac observation.
+        value = json.loads(answer(self.bundle['plan']))
+        fields = self.bundle['plan']['schema']['properties']['records']['properties']
+        for key, field in fields.items():
+            text_field = field['properties']['text']
+            if 'const' in text_field:
+                value['records'][key]['text'] = text_field['const']
+        return json.dumps(value, ensure_ascii=False)
 
     def body(self, events):
         return b''.join(e.get('body', b'') for e in events).decode()
@@ -83,9 +100,13 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                     self.assertIn('Aggiornamento nella nota del 2027-04-01:', self.body(events))
                     self.assertIn('Fotografia storica del 2027-03-01:', self.body(events))
                     self.assertEqual(len(evidence['sources'][0]['passages']), 6)
+                    self.assertIn('Frase riportata dalla fonte — Aggiornamento', self.body(events))
+                    self.assertIn('Gli altri punti sono sintesi del modello', self.body(events))
+                    self.assertIn(self.bundle['qualificationSentence']['source_text'], self.body(events))
                 else:
                     self.assertIn('Edizione digitale disponibile dal 16 marzo.', self.body(events))
                     self.assertNotIn('16 marzo 2027', self.body(events))
+                    self.assertNotIn('Frase riportata dalla fonte', self.body(events))
                 self.assertNotIn('Selected note', json.dumps(self.metric()))
                 self.assertGreaterEqual(self.metric()['structuredAcceptedTextMs'], self.metric()['structuredFirstJsonMs'])
 
@@ -96,8 +117,15 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         for kind in ('book', 'qualifications'):
             payload = self.fixture(kind); self.engine()
             original = synthesis.messages(self.bundle['case'], self.bundle['plan'])
-            expected = (experiment.compact.messages(self.bundle['case'], self.bundle['plan'], synthesis)
-                        if kind == 'qualifications' else original)
+            if kind == 'qualifications':
+                plan = adapter.prepare(self.bundle['case'], kind)
+                baseline = {'kind': kind, 'case': self.bundle['case'], 'plan': plan,
+                            'messages': experiment.compact.messages(self.bundle['case'], plan, synthesis)}
+                secured = guard.protect(baseline)
+                expected = secured['messages']
+                self.assertEqual(self.bundle['plan']['schema'], secured['plan']['schema'])
+            else:
+                expected = original
             events = await self.invoke(payload)
             self.assertEqual(events[0]['status'], 200)
             self.assertEqual(self.generated, [(expected, self.bundle['plan']['schema'])])
@@ -109,14 +137,24 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
                 body = json.loads(expected[1]['content'])
                 self.assertNotIn('response_schema', body)
                 self.assertIn('response_shape', body)
+                self.assertEqual(body['protected_qualification']['origin'], 'literal_original_qualification_span')
 
-    async def test_corrected_source_predicate_passes_without_claiming_values_were_updated(self):
+    async def test_prefix_preserved_but_consultation_incomplete_is_not_accepted(self):
         payload = self.fixture('qualifications')
-        raw = json.loads(answer(self.bundle['plan']))
+        raw = json.loads(self.model_output())
         raw['records']['F3']['text'] = 'I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando il periodo.'
         self.engine(json.dumps(raw)); events = await self.invoke(payload)
+        self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
+        self.assertNotIn(raw['records']['F3']['text'], self.body(events))
+        self.assertEqual(len(self.generated), 1)
+
+    async def test_real_kdp_source_convention_preserved_with_distinct_origins(self):
+        text = QUALIFICATIONS.replace('report indicando', 'report KDP indicando')
+        payload = self.fixture('qualifications', text); self.engine()
+        events = await self.invoke(payload)
         self.assertEqual(self.metric()['structuredOutcome'], 'accepted')
-        self.assertIn(raw['records']['F3']['text'], self.body(events))
+        self.assertIn('consultare dashboard o report KDP indicando periodo, titolo e marketplace.', self.body(events))
+        self.assertEqual(self.evidence(events)['qualityVerdict'], 'pending_review')
 
     async def test_wrong_year_count_label_context_predicate_or_cover_role_refuse_without_retry(self):
         variants = [
@@ -128,7 +166,7 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
             ('qualifications', 'F3', 'text', 'I valori sono stati aggiornati ma sono DATO NON VERIFICATO.'),
         ]
         for kind, field, key, wrong in variants:
-            payload = self.fixture(kind); raw = json.loads(answer(self.bundle['plan']))
+            payload = self.fixture(kind); raw = json.loads(self.model_output())
             raw['records'][field][key] = wrong
             self.engine(json.dumps(raw)); events = await self.invoke(payload)
             self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
@@ -142,6 +180,8 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         for text in (BOOK.replace('status: active', 'status: superseded'),
                      BOOK.replace('Kindle dal 16 marzo', 'Kindle dal 16 marzo, Kindle dal 17 marzo'),
                      '# Ordinary note\nA useful fact.',
+                     QUALIFICATIONS.replace('indicando periodo, titolo e marketplace.', 'indicando il periodo.'),
+                     QUALIFICATIONS.replace('consultare dashboard', 'non consultare dashboard'),
                      BOOK + QUALIFICATIONS[QUALIFICATIONS.index('# KPI'):]):
             payload = self.fixture(text=text); self.engine('PRIVATE')
             self.assertEqual((await self.invoke(payload))[0]['status'], 400)
@@ -158,19 +198,20 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.evidence(events)['sources']), 1)
 
     async def test_changed_deleted_or_inactivated_note_is_not_accepted_after_draining(self):
-        for mutation in ('content', 'delete', 'status', 'vault'):
-            payload = self.fixture(); initial = (self.root/self.path).read_text()
-            old_vault = self.store.vault
-            def changed():
-                if mutation == 'delete': (self.root/self.path).unlink()
-                elif mutation == 'content': (self.root/self.path).write_text(initial+'\nChanged outside selected spans.\n')
-                elif mutation == 'status': (self.root/self.path).write_text(initial.replace('status: active', 'status: draft'))
-                else: self.store.vault = ''
-            self.engine(after=changed); events = await self.invoke(payload)
-            self.store.vault = old_vault
-            self.assertEqual(self.drained, [True]); self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
-            self.assertIn('la nota è cambiata', self.body(events))
-            self.assertFalse(self.app.busy)
+        for kind in ('book', 'qualifications'):
+            for mutation in ('content', 'delete', 'status', 'vault'):
+                payload = self.fixture(kind); initial = (self.root/self.path).read_text()
+                old_vault = self.store.vault
+                def changed():
+                    if mutation == 'delete': (self.root/self.path).unlink()
+                    elif mutation == 'content': (self.root/self.path).write_text(initial+'\nChanged outside selected spans.\n')
+                    elif mutation == 'status': (self.root/self.path).write_text(initial.replace('status: active', 'status: draft'))
+                    else: self.store.vault = ''
+                self.engine(after=changed); events = await self.invoke(payload)
+                self.store.vault = old_vault
+                self.assertEqual(self.drained, [True]); self.assertEqual(self.metric()['structuredOutcome'], 'rejected')
+                self.assertIn('la nota è cambiata', self.body(events))
+                self.assertFalse(self.app.busy)
 
     async def test_bad_flags_path_symlink_and_external_origin_never_generate(self):
         payload = self.fixture(); self.engine()
@@ -246,7 +287,7 @@ class NoteFactTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(closed,[True])
 
     async def test_technical_acceptance_remains_distinct_from_semantic_quality(self):
-        payload = self.fixture('qualifications'); raw = json.loads(answer(self.bundle['plan']))
+        payload = self.fixture('qualifications'); raw = json.loads(self.model_output())
         raw['records']['F2']['text'] = 'Vendite e royalty non variano per periodo.'
         self.engine(json.dumps(raw)); events = await self.invoke(payload)
         # Deliberate counterexample: schema and lexical support are no semantic oracle.

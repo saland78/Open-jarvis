@@ -9,6 +9,8 @@ import qualification_clause_guard as prefix
 import qualification_sentence_guard as guard
 from test_andrea_qualification_clause_guard import response
 
+from andrea_qualification_baseline import load_modules as historical_modules
+
 ROOT = Path(__file__).resolve().parents[1]
 OBSERVED = 'I valori aggiornati restano DATO NON VERIFICATO soltanto in questa nota: Vendite e royalty varian per periodo.'
 
@@ -16,7 +18,7 @@ OBSERVED = 'I valori aggiornati restano DATO NON VERIFICATO soltanto in questa n
 class QualificationSentenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.modules = p.load_modules(ROOT)
+        cls.modules = historical_modules(p)
 
     def bundle(self, note=None):
         return self.modules.bridge.prepare(note or p.synthetic_note('adversarial'))

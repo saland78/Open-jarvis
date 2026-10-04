@@ -15,6 +15,8 @@ import qualification_sentence_fix_probe as probe
 from test_andrea_qualification_clause_guard import response
 from test_andrea_qualification_sentence_guard import OBSERVED
 
+from andrea_qualification_baseline import source as baseline_source
+
 ROOT = Path(__file__).resolve().parents[1]
 TRANSPORT = ROOT/'scripts/andrea/concise_qualification_text_probe.py'
 
@@ -61,7 +63,7 @@ class QualificationSentenceFixProbeTests(unittest.TestCase):
         for relative in self.p.EXPECTED:
             target = self.project/relative
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT/relative, target)
+            shutil.copyfile(baseline_source(relative), target)
         self.modules = self.p.load_modules(self.project)
         self.guard = probe.guard_module()
         self.bundle = self.guard.protect(self.modules.bridge.prepare(self.p.synthetic_note('adversarial')))

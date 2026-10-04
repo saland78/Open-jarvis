@@ -16,6 +16,10 @@ from test_andrea_real_notes_synthesis import BOOK, QUALIFICATIONS, answer, note
 ROOT = Path(__file__).resolve().parents[1]
 FILE = ROOT / 'scripts/andrea/compact_note_prompt_probe.py'
 BASELINE_NOTE_FACTS = ROOT / 'tests/fixtures/andrea/note_facts_before_qualification.py'
+HISTORICAL_GUARDS = {
+    'scripts/andrea/runtime.py': ROOT/'tests/fixtures/andrea/runtime-before-native-phases.py',
+    'src/openjarvis/engine/ollama.py': ROOT/'tests/fixtures/andrea/ollama-before-native-phases.py',
+}
 spec = importlib.util.spec_from_file_location('compact_probe', FILE)
 p = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(p)
@@ -29,7 +33,7 @@ def copy_probe_baseline(root):
     for relative in p.EXPECTED:
         destination = root / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
-        original = BASELINE_NOTE_FACTS if relative == 'scripts/andrea/note_facts.py' else ROOT/relative
+        original = BASELINE_NOTE_FACTS if relative == 'scripts/andrea/note_facts.py' else HISTORICAL_GUARDS.get(relative, ROOT/relative)
         shutil.copyfile(original, destination)
 
 

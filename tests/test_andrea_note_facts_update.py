@@ -102,8 +102,13 @@ class FactUpdateTests(unittest.TestCase):
         self.assertEqual(len(updater.MANIFEST),7)
         self.assertEqual(len({item['path'] for item in updater.MANIFEST}),7)
         for item in updater.MANIFEST:
-            source = (ROOT/'tests/fixtures/andrea/note_facts_before_qualification.py'
-                      if item['path'] == 'scripts/andrea/note_facts.py' else ROOT/item['path'])
+            historical = {
+                'scripts/andrea/note_facts.py': 'note_facts_before_qualification.py',
+                'scripts/andrea/runtime.py': 'runtime-before-native-phases.py',
+                'src/openjarvis/engine/ollama.py': 'ollama-before-native-phases.py',
+            }
+            source = (ROOT/'tests/fixtures/andrea'/historical[item['path']]
+                      if item['path'] in historical else ROOT/item['path'])
             self.assertEqual(updater.digest(source),item['sha256'])
             self.assertTrue(item['path'].endswith(('.py','.tsx')))
         self.assertEqual({item['path'] for item in updater.MANIFEST if item.get('new')}, {

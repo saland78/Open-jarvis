@@ -8,6 +8,8 @@ import unittest
 import concise_qualification_text_probe as p
 import qualification_clause_guard as guard
 
+from andrea_qualification_baseline import load_modules as historical_modules
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -27,7 +29,7 @@ def response(bundle, *, text=None):
 class QualificationClauseTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.modules = p.load_modules(ROOT)
+        cls.modules = historical_modules(p)
 
     def bundle(self, name='adversarial', note=None):
         return self.modules.bridge.prepare(note or p.synthetic_note(name))

@@ -12,6 +12,8 @@ import unittest
 from unittest.mock import patch
 from urllib.request import build_opener, ProxyHandler
 
+from andrea_qualification_baseline import source as baseline_source
+
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location(
     'concise_probe', ROOT/'scripts/andrea/concise_qualification_text_probe.py')
@@ -89,7 +91,7 @@ class ConciseQualificationTests(unittest.TestCase):
         for relative in p.EXPECTED:
             target = self.project/relative
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT/relative, target)
+            shutil.copyfile(baseline_source(relative), target)
         self.modules = p.load_modules(self.project)
 
     def test_candidate_changes_only_system_style_not_any_fact_schema_or_route(self):

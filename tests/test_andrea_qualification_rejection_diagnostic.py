@@ -12,6 +12,8 @@ from threading import Thread
 import unittest
 from unittest.mock import patch
 
+from andrea_qualification_baseline import source as baseline_source
+
 ROOT = Path(__file__).resolve().parents[1]
 PROBE_FILE = ROOT/'scripts/andrea/concise_qualification_text_probe.py'
 spec = importlib.util.spec_from_file_location(
@@ -74,7 +76,7 @@ class QualificationRejectionDiagnosticTests(unittest.TestCase):
         for relative in self.p.EXPECTED:
             target = self.project/relative
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT/relative, target)
+            shutil.copyfile(baseline_source(relative), target)
         self.modules = self.p.load_modules(self.project)
         self.bundle = self.modules.bridge.prepare(self.p.synthetic_note('adversarial'))
 
