@@ -31,3 +31,19 @@ Consultati nuovamente upstream al commit `a0df94cd93756047c724d803662bc671618b10
 Preparare un aggiornamento di soli `qualification_compact_wire.py` e `note_facts.py`, da un commit immutabile con hash, backup e rollback. OpenJarvis deve essere fermo durante la sostituzione. Dopo l'avvio usare la stessa nota KPI e il pulsante di sintesi della nota scelta, una volta: verificare quattro punti, frase corrente, date e passaggi; annotare tempi browser/backend e leggere le fasi native della medesima inferenza con il lettore esistente. Quella lettura non genera un'altra risposta.
 
 Qualità, accettazione tecnica e latenza reale sono criteri distinti. Non dichiarare già misurato un guadagno nel browser; evitare confronto causale con un solo campione che ha cache/caricamento diversi. Se fallisce, conservare risposta/rifiuto e diagnosticare prima di continuare altri task. PR #1 rimane draft e non unita; Jarvis originale resta indipendente.
+
+
+## Aggiornamento verificato pronto
+
+Payload immutabile: `90dc3f0bb4a1727ba4cb01ed9ed72916e5904d28`. Installer `scripts/andrea/update_compact_qualifications.py`, SHA-256 `0deec43be0302b78b2a2d5d4ed4ed6cc98bdc4d7f974239db305243c1bbf2cc9` (8875 byte). Scarica e verifica prima di sostituire questi due file:
+
+| Sorgente | SHA-256 nuovo | Baseline richiesta |
+|---|---|---|
+| `qualification_compact_wire.py` | `8ace1bc1a79345ee1efc4fb34f642808c5e610fd5b073c6ca960b15716abca98` | Assente o già identico |
+| `note_facts.py` | `e259adc3b46112a9516b3f41bd8dc1628a5676fcfff051cb1ba0ae343d6bdbe8` | `b2524d94ccbc7ab15e9d21e67ed91433cf6a37bedfe395aa6e27cbd46ea52ee7` oppure nuovo identico |
+
+Undici componenti immutabili, compresi i due guard e il frontend già compilato, sono verificati prima e dopo il download. Sintassi di ogni payload Python verificata prima dell'applicazione. Porta 8008 libera richiesta; nessun processo terminato automaticamente. Backup di ogni file precedente, sostituzione atomica di ciascun file e rollback della transazione se fallisce. Un helper nuovo viene rimosso dal rollback; il vecchio ponte viene preservato. Modifiche locali incompatibili, file mancanti, hash errati, symlink o modifiche concorrenti rilevate interrompono l'aggiornamento senza sovrascriverle.
+
+**Dieci test del manifest reale passati**, aggiunti alle 168 regressioni: applicazione/ripetizione, backup e permessi, dati/configurazioni sentinella invariati, hash errato del secondo download, collisione/mancanza, porta occupata e symlink, errore al secondo rimpiazzo e rimozione del helper, modifica dei guard o del ponte durante download, sintassi non valida con hash coerente e ciascuna dipendenza incompatibile. Totale dei controlli pertinenti passati: **178**. Gli artefatti di sorgente sono riletti integralmente dal commit pubblicato; nessun payload personale incluso.
+
+Il primo passo Mac successivo è fermare solo il Terminale OpenJarvis e lasciare Controlli aperto. Fornire poi separatamente download con URL semplice e checksum, esecuzione, avvio e una sintesi reale. Non presumere lo script già scaricato o il Mac aggiornato. Non richiedere una nuova build frontend per questo aggiornamento Python.
