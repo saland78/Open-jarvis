@@ -52,6 +52,18 @@ class SentenceTests(unittest.TestCase):
         self.assertEqual(data,{'question':'Domanda','passages':[[i+1,v] for i,v in enumerate(bank)]})
         item=schema['properties']['claims']['items']['properties']
         self.assertEqual(set(item),{'text','passage'});self.assertEqual(item['text']['maxLength'],100)
+        self.assertEqual(item['text'],{'type':'string','minLength':20,'maxLength':100})
+        self.assertEqual(schema['properties']['claims']['maxItems'],2)
+
+    def test_native_schema_still_requires_python_punctuation_check(self):
+        # The native pattern was removed, not the acceptance condition.
+        self.assertEqual(self.verdict('Le coroutine possono sospendersi e poi riprendere')['reason'],'sentence_not_complete')
+
+    def test_complete_json_with_five_points_is_not_accepted_or_trimmed(self):
+        raw=json.dumps({'claims':[{'passage':1,'text':'Le coroutine possono sospendersi e poi riprendere.'} for _ in range(5)]})
+        verdict=p.validate(raw,p.sentence_bank(PAGE),True)
+        self.assertEqual(verdict['reason'],'invalid_structure')
+        self.assertEqual(verdict['claims'],[])
 
 class HTTPTests(unittest.TestCase):
     def test_timeout_preserves_partial_diagnostic_but_never_accepts_it(self):

@@ -63,3 +63,34 @@ removed to make the original test easier. The 90-second deadline and 512-token
 budget are unchanged. If an error occurs, collected partial JSON is now
 printed as diagnostic-only, with an error category; it is always rejected
 without a completed terminal frame. The semantic check remains pending.
+
+## Schema correction after the second Mac probe
+
+The second isolated probe completed in 89.262 seconds, but its JSON contained
+five claims, including strings above the requested 100-character limit.
+It was correctly rejected as invalid_structure; no claims were trimmed to
+force acceptance. The output is not a passed quality test.
+
+The candidate previously combined minLength/maxLength with the pattern
+`^.+[.!?]$`. The public llama.cpp JSON-schema converter prioritizes pattern
+over string length handling. Its documented dot grammar accepts quote
+characters as well as ordinary characters, so this unbounded wildcard may
+also consume subsequent JSON fields/items. This explains a plausible path
+around both constraints; the precise installed Ollama converter has not
+been inspected, so causality on the Mac is still a hypothesis.
+
+This revision removes only the native pattern. The schema still caps claims
+at two and text at 20–100 characters. The Python punctuation, evidence,
+numeric, lexical and verbatim checks are unchanged. No prompt, context,
+temperature, model, timeout, source or token budget is changed in this
+comparison. An explicit schemaVariant identifies the new diagnostic.
+
+The 55 deterministic tests include rejection of a complete five-point JSON
+and a missing final punctuation mark despite removal of the native pattern.
+They do not run Ollama or prove its enforcement. The live Mac comparison and
+semantic review remain pending; production has not been modified.
+
+Primary references consulted: upstream OpenJarvis tests/tools/test_web_search.py,
+Ollama structured-output documentation, and llama.cpp grammars/README.md and
+examples/json_schema_to_grammar.py. The upstream search tests do not fix this
+personal synthesis contract.
