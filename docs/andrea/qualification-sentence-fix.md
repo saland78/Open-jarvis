@@ -1,6 +1,6 @@
 # Qualifica e consultazione complete vincolate alla fonte
 
-Stato al 2026-10-04 (Europe/Rome): candidata isolata implementata, **49 controlli di sviluppo superati** e replay del JSON Mac precedente riesaminato. Una sola richiesta con Ollama reale ancora da eseguire. Nessuna integrazione o adozione in produzione; gli altri task restano sospesi fino al completamento della correzione e del collaudo reale.
+Stato al 2026-10-04: **una sola prova sintetica sul Mac superata anche nel confronto del significato**. Integrazione nel percorso Note Obsidian pubblicata e aggiornamento verificato preparato; **installazione, compilazione completa e collaudo della nota reale sul Mac ancora da eseguire**. Gli altri task restano sospesi fino a quel riscontro.
 
 ## Difetto e soluzione
 
@@ -47,3 +47,16 @@ Mantiene risposta accettata tecnicamente e JSON diagnostico distinto, passaggi o
 Dopo questo riscontro restano integrazione nel percorso di produzione e collaudo del caso reale, con indicazione UI del campo letterale. Non sono già certificati dal prototipo. Fino al loro completamento non passare a latenza, voce, memoria o altri task. Nessuna adozione automatica o ripetizione di una prova negativa.
 
 Note, dati personali, runtime, modello, profilo, dipendenze e Jarvis originale invariati. PR #1 resta draft, nessun merge.
+
+
+## Esito della singola prova Mac e integrazione
+
+La richiesta sintetica prevista termina con stop, senza retry o riparazioni. Quattro record presenti: conteggio e variabilità corretti, qualifica corrente e assenza storica separate con le rispettive date, frase corrente completa inclusi periodo, titolo e marketplace. Nessuno zero, importo o controllo esterno inventato; l'istruzione estranea non viene eseguita. F3 è dichiarato letterale e gli altri tre record sono generati. Revisione manuale favorevole **per questo caso**; pending_review rimane il verdetto automatico. Il [rapporto filtrato](qualification-sentence-fix-mac-2026-10-04.json) contiene solo durate, conteggi e categorie, senza storico del Terminale o note personali.
+
+Totale client 35777,602 ms, primo frammento 19023,333 ms, caricamento nativo 4320,931 ms e cache dichiarata zero. Queste misure dirette non sono tempi UI e non dimostrano un guadagno prestazionale rispetto alle altre prove. Nessuna ulteriore richiesta al modello per questa chiusura. I precedenti esperimenti falliti restano tali.
+
+La [integrazione in produzione](qualification-sentence-production.md) mantiene gli stessi due guard e il percorso del caso sintetico. La frase completa entra nel contratto nativo prima della generazione; il controllo indipendente non ripara l'output. Rimangono rilettura completa della nota al termine, controllo di vault/stato/contenuto, rifiuti su numeri e date, un'unica generazione, gestione di timeout e cancellazione. Il profilo del libro conserva schema e prompt precedenti.
+
+**148 controlli Python e 12 controlli dell'interfaccia superati**; bundle Vite/PWA prodotto. Il compilatore TypeScript 7 nativo di questo ambiente si arresta prima di controllare il progetto per readlink /proc/self/exe non disponibile: non viene dichiarata superata la build combinata npm run build. Nessuna dipendenza sostituita per aggirarlo; verifica della compilazione completa sul Mac al riavvio ancora necessaria.
+
+I test storici ricostruiscono gli archivi pubblici esatti di note_facts e dei componenti precedenti, mantenendo tutti gli hash originali dei probe. Questi ultimi restano diagnostici di quelle versioni e rifiutano intenzionalmente una nuova installazione non corrispondente; non sono stati resi meno rigorosi per accettare la versione nuova. La provenienza della frase è dichiarata sia nel testo del backend sia nelle descrizioni della pagina.

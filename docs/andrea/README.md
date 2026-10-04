@@ -1,5 +1,7 @@
 # OpenJarvis personale: chat e note locali separate
 
+Stato al 2026-10-04: **una sola prova sintetica sul Mac superata anche nel confronto del significato**. Integrazione nel percorso Note Obsidian pubblicata e aggiornamento verificato preparato; **installazione, compilazione completa e collaudo della nota reale sul Mac ancora da eseguire**. Gli altri task restano sospesi fino a quel riscontro.
+
 Repository: https://github.com/saland78/Open-jarvis
 
 Sorgente: https://github.com/open-jarvis/OpenJarvis, commit `c4da16e1ca3d21f4cc1905d4200063e564104f0f` (1 ottobre 2026). Il fork conserva storia, licenza Apache-2.0 e relazione upstream. `main` conserva la base; queste modifiche sono su `feature/andrea-local-profile`, PR draft #1. Il precedente Jarvis rimane in un'altra repository e cartella.
@@ -199,6 +201,6 @@ Il [diagnostico successivo](qualification-rejection-diagnostic.md) prepara una s
 
 Il [collaudo Mac del prefisso](qualification-clause-fix.md#esito-reale-del-collaudo-mac) è concluso: pattern nativo e predicato/ambito conservati, ma qualità completa **fallita per omissione della consultazione con periodo, titolo e marketplace**. Nessuna adozione o riclassificazione del precedente fallimento prestazionale.
 
-La [correzione della frase completa](qualification-sentence-fix.md) è implementata come candidata isolata: F3 letterale dal passaggio originale, vincolato prima della generazione e verificato indipendentemente senza riparare testo; altri tre record ancora sintesi del modello. 49 controlli di sviluppo superati e replay offline del JSON Mac: la frase incompleta ora rifiutata, senza nuova inferenza. Non è parafrasi interamente libera o apprendimento del modello.
+La [correzione della frase completa](qualification-sentence-fix.md) ha superato la singola prova sintetica Mac, anche nel confronto del significato: conserva tutta l'indicazione di consultazione e le quattro informazioni obbligatorie. F3 rimane letterale dalla fonte; gli altri tre record sono sintesi del modello. Esito circoscritto al caso osservato, senza apprendimento o verifica esterna. Il precedente prefisso incompleto resta una prova fallita.
 
-Una sola richiesta sintetica Mac da raccogliere, senza retry o canary supplementari. Nessuna modifica alla produzione o lettura del vault nel prototipo; Ollama reale, integrazione e caso reale ancora da verificare. Tutti gli altri task rimangono sospesi finché questo difetto non è corretto e collaudato.
+La [integrazione Note Obsidian e l'aggiornamento a quattro file](qualification-sentence-production.md) sono preparati: 148 controlli Python, 12 dell'interfaccia e build Vite/PWA superati. Il type checker nativo è bloccato da un limite dell'ambiente; compilazione completa, installazione e nota reale sul Mac ancora da verificare. Non eseguire altri task prima di completare questo riscontro.
