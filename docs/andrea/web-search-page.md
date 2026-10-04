@@ -26,6 +26,8 @@ Bundle Vite/PWA generato. Comando completo `npm run build` fermato dal compilato
 
 Aggiornamento separato, sorgenti pinned con hash e backup, controllo baseline, porta 8008 libera prima della sostituzione. Nessuna nota/configurazione/database/dipendenza aggiornata. Riavviare con il launcher esistente che compila il frontend; verificare completamento di TypeScript e Vite. Aprire Ricerca web, scegliere DuckDuckGo e cercare la query pubblica Python già usata, poi You.com con la query Ollama. Controllare query/fornitore mostrati, schede/link e tempi, nessun testo privato incluso. Una prova di interruzione è separata dalla qualità dei risultati. Se un passo fallisce, conservare l'errore e risolverlo prima di dichiarare concluso il modulo.
 
+Installer `scripts/andrea/update_web_search.py`: sette file pinned al commit sorgente `efd8793d78a8e6b012404c13e381f14796924c07`, tre sostituzioni e quattro moduli nuovi. Sette test aggiuntivi passati per manifest/hash, backup e idempotenza, dati privati intatti, download corrotto, edit locale rifiutato prima della rete, porta occupata, rollback, modulo diverso/symlink e modifica durante il download. Totale dei controlli Python pertinenti: 90, su due selezioni complementari. Le fixture del vecchio runtime/App/Sidebar sono codice pubblico, non configurazioni del Mac.
+
 ## Interfaccia richiesta da Andrea
 
 Indicatori piccoli sotto il nucleo; dati ampi al posto del nucleo con ritorno alla vista principale. Requisito registrato nella roadmap come composizione modulare futura. Questa pagina mostra risultati ampi; non implementa ancora nucleo animato, dashboard Second Brain o carosello Amazon. Sintesi web, confronto venditori/prodotti, acquisti e controllo del Mac sono task successivi distinti.
