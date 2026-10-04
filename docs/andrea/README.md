@@ -2,6 +2,8 @@
 
 Stato al 2026-10-04: **aggiornamento installato, compilazione completa sul Mac e collaudo della nota reale superati**. La revisione del significato conferma i quattro fatti selezionati e la frase corrente completa con le indicazioni di consultazione. Esito circoscritto al caso e al formato riconosciuto; nessuna verifica esterna o garanzia su altre sintesi. Questo difetto è chiuso nel caso collaudato; il prossimo task riguarda la latenza, senza perdere informazioni o controlli.
 
+Per il task latenza è pronta una [prova isolata con meno campi generati](qualification-compact-wire-experiment.md): conserva direttamente frase corrente e date comprovate, chiedendo al modello gli altri tre punti. 16 nuovi test e 148 regressioni passati; nessuna inferenza reale o adozione. Primo passo sul Mac: leggere le fasi native della richiesta già conclusa, senza generare un'altra risposta. La produzione installata resta invariata.
+
 Repository: https://github.com/saland78/Open-jarvis
 
 Sorgente: https://github.com/open-jarvis/OpenJarvis, commit `c4da16e1ca3d21f4cc1905d4200063e564104f0f` (1 ottobre 2026). Il fork conserva storia, licenza Apache-2.0 e relazione upstream. `main` conserva la base; queste modifiche sono su `feature/andrea-local-profile`, PR draft #1. Il precedente Jarvis rimane in un'altra repository e cartella.
