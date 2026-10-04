@@ -1,4 +1,4 @@
-"""Local-only entry point for the personal fork; upstream modules stay intact."""
+"""Local profile with isolated inference and explicitly requested web search."""
 from __future__ import annotations
 
 import asyncio
@@ -16,6 +16,7 @@ from structured_stream import collect as collect_structured, until_disconnect
 import note_facts
 from manual_memory import ManualMemory, MemoryError
 from memory_provenance import MemoryProvenanceFooter
+from web_search_local import LocalWebSearch, SearchError
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -50,11 +51,12 @@ def notes_messages(query, sources):
 
 
 class LocalMode:
-    """First milestone: same-origin text chat; other mutations remain unavailable."""
-    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None, memory=None):
+    """Same-origin local chat, notes, declared memory and explicit web requests."""
+    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None, memory=None, web=None):
         self.app, self.model, self.port, self.timeout = app, model, port, timeout
         self.notes = notes
         self.memory = memory
+        self.web = web
         self.structured_stream = structured_stream
         self.fact_stream = fact_stream
         self.busy = False
@@ -93,7 +95,8 @@ class LocalMode:
             return await self.app(scope, receive, send)
         configuring = bool(self.notes and scope["path"] == "/api/andrea/notes/config")
         memorizing = bool(self.memory and scope["path"] == "/api/andrea/memory")
-        if scope["method"] != "POST" or (scope["path"] != "/v1/chat/completions" and not configuring and not memorizing):
+        searching = bool(self.web and scope["path"] == "/api/andrea/web/search")
+        if scope["method"] != "POST" or (scope["path"] != "/v1/chat/completions" and not configuring and not memorizing and not searching):
             return await self.reply(send, 403, "Strumenti e modifiche non sono ancora attivi nel profilo locale.")
         if not origin or not headers.get(b"content-type", b"").startswith(b"application/json"):
             return await self.reply(send, 403, "Usa l'interfaccia locale per inviare messaggi.")
@@ -111,6 +114,22 @@ class LocalMode:
             payload = json.loads(raw)
             if not isinstance(payload, dict):
                 raise ValueError("Formato della richiesta non valido.")
+            if searching:
+                if self.busy:
+                    return await self.reply(send, 409, "Attendi la richiesta in corso prima di cercare sul web.")
+                self.busy = True
+                try:
+                    data = await until_disconnect(self.web.search(payload), receive)
+                    if data is None:
+                        return
+                    await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json"), (b"cache-control", b"no-store")]})
+                    return await send({"type": "http.response.body", "body": json.dumps(data).encode()})
+                except SearchError as exc:
+                    return await self.reply(send, exc.status, str(exc))
+                except OSError:
+                    return await self.reply(send, 503, "Ricerca web non disponibile in questo avvio.")
+                finally:
+                    self.busy = False
             if memorizing:
                 if self.busy:
                     return await self.reply(send, 409, "Attendi o interrompi la risposta prima di modificare la memoria.")
@@ -376,7 +395,7 @@ def build_app(ollama_host: str | None = None):
                 yield chunk
         finally:
             await iterator.aclose()
-    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"]), identity_prompt=cfg.agent.system_prompt))
+    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"]), identity_prompt=cfg.agent.system_prompt), web=LocalWebSearch())
 
 
 if __name__ == "__main__":

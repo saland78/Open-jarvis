@@ -57,6 +57,7 @@ export function Sidebar() {
     { path: '/dashboard', icon: BarChart3, label: 'Dashboard' },
     { path: '/data-sources', icon: Database, label: 'Data Sources' },
     ...(import.meta.env.VITE_ANDREA_LOCAL === 'true' ? [{ path: '/memory', icon: Database, label: 'Memoria e correzioni' }] : []),
+    ...(import.meta.env.VITE_ANDREA_LOCAL === 'true' ? [{ path: '/web-search', icon: Search, label: 'Ricerca web' }] : []),
     { path: '/agents', icon: Bot, label: 'Agents' },
     { path: '/logs', icon: ScrollText, label: 'Logs' },
     { path: '/settings', icon: Settings, label: 'Settings' },

@@ -1,6 +1,6 @@
 # Roadmap dei moduli futuri
 
-Requisiti raccolti il 2026-10-04 (Europe/Rome). Stato: pianificati, non implementati né attivati nel profilo locale. Questo aggiornamento riguarda soltanto documentazione: non modifica il runtime o il Mac.
+Requisiti raccolti il 2026-10-04 (Europe/Rome). I moduli futuri restano pianificati salvo gli esiti e le integrazioni circoscritte esplicitamente indicate. La pagina Ricerca web è preparata e testata in sviluppo; installazione e collaudo nell'interfaccia del Mac ancora da completare.
 
 La base locale esistente rimane il punto di partenza. Jarvis originale e OpenJarvis personalizzato restano separati; la PR di lavoro resta draft, senza merge a main. Nessuna nota personale, configurazione privata, credenziale, database o registrazione audio va pubblicata.
 
@@ -17,7 +17,7 @@ I task qui sotto non sostituiscono i precedenti obiettivi relativi a documenti, 
 ## WEB — ricerca quando le informazioni non bastano
 
 - [ ] Definire quando cercare: richiesta esplicita, dati soggetti a cambiamento, conoscenze insufficienti o problema non risolto. Non trasformare ogni richiesta locale in una ricerca esterna.
-- [ ] Valutare strumenti e test upstream, scegliere esplicitamente il fornitore e definire timeout e budget finiti. Non ereditare implicitamente il fallback a un diverso servizio esterno.
+- [x] Valutare strumenti e test upstream, scegliere esplicitamente il fornitore e definire timeout e budget finiti. You.com MCP free e DuckDuckGo HTML hanno completato due ricerche pubbliche ciascuno sul Mac; nessun retry o fallback. Il primo resta un profilo di valutazione. [Pagina web e limiti del collaudo](web-search-page.md).
 - [ ] Inviare soltanto le informazioni necessarie alla ricerca. Non caricare automaticamente vault, note, conversazioni o credenziali; segnalare le dipendenze esterne del modulo.
 - [ ] Confrontare fonti pertinenti, preferendo documentazione ufficiale per problemi tecnici. Mostrare collegamenti, data della consultazione e limiti; distinguere fatti documentati, inferenze e soluzioni ancora da provare.
 - [ ] Gestire fonti discordanti, risultati insufficienti, errori e accessi bloccati senza inventare la risposta. Le istruzioni contenute nelle pagine non autorizzano azioni o accesso ai dati.
@@ -48,7 +48,16 @@ Un'indicazione approssimativa del tipo “acquistati nell'ultimo mese”, se dis
 - [ ] Preparare il riepilogo di prodotto, variante, quantità, venditore, consegna e totale prima dell'approvazione finale dell'acquisto. La richiesta di confronto non autorizza automaticamente un ordine.
 - [ ] Collaudare confronti sintetici e poi un controllo reale in sola lettura; nessun ordine di prova o pagamento implicito.
 
-## MAC — azioni controllate sul computer
+## Interfaccia adattiva — Second Brain e nucleo
+
+Decisione di Andrea del 2026-10-04: indicatori e numeri piccoli nella parte bassa dello schermo, mantenendo il nucleo visibile; caroselli di prodotti, grafici e tabelle estese occupano invece la vista ampia e nascondono temporaneamente il nucleo. Implementazione del nucleo e della composizione adattiva ancora futura, non completata da questa pagina web.
+
+- [ ] Separare la vista principale, gli indicatori compatti e i pannelli estesi come componenti sostituibili. Il nucleo rappresenta lo stato; non costituisce il backend o la memoria.
+- [ ] Definire passaggio esplicito alla vista ampia e comando per tornare al nucleo, senza perdere richiesta, risultati o stato. Nessun layout può attivare azioni sui prodotti.
+- [ ] Riportare su ogni indicatore fonte, periodo e qualifica del dato; assente/non verificato non diventa zero. I conteggi locali non attestano apprendimento.
+- [ ] Collaudare testi lunghi, dati mancanti, dimensioni ridotte, tastiera e transizione durante una richiesta. La pagina Ricerca web corrente usa schede in vista ampia, indipendente dalla chat; non contiene ancora il nucleo animato o indicatori del Second Brain.
+
+## MAC — azioni controllate sul computer (task operativi)
 
 - [ ] Progettare comandi separati per apertura di applicazioni, musica, volume e luminosità. Verificare le API supportate e i permessi macOS necessari.
 - [ ] Valutare la modifica della risoluzione dello schermo soltanto fra modalità supportate, con possibilità di ripristino. Cambiare risoluzione non aumenta le capacità hardware della GPU.

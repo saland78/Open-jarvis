@@ -20,6 +20,7 @@ import { track, hashId } from './lib/analytics';
 // Personal fork: local evidence page without activating upstream ingestion.
 const AndreaNotesPage = lazy(() => import('./pages/AndreaNotesPage').then(m => ({ default: m.AndreaNotesPage })));
 const AndreaMemoryPage = lazy(() => import('./pages/AndreaMemoryPage').then(m => ({ default: m.AndreaMemoryPage })));
+const AndreaWebPage = lazy(() => import('./pages/AndreaWebPage').then(m => ({ default: m.AndreaWebPage })));
 
 export default function App() {
   const [setupDone, setSetupDone] = useState(!isTauri());
@@ -191,6 +192,7 @@ export default function App() {
           <Route index element={<ChatPage />} />
           <Route path="dashboard" element={<DashboardPage />} />
           {import.meta.env.VITE_ANDREA_LOCAL === 'true' && <Route path="memory" element={<Suspense fallback={<p className="p-6">Caricamento memoria…</p>}><AndreaMemoryPage /></Suspense>} />}
+          {import.meta.env.VITE_ANDREA_LOCAL === 'true' && <Route path="web-search" element={<Suspense fallback={<p className="p-6">Caricamento ricerca…</p>}><AndreaWebPage /></Suspense>} />}
           <Route path="settings" element={<SettingsPage />} />
           <Route path="get-started" element={<GetStartedPage />} />
           <Route path="data-sources" element={import.meta.env.VITE_ANDREA_LOCAL === 'true'
