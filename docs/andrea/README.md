@@ -12,6 +12,8 @@ Repository: https://github.com/saland78/Open-jarvis
 
 Sorgente: https://github.com/open-jarvis/OpenJarvis, commit `c4da16e1ca3d21f4cc1905d4200063e564104f0f` (1 ottobre 2026). Il fork conserva storia, licenza Apache-2.0 e relazione upstream. `main` conserva la base; queste modifiche sono su `feature/andrea-local-profile`, PR draft #1. Il precedente Jarvis rimane in un'altra repository e cartella.
 
+Il prossimo task autorizzato è la [prova sul contesto](qualification-context-prompt-experiment.md): istruzioni specializzate per le qualifiche, con fatti, schema e validatori invariati. 196 controlli Python passati; quattro richieste sintetiche sul Mac ancora da eseguire. Nessun miglioramento di latenza già misurato o aggiornamento della produzione.
+
 ## Prima versione
 
 `Avvia-OpenJarvis.command` prepara un ambiente Python nel progetto, compila l'estensione Rust e l'interfaccia quando le sorgenti cambiano, quindi avvia la chat su **http://127.0.0.1:8008**. Il browser si apre dopo il controllo di salute del backend. Lascia aperto quel Terminale; Control+C ferma OpenJarvis. Un'altra istanza sulla stessa porta produce un messaggio e non viene terminata.
