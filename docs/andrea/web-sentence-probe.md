@@ -20,7 +20,7 @@ page read replaces the normal ephemeral current page in server RAM.
 The candidate uses whole lines or sentence boundaries instead of cutting at
 300 characters. All text is retained in the prompt. Units longer than 600 or
 shorter than 20 characters stay as context but cannot be cited. A generated
-claim is limited to 160 characters and must finish with punctuation; it must
+claim is limited to 100 characters and must finish with punctuation; it must
 not be an exact source copy. Exact evidence is recovered by ID. Numeric and
 narrow technical-term checks reject unsupported tokens in the selected unit.
 These are conservative structural/lexical checks, not a general entailment
@@ -45,6 +45,21 @@ official structured-output documentation were consulted. The former covers
 search isolation, not this personal synthesis contract; the latter specifies
 schema enforcement, not semantic truth.
 
-Local deterministic suite: 52 tests passed across this probe, indexed evidence,
+Local deterministic suite: 53 tests passed across this probe, indexed evidence,
 page reading, timing extraction and disconnection handling. Live model quality
 and latency for the sentence candidate are pending.
+
+## First Mac probe and revised candidate
+
+The first complete-sentence candidate did not finish within 90 seconds.
+First content arrived at 57.142 seconds; the diagnostic returned at 90.011
+seconds without a terminal frame or native metrics. Quality was not reviewed
+because the response was incomplete. It is not a passed test.
+
+The revised probe retains the full 6,000-character excerpt and the same
+complete-unit bank. Only the system instructions are compacted and each
+point is capped at 100 rather than 160 characters. No source context is
+removed to make the original test easier. The 90-second deadline and 512-token
+budget are unchanged. If an error occurs, collected partial JSON is now
+printed as diagnostic-only, with an error category; it is always rejected
+without a completed terminal frame. The semantic check remains pending.

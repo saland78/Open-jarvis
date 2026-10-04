@@ -51,9 +51,24 @@ class SentenceTests(unittest.TestCase):
         data=json.loads(messages[1]['content'])
         self.assertEqual(data,{'question':'Domanda','passages':[[i+1,v] for i,v in enumerate(bank)]})
         item=schema['properties']['claims']['items']['properties']
-        self.assertEqual(set(item),{'text','passage'});self.assertEqual(item['text']['maxLength'],160)
+        self.assertEqual(set(item),{'text','passage'});self.assertEqual(item['text']['maxLength'],100)
 
 class HTTPTests(unittest.TestCase):
+    def test_timeout_preserves_partial_diagnostic_but_never_accepts_it(self):
+        class Response(io.BytesIO):
+            def readline(self,*args):
+                if self.tell():raise TimeoutError('synthetic deadline')
+                return super().readline(*args)
+        class Opener:
+            def open(self,*a,**k):
+                return Response(json.dumps({'message':{'content':'{"claims":['},'done':False}).encode()+b'\n')
+        bank,messages,schema=p.prepare(PAGE,'q')
+        result=p.stream_probe(Opener(),messages,schema)
+        self.assertEqual(result['status'],'error');self.assertEqual(result['errorKind'],'timeout')
+        self.assertEqual(result['modelAnswer'],'{"claims":[')
+        self.assertTrue(result['partialAnswerDiagnosticOnly'])
+        self.assertEqual(p.validate(result['modelAnswer'],bank,False)['reason'],'stream_incomplete')
+
     def test_one_read_one_inference_no_writes_and_raw_diagnostic(self):
         requests=[]
         class Response(io.BytesIO):status=200
