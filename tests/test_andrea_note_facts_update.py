@@ -106,6 +106,7 @@ class FactUpdateTests(unittest.TestCase):
                 'scripts/andrea/note_facts.py': 'note_facts_before_qualification.py',
                 'scripts/andrea/runtime.py': 'runtime-before-native-phases.py',
                 'src/openjarvis/engine/ollama.py': 'ollama-before-native-phases.py',
+                'frontend/src/pages/AndreaNotesPage.tsx': 'AndreaNotesPage-before-qualification-sentence.tsx',
             }
             source = (ROOT/'tests/fixtures/andrea'/historical[item['path']]
                       if item['path'] in historical else ROOT/item['path'])
