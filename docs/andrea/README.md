@@ -1,6 +1,6 @@
 # OpenJarvis personale: chat e note locali separate
 
-Stato al 2026-10-04: **una sola prova sintetica sul Mac superata anche nel confronto del significato**. Integrazione nel percorso Note Obsidian pubblicata e aggiornamento verificato preparato; **installazione, compilazione completa e collaudo della nota reale sul Mac ancora da eseguire**. Gli altri task restano sospesi fino a quel riscontro.
+Stato al 2026-10-04: **aggiornamento installato, compilazione completa sul Mac e collaudo della nota reale superati**. La revisione del significato conferma i quattro fatti selezionati e la frase corrente completa con le indicazioni di consultazione. Esito circoscritto al caso e al formato riconosciuto; nessuna verifica esterna o garanzia su altre sintesi. Questo difetto è chiuso nel caso collaudato; il prossimo task riguarda la latenza, senza perdere informazioni o controlli.
 
 Repository: https://github.com/saland78/Open-jarvis
 
@@ -203,4 +203,4 @@ Il [collaudo Mac del prefisso](qualification-clause-fix.md#esito-reale-del-colla
 
 La [correzione della frase completa](qualification-sentence-fix.md) ha superato la singola prova sintetica Mac, anche nel confronto del significato: conserva tutta l'indicazione di consultazione e le quattro informazioni obbligatorie. F3 rimane letterale dalla fonte; gli altri tre record sono sintesi del modello. Esito circoscritto al caso osservato, senza apprendimento o verifica esterna. Il precedente prefisso incompleto resta una prova fallita.
 
-La [integrazione Note Obsidian e l'aggiornamento a quattro file](qualification-sentence-production.md) sono preparati: 148 controlli Python, 12 dell'interfaccia e build Vite/PWA superati. Il type checker nativo è bloccato da un limite dell'ambiente; compilazione completa, installazione e nota reale sul Mac ancora da verificare. Non eseguire altri task prima di completare questo riscontro.
+La [integrazione Note Obsidian e l’aggiornamento a quattro file](qualification-sentence-production.md) sono installati e collaudati nel caso reale: compilazione completa sul Mac riuscita, trasporto concluso, controlli tecnici accettati e confronto manuale con i quattro fatti della nota favorevole. Conservati qualifica, ambito, indicazioni di consultazione e date distinte; origine letterale e origine del modello dichiarate. 148 controlli Python e 12 dell’interfaccia superati in sviluppo. Primo aggiornamento della risposta UI 45290 ms: qualità del caso superata, latenza ancora da ottimizzare. Nessun testo personale pubblicato; nessuna ulteriore prova necessaria per chiudere questo caso. Prossimo task: ridurre la latenza preservando gli stessi requisiti, senza riclassificare gli esperimenti precedenti falliti.

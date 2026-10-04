@@ -1,6 +1,6 @@
 # Qualifica e consultazione complete vincolate alla fonte
 
-Stato al 2026-10-04: **una sola prova sintetica sul Mac superata anche nel confronto del significato**. Integrazione nel percorso Note Obsidian pubblicata e aggiornamento verificato preparato; **installazione, compilazione completa e collaudo della nota reale sul Mac ancora da eseguire**. Gli altri task restano sospesi fino a quel riscontro.
+Stato al 2026-10-04: **aggiornamento installato, compilazione completa sul Mac e collaudo della nota reale superati**. La revisione del significato conferma i quattro fatti selezionati e la frase corrente completa con le indicazioni di consultazione. Esito circoscritto al caso e al formato riconosciuto; nessuna verifica esterna o garanzia su altre sintesi. Questo difetto è chiuso nel caso collaudato; il prossimo task riguarda la latenza, senza perdere informazioni o controlli.
 
 ## Difetto e soluzione
 
@@ -60,3 +60,8 @@ La [integrazione in produzione](qualification-sentence-production.md) mantiene g
 **148 controlli Python e 12 controlli dell'interfaccia superati**; bundle Vite/PWA prodotto. Il compilatore TypeScript 7 nativo di questo ambiente si arresta prima di controllare il progetto per readlink /proc/self/exe non disponibile: non viene dichiarata superata la build combinata npm run build. Nessuna dipendenza sostituita per aggirarlo; verifica della compilazione completa sul Mac al riavvio ancora necessaria.
 
 I test storici ricostruiscono gli archivi pubblici esatti di note_facts e dei componenti precedenti, mantenendo tutti gli hash originali dei probe. Questi ultimi restano diagnostici di quelle versioni e rifiutano intenzionalmente una nuova installazione non corrispondente; non sono stati resi meno rigorosi per accettare la versione nuova. La provenienza della frase è dichiarata sia nel testo del backend sia nelle descrizioni della pagina.
+
+
+## Collaudo di produzione concluso
+
+Aggiornamento installato e compilazione completa riuscita sul Mac. La successiva singola sintesi della nota reale è tecnicamente accettata e supera il confronto manuale con tutti i passaggi selezionati, compresa la consultazione completa. Il [rapporto di produzione](qualification-sentence-production.md#chiusura-verificata-sulla-nota-reale--2026-10-04) distingue questa chiusura dagli stati precedenti: circa 45,29 s fino all'aggiornamento della risposta UI, nessuna nuova inferenza per archiviare l'esito. Nessun testo personale pubblicato. Il caso sintetico e quello reale osservati sono superati; i campi letterali non certificano altre parafrasi o dati esterni. I riferimenti a verifiche ancora necessarie nelle sezioni precedenti documentano lo stato prima del collaudo, ora concluso. Prossimo task: latenza con i medesimi requisiti di qualità.

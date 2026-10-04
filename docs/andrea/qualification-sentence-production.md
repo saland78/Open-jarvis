@@ -1,6 +1,6 @@
 # Qualifica completa nel percorso Note Obsidian
 
-Stato al 2026-10-04: prova sintetica con Ollama reale superata anche nel confronto del significato; integrazione e aggiornamento verificato pronti. **Installazione, compilazione completa e collaudo sulla nota reale del Mac ancora da eseguire.** Gli altri task restano sospesi.
+Stato al 2026-10-04: **aggiornamento installato, compilazione completa sul Mac e collaudo della nota reale superati**. La revisione del significato conferma i quattro fatti selezionati e la frase corrente completa con le indicazioni di consultazione. Esito circoscritto al caso e al formato riconosciuto; nessuna verifica esterna o garanzia su altre sintesi. Questo difetto è chiuso nel caso collaudato; il prossimo task riguarda la latenza, senza perdere informazioni o controlli.
 
 ## Comportamento previsto
 
@@ -45,9 +45,9 @@ Build **Vite/PWA completata**. Il compilatore TypeScript 7 nativo qui si arresta
 
 Consultati prima dell'integrazione branch, PR #1 draft e [test structured output upstream](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/engine/test_structured_output.py). Riusato il passaggio dello schema JSON completo nell'engine Ollama. Consultati convertitore e test const di llama.cpp b10969 dichiarato da Ollama v0.34.2, già riportati nel [rapporto della candidata](qualification-sentence-fix.md). Questa consultazione non è esecuzione delle suite upstream complete.
 
-## Collaudo sul Mac ancora necessario
+## Procedura del collaudo Mac ora concluso
 
-Procedere per un passaggio alla volta, dopo il risultato precedente:
+Il collaudo è stato eseguito per un passaggio alla volta, dopo il risultato precedente. Procedura di riferimento:
 
 1. Nella finestra **OpenJarvis**, Control+C e ritorno del prompt. Lasciare **Controlli** aperta. Non fermare altri progetti.
 2. In **Controlli**, scaricare lo script dal commit pubblicato e verificare lo SHA-256 indicato prima di eseguirlo. Non assumere che sia già scaricato.
@@ -61,3 +61,20 @@ Se fallisce questo riscontro, conservare il risultato e la categoria del difetto
 
 Il [rapporto filtrato della singola prova sintetica Mac](qualification-sentence-fix-mac-2026-10-04.json) dimostra solo quel caso. Non sostituisce il collaudo della nota reale, non verifica dashboard KDP e non attesta verità esterne. PR #1 rimane draft, nessun merge a main.
 
+
+
+## Chiusura verificata sulla nota reale — 2026-10-04
+
+Installazione a quattro file con backup confermata dall'output dello script. La successiva compilazione **tsc -b && vite build** è terminata sul Mac, con bundle e PWA generati; il limite di /proc/self/exe del precedente ambiente di sviluppo non si è verificato sul Mac. Il browser mostra la pagina locale aggiornata e il percorso della nota scelta.
+
+Una richiesta **Sintesi della nota** conclusa: controlli tecnici accettati, risposta e passaggi originali forniti per revisione. Tutti i quattro criteri di contenuto corrispondono ai passaggi selezionati: conteggio dichiarato, variabilità per periodo, qualifica corrente completa con ambito e consultazione, assenza storica distinta. Conservate le rispettive date originali e le citazioni. Nessuno zero, importo, aggiornamento economico o controllo della dashboard inventato. La frase corrente è identificata come testo della fonte e gli altri record come sintesi del modello.
+
+**Test superato nel caso osservato**, con revisione manuale del significato. Il verdetto automatico pending_review non viene promosso a verifica semantica universale. Il [rapporto filtrato](qualification-sentence-production-mac-2026-10-04.json) conserva solo categorie, versioni e durate. Nessun testo della nota, screenshot, storico del Terminale, database, profilo o configurazione privata pubblicato.
+
+Primo contenuto ricevuto dal browser e fine dello streaming: **45288 ms**. Primo e ultimo aggiornamento della risposta nell'interfaccia: **45290 ms**. Backend: recupero della nota **5 ms**, primo frammento JSON non mostrato **23685 ms**, generazione completa **45274 ms**, controlli **4 ms**, primo testo accettato **45285 ms**, totale **45286 ms**. Gli orologi di browser e backend non vengono sommati; il primo aggiornamento UI non misura l'esatto momento in cui lo schermo disegna il testo. La sintesi viene trattenuta fino ai controlli e questo spiega la coincidenza fra primo contenuto ricevuto e fine del trasporto; non significa una generazione istantanea.
+
+Le fasi native di caricamento, valutazione del contesto, cache e produzione dei token non sono disponibili in questo screenshot. Non si attribuisce la durata a una di esse né si dichiara un miglioramento rispetto a prove diverse. Una sola osservazione reale non è una stima del percentile o una garanzia di latenza stabile.
+
+Per chiudere questo difetto nel caso collaudato **non serve un'altra richiesta**. La prova precedente con consultazione omessa rimane fallita. Il nuovo task è ridurre la latenza mantenendo gli stessi fatti, qualifiche, date, provenienze e controlli: valutare separatamente informazioni già disponibili dalla fonte e prosa da generare, con una candidata delimitata e criteri fissati prima della prova. Non ripetere il vecchio esperimento di stile o cambiare modello e thread senza un'ipotesi nuova e verificabile.
+
+Nessun nuovo test del modello o modifica runtime per registrare questa chiusura. Riconsultati i test structured output upstream al riferimento già verificato a0df94cd93756047c724d803662bc671618b10d4; la loro consultazione non equivale all'esecuzione completa o alla verifica dei dati esterni. PR #1 sempre draft, nessun merge.
