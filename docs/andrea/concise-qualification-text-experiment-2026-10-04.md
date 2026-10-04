@@ -92,3 +92,10 @@ I collaudi favorevoli precedenti sul caso reale della nota scelta e sul riuso re
 
 [Diagnostico del rifiuto](qualification-rejection-diagnostic.md): stessa fonte avversariale sintetica, messaggi di produzione e controlli invariati, conservando il JSON della nuova richiesta esclusivamente per analisi. Nessuna candidata di stile, correzione del testo o modifica del runtime. Un'eventuale accettazione del nuovo campione non riclassifica questa prova fallita e non recupera il JSON scartato. La diagnosi serve a ottenere evidenza della causa, non a scegliere una generazione favorevole.
 
+
+
+## Chiusura della diagnosi distinta
+
+La [singola nuova diagnosi](qualification-rejection-diagnostic.md#esito-reale-della-singola-richiesta) è completata. In questo campione il contratto accetta quattro record: il rifiuto originale non è riprodotto e la sua causa resta aperta perché il JSON precedente non è conservato. La nuova parafrasi omette il predicato esplicito di persistenza presente nella fonte: accettazione tecnica distinta dalla conservazione completa del significato.
+
+Questa osservazione non cambia l'esito prestazionale negativo delle quattro richieste sopra e non adotta la candidata. Nessuna ulteriore ripetizione di questa serie. Il prossimo lavoro riguarda la preservazione del predicato e dell'ambito prima di altri confronti di velocità.

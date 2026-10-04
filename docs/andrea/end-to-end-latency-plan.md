@@ -72,3 +72,10 @@ Il [confronto finito](concise-qualification-text-experiment-2026-10-04.md) non s
 
 Prima di progettare un'altra modifica di latenza, ottenere evidenza del rifiuto con [una singola diagnosi sintetica distinta](qualification-rejection-diagnostic.md): il rapporto precedente non conserva il JSON rifiutato e non consente di attribuire la causa a una frase concreta. Un nuovo campione accettato non supera retroattivamente la prova precedente. Test di trasporto e formato restano distinti dall'equivalenza del significato. Non rendere il validatore meno rigoroso per far passare una risposta sconosciuta.
 
+
+
+## Diagnosi conclusa, priorità alla preservazione dell'informazione — 2026-10-04
+
+La [singola richiesta diagnostica](qualification-rejection-diagnostic.md#esito-reale-della-singola-richiesta) termina senza riprodurre il rifiuto, ma non risolve la causa precedente. La frase generata omette il predicato di persistenza presente nella fonte: il passaggio dai controlli tecnici non certifica equivalenza completa. Nessuna altra ripetizione della candidata di stile, né richiesta supplementare sul caso diagnostico.
+
+Il prossimo intervento è definire un contratto circoscritto che preservi predicato e ambito della qualifica, separando chiaramente gli elementi sostenuti dalla fonte dalla prosa generata. Non è ancora implementato o adottato. Dopo i controlli di preservazione, valutare la rimozione di metadati ridondanti dal JSON generato per ridurre il lavoro del modello; conservare le associazioni alla fonte e non chiamare quei metadati apprendimento autonomo. Prestazioni e qualità richiedono esiti distinti, con criteri fissati prima della raccolta.

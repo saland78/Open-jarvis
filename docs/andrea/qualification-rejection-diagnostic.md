@@ -1,6 +1,6 @@
 # Diagnosi di un rifiuto delle qualifiche: una sola richiesta sintetica
 
-Stato al 2026-10-04 (Europe/Rome): preparata e verificata in sviluppo; nuova richiesta reale non ancora eseguita. Nessuna modifica alla produzione e nessun problema reale dichiarato risolto.
+Stato al 2026-10-04 (Europe/Rome): una richiesta reale completata sul Mac, JSON diagnostico disponibile e riesaminato. **Rifiuto precedente non riprodotto in questo campione; causa del rifiuto precedente non risolta.** Nessuna modifica alla produzione. Conservazione completa del predicato nella nuova parafrasi non certificata.
 
 ## Evidenza disponibile e limite del rapporto precedente
 
@@ -42,7 +42,7 @@ Qualunque correzione futura deve mantenere il rifiuto di aggiornamenti realmente
 
 Consultati in questo task tests/engine/test_structured_output.py e tests/engine/test_ollama_runtime_options.py dell'upstream al commit 792131feb3948aca0b54a94e0344f6827ff3129d. Riutilizzati i principi di payload/schema nativo e opzioni esplicite, oltre al trasporto e ai moduli del fork già verificati. Consultazione distinta dall'esecuzione dell'intera suite upstream. Nessun modello reale, vault personale, browser o backend Rust completo eseguito nel contenitore.
 
-## Passaggio Mac
+## Passaggio Mac eseguito — non ripetere
 
 Lasciare il Terminale OpenJarvis in esecuzione e Controlli aperto. Non installare nulla nel progetto e non arrestare il server. Scaricare il solo diagnostico da un commit preciso, verificare l'hash e poi, in un passaggio successivo, eseguirlo con il Python del progetto:
 
@@ -50,4 +50,50 @@ Lasciare il Terminale OpenJarvis in esecuzione e Controlli aperto. Non installar
 "/Users/mac/Desktop/Documenti/OpenJarvis-Andrea/.venv/bin/python" /tmp/OpenJarvis-diagnose-qualification-rejection.py "/Users/mac/Desktop/Documenti/OpenJarvis-Andrea"
 ```
 
-La guida attende il risultato di ogni piccolo passaggio. La richiesta reale resta da eseguire. PR #1 draft non unita e Jarvis originale intatto.
+La guida ha ricevuto il rapporto della singola richiesta. La serie è conclusa: non ripetere per cercare un nuovo campione favorevole. PR #1 draft non unita e Jarvis originale intatto.
+
+
+## Esito reale della singola richiesta
+
+[Misure filtrate e categorie della diagnosi](qualification-rejection-diagnostic-mac-2026-10-04.json). Una richiesta tentata e completata con stop, zero retry, nessuna lettura del vault o modifica di produzione. Contratto valid_structure_pending_semantic_review, quattro fatti coperti secondo i controlli tecnici, nessuna categoria di rifiuto. Non è un certificato di accuratezza semantica.
+
+| Quantità | Osservazione |
+|---|---:|
+| Primo frammento JSON al client diretto | 16075,498 ms |
+| Totale al client diretto | 32696,042 ms |
+| Caricamento nativo | 3816,075 ms |
+| Valutazione del contesto nativa | 12225,209 ms |
+| Produzione dei token nativa | 16620,572 ms |
+| Totale nativo | 32691,377 ms |
+| Token del contesto | 799 |
+| Token del contesto dichiarati in cache | 0 |
+| Token generati | 134 |
+| Token/s dalla fase nativa di produzione | 8,062 |
+
+Queste misure descrivono la nuova chiamata diretta, non la UI o il server ASGI. Caricamento e cache sono diversi dalla precedente richiesta avversariale: non usare il totale come confronto di ottimizzazione né attribuire una causa specifica all'assenza di cache. Il primo frammento JSON non è testo già validato e visibile al browser.
+
+### Confronto della frase con la fonte sintetica
+
+La fonte del record corrente contiene il predicato «I valori aggiornati restano DATO NON VERIFICATO soltanto in questa nota» con indicazioni di consultazione. Il modello genera «I valori sono DATO NON VERIFICATO» seguito dalle indicazioni di consultazione. Nella frase generata non compare «aggiornati»: il controllo unsupported_value_update ritorna false quando non trova quella famiglia di parole. L'ispezione riporta false sia per F3 sia per F4, coerentemente con il codice.
+
+Il conteggio dichiarato, la variabilità per periodo, le due etichette, le indicazioni di consultazione e le date di contesto nella risposta resa sono mantenuti. Le date del contesto sono assegnate e rese attraverso lo schema e il programma, non prova che il modello abbia appreso a conservarle autonomamente. La delimitazione alla nota e alla fotografia compare nei prefissi resi dal programma. Non risultano importi estranei o verifiche esterne affermate.
+
+La parafrasi non conserva esplicitamente «restano», che esprime persistenza, né l'aggettivo presente nella fonte. La conservazione completa di questo predicato non è dimostrata dalla semplice accettazione del formato e delle etichette. La diagnosi individua quindi un limite osservabile di preservazione dell'informazione; non ricostruisce la frase che aveva causato il rifiuto precedente.
+
+### Decisione di chiusura
+
+- Diagnosi informativa conclusa: JSON del nuovo campione acquisito e confrontato con i passaggi.
+- Rifiuto originale non riprodotto, causa non risolta; il vecchio JSON scartato resta indisponibile.
+- Esperimento di stile precedente ancora fallito e candidata non adottata. Nessuna nuova richiesta o variante per riclassificarlo.
+- Nessuna modifica di produzione, modello, budget, validatore o note; prove favorevoli precedenti restano circoscritte ai loro casi.
+- Testo grezzo diagnostico e storico personale del Terminale esclusi dal rapporto pubblicato.
+
+## Prossimo intervento definito: conservazione del predicato e dell'ambito
+
+Prima di altre prove di velocità, progettare una correzione circoscritta che mantenga il predicato e l'ambito della qualifica anche quando il modello omette la parola «aggiornati». Non usare quella omissione come dimostrazione che il rifiuto precedente sia risolto e non rendere il guard più permissivo per frasi ignote.
+
+Valutare un contratto che separi elementi protetti sostenuti dalla fonte e prosa generata, mantenendo trasparente quale componente copia/assegna il contesto e quale parafrasa. La scelta non è ancora implementata o adottata. Conservare i fatti originali e la provenienza; rifiutare aggiornamenti realmente non documentati, negazioni, qualifiche fuse, ambito esteso alla dashboard e istruzioni ostili. Fissare prima i criteri di regressione e riesaminare il significato, distinguendo sintesi del modello, testo protetto e passaggi copiati.
+
+La riduzione successiva del JSON ridondante può riguardare metadati già legati alla fonte dal programma, senza troncare risposte o confondere una copia con apprendimento del modello. Riduzione dei token e latenza richiederanno una verifica reale distinta; nessun guadagno dichiarato da questo rapporto.
+
+Per questa chiusura verificati branch, PR draft e upstream main al commit 792131feb3948aca0b54a94e0344f6827ff3129d; riconsultati i controlli sul formato del payload in tests/engine/test_structured_output.py e il guard del fork. Nessuna nuova modifica al codice: non ripetuti i 21 controlli di sviluppo già conclusi. Consultazione dei test upstream distinta dalla loro esecuzione completa.
