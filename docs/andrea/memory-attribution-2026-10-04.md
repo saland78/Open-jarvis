@@ -1,4 +1,4 @@
-# Attribuzione del ricordo all'utente — difetto aperto
+# Attribuzione del ricordo all'utente — collaudo circoscritto concluso
 
 Il primo richiamo sintetico della memoria sul Mac ha recuperato il colore corretto, ma ha usato una formulazione in prima persona che assegnava la scelta a Jarvis. Il richiamo successivo alla correzione ha usato il nuovo colore con una formulazione corretta; non risolve retroattivamente il primo esito. Persistenza dopo riavvio ed eliminazione della voce confermate. Dopo l'eliminazione, in una nuova chat il modello dichiara di non avere l'informazione e non ripropone i colori precedenti.
 
@@ -79,3 +79,21 @@ Verifica finale di sviluppo: **219 esecuzioni Python superate**, comprendenti no
 `update_memory_roles.py` scarica quattro file di programma dal commit `a426593bd2a483ae5e7a828f16e85ac62daff83d`: runtime, formatter della memoria, avviso SSE e collaudo finito. SHA-256 dello script: `b20b8288918e0ab98a3452691722aaf0af99c050baa45b3023be0360e289e3f1`. Richiede porta 8008 libera, verifica baseline e hash prima delle sostituzioni, compila i sorgenti Python, crea backup e ripristina i file già applicati in caso di errore. Non aggiorna memoria salvata, note, database, profili o dipendenze. Nessuna build frontend richiesta.
 
 Sette test dell'installer passati: manifest effettivo e backup/ripetizione, hash errato, modifiche locali prima del download, porta occupata, rollback al quarto rimpiazzo con rimozione del nuovo modulo già scritto, file nuovo incompatibile/symlink e modifica durante il download. Sentinelle di memoria, database, profilo, configurazione e nota conservate. Con le 219 esecuzioni precedenti, **226 controlli di sviluppo superati**. Motore simulato; il collaudo semantico sul Mac rimane da eseguire e gli esperimenti negativi rimangono tali.
+
+## Collaudo Mac della versione installata — concluso
+
+Installazione del manifest di quattro file riuscita, seguita da riavvio. Tre richieste di produzione con una voce sintetica realmente salvata, senza retry o lettura del vault. Tutte completate; contesto fornito e avviso del programma aggiunto in ciascuna. Revisione delle risposte rispetto ai criteri originali:
+
+| Caso | Revisione semantica | Primo testo client | Totale client |
+|---|---|---:|---:|
+| Scelta utente | Superato: verde recuperato, attribuzione senza appropriazione e provenienza dichiarata nell'avviso del programma | 12587,41 ms | 14457,94 ms |
+| Prima persona salvata | Superato: viola attribuito all'utente in seconda persona, nessuna verifica esterna inventata | 1003,05 ms | 2675,61 ms |
+| Terza persona distinta | Superato: scelta dell'utente dichiarata mancante, nessun colore inventato o assegnato dalla terza persona | 1245,20 ms | 2179,62 ms |
+
+Il raccoglitore mantiene `qualityVerdict=pending_review`: questa revisione umana delle tre risposte assegna gli esiti sopra; i flag tecnici non certificano il significato. La voce sintetica del raccoglitore è stata eliminata soltanto dopo verifica di proprietà/contenuto/revisione; `memoryEmptyAfter=true`, nessun ripristino della revisione precedente.
+
+Controllo browser separato: voce sintetica in prima persona salvata e attivata manualmente, domanda inviata in una nuova chat. Risposta osservata in seconda persona, colore corretto e avviso del programma visibile. Trasporto completato. Misure: primo contenuto browser 2010 ms, primo aggiornamento UI 2023 ms, fine streaming 4299 ms, aggiornamento finale UI 4311 ms; backend primo testo 2007 ms e totale 4288 ms. Orologi separati, non sommati; nessuna attribuzione causale di un miglioramento prestazionale.
+
+Eliminazione della sola voce manuale di prova confermata dall'utente dopo il controllo browser. Il collaudo finito dell'attribuzione e della provenienza dichiarata è **concluso e superato nei casi osservati**. Gli esperimenti precedenti falliti restano negativi. Nessuna certificazione universale, addestramento del modello o verifica di dati esterni. Persistenza, correzione ed eliminazione erano state osservate nel collaudo precedente; non presentate come nuove misure di questa serie.
+
+Prima di aggiornare questo rapporto sono stati ricontrollati branch e test del contesto memoria upstream. Nessuna nota, screenshot, storico Terminale, ID privato o configurazione privata pubblicati. PR ancora draft: non unire a main.
