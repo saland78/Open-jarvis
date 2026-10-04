@@ -33,7 +33,8 @@ class ContextUpdateTests(unittest.TestCase):
             path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(content)
         for relative in updater.CHECKS:
             file = self.project/relative; file.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT/relative, file)
+            source = ROOT/'tests/fixtures/andrea/runtime_before_manual_memory.py' if relative == 'scripts/andrea/runtime.py' else ROOT/relative
+            shutil.copy2(source, file)
         shutil.copy2(OLD, self.project/PATH)
         self.new = (ROOT/PATH).read_bytes()
         self.manifest = [dict(item) for item in updater.MANIFEST]

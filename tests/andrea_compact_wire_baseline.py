@@ -18,5 +18,6 @@ def project(probe):
     for relative in probe.EXPECTED:
         target = root/relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes((OLD_BRIDGE if relative == BRIDGE else ROOT/relative).read_bytes())
+        source = OLD_BRIDGE if relative == BRIDGE else ROOT/'tests/fixtures/andrea/runtime_before_manual_memory.py' if relative == 'scripts/andrea/runtime.py' else ROOT/relative
+        target.write_bytes(source.read_bytes())
     return temporary, root

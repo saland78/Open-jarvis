@@ -14,7 +14,6 @@ from status_scope import status_scope_answer
 from synthesis_contract import make_coverage_messages, render_contract
 from structured_stream import collect as collect_structured, until_disconnect
 import note_facts
-from manual_memory import ManualMemory, MemoryError
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -50,10 +49,9 @@ def notes_messages(query, sources):
 
 class LocalMode:
     """First milestone: same-origin text chat; other mutations remain unavailable."""
-    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None, memory=None):
+    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None):
         self.app, self.model, self.port, self.timeout = app, model, port, timeout
         self.notes = notes
-        self.memory = memory
         self.structured_stream = structured_stream
         self.fact_stream = fact_stream
         self.busy = False
@@ -77,13 +75,6 @@ class LocalMode:
         if host not in hosts or (origin and origin not in origins) or headers.get(b"sec-fetch-site") == b"cross-site":
             return await self.reply(send, 403, "Richiesta consentita solo dall'interfaccia locale.")
         if scope["method"] in {"GET", "HEAD"}:
-            if self.memory and scope["path"] == "/api/andrea/memory":
-                try:
-                    data = await asyncio.to_thread(self.memory.snapshot)
-                except (MemoryError, OSError) as exc:
-                    return await self.reply(send, getattr(exc, "status", 503), str(exc) if isinstance(exc, MemoryError) else "Memoria locale non disponibile.")
-                await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json"), (b"cache-control", b"no-store")]})
-                return await send({"type": "http.response.body", "body": b"" if scope["method"] == "HEAD" else json.dumps(data).encode()})
             if scope["path"] == "/api/andrea/metrics":
                 await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json"), (b"cache-control", b"no-store")]})
                 return await send({"type": "http.response.body", "body": b"" if scope["method"] == "HEAD" else json.dumps(self.measurements.snapshot()).encode()})
@@ -91,8 +82,7 @@ class LocalMode:
                 return await self.notes.api(scope, send)
             return await self.app(scope, receive, send)
         configuring = bool(self.notes and scope["path"] == "/api/andrea/notes/config")
-        memorizing = bool(self.memory and scope["path"] == "/api/andrea/memory")
-        if scope["method"] != "POST" or (scope["path"] != "/v1/chat/completions" and not configuring and not memorizing):
+        if scope["method"] != "POST" or (scope["path"] != "/v1/chat/completions" and not configuring):
             return await self.reply(send, 403, "Strumenti e modifiche non sono ancora attivi nel profilo locale.")
         if not origin or not headers.get(b"content-type", b"").startswith(b"application/json"):
             return await self.reply(send, 403, "Usa l'interfaccia locale per inviare messaggi.")
@@ -110,18 +100,6 @@ class LocalMode:
             payload = json.loads(raw)
             if not isinstance(payload, dict):
                 raise ValueError("Formato della richiesta non valido.")
-            if memorizing:
-                if self.busy:
-                    return await self.reply(send, 409, "Attendi o interrompi la risposta prima di modificare la memoria.")
-                self.busy = True
-                try:
-                    data = await asyncio.to_thread(self.memory.mutate, payload)
-                except (MemoryError, OSError) as exc:
-                    return await self.reply(send, getattr(exc, "status", 503), str(exc) if isinstance(exc, MemoryError) else "Salvataggio della memoria non riuscito.")
-                finally:
-                    self.busy = False
-                await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json"), (b"cache-control", b"no-store")]})
-                return await send({"type": "http.response.body", "body": json.dumps(data).encode()})
             if configuring:
                 if self.busy:
                     return await self.reply(send, 409, "Interrompi o attendi la risposta prima di cambiare cartella.")
@@ -226,17 +204,6 @@ class LocalMode:
                 measurement.retrieval(retrieval_started)
                 self.measurements.add(measurement.finish("cancelled" if isinstance(exc, asyncio.CancelledError) else "retrieval_error"))
                 self.busy = False
-                raise
-        if self.memory and "notes_query" not in payload:
-            try:
-                messages = await asyncio.to_thread(self.memory.messages, messages)
-            except (MemoryError, OSError) as exc:
-                self.measurements.add(measurement.finish("memory_error"))
-                self.busy = False
-                return await self.reply(send, getattr(exc, "status", 503), str(exc) if isinstance(exc, MemoryError) else "Memoria locale non disponibile.")
-            except BaseException:
-                self.busy = False
-                self.measurements.add(measurement.finish("cancelled"))
                 raise
         # Request defaults override intelligence config upstream: enforce our budget here.
         payload = {"model": self.model, "messages": messages, "stream": True, "temperature": 0.4, "max_tokens": 512}
@@ -363,7 +330,7 @@ def build_app(ollama_host: str | None = None):
                 yield chunk
         finally:
             await iterator.aclose()
-    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"])))
+    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream)
 
 
 if __name__ == "__main__":

@@ -186,6 +186,7 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
 
 
 class ASGINativeTests(unittest.IsolatedAsyncioTestCase):
+    model_output=note_tests.NoteFactTests.model_output
     asyncSetUp=note_tests.NoteFactTests.asyncSetUp
     invoke=note_tests.NoteFactTests.invoke
     payload=note_tests.NoteFactTests.payload
@@ -198,7 +199,7 @@ class ASGINativeTests(unittest.IsolatedAsyncioTestCase):
         self.engine(); before=await self.invoke(payload)
         expected_body=self.body(before)
         async def observed(messages,schema):
-            yield SimpleNamespace(content=answer(self.bundle['plan']),finish_reason=None,tool_calls=None)
+            yield SimpleNamespace(content=self.model_output(),finish_reason=None,tool_calls=None)
             native.capture(FRAME)
             yield SimpleNamespace(content=None,finish_reason='stop',tool_calls=None)
         self.app.fact_stream=observed

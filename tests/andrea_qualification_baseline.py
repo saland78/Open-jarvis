@@ -13,6 +13,8 @@ OLD_BRIDGE = ROOT/'tests/fixtures/andrea/note_facts_before_sentence.py'
 
 
 def source(relative):
+    if relative == 'scripts/andrea/runtime.py':
+        return ROOT/'tests/fixtures/andrea/runtime_before_manual_memory.py'
     return OLD_BRIDGE if relative == BRIDGE else ROOT/relative
 
 

@@ -35,6 +35,8 @@ def installed_project():
         target.parent.mkdir(parents=True, exist_ok=True)
         archived = ROOT/'tests/fixtures/andrea/qualification_compact_wire_before_context.py'
         source = archived if relative == 'scripts/andrea/qualification_compact_wire.py' else ROOT/relative
+        if relative == 'scripts/andrea/runtime.py':
+            source = ROOT/'tests/fixtures/andrea/runtime_before_manual_memory.py'
         target.write_bytes(source.read_bytes())
     return temporary, project
 
