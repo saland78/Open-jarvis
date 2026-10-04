@@ -24,4 +24,26 @@ Tre richieste attraverso la chat di produzione a Ollama locale, senza retry auto
 
 Verifiche di sviluppo: sette nuovi controlli su consegna ASGI, conservazione dei soggetti letterali, stato vuoto e revisione, raccolta senza retry, conservazione dei fallimenti e rifiuto dei redirect; quindici test del modulo memoria e sette del suo installer precedente. **29 esecuzioni superate**, con motore simulato e senza inferenza reale. Frontend, archivio della memoria, runtime e percorso delle note invariati: nessuna nuova build necessaria per eseguire il diagnostico.
 
-**Collaudo del candidato sul Mac ancora da eseguire.** Nessuna correzione installata o qualità già dichiarata superata. Se i tre criteri passano, preparare l'aggiornamento della sola policy con backup, hash e successiva prova nella chat normale. Se uno fallisce, conservare l'esito e diagnosticare quel caso senza cambiare i criteri o passare ad altri moduli.
+## Esito Mac del candidato con sola policy: negativo
+
+Tre richieste completate, nessun retry, memoria vuota e revisione invariata. Revisione delle risposte: scelta dell'utente nella formulazione impersonale superata; **dichiarazione salvata in prima persona fallita**, perché la risposta mantiene la prima persona senza attribuzione; scelta della terza persona superata, con informazione dell'utente dichiarata mancante. `qualityVerdict=pending_review` del raccoglitore non è un giudizio positivo: questa lettura assegna due casi superati e uno fallito. Il candidato non è stato installato.
+
+| Caso | Esito semantico | Primo testo client | Totale client |
+|---|---|---:|---:|
+| Scelta utente | Superato nel caso osservato | 10104,49 ms | 13589,87 ms |
+| Prima persona salvata | Fallito | 977,31 ms | 2572,69 ms |
+| Terza persona distinta | Superato nel caso osservato | 1157,35 ms | 8856,17 ms |
+
+Sono osservazioni del client di controllo, non rendering browser né un confronto prestazionale. Stato caldo/freddo e causa della variabilità non determinati. Nessuno storico del Terminale, testo personale, screenshot o ID di richieste pubblicato.
+
+## Diagnosi dell'integrazione e candidato con ruoli separati
+
+Riletti [context.py upstream](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/src/openjarvis/tools/storage/context.py), [test_context.py](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/memory/test_context.py) e [routes.py](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/src/openjarvis/server/routes.py). `_ensure_identity_prompt` considera un messaggio system privo di metadata `memory_context` come grounding fornito dal chiamante: non aggiunge l'identità del server. Il modulo locale passa la memoria come system nel JSON della chat senza quel metadata; il suo testo comprende sia istruzioni sia dichiarazioni letterali dell'utente. Di conseguenza il prompt system del profilo non viene aggiunto nel normale ramo engine. Questa conseguenza del codice è verificabile; non prova da sola la causa semantica dell'errore. Il primo candidato aggiungeva già una distinzione esplicita assistente/utente, ma ha fallito comunque.
+
+`check_memory_attribution_roles.py` prepara un secondo candidato: conserva il `system_prompt` del profilo pubblico locale verificato e le stesse istruzioni, mentre il JSON letterale dei ricordi diventa un messaggio **user** esplicitamente indicato come dichiarazioni salvate, dati e non autorizzazioni. Segue la domanda originale dell'utente. Un solo system iniziale, nessuna risposta assistant fittizia e nessuna riscrittura dei pronomi o del testo salvato. Non viene affermato che questo sia il meccanismo upstream: è un adattamento circoscritto del confine locale.
+
+I tre casi, domande e criteri sono caricati dal precedente diagnostico verificato byte per byte; sono immutati. Gli hash di formatter, runtime e client sono ricontrollati, e il profilo deve corrispondere a quello pubblicato. Un profilo modificato interrompe la prova senza sostituirlo o pubblicarlo. Tutti gli altri vincoli del primo esperimento restano attivi: memoria vuota e stabile, tre richieste, nessun retry, nessuna installazione o scrittura, proxy e redirect rifiutati, esiti precedenti conservati.
+
+Sei nuovi controlli tecnici verificano il candidato effettivamente consegnato al confine ASGI, la conservazione dell'identità del profilo, il JSON e i soggetti letterali, l'assenza di mutazioni dei payload e dei file, il rifiuto di baseline/profilo diversi e la raccolta con gli stessi criteri. Insieme alle 29 regressioni precedenti: **35 esecuzioni superate**, con motore simulato. Nessuna certificazione semantica del modello reale.
+
+**Collaudo del secondo candidato sul Mac ancora da eseguire.** Nessuna correzione installata o qualità già dichiarata superata. Se tutti e tre i criteri passano, preparare l'aggiornamento dell'integrazione con backup, hash e una successiva prova nella chat normale. Se uno fallisce, conservare l'esito e diagnosticare quel caso senza cambiare i criteri o passare ad altri moduli. L'esperimento negativo con la sola policy non viene riclassificato.
