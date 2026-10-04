@@ -15,6 +15,8 @@ updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater
 
 
 def published_source(relative):
+    if relative in {'scripts/andrea/runtime.py', 'frontend/src/pages/AndreaWebPage.tsx'}:
+        return (ROOT/f'tests/fixtures/andrea/{Path(relative).name}_before_web_pages').read_bytes()
     return (ROOT/relative).read_bytes()
 
 
@@ -37,7 +39,7 @@ class WebUpdateTests(unittest.TestCase):
             path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(data)
         for relative in updater.CHECKS:
             target = self.project/relative; target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT/relative, target)
+            target.write_bytes(published_source(relative))
         self.old = {}
         for item in updater.MANIFEST:
             target = self.project/item['path']; target.parent.mkdir(parents=True, exist_ok=True)

@@ -17,7 +17,6 @@ import note_facts
 from manual_memory import ManualMemory, MemoryError
 from memory_provenance import MemoryProvenanceFooter
 from web_search_local import LocalWebSearch, SearchError
-from web_page_local import LocalWebPages
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -53,12 +52,11 @@ def notes_messages(query, sources):
 
 class LocalMode:
     """Same-origin local chat, notes, declared memory and explicit web requests."""
-    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None, memory=None, web=None, pages=None):
+    def __init__(self, app, model: str, port: int, timeout: float = 90, notes=None, structured_stream=None, fact_stream=None, memory=None, web=None):
         self.app, self.model, self.port, self.timeout = app, model, port, timeout
         self.notes = notes
         self.memory = memory
         self.web = web
-        self.pages = pages
         self.structured_stream = structured_stream
         self.fact_stream = fact_stream
         self.busy = False
@@ -98,8 +96,7 @@ class LocalMode:
         configuring = bool(self.notes and scope["path"] == "/api/andrea/notes/config")
         memorizing = bool(self.memory and scope["path"] == "/api/andrea/memory")
         searching = bool(self.web and scope["path"] == "/api/andrea/web/search")
-        paging = bool(self.pages and scope["path"] in {"/api/andrea/web/read", "/api/andrea/web/summarize"})
-        if scope["method"] != "POST" or (scope["path"] != "/v1/chat/completions" and not configuring and not memorizing and not searching and not paging):
+        if scope["method"] != "POST" or (scope["path"] != "/v1/chat/completions" and not configuring and not memorizing and not searching):
             return await self.reply(send, 403, "Strumenti e modifiche non sono ancora attivi nel profilo locale.")
         if not origin or not headers.get(b"content-type", b"").startswith(b"application/json"):
             return await self.reply(send, 403, "Usa l'interfaccia locale per inviare messaggi.")
@@ -117,14 +114,12 @@ class LocalMode:
             payload = json.loads(raw)
             if not isinstance(payload, dict):
                 raise ValueError("Formato della richiesta non valido.")
-            if searching or paging:
+            if searching:
                 if self.busy:
                     return await self.reply(send, 409, "Attendi la richiesta in corso prima di cercare sul web.")
                 self.busy = True
                 try:
-                    operation = (self.web.search(payload) if searching else self.pages.read(payload)
-                                 if scope["path"].endswith("/read") else self.pages.summarize(payload, self.fact_stream))
-                    data = await until_disconnect(operation, receive)
+                    data = await until_disconnect(self.web.search(payload), receive)
                     if data is None:
                         return
                     await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json"), (b"cache-control", b"no-store")]})
@@ -400,7 +395,7 @@ def build_app(ollama_host: str | None = None):
                 yield chunk
         finally:
             await iterator.aclose()
-    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"]), identity_prompt=cfg.agent.system_prompt), web=LocalWebSearch(), pages=LocalWebPages())
+    return LocalMode(app, cfg.server.model, cfg.server.port, notes=VaultNotes(Path(os.environ["OPENJARVIS_HOME"])), structured_stream=structured_stream, fact_stream=fact_stream, memory=ManualMemory(Path(os.environ["OPENJARVIS_HOME"]), identity_prompt=cfg.agent.system_prompt), web=LocalWebSearch())
 
 
 if __name__ == "__main__":

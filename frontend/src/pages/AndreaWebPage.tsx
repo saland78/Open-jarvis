@@ -3,6 +3,33 @@ import { useEffect, useRef, useState } from 'react';
 type Provider = 'duckduckgo' | 'youcom';
 type Source = { title: string; url: string; snippet: string };
 export type SearchResult = { provider: Provider; providerLabel: string; query: string; consultedAt: string; elapsedMs: number; sources: Source[]; pagesFetched: false; modelUsed: false; automaticRetries: 0 };
+export type PageRead = { pageId: string; sourceId: string; url: string; title: string; text: string; partial: boolean; consultedAt: string; readMs: number; redirects: number; modelUsed: false };
+export type PageSummary = { outcome: string; reason?: string; claims: { text: string; quote: string }[]; sourceId: string; pageId: string; generationAndChecksMs: number; qualityVerdict: 'pending_review'; automaticRetries: 0 };
+
+export async function pageRequest<T>(action: 'read' | 'summarize', payload: { url: string } | { pageId: string; question: string }, signal: AbortSignal): Promise<T> {
+  const response = await fetch(`/api/andrea/web/${action}`, { method: 'POST', cache: 'no-store', signal, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.detail || `Operazione non riuscita (${response.status})`);
+  return data;
+}
+
+export function PageEvidence({ page, summary }: { page: PageRead; summary: PageSummary | null }) {
+  return <section aria-label="Pagina letta" className="border rounded-xl p-4 space-y-4">
+    <h2 className="text-lg font-semibold">Pagina letta: {page.title || page.url}</h2>
+    <p>{page.readMs} ms · {new Date(page.consultedAt).toLocaleString('it-IT')} · {page.redirects} reindirizzamenti</p>
+    {safeSearchLink(page.url) && <a className="underline break-all" href={page.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Fonte [W1]: {page.url}</a>}
+    <p>{page.partial ? 'Estratto limitato ai primi 6000 caratteri: il resto della pagina non viene fornito al modello.' : 'Testo estratto dalla pagina; elementi di navigazione e script esclusi. Il contenuto non è stato verificato su altre fonti.'} PDF e pagine che richiedono JavaScript non sono supportati in questa fase.</p>
+    {summary && <div aria-label="Sintesi della pagina" className="space-y-3">
+      <h3 className="font-semibold">Sintesi da verificare</h3>
+      <p>Generazione e controlli: {summary.generationAndChecksMs} ms. Nessuna seconda generazione automatica.</p>
+      {summary.outcome === 'accepted_pending_semantic_review' ? <>
+        <p>Formato e corrispondenza dei passaggi controllati. Questi controlli non dimostrano che la sintesi interpreti correttamente la fonte.</p>
+        {summary.claims.map((claim, index) => <div key={index} className="space-y-2"><p>{claim.text} [W1]</p><blockquote className="border-l-2 pl-3 whitespace-pre-wrap">Passaggio originale: «{claim.quote}» [W1]</blockquote></div>)}
+      </> : <p>{summary.outcome === 'abstained' ? 'Il modello non ha proposto una risposta sulla base di questo estratto.' : 'Sintesi non mostrata: controlli non superati o generazione non completata.'} {summary.reason && `Esito tecnico: ${summary.reason}.`} Leggi il testo originale qui sotto.</p>}
+    </div>}
+    <details open={!summary}><summary>Testo originale estratto [W1]</summary><p className="whitespace-pre-wrap break-words mt-3">{page.text}</p></details>
+  </section>;
+}
 
 export function safeSearchLink(url: string): boolean {
   try { const parsed = new URL(url); return parsed.protocol === 'https:' && !parsed.username && !parsed.password; }
@@ -19,7 +46,7 @@ export async function webRequest(query: string, provider: Provider, signal: Abor
   return data;
 }
 
-export function WebResults({ result }: { result: SearchResult }) {
+export function WebResults({ result, onRead, disabled = false }: { result: SearchResult; onRead?: (url: string) => void; disabled?: boolean }) {
   return <section aria-label="Risultati web" className="space-y-4">
     <h2 className="text-lg font-semibold">Risultati per: {result.query}</h2>
     <p>{result.providerLabel} · {result.elapsedMs} ms · {new Date(result.consultedAt).toLocaleString('it-IT')}</p>
@@ -30,6 +57,7 @@ export function WebResults({ result }: { result: SearchResult }) {
         <h3 className="font-semibold break-words">{source.title}</h3>
         <p className="break-words whitespace-pre-wrap">{source.snippet || 'Estratto non disponibile. Apri la fonte per consultarla.'}</p>
         {safeSearchLink(source.url) && <a className="underline break-all" href={source.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Apri fonte: {source.url}</a>}
+        {onRead && safeSearchLink(source.url) && <button type="button" disabled={disabled} className="block border rounded px-3 py-2" onClick={() => onRead(source.url)}>Leggi pagina in Jarvis</button>}
       </article>)}
     </div>
   </section>;
@@ -41,6 +69,10 @@ export function AndreaWebPage() {
   const [result, setResult] = useState<SearchResult | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
+  const [page, setPage] = useState<PageRead | null>(null);
+  const [summary, setSummary] = useState<PageSummary | null>(null);
+  const [question, setQuestion] = useState('Riassumi i punti principali di questo estratto.');
+  const [action, setAction] = useState<'search' | 'read' | 'summarize'>('search');
   const controller = useRef<AbortController | null>(null);
   const generation = useRef(0);
   useEffect(() => () => { generation.current += 1; controller.current?.abort(); }, []);
@@ -48,13 +80,35 @@ export function AndreaWebPage() {
     if (controller.current) return;
     const current = new AbortController(); controller.current = current;
     const sequence = ++generation.current;
-    setPending(true); setError(''); setResult(null);
+    setAction('search'); setPending(true); setError(''); setResult(null); setPage(null); setSummary(null);
     const deadline = window.setTimeout(() => current.abort(), 30000);
     try {
       const data = await webRequest(query.trim(), provider, current.signal);
       if (sequence === generation.current) setResult(data);
     } catch (e) {
       if (sequence === generation.current) setError(current.signal.aborted ? 'Ricerca interrotta o scaduta. Nessun altro fornitore è stato contattato.' : e instanceof Error ? e.message : 'Ricerca non disponibile');
+    } finally {
+      window.clearTimeout(deadline);
+      if (sequence === generation.current) { controller.current = null; setPending(false); }
+    }
+  };
+  const pageAction = async (next: 'read' | 'summarize', url?: string) => {
+    if (controller.current || (next === 'summarize' && !page)) return;
+    const current = new AbortController(); controller.current = current;
+    const sequence = ++generation.current;
+    setAction(next); setPending(true); setError(''); setSummary(null);
+    if (next === 'read') setPage(null);
+    const deadline = window.setTimeout(() => current.abort(), next === 'read' ? 30000 : 95000);
+    try {
+      if (next === 'read' && url) {
+        const data = await pageRequest<PageRead>('read', { url }, current.signal);
+        if (sequence === generation.current) setPage(data);
+      } else if (page) {
+        const data = await pageRequest<PageSummary>('summarize', { pageId: page.pageId, question: question.trim() }, current.signal);
+        if (sequence === generation.current && data.pageId === page.pageId) setSummary(data);
+      }
+    } catch (e) {
+      if (sequence === generation.current) setError(current.signal.aborted ? 'Operazione interrotta o scaduta. Nessun nuovo tentativo automatico.' : e instanceof Error ? e.message : 'Operazione non disponibile');
     } finally {
       window.clearTimeout(deadline);
       if (sequence === generation.current) { controller.current = null; setPending(false); }
@@ -70,10 +124,18 @@ export function AndreaWebPage() {
       {provider === 'youcom' && <p>Profilo MCP gratuito destinato alla valutazione. Disponibilità e limiti dipendono da You.com; nessuna chiave o pagamento configurato.</p>}
       <label className="block">Testo da inviare<input className="w-full border rounded p-2 bg-transparent" required maxLength={200} disabled={pending} value={query} onChange={e => setQuery(e.target.value)} placeholder="Scrivi una ricerca pubblica" /></label>
       <button className="border rounded px-3 py-2" type="submit" disabled={pending || !query.trim()}>{pending ? 'Ricerca in corso…' : 'Cerca sul web'}</button>
-      {pending && <button className="ml-3 border rounded px-3 py-2" type="button" onClick={() => controller.current?.abort()}>Interrompi ricerca</button>}
+      {pending && <button className="ml-3 border rounded px-3 py-2" type="button" onClick={() => controller.current?.abort()}>{action === 'search' ? 'Interrompi ricerca' : 'Interrompi operazione'}</button>}
     </form>
     {error && <p role="alert" className="text-red-500">{error}</p>}
-    {pending && <p role="status">Attendo il fornitore scelto…</p>}
-    {result && <WebResults result={result} />}
+    {pending && <p role="status">{action === 'search' ? 'Attendo il fornitore scelto…' : action === 'read' ? 'Leggo la pagina selezionata…' : 'Il modello locale prepara la sintesi; il testo sarà mostrato dopo i controlli…'}</p>}
+    {result && <WebResults result={result} disabled={pending} onRead={url => { void pageAction('read', url); }} />}
+    {page && <>
+      <PageEvidence page={page} summary={summary} />
+      <form className="space-y-3 max-w-2xl" onSubmit={e => { e.preventDefault(); void pageAction('summarize'); }}>
+        <label className="block">Domanda sul testo letto<input className="w-full border rounded p-2 bg-transparent" required maxLength={200} disabled={pending} value={question} onChange={e => setQuestion(e.target.value)} /></label>
+        <p>La sintesi usa soltanto questo estratto e questa domanda, con il modello locale. Non consulta altre pagine, note, memoria o conversazioni. La lettura resta disponibile per cinque minuti in questo avvio.</p>
+        <button className="border rounded px-3 py-2" disabled={pending || !question.trim()}>Sintetizza questa pagina</button>
+      </form>
+    </>}
   </main>;
 }
