@@ -1,6 +1,6 @@
 # Istruzioni specializzate per le qualifiche della nota scelta
 
-Stato al 2026-10-04: candidata misurata e integrata nei sorgenti; **installazione e collaudo della nuova versione sul Mac ancora da eseguire**. Si adotta soltanto il messaggio system di 824 caratteri del percorso riconosciuto delle qualifiche. Nessuna modifica al modello, al budget, al messaggio user o alle fonti.
+Stato al 2026-10-04: **aggiornamento di un file installato con backup, avvio e collaudo della nota reale superati**. I quattro fatti selezionati e la consultazione completa sono conservati; backend 19,489 s. Il tempo UI è escluso dai confronti perché la pagina segnala la scheda in secondo piano. Adozione chiusa nell’ambito osservato; nessuna ulteriore inferenza richiesta. Si adotta soltanto il messaggio system di 824 caratteri del percorso riconosciuto delle qualifiche. Nessuna modifica al modello, al budget, al messaggio user o alle fonti.
 
 ## Problema e comportamento
 
@@ -39,16 +39,39 @@ La vecchia versione dell’helper è archiviata byte per byte in `tests/fixtures
 
 Consultati prima dell’adozione i [test di output strutturato upstream](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/engine/test_structured_output.py) e [test opzioni Ollama](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/engine/test_ollama_runtime_options.py). Si riusano formato nativo e opzioni già supportati dal motore; non si attivano gli altri servizi. Intera suite upstream non eseguita.
 
-## Installazione e chiusura sul Mac
+## Procedura di installazione e criteri di chiusura sul Mac
 
 [update_qualification_context.py](../../scripts/andrea/update_qualification_context.py) scarica **un solo file da un commit preciso** e ne controlla hash e sintassi prima di applicarlo. Controlla 13 componenti immutabili; rifiuta modifiche locali incompatibili, symlink e porta 8008 occupata. Transazione, backup e ripristino riusati dall’installer precedente. Nessuna nota, configurazione, database, dipendenza, frontend o file del Jarvis originale viene sostituito.
 
-Passi restanti, uno alla volta:
+Procedura usata, completata un passo alla volta:
 
 1. Fermare solo il Terminale **OpenJarvis** con Control+C e attendere il prompt; lasciare **Controlli** aperto.
 2. Nel Terminale **Controlli**, scaricare l’installer fissato a commit e verificare SHA-256; poi eseguirlo con il Python della venv del progetto. Attendere il risultato prima di proseguire.
 3. Riavviare nel Terminale **OpenJarvis** con `bash Avvia-OpenJarvis.command` dalla cartella esistente; lasciare quel Terminale aperto.
-4. Nel browser su `http://127.0.0.1:8008`, **Data Sources → Note Obsidian**, cercare la nota KPI e usare la **sintesi strutturata della nota scelta**, una sola volta. Rivedere i quattro fatti e i loro passaggi originali; registrare esito tecnico e tempi visibili.
+4. Nel browser su `http://127.0.0.1:8008`, **Data Sources → Note Obsidian**, cercare la nota KPI e premere **Sintesi della nota** nella scheda del risultato scelto, una sola volta. Rivedere i quattro fatti e i loro passaggi originali; registrare esito tecnico e tempi visibili.
 5. Se serve separare caricamento, contesto e generazione, leggere le metriche della stessa richiesta con il lettore già installato, senza emettere altre inferenze. Condividere soltanto l’output necessario, evitando cronologia del Terminale e dati personali.
 
 Per chiudere questa adozione servono installazione riuscita, avvio, una sintesi reale accettata, quattro fatti conservati nel confronto con la fonte e tempi disponibili. Non si impone al singolo campione UI una riduzione che la diagnosi non ha certificato. Risultato reale e tempi vanno riportati anche se peggiori o non conclusivi; un difetto non viene ignorato per passare al modulo successivo. PR #1 sempre draft, senza merge.
+
+
+## Collaudo reale concluso e superato — 2026-10-04
+
+Installer e sorgente verificati per SHA-256, aggiornamento di un file e backup confermati dal Terminale; avvio e pagina aperta confermati. La risposta del percorso **Sintesi della nota** è completata e accettata. La revisione manuale confronta i quattro fatti con i passaggi originali: conteggio dichiarato, variabilità per periodo, frase corrente completa limitata alla nota con indicazioni di consultazione e qualifica storica distinta. Date, quattro citazioni e origini dichiarate conservate; nessuna deduzione di zero o verifica di sistemi esterni. Esito circoscritto ai fatti selezionati della nota reale, non alla verità esterna di tutta la nota.
+
+Il [rapporto numerico filtrato](qualification-context-production-mac-2026-10-04.json) conserva separatamente la revisione, il lettore nativo invariato e l’osservazione UI. Nessun testo della nota, percorso privato, dato commerciale, screenshot, timestamp della nota, ID o storico del Terminale viene pubblicato.
+
+| Fase della stessa richiesta | Tempo / conteggio |
+|---|---:|
+| Recupero nota nel backend | 3,25 ms |
+| Caricamento Ollama | 5585,045 ms |
+| Elaborazione del prompt | 8473,515 ms |
+| Generazione del testo | 5365,669 ms |
+| Controlli strutturati | 5,38 ms |
+| Primo testo accettato dal backend | 19488,31 ms |
+| Totale backend | 19488,63 ms |
+| Token del prompt / in cache | 475 / 0 |
+| Token generati | 53 |
+
+Il lettore ha emesso **zero inferenze** e non ha letto il vault: le fasi provengono dalla stessa richiesta già in memoria. Primo frammento JSON a 14110,78 ms; non è testo accettato o visibile. Il riquadro del browser riporta primo contenuto a 19518 ms e aggiornamento UI a 19521 ms, ma segnala **scheda osservata in secondo piano**: conservare i valori e **escluderli dai confronti della latenza UI in primo piano**. La diagnosi sintetica precedente sul prefill mantiene il proprio esito; non diventa una certificazione dei tempi nel browser. Caricamento, input e output possono variare, quindi non si deduce un miglioramento causale o statistico universale dal singolo campione reale.
+
+Il task di questa adozione è chiuso: diagnosi nuova con soglie prefissate superate, 236 controlli di sviluppo pertinenti, installazione, avvio, risposta reale accettata, revisione dei quattro fatti e tempi della stessa richiesta disponibili. Il precedente test confuso dalla cache conserva l’esito non superato e non viene ripetuto. Nessun test UI aggiuntivo è necessario per questo ambito: una futura valutazione quantitativa della latenza in primo piano richiede un task distinto e protocollo esplicito. Modello e protezioni restano quelli collaudati. La roadmap può proseguire dalla memoria e dalle correzioni; nessuna funzione successiva è attivata da questa chiusura. PR #1 draft, non unire.

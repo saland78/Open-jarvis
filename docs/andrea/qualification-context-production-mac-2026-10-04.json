@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "mode": "qualification_context_production_mac_review",
+  "date": "2026-10-04",
+  "installation": {
+    "sourceCommit": "967853765d9e9fab4d2b51de9eeb8a7d7ad139c9",
+    "installerCommit": "c94d3831756371622c9e061b07784588595a1805",
+    "sourceSha256": "0dac39269c09f6915a679c511b40a79135acfa5b38ec49a3a52111f4826188b8",
+    "installerSha256": "db9e062a3e5713de76875d01cae160bfda3d34a94b90d149e77e8a3e734789e8",
+    "updatedFileCount": 1,
+    "backupCreated": true,
+    "restartAndPageConfirmed": true
+  },
+  "productionRequestsReviewed": 1,
+  "nativeReader": {
+    "schema": 1,
+    "mode": "production_native_phases_read_only",
+    "selection": "latest_retained_structured_notes_request",
+    "inferencesIssuedByReader": 0,
+    "vaultReadByReader": false,
+    "browserRendering": "not_measured",
+    "qualityVerdict": "not_assessed_by_reader",
+    "transportStatus": "completed",
+    "structuredOutcome": "accepted",
+    "serverMs": {
+      "retrievalMs": 3.25,
+      "structuredFirstJsonMs": 14110.78,
+      "structuredGenerationMs": 19476.53,
+      "structuredValidationMs": 5.38,
+      "structuredAcceptedTextMs": 19488.31,
+      "firstTextMs": 19488.42,
+      "totalMs": 19488.63
+    },
+    "native": {
+      "source": "ollama_terminal_frame",
+      "durationUnit": "ms",
+      "terminalFrameReceived": true,
+      "totalMs": 19455.41,
+      "loadMs": 5585.045,
+      "promptEvalMs": 8473.515,
+      "evalMs": 5365.669,
+      "promptEvalCount": 475,
+      "promptEvalCachedCount": 0,
+      "evalCount": 53,
+      "evalTokensPerSecond": 9.878
+    }
+  },
+  "browserObservation": {
+    "source": "user_provided_screenshot",
+    "firstContentBrowserMs": 19518,
+    "firstAnswerUpdateUiMs": 19521,
+    "streamFinishedBrowserMs": 19518,
+    "finalAnswerUpdateUiMs": 19521,
+    "hiddenTabObserved": true,
+    "eligibleForForegroundLatencyComparison": false,
+    "screenPaintMeasured": false,
+    "interpretation": "Values retained as observed; excluded from foreground UI latency comparisons because the page reports background-tab visibility."
+  },
+  "manualReview": {
+    "verdict": "passed_for_selected_note_facts",
+    "selectedFactsReviewed": 4,
+    "reportedCountPreserved": true,
+    "periodVariabilityPreserved": true,
+    "currentQualificationScopeAndCompleteConsultationPreserved": true,
+    "historicalQualificationAndBothContextDatesPreserved": true,
+    "fourCitationsMatchSelectedSource": true,
+    "literalAndGeneratedOriginsDeclared": true,
+    "noZeroOrExternalDashboardAbsenceInferred": true,
+    "externalSystemsVerified": false,
+    "method": "Compare user-provided rendered answer with its displayed original source passages and previously supplied historical passage. No note body is stored in this report.",
+    "notAGeneralSemanticCertification": true
+  },
+  "privacy": {
+    "noteTextIncluded": false,
+    "privatePathsIncluded": false,
+    "requestIdsIncluded": false,
+    "noteTimestampsIncluded": false,
+    "terminalHistoryIncluded": false,
+    "screenshotsPublished": false
+  },
+  "conclusion": {
+    "adoptionInstalledAndSelectedCasePassed": true,
+    "newDiagnosticPerformanceGatePreviouslyMet": true,
+    "previousCacheConfoundedExperimentReclassified": false,
+    "nativePhasesReadFromSameStoredRequest": true,
+    "additionalInferenceForPhaseReader": 0,
+    "foregroundUiLatencyBenefitEstablished": false,
+    "task": "closed_for_this_qualification_context_adoption",
+    "universalLatencyOrQualityGuarantee": false
+  }
+}

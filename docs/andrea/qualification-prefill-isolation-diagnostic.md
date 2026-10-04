@@ -1,6 +1,6 @@
 # Diagnosi distinta: prefill con prefissi isolati — 2026-10-04
 
-**Preparata e verificata in sviluppo, raccolta Mac ancora da eseguire. Non installata in produzione.** La [serie precedente](qualification-context-prompt-experiment.md#esito-mac-della-serie-finita--2026-10-04) conserva il proprio esito: informazioni e riduzione di input favorevoli, soglia prestazionale originale non superata. Non si ripetono i quattro campioni o si allentano i controlli delle risposte.
+**Diagnosi Mac conclusa e superata nelle nuove soglie prefissate; due risposte riesaminate favorevolmente. La successiva adozione del solo prompt è installata e collaudata sul Mac. I prefissi diagnostici rimangono esclusi dalla produzione.** La [serie precedente](qualification-context-prompt-experiment.md#esito-mac-della-serie-finita--2026-10-04) conserva il proprio esito: informazioni e riduzione di input favorevoli, soglia prestazionale originale non superata. Non si ripetono i quattro campioni o si allentano i controlli delle risposte.
 
 ## Causa da isolare
 
@@ -42,4 +42,4 @@ Produzione invariata, nessun installer o riavvio. Eventuale adozione richiede an
 
 Le due richieste sono complete. Copertura ammessa: 715/715 token nuovi nel primo campione, 520/523 nel secondo (3 in cache). Riduzione dei nuovi token 27,273% e della durata prefill 25,593%: entrambe le soglie prefissate superate. Revisione manuale delle due risposte favorevole su tutti e quattro i fatti, frase completa, qualifiche, date e ambito. Il [rapporto filtrato con revisione separata](qualification-prefill-isolation-mac-2026-10-04.json) conserva i verdetti tecnici e non include lo storico del Terminale.
 
-Il precedente test di quattro campioni resta non superato per attribuzione del prefill. Il nuovo risultato non certifica cache calda, tempi UI o significatività statistica. Nessuna ripetizione della diagnosi. Preparata [adozione delle sole istruzioni](qualification-context-production.md): regressioni superate; installazione e singolo collaudo reale della nuova versione sul Mac ancora da eseguire.
+Il precedente test di quattro campioni resta non superato per attribuzione del prefill. Il nuovo risultato non certifica cache calda, tempi UI o significatività statistica. Nessuna ripetizione della diagnosi. La [adozione delle sole istruzioni](qualification-context-production.md#collaudo-reale-concluso-e-superato--2026-10-04) è installata con backup e collaudata su una nota reale: quattro fatti conservati, risposta accettata, backend 19,489 s. Il tempo UI è escluso dai confronti perché la scheda era in secondo piano. Adozione chiusa, senza ulteriori inferenze.
