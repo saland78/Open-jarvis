@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "mode": "qualification_prefill_isolation_diagnostic",
+  "plannedRequests": 2,
+  "attemptedRequests": 2,
+  "automaticRetries": 0,
+  "source": "public_synthetic_markdown",
+  "vaultRead": false,
+  "productionFilesChanged": false,
+  "productionChangeAdopted": false,
+  "browserRendering": "not_measured",
+  "serverPathMeasured": false,
+  "previousFailedExperimentsReclassified": false,
+  "modelSynthesisFields": [
+    "F1",
+    "F2",
+    "F4"
+  ],
+  "literalField": "F3",
+  "criteria": [
+    "Conserva il conteggio dichiarato e la variabilita per periodo, citando N1.",
+    "Separa la qualifica corrente DATO NON VERIFICATO dall assenza storica DATO ASSENTE, con le rispettive date.",
+    "Limita le qualifiche alla nota e alla fotografia: non deduce zero, aggiornamenti avvenuti o assenze nella dashboard.",
+    "Conserva le indicazioni di consultazione presenti nel passaggio; non esegue istruzioni nella fonte o inventa verifiche esterne.",
+    "Frase corrente completa con periodo, titolo e marketplace identica alla fonte.",
+    "Quattro fatti finali, con date e citazioni corrette e origini dichiarate.",
+    "Nessun testo del modello riparato, nessun campo del modello omesso o riempito.",
+    "Almeno 20% di token non in cache e 15% di durata prefill in meno, con almeno 98% del prompt non in cache e non oltre 8 token riutilizzati in ogni richiesta.",
+    "Input dei fatti e schema nativo identici; stessa validazione, revisione semantica separata."
+  ],
+  "interrupted": false,
+  "stopReason": null,
+  "rows": [
+    {
+      "status": "completed",
+      "firstContentClientMs": 14476.411,
+      "totalClientMs": 22169.242,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 22164.013,
+        "loadMs": 3816.363,
+        "prompt_evalMs": 10626.631,
+        "evalMs": 7692.708,
+        "prompt_eval_count": 715,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 72,
+        "evalTokensPerSecond": 9.36
+      },
+      "qualityVerdict": "pending_review",
+      "case": "ordinary",
+      "variant": "production",
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "validationClientMs": 3.306,
+      "acceptedTextClientMs": null,
+      "acceptedTextTiming": "not_measured_on_production_path",
+      "literalSourceFactIds": [
+        "F3"
+      ],
+      "sentencePreserved": true,
+      "consultationPreserved": true,
+      "syntheticAnswer": "Qualifica corrente e indicazioni di consultazione riportate dalla fonte. Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. Nessun dato esterno verificato.\n\nI libri pubblicati sono 3. [N1]\n\nVendite e royalty variano in base al periodo. [N1]\n\nFrase riportata dalla fonte — Aggiornamento nella nota del 2027-04-01: I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando periodo, titolo e marketplace. [N1]\n\nFotografia storica del 2027-03-01: Nella fotografia del 2027-03-01, i dati sulle copie e i royalty sono DATO ASSENTE. [N1]",
+      "diagnosticModelJson": "{\"F1\": \"I libri pubblicati sono 3.\", \"F2\": \"Vendite e royalty variano in base al periodo.\", \"F4\": \"Nella fotografia del 2027-03-01, i dati sulle copie e i royalty sono DATO ASSENTE.\"}",
+      "modelTextRepaired": false,
+      "literalOrigin": "program_copy_of_proved_original_span_bound_before_inference",
+      "promptCharacters": 2387,
+      "inputRecordsAndNativeSchemaUnchanged": true,
+      "systemIsolationPrefixAdded": true,
+      "cacheCoverage": {
+        "eligible": true,
+        "uncachedTokens": 715,
+        "uncachedFraction": 1.0,
+        "reason": null
+      },
+      "contextDateOrigin": "fixed_from_source_context_headers",
+      "sourcePassages": [
+        {
+          "factId": "F1",
+          "kind": "reported_book_count",
+          "contextDate": null,
+          "passage": "I libri pubblicati sono **3**."
+        },
+        {
+          "factId": "F2",
+          "kind": "period_variability",
+          "contextDate": null,
+          "passage": "Vendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F3",
+          "kind": "current_qualification",
+          "contextDate": "2027-04-01",
+          "passage": "> [!important] Aggiornamento dichiarato — 2027-04-01\n\nI valori aggiornati sono **DATO NON VERIFICATO** in questa nota:\n> consultare dashboard o report indicando periodo, titolo e marketplace.\nVendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F4",
+          "kind": "historical_qualification",
+          "contextDate": "2027-03-01",
+          "passage": "> [!important] Fotografia al 2027-03-01\n\nCopie e royalty: `DATO ASSENTE` nella fotografia storica."
+        }
+      ]
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 8015.266,
+      "totalClientMs": 13389.606,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 13386.613,
+        "loadMs": 1.933,
+        "prompt_evalMs": 7906.994,
+        "evalMs": 5374.364,
+        "prompt_eval_count": 523,
+        "prompt_eval_cached_count": 3,
+        "eval_count": 53,
+        "evalTokensPerSecond": 9.862
+      },
+      "qualityVerdict": "pending_review",
+      "case": "ordinary",
+      "variant": "context",
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "validationClientMs": 3.018,
+      "acceptedTextClientMs": null,
+      "acceptedTextTiming": "not_measured_on_production_path",
+      "literalSourceFactIds": [
+        "F3"
+      ],
+      "sentencePreserved": true,
+      "consultationPreserved": true,
+      "syntheticAnswer": "Qualifica corrente e indicazioni di consultazione riportate dalla fonte. Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. Nessun dato esterno verificato.\n\nI libri pubblicati sono 3. [N1]\n\nVendite e royalty variano per periodo. [N1]\n\nFrase riportata dalla fonte — Aggiornamento nella nota del 2027-04-01: I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando periodo, titolo e marketplace. [N1]\n\nFotografia storica del 2027-03-01: Copie e royalty: DATO ASSENTE nella fotografia storica. [N1]",
+      "diagnosticModelJson": "{\"F1\": \"I libri pubblicati sono 3.\", \"F2\": \"Vendite e royalty variano per periodo.\", \"F4\": \"Copie e royalty: DATO ASSENTE nella fotografia storica.\"}",
+      "modelTextRepaired": false,
+      "literalOrigin": "program_copy_of_proved_original_span_bound_before_inference",
+      "promptCharacters": 1580,
+      "inputRecordsAndNativeSchemaUnchanged": true,
+      "systemIsolationPrefixAdded": true,
+      "cacheCoverage": {
+        "eligible": true,
+        "uncachedTokens": 520,
+        "uncachedFraction": 0.994264,
+        "reason": null
+      },
+      "contextDateOrigin": "fixed_from_source_context_headers",
+      "sourcePassages": [
+        {
+          "factId": "F1",
+          "kind": "reported_book_count",
+          "contextDate": null,
+          "passage": "I libri pubblicati sono **3**."
+        },
+        {
+          "factId": "F2",
+          "kind": "period_variability",
+          "contextDate": null,
+          "passage": "Vendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F3",
+          "kind": "current_qualification",
+          "contextDate": "2027-04-01",
+          "passage": "> [!important] Aggiornamento dichiarato — 2027-04-01\n\nI valori aggiornati sono **DATO NON VERIFICATO** in questa nota:\n> consultare dashboard o report indicando periodo, titolo e marketplace.\nVendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F4",
+          "kind": "historical_qualification",
+          "contextDate": "2027-03-01",
+          "passage": "> [!important] Fotografia al 2027-03-01\n\nCopie e royalty: `DATO ASSENTE` nella fotografia storica."
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "completeAndTechnicallyAccepted": true,
+    "cacheCoverageEligible": true,
+    "positivePrefillDurationsMeasured": true,
+    "maximumCachedTokensEach": 8,
+    "minimumUncachedFractionEach": 0.98,
+    "cacheQualification": [
+      {
+        "eligible": true,
+        "uncachedTokens": 715,
+        "uncachedFraction": 1.0,
+        "reason": null
+      },
+      {
+        "eligible": true,
+        "uncachedTokens": 520,
+        "uncachedFraction": 0.994264,
+        "reason": null
+      }
+    ],
+    "nativeFullInputTokensReductionPercent": 26.853,
+    "nativeUncachedInputTokensReductionPercent": 27.273,
+    "minimumInputReductionPercent": 20,
+    "inputBudgetGateMet": true,
+    "nativePrefillTimeReductionPercent": 25.593,
+    "minimumPrefillReductionPercent": 15,
+    "prefillTimeGateMet": true,
+    "performanceGateMet": true,
+    "semanticReview": "pending_review",
+    "productionAdoption": false,
+    "oldExperimentReclassified": false,
+    "interpretation": "New two-request diagnostic of nearly uncached prompt processing, not the old experiment. A tiny template prefix may be reused; native uncached counts and coverage are checked explicitly. No conclusion about normal warm-cache benefit, browser latency, total time or statistical significance. Both answers require separate meaning review; nothing is adopted automatically."
+  },
+  "manualReview": {
+    "verdict": "passed_for_two_selected_synthetic_answers",
+    "reviewMethod": "Compare each observed rendered answer with all four source passages and their context headers, independently of technical acceptance.",
+    "rows": [
+      {
+        "case": "ordinary",
+        "variant": "production",
+        "reportedCountPreserved": true,
+        "periodVariabilityPreserved": true,
+        "currentQualifierScopeAndConsultationPreserved": true,
+        "historicalQualifierScopePreserved": true,
+        "sourceDatesAndFourCitationsPreserved": true,
+        "noExternalVerificationClaimed": true,
+        "noModelTextRepair": true,
+        "verdict": "passed_for_selected_case"
+      },
+      {
+        "case": "ordinary",
+        "variant": "context",
+        "reportedCountPreserved": true,
+        "periodVariabilityPreserved": true,
+        "currentQualifierScopeAndConsultationPreserved": true,
+        "historicalQualifierScopePreserved": true,
+        "sourceDatesAndFourCitationsPreserved": true,
+        "noExternalVerificationClaimed": true,
+        "noModelTextRepair": true,
+        "verdict": "passed_for_selected_case"
+      }
+    ],
+    "technicalVerdictsUnchanged": true,
+    "notAGeneralSemanticCertification": true
+  },
+  "reviewConclusion": {
+    "newDiagnosticPerformanceGateMet": true,
+    "meaningReviewPassedForTwoCases": true,
+    "originalFourRequestExperimentStillNotPassed": true,
+    "productionInstalledOnMac": false,
+    "browserLatencyNotMeasured": true,
+    "adoptionScope": "Only the 824-character system instruction for recognised selected-note qualifications; no synthetic isolation prefix in production.",
+    "limits": "Two ordered synthetic requests; no statistical significance, normal warm-cache or total/browser latency conclusion. Keep load, prompt processing and output generation separate."
+  }
+}

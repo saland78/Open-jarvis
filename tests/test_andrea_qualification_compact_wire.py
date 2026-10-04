@@ -226,7 +226,7 @@ class CompactProbeTests(unittest.TestCase):
         candidate = baseline.CANDIDATE.read_text()
         self.assertEqual(probe.CANDIDATE_SOURCE, candidate)
         self.assertEqual(probe.CANDIDATE_SHA256, hashlib.sha256(candidate.encode()).hexdigest())
-        adopted = (ROOT/'scripts/andrea/qualification_compact_wire.py').read_text()
+        adopted = (ROOT/'tests/fixtures/andrea/qualification_compact_wire_before_context.py').read_text()
         definitions = lambda text: ast.dump(ast.Module(body=ast.parse(text).body[1:], type_ignores=[]))
         self.assertEqual(definitions(candidate), definitions(adopted))
         original = (ROOT/'scripts/andrea/concise_qualification_text_probe.py').read_text()

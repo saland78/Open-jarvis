@@ -33,7 +33,9 @@ def installed_project():
     for relative in probe.EXPECTED:
         target = project/relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes((ROOT/relative).read_bytes())
+        archived = ROOT/'tests/fixtures/andrea/qualification_compact_wire_before_context.py'
+        source = archived if relative == 'scripts/andrea/qualification_compact_wire.py' else ROOT/relative
+        target.write_bytes(source.read_bytes())
     return temporary, project
 
 

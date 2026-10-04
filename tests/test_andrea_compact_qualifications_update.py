@@ -18,6 +18,7 @@ spec.loader.exec_module(updater)
 HELPER = 'scripts/andrea/qualification_compact_wire.py'
 BRIDGE = 'scripts/andrea/note_facts.py'
 OLD_BRIDGE = ROOT/'tests/fixtures/andrea/note_facts_before_compact_wire.py'
+OLD_WIRE = ROOT/'tests/fixtures/andrea/qualification_compact_wire_before_context.py'
 
 
 class CompactUpdateTests(unittest.TestCase):
@@ -40,7 +41,7 @@ class CompactUpdateTests(unittest.TestCase):
             target = self.project/relative; target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT/relative, target)
         shutil.copy2(OLD_BRIDGE, self.project/BRIDGE)
-        self.payload = {item['path']: (ROOT/item['path']).read_bytes() for item in updater.MANIFEST}
+        self.payload = {item['path']: (OLD_WIRE if item['path'] == HELPER else ROOT/item['path']).read_bytes() for item in updater.MANIFEST}
         self.manifest = [dict(item) for item in updater.MANIFEST]
 
     def fetch(self, relative, destination):
@@ -174,7 +175,7 @@ class CompactUpdateTests(unittest.TestCase):
         self.assertTrue(updater.MANIFEST[0]['new'])
         self.assertEqual(updater.MANIFEST[1]['before'], updater.digest(OLD_BRIDGE))
         for item in updater.MANIFEST:
-            self.assertEqual(updater.digest(ROOT/item['path']), item['sha256'])
+            self.assertEqual(updater.digest(OLD_WIRE if item['path'] == HELPER else ROOT/item['path']), item['sha256'])
         self.assertEqual(len(updater.CHECKS), 11)
         self.assertFalse(set(updater.CHECKS) & {HELPER, BRIDGE})
         for relative, expected in updater.CHECKS.items():
