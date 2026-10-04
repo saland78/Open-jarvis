@@ -6,6 +6,8 @@ Per il task latenza è pronta una [prova isolata con meno campi generati](qualif
 
 La lettura delle fasi della richiesta già conclusa è completata: caricamento 5,33 s, contesto 18,29 s, produzione 21,59 s; cache dichiarata zero, nessuna nuova inferenza dal lettore. Prossimo passo: scaricare e verificare la prova isolata prima del confronto finito. Nessuna ottimizzazione già adottata; [misure filtrate e limiti](qualification-compact-wire-experiment.md#lettura-della-richiesta-esistente-conclusa--2026-10-04).
 
+Il primo comando della prova isolata sul Mac si è fermato prima dell'inferenza: l'avvio precedeva le definizioni dei testi sintetici. [Errore corretto](qualification-compact-wire-startup-fix.md), con 18 test passati e lanci del comando in un nuovo processo Python; modello, candidata e criteri invariati. Scaricare la versione corretta prima delle quattro richieste reali inizialmente previste. Nessuna modifica alla produzione installata.
+
 Repository: https://github.com/saland78/Open-jarvis
 
 Sorgente: https://github.com/open-jarvis/OpenJarvis, commit `c4da16e1ca3d21f4cc1905d4200063e564104f0f` (1 ottobre 2026). Il fork conserva storia, licenza Apache-2.0 e relazione upstream. `main` conserva la base; queste modifiche sono su `feature/andrea-local-profile`, PR draft #1. Il precedente Jarvis rimane in un'altra repository e cartella.

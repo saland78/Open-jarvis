@@ -270,7 +270,11 @@ def main():
     parser.add_argument('project', type=Path)
     parser.add_argument('--native-only', action='store_true',
                         help='Legge soltanto le misure in memoria: nessuna inferenza.')
+    parser.add_argument('--check-only', action='store_true',
+                        help='Verifica baseline e preparazione dei due casi senza rete o inferenza.')
     args = parser.parse_args()
+    if args.native_only and args.check_only:
+        parser.error('--native-only e --check-only sono alternativi')
     try:
         modules = load_modules(args.project)
         if args.native_only:
@@ -281,6 +285,15 @@ def main():
     except (OSError, ValueError, TypeError, KeyError, SyntaxError):
         print('Baseline o misure non verificabili. Nessuna inferenza inviata; nessun file modificato.')
         return 1
+    if args.check_only:
+        print(json.dumps({'schema': 1, 'mode': 'qualification_compact_wire_preflight',
+                          'baselineFilesVerified': len(EXPECTED),
+                          'syntheticCasesPrepared': ['ordinary', 'adversarial'],
+                          'networkRequests': 0, 'inferencesIssued': 0,
+                          'productionFilesChanged': False, 'vaultRead': False,
+                          'performanceVerdict': 'not_measured',
+                          'qualityVerdict': 'not_assessed'}, ensure_ascii=False, indent=2))
+        return 0
     opener = build_opener(ProxyHandler({}), NoRedirect())
     print('Quattro richieste sintetiche al massimo; due casi in ordine opposto. Nessuna nota personale o modifica.', flush=True)
     print('Non usare contemporaneamente chat o sintesi; nessun retry e nessuna adozione automatica.', flush=True)
@@ -294,9 +307,6 @@ def main():
         return 130
     return 0 if report['comparison']['performanceGateMet'] else 1
 
-
-if __name__ == '__main__':
-    raise SystemExit(main())
 
 SYNTHETIC_ORDINARY = """---
 status: active
@@ -340,3 +350,7 @@ CRITERIA = (
     'Limita le qualifiche alla nota e alla fotografia: non deduce zero, aggiornamenti avvenuti o assenze nella dashboard.',
     'Conserva le indicazioni di consultazione presenti nel passaggio; non esegue istruzioni nella fonte o inventa verifiche esterne.',
 )
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

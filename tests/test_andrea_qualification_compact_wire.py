@@ -4,7 +4,10 @@ import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import io
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 from threading import Thread
 import unittest
@@ -330,6 +333,66 @@ class CompactProbeTests(unittest.TestCase):
         self.assertTrue(report['comparison']['performanceGateMet'])
         self.assertTrue(all(row['factsCovered'] == 4 and row['sentencePreserved'] for row in report['rows']))
         self.assertEqual(report['rows'][1]['native']['eval_count'], 100)
+
+    def test_cli_subprocess_prepares_both_fixtures_before_startup_without_any_network(self):
+        """Import-based tests did not cover the published main-before-fixtures bug."""
+        script = ROOT/'scripts/andrea/qualification_compact_wire_probe.py'
+        before = {path: (ROOT/path).read_bytes() for path in probe.EXPECTED}
+        result = subprocess.run([sys.executable, str(script), str(ROOT), '--check-only'],
+                                cwd=ROOT, capture_output=True, text=True, timeout=10,
+                                env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report['syntheticCasesPrepared'], ['ordinary', 'adversarial'])
+        self.assertEqual(report['baselineFilesVerified'], 11)
+        self.assertEqual(report['networkRequests'], 0)
+        self.assertEqual(report['inferencesIssued'], 0)
+        self.assertFalse(report['vaultRead'])
+        self.assertEqual(report['qualityVerdict'], 'not_assessed')
+        self.assertEqual(report['performanceVerdict'], 'not_measured')
+        self.assertEqual(result.stderr, '')
+        self.assertEqual(before, {path: (ROOT/path).read_bytes() for path in probe.EXPECTED})
+
+    def test_exact_default_cli_subprocess_finishes_all_four_calls_to_a_local_simulator(self):
+        """Exercise python script.py project, including __main__, not an import."""
+        transport = Transport(self.modules)
+        class Handler(BaseHTTPRequestHandler):
+            def do_POST(self):
+                request = probe.Request('http://127.0.0.1:11434/api/chat',
+                                        data=self.rfile.read(int(self.headers['Content-Length'])), method='POST')
+                wire = transport.open(request, 90).getvalue()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/x-ndjson')
+                self.end_headers()
+                self.wfile.write(wire)
+            def log_message(self, *_args):
+                pass
+        # The child's unmodified default URL must reach this simulator.
+        # Binding fails if occupied, before sending anything to another server.
+        server = ThreadingHTTPServer(('127.0.0.1', 11434), Handler)
+        thread = Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        before = {path: (ROOT/path).read_bytes() for path in probe.EXPECTED}
+        try:
+            script = ROOT/'scripts/andrea/qualification_compact_wire_probe.py'
+            result = subprocess.run([sys.executable, str(script), str(ROOT)],
+                                    cwd=ROOT, capture_output=True, text=True, timeout=15,
+                                    env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'})
+        finally:
+            server.shutdown(); server.server_close(); thread.join(timeout=2)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stderr, '')
+        report = json.loads(result.stdout[result.stdout.index('{\n  "schema"'):])
+        self.assertEqual(len(transport.requests), 4)
+        self.assertEqual(report['attemptedRequests'], 4)
+        self.assertEqual(report['automaticRetries'], 0)
+        self.assertTrue(report['comparison']['performanceGateMet'])
+        self.assertFalse(report['productionChangeAdopted'])
+        for row in report['rows']:
+            self.assertEqual(row['factsCovered'], 4)
+            self.assertEqual(row['qualityVerdict'], 'pending_review')
+            self.assertEqual(row['technicalOutcome'], 'valid_structure_pending_semantic_review')
+        self.assertEqual(before, {path: (ROOT/path).read_bytes() for path in probe.EXPECTED})
 
 
 if __name__ == '__main__':
