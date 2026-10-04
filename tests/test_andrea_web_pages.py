@@ -130,6 +130,32 @@ class PageServiceTests(unittest.IsolatedAsyncioTestCase):
         result=await local.generate(stream,'q',TEXT)
         self.assertEqual(result['reason'],'stream_incomplete'); self.assertEqual(closed,[True])
 
+    async def test_model_timeout_or_cancel_closes_stream_without_retry(self):
+        for cancel in [False, True]:
+            pages = local.LocalWebPages(); pages.page = {**PAGE,'pageId':'token'}; pages.expires=local.time.monotonic()+100
+            closed=[]; calls=[]
+            async def stream(messages,schema):
+                calls.append(True)
+                try:
+                    await asyncio.Event().wait()
+                    yield Chunk(content='',finish_reason=None)
+                finally: closed.append(True)
+            with patch.object(local,'MODEL_TIMEOUT',.01):
+                task=asyncio.create_task(pages.summarize({'pageId':'token','question':'q'},stream))
+                if cancel:
+                    await asyncio.sleep(.001); task.cancel()
+                    with self.assertRaises(asyncio.CancelledError): await task
+                else:
+                    result=await task
+                    self.assertEqual(result['outcome'],'timeout'); self.assertEqual(result['claims'],[])
+            self.assertEqual(calls,[True]); self.assertEqual(closed,[True])
+
+    async def test_terminal_followed_by_content_is_not_accepted(self):
+        async def stream(messages,schema):
+            yield Chunk(content='{"claims":[]}',finish_reason='stop')
+            yield Chunk(content='unexpected',finish_reason=None)
+        self.assertEqual((await local.generate(stream,'q',TEXT))['reason'],'stream_incomplete')
+
 class PageRouteTests(RouteTests):
     async def request(self,mode,origin='http://127.0.0.1:8008',payload=None,method='POST'):
         headers=[(b'host',b'127.0.0.1:8008'),(b'content-type',b'application/json')]

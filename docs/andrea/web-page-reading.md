@@ -32,7 +32,7 @@ I tempi di lettura e di generazione/controlli sono separati; non rappresentano i
 
 ## Verifiche di sviluppo
 
-102 test Python selezionati: nuove protezioni, lettura/cancellazione, contratto della sintesi, isolamento delle route, installer con rollback, ricerche preesistenti, memoria e runtime delle note. 13 test frontend (pagina web e memoria): richieste esplicite, payload minimali, escaping, passaggi visibili e output rifiutato nascosto. Vite bundle riuscito. Il TypeScript nativo installato nel container non è utilizzabile per il controllo completo; `tsc -b && vite build` va confermato sul Mac. Non è stato eseguito il modello del Mac in questo ambiente né un collaudo del suo browser.
+104 test Python selezionati: nuove protezioni, lettura/cancellazione, contratto della sintesi, isolamento delle route, installer con rollback, ricerche preesistenti, memoria e runtime delle note. 13 test frontend (pagina web e memoria): richieste esplicite, payload minimali, escaping, passaggi visibili e output rifiutato nascosto. Vite bundle riuscito. Il TypeScript nativo installato nel container non è utilizzabile per il controllo completo; `tsc -b && vite build` va confermato sul Mac. Non è stato eseguito il modello del Mac in questo ambiente né un collaudo del suo browser.
 
 Fonti tecniche consultate: upstream `src/openjarvis/tools/web_search.py`, `tests/tools/test_web_search.py`, `src/openjarvis/security/ssrf.py`, `tests/security/test_ssrf.py`; documentazione ufficiale Python `ssl` e `http.client`. Riutilizzato il pattern locale di processo cancellabile e il percorso già configurato del modello; nessun abilitamento indiscriminato degli strumenti upstream.
 
@@ -45,3 +45,7 @@ Fonti tecniche consultate: upstream `src/openjarvis/tools/web_search.py`, `tests
 5. Interruzione durante lettura o sintesi: messaggio comprensibile e successiva operazione disponibile. Le verifiche di sviluppo sul processo non sono un'osservazione diretta del traffico Mac.
 
 Non avanzare ad altri task se emerge un difetto in questo flusso. Conservare errori ed esiti, senza modificare criteri per dichiarare un test superato.
+
+## Distribuzione
+
+Sorgenti: `b9677f739dcee2ddca9c7ec40a042128dfd122c2` sul branch `feature/andrea-local-profile`, PR #1 draft. Installer: `scripts/andrea/update_web_pages.py`, quattro file applicativi e controlli sulle dipendenze applicative precedenti, senza nuove dipendenze Python/npm. SHA-256 installer: `2948480c506b9f0a976095f92f4c553e99cd985f9399b232160ddf0d81f22119`. Richiede OpenJarvis fermo sulla porta 8008; nessun processo è terminato automaticamente.
