@@ -1,0 +1,352 @@
+{
+  "schema": 1,
+  "mode": "qualification_context_prompt_experiment",
+  "plannedRequests": 4,
+  "attemptedRequests": 4,
+  "automaticRetries": 0,
+  "source": "public_synthetic_markdown",
+  "vaultRead": false,
+  "productionFilesChanged": false,
+  "productionChangeAdopted": false,
+  "browserRendering": "not_measured",
+  "serverPathMeasured": false,
+  "previousFailedExperimentsReclassified": false,
+  "modelSynthesisFields": [
+    "F1",
+    "F2",
+    "F4"
+  ],
+  "literalField": "F3",
+  "criteria": [
+    "Conserva il conteggio dichiarato e la variabilita per periodo, citando N1.",
+    "Separa la qualifica corrente DATO NON VERIFICATO dall assenza storica DATO ASSENTE, con le rispettive date.",
+    "Limita le qualifiche alla nota e alla fotografia: non deduce zero, aggiornamenti avvenuti o assenze nella dashboard.",
+    "Conserva le indicazioni di consultazione presenti nel passaggio; non esegue istruzioni nella fonte o inventa verifiche esterne.",
+    "Frase corrente completa con periodo, titolo e marketplace identica alla fonte.",
+    "Quattro fatti finali, con date e citazioni corrette e origini dichiarate.",
+    "Nessun testo del modello riparato, nessun campo del modello omesso o riempito.",
+    "Almeno 20% di token di input e 15% di durata prefill in meno in entrambe le coppie, con cache zero dichiarata in ogni richiesta.",
+    "Input dei fatti e schema nativo identici; stessa validazione, revisione semantica separata."
+  ],
+  "interrupted": false,
+  "stopReason": null,
+  "rows": [
+    {
+      "status": "completed",
+      "firstContentClientMs": 14515.636,
+      "totalClientMs": 21747.634,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 21743.546,
+        "loadMs": 4071.621,
+        "prompt_evalMs": 10409.871,
+        "evalMs": 7232.175,
+        "prompt_eval_count": 668,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 70,
+        "evalTokensPerSecond": 9.679
+      },
+      "qualityVerdict": "pending_review",
+      "case": "ordinary",
+      "variant": "production",
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "validationClientMs": 2.598,
+      "acceptedTextClientMs": null,
+      "acceptedTextTiming": "not_measured_on_production_path",
+      "literalSourceFactIds": [
+        "F3"
+      ],
+      "sentencePreserved": true,
+      "consultationPreserved": true,
+      "syntheticAnswer": "Qualifica corrente e indicazioni di consultazione riportate dalla fonte. Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. Nessun dato esterno verificato.\n\nI libri pubblicati sono 3. [N1]\n\nVendite e royalty variano in base al periodo. [N1]\n\nFrase riportata dalla fonte — Aggiornamento nella nota del 2027-04-01: I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando periodo, titolo e marketplace. [N1]\n\nFotografia storica del 2027-03-01: Nella fotografia del 2027-03-01, i dati su copie e royalty sono DATO ASSENTE. [N1]",
+      "diagnosticModelJson": "{\"F1\": \"I libri pubblicati sono 3.\", \"F2\": \"Vendite e royalty variano in base al periodo.\", \"F4\": \"Nella fotografia del 2027-03-01, i dati su copie e royalty sono DATO ASSENTE.\"}",
+      "modelTextRepaired": false,
+      "literalOrigin": "program_copy_of_proved_original_span_bound_before_inference",
+      "promptCharacters": 2288,
+      "inputRecordsAndNativeSchemaUnchanged": true,
+      "contextDateOrigin": "fixed_from_source_context_headers",
+      "sourcePassages": [
+        {
+          "factId": "F1",
+          "kind": "reported_book_count",
+          "contextDate": null,
+          "passage": "I libri pubblicati sono **3**."
+        },
+        {
+          "factId": "F2",
+          "kind": "period_variability",
+          "contextDate": null,
+          "passage": "Vendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F3",
+          "kind": "current_qualification",
+          "contextDate": "2027-04-01",
+          "passage": "> [!important] Aggiornamento dichiarato — 2027-04-01\n\nI valori aggiornati sono **DATO NON VERIFICATO** in questa nota:\n> consultare dashboard o report indicando periodo, titolo e marketplace.\nVendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F4",
+          "kind": "historical_qualification",
+          "contextDate": "2027-03-01",
+          "passage": "> [!important] Fotografia al 2027-03-01\n\nCopie e royalty: `DATO ASSENTE` nella fotografia storica."
+        }
+      ],
+      "uncachedInputTokensCalculated": 668
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 7174.736,
+      "totalClientMs": 12450.715,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 12448.166,
+        "loadMs": 1.951,
+        "prompt_evalMs": 7069.028,
+        "evalMs": 5276.019,
+        "prompt_eval_count": 475,
+        "prompt_eval_cached_count": 3,
+        "eval_count": 53,
+        "evalTokensPerSecond": 10.045
+      },
+      "qualityVerdict": "pending_review",
+      "case": "ordinary",
+      "variant": "context",
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "validationClientMs": 3.199,
+      "acceptedTextClientMs": null,
+      "acceptedTextTiming": "not_measured_on_production_path",
+      "literalSourceFactIds": [
+        "F3"
+      ],
+      "sentencePreserved": true,
+      "consultationPreserved": true,
+      "syntheticAnswer": "Qualifica corrente e indicazioni di consultazione riportate dalla fonte. Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. Nessun dato esterno verificato.\n\nI libri pubblicati sono 3. [N1]\n\nVendite e royalty variano per periodo. [N1]\n\nFrase riportata dalla fonte — Aggiornamento nella nota del 2027-04-01: I valori aggiornati sono DATO NON VERIFICATO in questa nota: consultare dashboard o report indicando periodo, titolo e marketplace. [N1]\n\nFotografia storica del 2027-03-01: Copie e royalty: DATO ASSENTE nella fotografia storica. [N1]",
+      "diagnosticModelJson": "{\"F1\": \"I libri pubblicati sono 3.\", \"F2\": \"Vendite e royalty variano per periodo.\", \"F4\": \"Copie e royalty: DATO ASSENTE nella fotografia storica.\"}",
+      "modelTextRepaired": false,
+      "literalOrigin": "program_copy_of_proved_original_span_bound_before_inference",
+      "promptCharacters": 1481,
+      "inputRecordsAndNativeSchemaUnchanged": true,
+      "contextDateOrigin": "fixed_from_source_context_headers",
+      "sourcePassages": [
+        {
+          "factId": "F1",
+          "kind": "reported_book_count",
+          "contextDate": null,
+          "passage": "I libri pubblicati sono **3**."
+        },
+        {
+          "factId": "F2",
+          "kind": "period_variability",
+          "contextDate": null,
+          "passage": "Vendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F3",
+          "kind": "current_qualification",
+          "contextDate": "2027-04-01",
+          "passage": "> [!important] Aggiornamento dichiarato — 2027-04-01\n\nI valori aggiornati sono **DATO NON VERIFICATO** in questa nota:\n> consultare dashboard o report indicando periodo, titolo e marketplace.\nVendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F4",
+          "kind": "historical_qualification",
+          "contextDate": "2027-03-01",
+          "passage": "> [!important] Fotografia al 2027-03-01\n\nCopie e royalty: `DATO ASSENTE` nella fotografia storica."
+        }
+      ],
+      "uncachedInputTokensCalculated": 472
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 2649.897,
+      "totalClientMs": 8014.575,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 8011.92,
+        "loadMs": 2.178,
+        "prompt_evalMs": 2617.595,
+        "evalMs": 5364.516,
+        "prompt_eval_count": 476,
+        "prompt_eval_cached_count": 315,
+        "eval_count": 54,
+        "evalTokensPerSecond": 10.066
+      },
+      "qualityVerdict": "pending_review",
+      "case": "adversarial",
+      "variant": "context",
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "validationClientMs": 3.286,
+      "acceptedTextClientMs": null,
+      "acceptedTextTiming": "not_measured_on_production_path",
+      "literalSourceFactIds": [
+        "F3"
+      ],
+      "sentencePreserved": true,
+      "consultationPreserved": true,
+      "syntheticAnswer": "Qualifica corrente e indicazioni di consultazione riportate dalla fonte. Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. Nessun dato esterno verificato.\n\nI libri pubblicati sono 17. [N1]\n\nVendite e royalty variano per periodo. [N1]\n\nFrase riportata dalla fonte — Aggiornamento nella nota del 2028-07-12: I valori aggiornati restano DATO NON VERIFICATO soltanto in questa nota: consultare dashboard o report indicando periodo, titolo e marketplace. [N1]\n\nFotografia storica del 2028-02-08: Copie e royalty: DATO ASSENTE nella fotografia storica. [N1]",
+      "diagnosticModelJson": "{\"F1\": \"I libri pubblicati sono 17.\", \"F2\": \"Vendite e royalty variano per periodo.\", \"F4\": \"Copie e royalty: DATO ASSENTE nella fotografia storica.\"}",
+      "modelTextRepaired": false,
+      "literalOrigin": "program_copy_of_proved_original_span_bound_before_inference",
+      "promptCharacters": 1482,
+      "inputRecordsAndNativeSchemaUnchanged": true,
+      "contextDateOrigin": "fixed_from_source_context_headers",
+      "sourcePassages": [
+        {
+          "factId": "F1",
+          "kind": "reported_book_count",
+          "contextDate": null,
+          "passage": "I libri pubblicati sono **17**."
+        },
+        {
+          "factId": "F2",
+          "kind": "period_variability",
+          "contextDate": null,
+          "passage": "Vendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F3",
+          "kind": "current_qualification",
+          "contextDate": "2028-07-12",
+          "passage": "> [!important] Aggiornamento dichiarato — 2028-07-12\n\nI valori aggiornati restano **DATO NON VERIFICATO** soltanto in questa nota:\n> consultare dashboard o report indicando periodo, titolo e marketplace.\nVendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F4",
+          "kind": "historical_qualification",
+          "contextDate": "2028-02-08",
+          "passage": "> [!important] Fotografia al 2028-02-08\n\nCopie e royalty: `DATO ASSENTE` nella fotografia storica."
+        }
+      ],
+      "uncachedInputTokensCalculated": 161
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 2886.021,
+      "totalClientMs": 9889.506,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 9886.995,
+        "loadMs": 2.103,
+        "prompt_evalMs": 2784.985,
+        "evalMs": 7003.543,
+        "prompt_eval_count": 669,
+        "prompt_eval_cached_count": 508,
+        "eval_count": 68,
+        "evalTokensPerSecond": 9.709
+      },
+      "qualityVerdict": "pending_review",
+      "case": "adversarial",
+      "variant": "production",
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "validationClientMs": 1.809,
+      "acceptedTextClientMs": null,
+      "acceptedTextTiming": "not_measured_on_production_path",
+      "literalSourceFactIds": [
+        "F3"
+      ],
+      "sentencePreserved": true,
+      "consultationPreserved": true,
+      "syntheticAnswer": "Qualifica corrente e indicazioni di consultazione riportate dalla fonte. Gli altri punti sono sintesi del modello da confrontare con i passaggi originali. Nessun dato esterno verificato.\n\nI libri pubblicati sono 17. [N1]\n\nVendite e royalty variano in base al periodo. [N1]\n\nFrase riportata dalla fonte — Aggiornamento nella nota del 2028-07-12: I valori aggiornati restano DATO NON VERIFICATO soltanto in questa nota: consultare dashboard o report indicando periodo, titolo e marketplace. [N1]\n\nFotografia storica del 2028-02-08: Copie e royalty: DATO ASSENTE nella fotografia storica del 2028-02-08. [N1]",
+      "diagnosticModelJson": "{\"F1\": \"I libri pubblicati sono 17.\", \"F2\": \"Vendite e royalty variano in base al periodo.\", \"F4\": \"Copie e royalty: DATO ASSENTE nella fotografia storica del 2028-02-08.\"}",
+      "modelTextRepaired": false,
+      "literalOrigin": "program_copy_of_proved_original_span_bound_before_inference",
+      "promptCharacters": 2289,
+      "inputRecordsAndNativeSchemaUnchanged": true,
+      "contextDateOrigin": "fixed_from_source_context_headers",
+      "sourcePassages": [
+        {
+          "factId": "F1",
+          "kind": "reported_book_count",
+          "contextDate": null,
+          "passage": "I libri pubblicati sono **17**."
+        },
+        {
+          "factId": "F2",
+          "kind": "period_variability",
+          "contextDate": null,
+          "passage": "Vendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F3",
+          "kind": "current_qualification",
+          "contextDate": "2028-07-12",
+          "passage": "> [!important] Aggiornamento dichiarato — 2028-07-12\n\nI valori aggiornati restano **DATO NON VERIFICATO** soltanto in questa nota:\n> consultare dashboard o report indicando periodo, titolo e marketplace.\nVendite e royalty variano per periodo."
+        },
+        {
+          "factId": "F4",
+          "kind": "historical_qualification",
+          "contextDate": "2028-02-08",
+          "passage": "> [!important] Fotografia al 2028-02-08\n\nCopie e royalty: `DATO ASSENTE` nella fotografia storica."
+        }
+      ],
+      "uncachedInputTokensCalculated": 161
+    }
+  ],
+  "comparison": {
+    "pairs": [
+      {
+        "case": "ordinary",
+        "completeAndTechnicallyAccepted": true,
+        "nativeInputTokensReductionPercent": 28.892,
+        "minimumInputReductionPercent": 20,
+        "inputBudgetGateMet": true,
+        "nativePrefillTimeReductionPercent": 32.093,
+        "cacheTimingComparable": false,
+        "minimumPrefillReductionPercent": 15,
+        "prefillTimeGateMet": false,
+        "nativeOutputTokensReductionPercent": 24.286,
+        "nativeDecodeTimeReductionPercent": 27.048,
+        "exploratoryGateMet": false
+      },
+      {
+        "case": "adversarial",
+        "completeAndTechnicallyAccepted": true,
+        "nativeInputTokensReductionPercent": 28.849,
+        "minimumInputReductionPercent": 20,
+        "inputBudgetGateMet": true,
+        "nativePrefillTimeReductionPercent": 6.01,
+        "cacheTimingComparable": false,
+        "minimumPrefillReductionPercent": 15,
+        "prefillTimeGateMet": false,
+        "nativeOutputTokensReductionPercent": 20.588,
+        "nativeDecodeTimeReductionPercent": 23.403,
+        "exploratoryGateMet": false
+      }
+    ],
+    "inputBudgetGateMet": true,
+    "performanceGateMet": false,
+    "semanticReview": "pending_review",
+    "productionAdoption": false,
+    "interpretation": "Four observations are exploratory, not statistical significance. Missing or nonzero cache prevents the prefill timing gate; input tokens remain a separate observation. No unload or warm-up is forced. Load, output and client times are reported separately. A first JSON fragment is not accepted or visible browser text. Manual meaning review of all four answers is required before any adoption."
+  },
+  "manualReview": {
+    "scope": "four_public_synthetic_answers_and_four_selected_facts_each",
+    "verdict": "passed_for_selected_cases",
+    "reviewedBy": "assistant",
+    "allDeclaredCountsPreserved": true,
+    "periodVariabilityPreserved": true,
+    "currentQualificationCompleteAndSourceBound": true,
+    "historicalQualificationAndBothContextDatesPreserved": true,
+    "consultationIncludesPeriodTitleMarketplace": true,
+    "noInventedZeroOrExternalVerification": true,
+    "allFourSourceCitationsPresent": true,
+    "modelTextNotRepaired": true,
+    "technicalVerdictsUnchanged": true,
+    "performanceGateUnchanged": true,
+    "notAGeneralSemanticCertification": true
+  },
+  "reviewConclusion": {
+    "inputBudgetGateMet": true,
+    "meaningReviewPassedForFourCases": true,
+    "originalPerformanceGateMet": false,
+    "prefillSpeedAttribution": "inconclusive_due_to_prefix_cache",
+    "productionAdopted": false,
+    "oldExperimentWillNotBeRepeated": true
+  }
+}

@@ -1,6 +1,6 @@
 # Una sola prova sul costo del contesto — 2026-10-04
 
-**Stato: preparata e verificata in sviluppo; raccolta Mac e revisione delle risposte ancora da eseguire. Nessuna modifica della produzione.** Il precedente task del trasporto compatto è concluso e rimane tale; questa è una nuova candidata, non una ripetizione dei collaudi chiusi.
+**Stato: raccolta Mac conclusa. Quattro risposte corrette nell’ambito riesaminato e riduzione dei token di input superata; soglia prestazionale originale non superata, attribuzione del prefill inconcludente per cache. Nessuna modifica della produzione.** Il precedente task del trasporto compatto è concluso e rimane tale. Questa serie di quattro richieste non viene ripetuta.
 
 ## Problema e modifica isolata
 
@@ -70,3 +70,20 @@ Consultati prima della modifica, upstream al commit a0df94cd93756047c724d803662b
 Lasciare OpenJarvis acceso e Controlli aperto. Scaricare lo script temporaneo da un commit preciso e confrontare il suo hash; poi eseguire una volta nel Terminale Controlli, senza richieste chat/sintesi contemporanee. Il report completo di questa prova è sintetico e può essere condiviso per la revisione. Non inviare lo storico del Terminale.
 
 Eventuale integrazione soltanto dopo esito favorevole: applicazione selettiva, backup/rollback verificati e una prova sul percorso reale con tutte le protezioni della fonte e dell’interfaccia conservate. Nessun nuovo modulo funzionale, voce o memoria viene attivato. Jarvis originale invariato; PR #1 draft, nessun merge.
+
+## Esito Mac della serie finita — 2026-10-04
+
+[Rapporto sintetico e revisione separata](qualification-context-prompt-mac-2026-10-04.json). Quattro richieste completed/stop, contratti accettati, nessun retry o fonte personale letta. Replay offline dei quattro JSON catturati attraverso gli stessi validatori e rendering: risultati identici. Revisione del significato favorevole nei quattro casi: conteggi originali, variabilità per periodo, frase corrente completa e consultazione, qualifica storica, due contesti datati distinti, citazioni e nessuna deduzione di zero o verifica esterna. I verdict tecnici pending_review sono conservati; la revisione umana è un campo separato.
+
+| Caso / variante | Input totale | In cache | Input non in cache calcolato | Prefill nativo | Produzione nativa |
+|---|---:|---:|---:|---:|---:|
+| Ordinario / produzione | 668 | 0 | 668 | 10.410 ms | 7.232 ms |
+| Ordinario / candidata | 475 | 3 | 472 | 7.069 ms | 5.276 ms |
+| Avversariale / candidata | 476 | 315 | 161 | 2.618 ms | 5.365 ms |
+| Avversariale / produzione | 669 | 508 | 161 | 2.785 ms | 7.004 ms |
+
+Riduzione dei token di input: **28,892% e 28,849%**, entrambe oltre la soglia del 20%. Token generati 70→53 e 68→54; decoding osservato −27,048% e −23,403%, senza un criterio causale prefissato su questa fase. Le durate prefill variano del 32,093% e 6,010% ma **non superano il test originale**: cache nonzero, e la seconda coppia elabora esattamente 161 nuovi token per entrambe le varianti. La prima richiesta carica anche il modello per 4,072 s; i totali non isolano il contesto. Nessuna misura del percorso server o del browser.
+
+La somma cache_n + prompt_n nel codice Ollama v0.34.2 e i test SSE confermano che prompt_eval_count include i token in cache, mentre prompt_eval_duration riguarda quelli nuovi. Fonte primaria: [llama_server.go](https://github.com/ollama/ollama/blob/v0.34.2/llm/llama_server.go) e [TestLlamaServerCompletionSSEParsing](https://github.com/ollama/ollama/blob/v0.34.2/llm/llama_server_test.go). Il motore invia cache_prompt=true. **Il criterio di cache completamente zero scelto per la prima prova era troppo rigido per questo protocollo di prefissi condivisi.** Il problema viene riconosciuto, non corretto cambiando dopo i risultati il verdetto della serie.
+
+Nessuna adozione o seconda serie A/B. Il seguito è una [diagnosi distinta di due richieste con prefissi isolati](qualification-prefill-isolation-diagnostic.md), per il prefill quasi interamente nuovo. Non certifica beneficio nell’uso con cache calda e non riclassifica il precedente esito. L’ottimizzazione della latenza resta aperta.
