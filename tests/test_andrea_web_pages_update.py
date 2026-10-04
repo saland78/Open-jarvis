@@ -64,7 +64,7 @@ class PageUpdateTests(unittest.TestCase):
 
     def test_actual_manifest_backup_repeat_and_no_private_changes(self):
         self.assertEqual(len(updater.MANIFEST), 4)
-        self.assertEqual(updater.REVISION, 'b9677f739dcee2ddca9c7ec40a042128dfd122c2')
+        self.assertEqual(updater.REVISION, '5fb57e93630fecb5c5aefe2998d89bccd7f61bb8')
         for item in updater.MANIFEST:
             self.assertEqual(hashlib.sha256(published_source(item['path'])).hexdigest(), item['sha256'])
             if 'before' in item:

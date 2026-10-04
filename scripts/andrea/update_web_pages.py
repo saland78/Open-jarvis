@@ -15,8 +15,8 @@ import subprocess
 import sys
 import tempfile
 
-REVISION = 'b9677f739dcee2ddca9c7ec40a042128dfd122c2'
-MANIFEST = [{'path': 'scripts/andrea/runtime.py', 'sha256': '66a9edadd3cd87a88b7c9c6aa40c74c268cdf6917266db607699725c23f46644', 'before': '67f6c6566bf91b3584683a2d0b0eb7eaadf40db9fd3fa41d608083c73532bc64'}, {'path': 'scripts/andrea/web_page_fetch.py', 'sha256': '7fe4315bd2bed5a60c369db6ea9cfd81c3c53ce29e724f719a3325fa63b9b5e8', 'new': True}, {'path': 'scripts/andrea/web_page_local.py', 'sha256': 'de7c024f159ad701f6758b00560800ed5d03887240d3a6f6aad23ef6bc7d4806', 'new': True}, {'path': 'frontend/src/pages/AndreaWebPage.tsx', 'sha256': '30d38b0cf2fdc300c4a0b03a7d1e627dbbd7af13f6524aac99f97bdaab96fcb8', 'before': '18d882de38999ef087e62df1e1181c705406b7c2a83aa054b006bad9004186c3'}]
+REVISION = '5fb57e93630fecb5c5aefe2998d89bccd7f61bb8'
+MANIFEST = [{'path': 'scripts/andrea/runtime.py', 'sha256': '395271608f3f6678017064afcb7dc4ac2272f3d75bc249cddbfc240a861bb172', 'before': '67f6c6566bf91b3584683a2d0b0eb7eaadf40db9fd3fa41d608083c73532bc64'}, {'path': 'scripts/andrea/web_page_fetch.py', 'sha256': '7fe4315bd2bed5a60c369db6ea9cfd81c3c53ce29e724f719a3325fa63b9b5e8', 'new': True}, {'path': 'scripts/andrea/web_page_local.py', 'sha256': 'de7c024f159ad701f6758b00560800ed5d03887240d3a6f6aad23ef6bc7d4806', 'new': True}, {'path': 'frontend/src/pages/AndreaWebPage.tsx', 'sha256': '30d38b0cf2fdc300c4a0b03a7d1e627dbbd7af13f6524aac99f97bdaab96fcb8', 'before': '18d882de38999ef087e62df1e1181c705406b7c2a83aa054b006bad9004186c3'}]
 
 
 def digest(path):

@@ -48,4 +48,6 @@ Non avanzare ad altri task se emerge un difetto in questo flusso. Conservare err
 
 ## Distribuzione
 
-Sorgenti: `b9677f739dcee2ddca9c7ec40a042128dfd122c2` sul branch `feature/andrea-local-profile`, PR #1 draft. Installer: `scripts/andrea/update_web_pages.py`, quattro file applicativi e controlli sulle dipendenze applicative precedenti, senza nuove dipendenze Python/npm. SHA-256 installer: `2948480c506b9f0a976095f92f4c553e99cd985f9399b232160ddf0d81f22119`. Richiede OpenJarvis fermo sulla porta 8008; nessun processo è terminato automaticamente.
+Sorgenti: `b9677f739dcee2ddca9c7ec40a042128dfd122c2` sul branch `feature/andrea-local-profile`, PR #1 draft. Installer: `scripts/andrea/update_web_pages.py`, quattro file applicativi e controlli sulle dipendenze applicative precedenti, senza nuove dipendenze Python/npm. SHA-256 installer: `4d6b900238873cf953211d5ad0e2ba80e759c474dd9146e9b318637aca710fe6`. Richiede OpenJarvis fermo sulla porta 8008; nessun processo è terminato automaticamente.
+
+Correzione interruzione browser: 5fb57e93630fecb5c5aefe2998d89bccd7f61bb8. Il log Mac mostrava CancelledError propagato ad ASGI dopo il pulsante Interrompi. Il runtime ora termina normalmente la richiesta scollegata dopo la pulizia dei task; una cancellazione richiesta al task dal server resta propagata. Tre test aggiunti: interruzione ricerca con worker terminato e successiva richiesta riuscita, interruzione delle due nuove route, cancellazione server conservata.
