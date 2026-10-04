@@ -129,6 +129,13 @@ class LocalMode:
                         return
                     await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json"), (b"cache-control", b"no-store")]})
                     return await send({"type": "http.response.body", "body": json.dumps(data).encode()})
+                except asyncio.CancelledError:
+                    # until_disconnect has already cancelled/awaited the work.
+                    # A departed browser needs no response or ASGI traceback.
+                    # Preserve cancellation requested by server shutdown.
+                    if asyncio.current_task().cancelling():
+                        raise
+                    return
                 except SearchError as exc:
                     return await self.reply(send, exc.status, str(exc))
                 except OSError:
