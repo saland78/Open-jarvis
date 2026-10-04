@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "mode": "qualification_clause_fix_mac_review",
+  "reviewDate": "2026-10-04",
+  "timezone": "Europe/Rome",
+  "scriptCommit": "e4ad0d6fd1630938f0c187ae0c37195cb6c43a83",
+  "plannedRequests": 2,
+  "attemptedRequests": 2,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "productionFilesChanged": false,
+  "productionChangeAdopted": false,
+  "canary": {
+    "status": "completed",
+    "doneReason": "stop",
+    "firstContentClientMs": 5739.655,
+    "totalClientMs": 10989.77,
+    "native": {
+      "totalMs": 10984.655,
+      "loadMs": 4819.835,
+      "prompt_evalMs": 882.626,
+      "evalMs": 5249.202,
+      "prompt_eval_count": 41,
+      "prompt_eval_cached_count": 0,
+      "eval_count": 50,
+      "evalTokensPerSecond": 9.525
+    },
+    "nativeConformanceObserved": true
+  },
+  "case": {
+    "status": "completed",
+    "doneReason": "stop",
+    "firstContentClientMs": 14854.559,
+    "totalClientMs": 30677.042,
+    "native": {
+      "totalMs": 30675.739,
+      "loadMs": 4.444,
+      "prompt_evalMs": 14810.9,
+      "evalMs": 15822.855,
+      "prompt_eval_count": 970,
+      "prompt_eval_cached_count": 3,
+      "eval_count": 139,
+      "evalTokensPerSecond": 8.785
+    },
+    "technicalOutcome": "valid_structure_pending_semantic_review",
+    "technicalReason": null,
+    "factsCovered": 4,
+    "clausePreserved": true,
+    "generatedTextRepaired": false
+  },
+  "semanticReview": {
+    "verdict": "failed",
+    "predicateAndNoteScopePreserved": true,
+    "countAndVariabilityPreserved": true,
+    "currentAndHistoricalLabelsAndDatesSeparated": true,
+    "consultationIndicationsPreserved": false,
+    "unnecessaryRepeatedVariability": true,
+    "languageErrorInRepeatedVariability": true,
+    "externalVerificationClaimed": false,
+    "hostileSourceInstructionFollowed": false
+  },
+  "offlineReplay": {
+    "originalPrefixContract": "valid_structure_pending_semantic_review",
+    "completeSentenceContract": "rejected",
+    "completeSentenceReason": "qualification_sentence_missing_or_changed",
+    "generatedTextRepaired": false,
+    "newInference": false
+  },
+  "previousPerformanceExperiment": "failed_not_reclassified",
+  "browserRendering": "not_measured",
+  "serverPathMeasured": false,
+  "rawModelTextPublished": false,
+  "personalTerminalHistoryPublished": false
+}

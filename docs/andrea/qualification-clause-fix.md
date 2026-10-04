@@ -1,6 +1,6 @@
 # Conservare il predicato e l'ambito delle qualifiche
 
-Stato al 2026-10-04 (Europe/Rome): **correzione candidata implementata e 35 controlli di sviluppo superati; Ollama reale sul Mac e integrazione in produzione ancora da verificare**. Tutti gli altri task sono sospesi fino alla correzione e al collaudo di questo difetto. Il confronto prestazionale precedente resta fallito.
+Stato al 2026-10-04 (Europe/Rome): **collaudo Mac concluso, conservazione del prefisso superata ma qualità completa fallita: indicazioni di consultazione omesse**. Nessuna adozione in produzione. I 35 controlli di sviluppo restano superati nel loro ambito e non compensano il criterio semantico mancante. Il successivo intervento protegge [la frase completa](qualification-sentence-fix.md), senza riparare la generazione precedente. Tutti gli altri task restano sospesi; il confronto prestazionale precedente resta fallito.
 
 ## Difetto osservato
 
@@ -62,3 +62,23 @@ env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=../OpenJarvis-brief-build/src:scripts/a
 ```
 
 PR #1 resta draft. Nessuna modifica al Jarvis originale o ai dati personali; nessuna nota o cronologia del Terminale pubblicata.
+
+## Esito reale del collaudo Mac
+
+[Misure e categorie filtrate](qualification-clause-fix-mac-2026-10-04.json). Due richieste completed/stop, zero retry, nessuna lettura del vault o modifica alla produzione. Il canary osserva conformità al pattern: il suo testo è diagnostico, non una risposta o un fatto della nota. Il caso difettoso passa i controlli tecnici con quattro fatti e il prefisso letterale conservato.
+
+La continuazione però ripete la variabilità delle vendite, con «varian», anziché riportare la consultazione di dashboard o report con periodo, titolo e marketplace. Questo viola un criterio già fissato prima della raccolta. **Qualità complessiva fallita**, non «superata con una piccola riserva». Il vincolo sul solo prefisso era insufficiente: lasciava al modello la possibilità di omettere l'istruzione necessaria pur soddisfacendo il controllo.
+
+| Quantità del caso difettoso | Osservazione |
+|---|---:|
+| Primo contenuto JSON al client diretto | 14854,559 ms |
+| Totale al client diretto | 30677,042 ms |
+| Caricamento nativo | 4,444 ms |
+| Valutazione del contesto nativa | 14810,9 ms |
+| Produzione dei token nativa | 15822,855 ms |
+| Token del contesto / dichiarati in cache | 970 / 3 |
+| Token generati | 139 |
+
+Non sono misure del server o della UI, né un nuovo confronto prestazionale. Il campione e la serie sono conclusi: nessuna ripetizione per trovare una formulazione favorevole.
+
+Il replay offline dell'esatto JSON raccolto conferma che il vecchio vincolo accetta la frase incompleta. Il nuovo controllo della frase completa la rifiuta per qualification_sentence_missing_or_changed, senza inferenza, riparazione del testo o modifica della produzione. Il [nuovo collaudo](qualification-sentence-fix.md) riguarda la correzione di questo difetto, non una riclassificazione del fallimento qui documentato.
