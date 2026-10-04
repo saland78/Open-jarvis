@@ -1,4 +1,4 @@
-# Ricerca web esplicita — prima pagina, collaudo Mac da completare
+# Ricerca web esplicita — prima pagina, collaudo Mac concluso
 
 Base verificata su GitHub: `9857880e0aa7803af4abeb0900d52899059327e8`, branch `feature/andrea-local-profile`, PR draft. Consultati prima del task tool web upstream, test web search e test dei permessi di ricerca negli agenti ibridi. Non attivare gli agenti generici o il loro fallback automatico.
 
@@ -20,7 +20,7 @@ Fino a tre schede: titolo, testo letterale del motore, link HTTPS, fornitore, da
 
 83 test Python pertinenti passati: nuovi client/servizio/route, errori, input, cooldown, timeout e cancellazione; regressioni memoria, fatti delle note e sintesi strutturata. Una prima esecuzione estesa non trovava i sorgenti upstream nel percorso Python; rieseguita con il mirror source disponibile, stessa selezione passata. 23 test frontend passati per web/memoria/note/profilo locale; richieste minime, nessun retry, fonte ostile escapata, URL eseguibile escluso, snippet mancante e avvisi della pagina.
 
-Bundle Vite/PWA generato. Comando completo `npm run build` fermato dal compilatore TypeScript 7 nativo nel contenitore: `/proc/self/exe` non disponibile. Il bundler successivo è passato ma non sostituisce il typecheck. Il typecheck completo e la compilazione sul Mac devono ancora passare: non dichiararli verificati qui. Nessun browser reale sul Mac collaudato per la nuova pagina.
+Bundle Vite/PWA generato. Comando completo `npm run build` fermato dal compilatore TypeScript 7 nativo nel contenitore: `/proc/self/exe` non disponibile. Il bundler successivo è passato ma non sostituisce il typecheck. Questa limitazione del contenitore resta registrata; la successiva compilazione completa sul Mac è passata, come documentato sotto.
 
 ## Criteri finiti di installazione e collaudo
 
@@ -31,3 +31,18 @@ Installer `scripts/andrea/update_web_search.py`: sette file pinned al commit sor
 ## Interfaccia richiesta da Andrea
 
 Indicatori piccoli sotto il nucleo; dati ampi al posto del nucleo con ritorno alla vista principale. Requisito registrato nella roadmap come composizione modulare futura. Questa pagina mostra risultati ampi; non implementa ancora nucleo animato, dashboard Second Brain o carosello Amazon. Sintesi web, confronto venditori/prodotti, acquisti e controllo del Mac sono task successivi distinti.
+
+## Collaudo Mac concluso — 2026-10-04, Europe/Rome
+
+Installazione dei sette file completata con verifica hash e backup; avvio tramite launcher esistente. Il log fornito mostra `tsc -b && vite build`, bundle e PWA completati e avvio sulla porta 8008. La limitazione TypeScript del contenitore non ha impedito la compilazione sul Mac; nessun cambiamento alle dipendenze necessario.
+
+Due controlli nell'interfaccia del Mac, risultati osservati negli screenshot senza pubblicare immagini o cronologia:
+
+| Fornitore | Query pubblica | Tempo backend | Esito della pagina |
+|---|---|---|---|
+| DuckDuckGo HTML | `site:docs.python.org asyncio wait_for` | 1171 ms | Tre schede leggibili, query/fornitore/data, estratti e link di documentazione Python |
+| You.com MCP free, valutazione | `site:docs.ollama.com keep_alive` | 1528 ms | Tre schede di documentazione Ollama, link, query/fornitore/data; snippet assenti esplicitamente segnalati |
+
+Terza prova finita: Andrea ha cliccato Interrompi ricerca e riportato il messaggio «Ricerca interrotta o scaduta. Nessun altro fornitore è stato contattato.». Gestione dell'interruzione osservata nell'interfaccia; la sola scritta non misura il momento della terminazione del processo figlio o prova indipendentemente le richieste esterne. Kill/reap e assenza di fallback sono controllati separatamente nei test del servizio e nel codice. Non ripetere fino al successo.
+
+Concluso il task circoscritto di ricerca esplicita con risultati a schermo: installazione, compilazione, due fornitori e feedback di interruzione osservati. Nessuna sintesi web o lettura automatica delle pagine ancora implementata. I tempi includono la richiesta al fornitore e il lavoro del backend, non il tempo esatto di disegno sullo schermo; non equivalgono alla latenza della chat o del modello. Nessuna garanzia universale di pertinenza, aggiornamento, disponibilità dei fornitori o qualità delle risposte. Il profilo You.com resta valutazione.

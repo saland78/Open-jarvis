@@ -1,6 +1,6 @@
 # Roadmap dei moduli futuri
 
-Requisiti raccolti il 2026-10-04 (Europe/Rome). I moduli futuri restano pianificati salvo gli esiti e le integrazioni circoscritte esplicitamente indicate. La pagina Ricerca web è preparata e testata in sviluppo; installazione e collaudo nell'interfaccia del Mac ancora da completare.
+Requisiti raccolti il 2026-10-04 (Europe/Rome). I moduli futuri restano pianificati salvo gli esiti e le integrazioni circoscritte esplicitamente indicate. La pagina Ricerca web esplicita è installata e il suo collaudo circoscritto è concluso: compilazione sul Mac, due fornitori e feedback di interruzione osservati. [Esiti e limiti](web-search-page.md#collaudo-mac-concluso--2026-10-04-europerome). Lettura automatica delle pagine e sintesi web restano il prossimo passo da progettare e collaudare.
 
 La base locale esistente rimane il punto di partenza. Jarvis originale e OpenJarvis personalizzato restano separati; la PR di lavoro resta draft, senza merge a main. Nessuna nota personale, configurazione privata, credenziale, database o registrazione audio va pubblicata.
 
