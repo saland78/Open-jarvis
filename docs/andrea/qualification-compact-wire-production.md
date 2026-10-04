@@ -1,6 +1,6 @@
 # Trasporto compatto della sintesi delle qualifiche
 
-Stato al 2026-10-04: integrato e verificato in sviluppo dopo il confronto Mac superato. **Non ancora installato né misurato nel browser sul Mac.** La preservazione della frase corrente è già collaudata nel caso reale precedente; il presente intervento riduce il trasporto generato mantenendola.
+Stato al 2026-10-04: **installato sul Mac, avvio riuscito e collaudo del percorso reale concluso e superato**. Una sintesi della nota scelta, quattro fatti tecnicamente accettati e riesaminati favorevolmente, testo nell’interfaccia a 26381 ms e fasi native della medesima richiesta lette senza inferenza aggiuntiva. Nessun altro test necessario per la chiusura di questa adozione circoscritta; non è una certificazione generale della sintesi libera.
 
 ## Comportamento finale
 
@@ -26,14 +26,14 @@ Il helper adottato conserva byte per byte tutte le istruzioni, costanti e funzio
 
 Consultati nuovamente upstream al commit `a0df94cd93756047c724d803662bc671618b10d4`: [test_structured_output.py](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/engine/test_structured_output.py) e [test_stream_bridge.py](https://github.com/open-jarvis/OpenJarvis/blob/a0df94cd93756047c724d803662bc671618b10d4/tests/server/test_stream_bridge.py). Si mantiene schema nativo nel motore e il risultato della singola inferenza, con validazione indipendente; nessuna installazione indiscriminata dell'upstream.
 
-## Collaudo Mac finito ancora da eseguire
+## Protocollo Mac seguito (definito prima della raccolta)
 
 Preparare un aggiornamento di soli `qualification_compact_wire.py` e `note_facts.py`, da un commit immutabile con hash, backup e rollback. OpenJarvis deve essere fermo durante la sostituzione. Dopo l'avvio usare la stessa nota KPI e il pulsante di sintesi della nota scelta, una volta: verificare quattro punti, frase corrente, date e passaggi; annotare tempi browser/backend e leggere le fasi native della medesima inferenza con il lettore esistente. Quella lettura non genera un'altra risposta.
 
 Qualità, accettazione tecnica e latenza reale sono criteri distinti. Non dichiarare già misurato un guadagno nel browser; evitare confronto causale con un solo campione che ha cache/caricamento diversi. Se fallisce, conservare risposta/rifiuto e diagnosticare prima di continuare altri task. PR #1 rimane draft e non unita; Jarvis originale resta indipendente.
 
 
-## Aggiornamento verificato pronto
+## Aggiornamento verificato installato
 
 Payload immutabile: `90dc3f0bb4a1727ba4cb01ed9ed72916e5904d28`. Installer `scripts/andrea/update_compact_qualifications.py`, SHA-256 `0deec43be0302b78b2a2d5d4ed4ed6cc98bdc4d7f974239db305243c1bbf2cc9` (8875 byte). Scarica e verifica prima di sostituire questi due file:
 
@@ -46,4 +46,32 @@ Undici componenti immutabili, compresi i due guard e il frontend già compilato,
 
 **Dieci test del manifest reale passati**, aggiunti alle 168 regressioni: applicazione/ripetizione, backup e permessi, dati/configurazioni sentinella invariati, hash errato del secondo download, collisione/mancanza, porta occupata e symlink, errore al secondo rimpiazzo e rimozione del helper, modifica dei guard o del ponte durante download, sintassi non valida con hash coerente e ciascuna dipendenza incompatibile. Totale dei controlli pertinenti passati: **178**. Gli artefatti di sorgente sono riletti integralmente dal commit pubblicato; nessun payload personale incluso.
 
-Il primo passo Mac successivo è fermare solo il Terminale OpenJarvis e lasciare Controlli aperto. Fornire poi separatamente download con URL semplice e checksum, esecuzione, avvio e una sintesi reale. Non presumere lo script già scaricato o il Mac aggiornato. Non richiedere una nuova build frontend per questo aggiornamento Python.
+I passaggi Mac sono stati completati separatamente: arresto del solo OpenJarvis, download con checksum coincidente, applicazione dei due sorgenti con backup, avvio riuscito e una sintesi reale della nota scelta. Nessuna nuova build frontend richiesta o mostrata nell’ultimo avvio; la build precedente appartiene al precedente aggiornamento della frase completa. Il Terminale Controlli ha poi letto le metriche già in RAM della stessa inferenza.
+
+
+## Collaudo reale concluso e superato — 2026-10-04
+
+Dopo l’installazione Andrea ha eseguito una sola «Sintesi della nota» sul caso reale già collaudato, mantenendo la scheda in primo piano. Gli screenshot mostrano completamento e formato accettato. La revisione del significato confronta tutti i quattro punti con i passaggi originali: conteggio corretto, variabilità per periodo, qualifica corrente completa con consultazione, qualifica storica separata con la propria data. Ambito limitato alla nota, quattro citazioni N1, origine letterale corrente dichiarata; nessun valore zero inventato o verifica esterna affermata. La ripetizione coerente della data storica è cosmetica e il testo generato non viene corretto. I contenuti della nota, i valori aziendali e gli screenshot non sono pubblicati.
+
+| Misura della singola richiesta reale | Valore |
+|---|---|
+| Primo contenuto ricevuto dal browser | 26379 ms |
+| Primo e ultimo aggiornamento dell’interfaccia | 26381 ms |
+| Recupero della nota nel backend | 3,10 ms |
+| Primo frammento JSON (non mostrato) | 17034,26 ms |
+| Raccolta/generazione completa del JSON | 26364,34 ms |
+| Controlli del JSON | 5,44 ms |
+| Primo testo accettato dal backend | 26376,50 ms |
+| Totale backend | 26376,82 ms |
+| Totale dichiarato da Ollama | 26342,469 ms |
+| Caricamento dichiarato da Ollama | 5078,324 ms |
+| Valutazione del contesto | 11901,419 ms |
+| Produzione dei token | 9329,722 ms |
+| Token prompt / cache / output | 668 / 0 / 67 |
+| Velocità dichiarata di produzione | 7,181 token/s |
+
+La lettura tramite `read_native_phases.py` riporta `completed`/`accepted` e frame terminale nativo presente, nessuna inferenza o lettura del vault da parte del lettore. Le fasi del backend, arrotondate, coincidono con quelle visualizzate negli screenshot della richiesta; non vengono sommate a quelle del browser. `qualityVerdict: not_assessed_by_reader` resta corretto: il lettore misura, mentre la revisione del significato è un esito separato registrato qui. [Rapporto numerico filtrato](qualification-compact-wire-production-mac-2026-10-04.json).
+
+Il riferimento reale precedente era 45285,52 ms nel backend e circa 45290 ms nell’interfaccia, con 951 token di prompt, cache zero e 142 token generati. Questa osservazione è 26376,82 ms nel backend (−41,754%), con 668 token di prompt, cache zero e 67 di output (−52,817%). Durata nativa di produzione 21589,931 → 9329,722 ms (−56,787%). È un confronto osservato di singole richieste, coerente con il confronto sintetico finito già superato, non una stima causale universale o statistica. Caricamento e contesto restano costi reali: non si promette latenza zero o che ogni richiesta abbia quei tempi.
+
+L’adozione è chiusa per il percorso e i criteri definiti. Nessuna ripetizione della sintesi, serie A/B, prova CPU o modifica aggiuntiva necessaria per dichiarare questo esito. Qualsiasi nuova ottimizzazione seguirà un task distinto e criteri propri. Jarvis originale resta indipendente; PR draft senza merge.
