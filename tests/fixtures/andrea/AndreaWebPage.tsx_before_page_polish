@@ -4,25 +4,7 @@ type Provider = 'duckduckgo' | 'youcom';
 type Source = { title: string; url: string; snippet: string };
 export type SearchResult = { provider: Provider; providerLabel: string; query: string; consultedAt: string; elapsedMs: number; sources: Source[]; pagesFetched: false; modelUsed: false; automaticRetries: 0 };
 export type PageRead = { pageId: string; sourceId: string; url: string; title: string; text: string; partial: boolean; consultedAt: string; readMs: number; redirects: number; modelUsed: false };
-type NativePhases = { terminalFrameReceived: boolean; loadMs: number | null; promptEvalMs: number | null; evalMs: number | null; promptEvalCount: number | null; evalCount: number | null; evalTokensPerSecond: number | null };
-export type PageSummary = { outcome: string; reason?: string; claims: { text: string; quote: string }[]; sourceId: string; pageId: string; generationAndChecksMs: number; qualityVerdict: 'pending_review'; automaticRetries: 0; timings?: { inputCharacters: number; firstJsonMs: number | null; generationMs: number | null; validationMs: number | null; outputCharacters: number | null; ollamaNative: NativePhases } };
-
-export function PageTimings({ summary }: { summary: PageSummary }) {
-  const timing = summary.timings;
-  if (!timing) return null;
-  const native = timing.ollamaNative;
-  const ms = (value: number | null | undefined) => typeof value === 'number' ? `${value} ms` : 'Non disponibile';
-  return <details><summary>Tempi e dimensioni di questa sintesi</summary><table className="mt-2 text-sm"><tbody>
-    <tr><th className="text-left pr-4">Caratteri dell’estratto fornito</th><td>{timing.inputCharacters}</td></tr>
-    <tr><th className="text-left pr-4">Primo frammento JSON (non mostrato)</th><td>{ms(timing.firstJsonMs)}</td></tr>
-    <tr><th className="text-left pr-4">Stream del modello e sua chiusura</th><td>{ms(timing.generationMs)}</td></tr>
-    <tr><th className="text-left pr-4">Controlli del programma</th><td>{ms(timing.validationMs)}</td></tr>
-    <tr><th className="text-left pr-4">Caricamento modello, dichiarato da Ollama</th><td>{ms(native?.loadMs)}</td></tr>
-    <tr><th className="text-left pr-4">Elaborazione contesto, dichiarata da Ollama</th><td>{ms(native?.promptEvalMs)}</td></tr>
-    <tr><th className="text-left pr-4">Generazione token, dichiarata da Ollama</th><td>{ms(native?.evalMs)}</td></tr>
-    <tr><th className="text-left pr-4">Token contesto / generati</th><td>{native?.promptEvalCount ?? 'Non disponibile'} / {native?.evalCount ?? 'Non disponibile'}</td></tr>
-  </tbody></table><p className="mt-2 text-sm">I tempi sono del backend e del modello: non misurano il momento di disegno dello schermo e non vanno sommati tra loro. Il JSON parziale non è una risposta accettata. Le misure non certificano la qualità.</p></details>;
-}
+export type PageSummary = { outcome: string; reason?: string; claims: { text: string; quote: string }[]; sourceId: string; pageId: string; generationAndChecksMs: number; qualityVerdict: 'pending_review'; automaticRetries: 0 };
 
 export async function pageRequest<T>(action: 'read' | 'summarize', payload: { url: string } | { pageId: string; question: string }, signal: AbortSignal): Promise<T> {
   const response = await fetch(`/api/andrea/web/${action}`, { method: 'POST', cache: 'no-store', signal, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -36,11 +18,10 @@ export function PageEvidence({ page, summary }: { page: PageRead; summary: PageS
     <h2 className="text-lg font-semibold">Pagina letta: {page.title || page.url}</h2>
     <p>{page.readMs} ms · {new Date(page.consultedAt).toLocaleString('it-IT')} · {page.redirects} reindirizzamenti</p>
     {safeSearchLink(page.url) && <a className="underline break-all" href={page.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Fonte [W1]: {page.url}</a>}
-    <p>{page.partial ? 'Estratto limitato ai primi 6000 caratteri del contenuto selezionato: il resto non viene fornito al modello.' : 'Testo estratto dal contenuto principale, quando identificabile; possono restare elementi non pertinenti.'} Il contenuto non è stato verificato su altre fonti. PDF e pagine che richiedono JavaScript non sono supportati in questa fase.</p>
+    <p>{page.partial ? 'Estratto limitato ai primi 6000 caratteri: il resto della pagina non viene fornito al modello.' : 'Testo estratto dalla pagina; elementi di navigazione e script esclusi. Il contenuto non è stato verificato su altre fonti.'} PDF e pagine che richiedono JavaScript non sono supportati in questa fase.</p>
     {summary && <div aria-label="Sintesi della pagina" className="space-y-3">
       <h3 className="font-semibold">Sintesi da verificare</h3>
       <p>Generazione e controlli: {summary.generationAndChecksMs} ms. Nessuna seconda generazione automatica.</p>
-      <PageTimings summary={summary} />
       {summary.outcome === 'accepted_pending_semantic_review' ? <>
         <p>Formato e corrispondenza dei passaggi controllati. Questi controlli non dimostrano che la sintesi interpreti correttamente la fonte.</p>
         {summary.claims.map((claim, index) => <div key={index} className="space-y-2"><p>{claim.text} [W1]</p><blockquote className="border-l-2 pl-3 whitespace-pre-wrap">Passaggio originale: «{claim.quote}» [W1]</blockquote></div>)}
@@ -94,18 +75,7 @@ export function AndreaWebPage() {
   const [action, setAction] = useState<'search' | 'read' | 'summarize'>('search');
   const controller = useRef<AbortController | null>(null);
   const generation = useRef(0);
-  const pagePanel = useRef<HTMLElement | null>(null);
-  const errorPanel = useRef<HTMLParagraphElement | null>(null);
   useEffect(() => () => { generation.current += 1; controller.current?.abort(); }, []);
-  useEffect(() => {
-    if (pending || (!page && !error)) return;
-    const frame = window.requestAnimationFrame(() => {
-      const target = error ? errorPanel.current : pagePanel.current;
-      target?.scrollIntoView({ behavior: 'auto', block: 'start' });
-      target?.focus({ preventScroll: true });
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [page, summary, error, pending]);
   const search = async () => {
     if (controller.current) return;
     const current = new AbortController(); controller.current = current;
@@ -153,14 +123,14 @@ export function AndreaWebPage() {
       </select></label>
       {provider === 'youcom' && <p>Profilo MCP gratuito destinato alla valutazione. Disponibilità e limiti dipendono da You.com; nessuna chiave o pagamento configurato.</p>}
       <label className="block">Testo da inviare<input className="w-full border rounded p-2 bg-transparent" required maxLength={200} disabled={pending} value={query} onChange={e => setQuery(e.target.value)} placeholder="Scrivi una ricerca pubblica" /></label>
-      <button className="border rounded px-3 py-2" type="submit" disabled={pending || !query.trim()}>{pending && action === 'search' ? 'Ricerca in corso…' : 'Cerca sul web'}</button>
+      <button className="border rounded px-3 py-2" type="submit" disabled={pending || !query.trim()}>{pending ? 'Ricerca in corso…' : 'Cerca sul web'}</button>
       {pending && <button className="ml-3 border rounded px-3 py-2" type="button" onClick={() => controller.current?.abort()}>{action === 'search' ? 'Interrompi ricerca' : 'Interrompi operazione'}</button>}
     </form>
-    {error && <p ref={errorPanel} tabIndex={-1} role="alert" className="text-red-500">{error}</p>}
+    {error && <p role="alert" className="text-red-500">{error}</p>}
     {pending && <p role="status">{action === 'search' ? 'Attendo il fornitore scelto…' : action === 'read' ? 'Leggo la pagina selezionata…' : 'Il modello locale prepara la sintesi; il testo sarà mostrato dopo i controlli…'}</p>}
     {result && <WebResults result={result} disabled={pending} onRead={url => { void pageAction('read', url); }} />}
     {page && <>
-      <section ref={pagePanel} tabIndex={-1} aria-label="Esito lettura e sintesi"><PageEvidence page={page} summary={summary} /></section>
+      <PageEvidence page={page} summary={summary} />
       <form className="space-y-3 max-w-2xl" onSubmit={e => { e.preventDefault(); void pageAction('summarize'); }}>
         <label className="block">Domanda sul testo letto<input className="w-full border rounded p-2 bg-transparent" required maxLength={200} disabled={pending} value={question} onChange={e => setQuestion(e.target.value)} /></label>
         <p>La sintesi usa soltanto questo estratto e questa domanda, con il modello locale. Non consulta altre pagine, note, memoria o conversazioni. La lettura resta disponibile per cinque minuti in questo avvio.</p>

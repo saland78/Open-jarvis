@@ -72,56 +72,38 @@ class PinnedHTTPS(http.client.HTTPSConnection):
             raise
 
 class TextParser(HTMLParser):
-    BLOCK = {'script', 'style', 'noscript', 'iframe', 'svg', 'form', 'nav', 'footer', 'aside', 'template'}
+    BLOCK = {'script', 'style', 'noscript', 'iframe', 'svg', 'form', 'nav', 'footer', 'header', 'aside', 'template'}
     BREAK = {'p', 'div', 'br', 'li', 'h1', 'h2', 'h3', 'h4', 'article', 'section', 'tr', 'pre'}
-    VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}
-    ROLES = {'navigation', 'banner', 'contentinfo', 'search', 'complementary'}
-    CHROME = {'related', 'sphinxsidebar', 'sidebar', 'footer', 'headerlink', 'site-header', 'site-footer', 'navigation', 'breadcrumbs', 'breadcrumb'}
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.stack = []  # tag, excluded, inside main, inside title
+        self.hidden = []
         self.parts = []
-        self.main_parts = []
-        self.has_main = False
         self.title_parts = []
-
-    def state(self):
-        return self.stack[-1][1:] if self.stack else (False, False, False)
-
-    def append(self, data, main):
-        self.parts.append(data)
-        if main: self.main_parts.append(data)
-
+        self.in_title = False
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        excluded, main, title = self.state()
-        roles = set((attrs.get('role') or '').lower().split())
-        classes = set((attrs.get('class') or '').lower().split())
-        hidden_style = re.search(r'(?:display\s*:\s*none|visibility\s*:\s*hidden)', attrs.get('style') or '', re.I)
-        excluded = bool(excluded or tag in self.BLOCK or roles & self.ROLES or classes & self.CHROME or 'hidden' in attrs or attrs.get('aria-hidden') == 'true' or hidden_style or (tag == 'header' and not main))
-        main = main or (not excluded and (tag == 'main' or 'main' in roles))
-        if main and not excluded: self.has_main = True
-        title = title or tag == 'title'
-        if not excluded and tag in self.BREAK: self.append('\n', main)
-        if tag not in self.VOID: self.stack.append((tag, excluded, main, title))
-
+        if self.hidden:
+            if tag not in {'br', 'img', 'meta', 'link', 'input', 'hr', 'source', 'wbr'}:
+                self.hidden.append(tag)
+            return
+        if tag in self.BLOCK or 'hidden' in attrs or attrs.get('aria-hidden') == 'true':
+            self.hidden.append(tag)
+            return
+        if tag == 'title': self.in_title = True
+        if tag in self.BREAK: self.parts.append('\n')
     def handle_startendtag(self, tag, attrs):
-        self.handle_starttag(tag, attrs)
-        if tag not in self.VOID: self.handle_endtag(tag)
-
+        if tag == 'br' and not self.hidden: self.parts.append('\n')
     def handle_endtag(self, tag):
-        excluded, main, _ = self.state()
-        if not excluded and tag in self.BREAK: self.append('\n', main)
-        for index in range(len(self.stack)-1, -1, -1):
-            if self.stack[index][0] == tag:
-                del self.stack[index:]
-                break
-
+        if self.hidden:
+            if tag in self.hidden:
+                del self.hidden[len(self.hidden) - 1 - self.hidden[::-1].index(tag):]
+            return
+        if tag == 'title': self.in_title = False
+        if tag in self.BREAK: self.parts.append('\n')
     def handle_data(self, data):
-        excluded, main, title = self.state()
-        if excluded: return
-        if title: self.title_parts.append(data)
-        else: self.append(data, main)
+        if self.hidden: return
+        if self.in_title: self.title_parts.append(data)
+        else: self.parts.append(data)
 
 def extract(body, content_type):
     charset_match = re.search(r'charset\s*=\s*["\']?([\w-]+)', content_type, re.I)
@@ -133,7 +115,7 @@ def extract(body, content_type):
     if content_type.split(';')[0].strip().lower() == 'text/html':
         parser = TextParser()
         parser.feed(decoded)
-        decoded = ''.join(parser.main_parts if parser.has_main else parser.parts)
+        decoded = ''.join(parser.parts)
         title = ' '.join(''.join(parser.title_parts).split())[:200]
     text = '\n'.join(' '.join(line.split()) for line in decoded.splitlines() if line.strip())
     if len(text) < 40:

@@ -15,6 +15,8 @@ updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater
 
 
 def published_source(relative):
+    if relative in {'scripts/andrea/web_page_fetch.py', 'scripts/andrea/web_page_local.py', 'frontend/src/pages/AndreaWebPage.tsx'}:
+        return (ROOT/f'tests/fixtures/andrea/{Path(relative).name}_before_page_polish').read_bytes()
     return (ROOT/relative).read_bytes()
 
 

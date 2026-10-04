@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { AndreaWebPage, WebResults, webRequest, safeSearchLink, PageEvidence, pageRequest, type SearchResult, type PageRead, type PageSummary } from './AndreaWebPage';
+import { AndreaWebPage, WebResults, webRequest, safeSearchLink, PageEvidence, PageTimings, pageRequest, type SearchResult, type PageRead, type PageSummary } from './AndreaWebPage';
 afterEach(() => vi.unstubAllGlobals());
 const result: SearchResult = { provider: 'duckduckgo', providerLabel: 'DuckDuckGo HTML', query: 'public query', consultedAt: '2026-10-04T20:33:00Z', elapsedMs: 800, sources: [{ title: '<script>run()</script>', url: 'https://docs.python.org/a', snippet: '' }], pagesFetched: false, modelUsed: false, automaticRetries: 0 };
 describe('explicit web search', () => {
@@ -34,6 +34,20 @@ describe('explicit web search', () => {
     expect(html).toContain('Note, memoria e conversazioni non vengono aggiunte');
     expect(html).toContain('You.com — prova gratuita'); expect(html).toContain('DuckDuckGo');
     expect(html).toContain('Testo da inviare');
+  });
+});
+
+describe('web timing disclosure', () => {
+  const measured: PageSummary = { ...summary, timings: { inputCharacters: 1000, firstJsonMs: 3000, generationMs: 9000, validationMs: 0.1, outputCharacters: 300, ollamaNative: { terminalFrameReceived: true, loadMs: 200, promptEvalMs: 2800, evalMs: 6000, promptEvalCount: 400, evalCount: 100, evalTokensPerSecond: 16.67 } } };
+  it('distinguishes first JSON, generation and native phases without a speed claim', () => {
+    const html=renderToStaticMarkup(<PageTimings summary={measured} />);
+    expect(html).toContain('non mostrato');expect(html).toContain('non vanno sommati');
+    expect(html).toContain('2800 ms');expect(html).toContain('9000 ms');expect(html).toContain('1000');
+    expect(html).not.toContain('velocità migliorata');
+  });
+  it('reports unavailable native timings honestly', () => {
+    const html=renderToStaticMarkup(<PageTimings summary={{ ...measured, timings: { ...measured.timings!, ollamaNative: { terminalFrameReceived: false, loadMs: null, promptEvalMs: null, evalMs: null, promptEvalCount: null, evalCount: null, evalTokensPerSecond: null } } }} />);
+    expect(html).toContain('Non disponibile');
   });
 });
 
