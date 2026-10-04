@@ -1,6 +1,6 @@
 # Memoria esplicita e correzioni — primo modulo
 
-Stato al 2026-10-04: implementazione e controlli di sviluppo completati; installazione, persistenza al riavvio, interazione con la nuova pagina e applicazione delle correzioni da parte di Ollama sul Mac **da collaudare**. Non dichiarare il modulo concluso prima del collaudo sotto.
+Stato al 2026-10-04: installazione sul Mac e build standard riuscite. Creazione, correzione, persistenza dopo riavvio ed eliminazione osservate nel browser. La risposta successiva alla correzione usa il valore nuovo; dopo l'eliminazione una nuova chat dichiara di non conoscere il valore. **Modulo ancora non concluso:** la prima risposta riportava il valore corretto ma attribuiva la scelta all'assistente con una formulazione in prima persona. Questo esito negativo resta conservato; non è annullato dalle prove successive. Vedi il [controllo circoscritto dell'attribuzione](memory-attribution-2026-10-04.md).
 
 ## Contratto
 
@@ -40,13 +40,13 @@ Le prove storiche conservano il runtime precedente come archivio con gli hash or
 
 Esito: 185 esecuzioni Python pertinenti superate (15 del nuovo modulo, regressioni dei confini e archivi), 17 verifiche frontend superate su tre file. Non è stata eseguita l'intera suite upstream. Nessuna nota personale o inferenza reale utilizzata.
 
-Frontend: controlli su origine locale, contenuto/revisione inviati, errori senza retry e spiegazione del modulo. Typecheck con TypeScript JavaScript 5.9.3 disponibile nell'ambiente e build Vite 8.3.0 completati; il compilatore nativo TypeScript 7 locale non può leggere `/proc/self/exe` in questo ambiente. La build Mac continuerà a usare la versione del lock installato, senza cambiarla. Il rendering/interazione nel browser sul Mac è ancora da verificare.
+Frontend: controlli su origine locale, contenuto/revisione inviati, errori senza retry e spiegazione del modulo. Typecheck con TypeScript JavaScript 5.9.3 disponibile nell'ambiente e build Vite 8.3.0 completati; il compilatore nativo TypeScript 7 locale non può leggere `/proc/self/exe` in questo ambiente. Sul Mac la build standard con la versione del lock installato è riuscita; rendering e azioni della pagina verificati nei casi descritti sotto.
 
-## Collaudo Mac finito, da eseguire dopo l'installazione
+## Serie Mac prevista e risultati
 
 Aggiornamento: `scripts/andrea/update_manual_memory.py` scarica cinque sorgenti fissati al commit `07c8ce93b0e4c5d486b7a24b26c4763e77b1ae4e`, verificando baseline e SHA-256. Tutte le destinazioni sono controllate prima del primo download, poi ricontrollate prima di applicare i file. Porta 8008 libera richiesta; backup e rollback conservano i file precedenti. Non crea l'archivio della memoria, non modifica note, profilo, database o dipendenze. Il launcher ricompilerà la UI al successivo avvio perché sono cambiati i sorgenti; la normale preparazione della build usa le dipendenze già definite nel lock, senza cambiare le loro versioni.
 
-Sette test dell'aggiornamento superati: manifest effettivo, backup e ripetizione; download errato; modifiche locali; porta occupata senza terminare processi; rollback con rimozione dei nuovi file; file nuovi incompatibili/collegamenti; modifica durante il download. File privati sintetici conservati in tutte queste prove. Nessuna installazione Mac dichiarata già riuscita.
+Sette test dell'aggiornamento superati: manifest effettivo, backup e ripetizione; download errato; modifiche locali; porta occupata senza terminare processi; rollback con rimozione dei nuovi file; file nuovi incompatibili/collegamenti; modifica durante il download. File privati sintetici conservati in tutte queste prove. Sul Mac l'aggiornamento di cinque file è riuscito; build standard TypeScript/Vite/PWA e interazione con la pagina confermate. Nessun nuovo dato personale pubblicato.
 
 Usare soltanto dati sintetici. Nessun caricamento del vault o benchmark ripetuto fino al successo.
 
@@ -57,3 +57,5 @@ Usare soltanto dati sintetici. Nessun caricamento del vault o benchmark ripetuto
 5. Eliminare la voce con conferma. In un'altra nuova chat ripetere la domanda: non deve attribuire un colore dalla memoria né inventare di averlo verificato. Ricaricare la pagina: voce assente.
 
 Sono tre richieste al modello, senza retry automatici. Annotare risposte e tempi della UI, senza pubblicare contenuti personali. Se una richiesta non rispetta il criterio, conservarne l'esito e diagnosticare quel caso: salvataggio corretto e memoria applicata restano valutazioni distinte. Non passare al modulo successivo prima di rivedere questi esiti.
+
+Esiti osservati: primo richiamo **non completamente superato** per attribuzione errata; secondo richiamo dopo la correzione superato nel caso osservato; persistenza dopo riavvio confermata con voce attiva e revisione 2; eliminazione confermata con zero voci e revisione 3; terzo richiamo in nuova chat superato nel caso osservato, senza riproporre un valore cancellato o inventare una verifica. Questi esiti non dimostrano apprendimento del modello, affidabilità universale o cancellazione forense.
