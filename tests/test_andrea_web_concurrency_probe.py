@@ -14,6 +14,21 @@ import web_sentence_contract as installed
 PAGE = ('La programmazione asincrona gestisce più attività contemporaneamente durante le attese.\n'
         'await sospende una coroutine, lasciando procedere altro codice durante le attese.\n')
 
+ROOT = Path(__file__).resolve().parents[1]
+
+def installed_source(relative):
+    # The isolated probe intentionally targets the pre-integration installed
+    # version. Preserve that baseline when the repository advances.
+    if relative == 'scripts/andrea/web_sentence_contract.py':
+        return (ROOT / 'tests/fixtures/andrea/web_sentence_contract.py_before_concurrency_prompt').read_bytes()
+    return (ROOT / relative).read_bytes()
+
+def baseline(root):
+    for relative in candidate.EXPECTED:
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(installed_source(relative))
+
 
 class ConcurrencyProbeTests(unittest.TestCase):
     def test_acceptance_contract_is_unchanged(self):
@@ -54,17 +69,13 @@ class ConcurrencyProbeTests(unittest.TestCase):
         self.assertEqual(candidate.validate(raw, bank, True)['outcome'], 'rejected')
 
     def test_expected_files_match_and_local_changes_abort_before_network(self):
-        root = Path(__file__).resolve().parents[1]
-        candidate.verify_project(root)
         class NeverOpen:
             def open(self, *args, **kwargs):
                 raise AssertionError('Unexpected network request')
         with tempfile.TemporaryDirectory() as directory:
             temporary = Path(directory)
-            for relative in candidate.EXPECTED:
-                target = temporary / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_bytes((root / relative).read_bytes())
+            baseline(temporary)
+            candidate.verify_project(temporary)
             first = temporary / next(iter(candidate.EXPECTED))
             first.write_bytes(first.read_bytes() + b'\n# local change\n')
             with self.assertRaisesRegex(ValueError, 'installed_version_mismatch'):
@@ -91,12 +102,14 @@ class ConcurrencyProbeTests(unittest.TestCase):
                 test.assertNotIn('tools', payload)
                 return Response((json.dumps({'message': {'content': answer}, 'done': True,
                                              'done_reason': 'stop'}) + '\n').encode())
-        root = Path(__file__).resolve().parents[1]
-        before = {path: sha256((root / path).read_bytes()).hexdigest() for path in candidate.EXPECTED}
-        with redirect_stdout(io.StringIO()):
-            result = candidate.run(root, Opener())
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            baseline(root)
+            before = {path: sha256((root / path).read_bytes()).hexdigest() for path in candidate.EXPECTED}
+            with redirect_stdout(io.StringIO()):
+                result = candidate.run(root, Opener())
+            self.assertEqual(before, {path: sha256((root / path).read_bytes()).hexdigest() for path in candidate.EXPECTED})
         self.assertEqual(len(requests), 2)
-        self.assertEqual(before, {path: sha256((root / path).read_bytes()).hexdigest() for path in candidate.EXPECTED})
         self.assertFalse(result['productionModified'])
         self.assertEqual(result['automaticRetries'], 0)
         self.assertEqual(result['checks']['outcome'], 'accepted_pending_semantic_review')

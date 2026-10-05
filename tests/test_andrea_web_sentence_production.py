@@ -6,7 +6,7 @@ import unittest
 from types import SimpleNamespace
 import web_page_local as local
 import web_sentence_contract as contract
-import web_sentence_synthesis_probe as candidate
+import web_concurrency_synthesis_probe as candidate
 
 PAGE=('La programmazione asincrona gestisce più attività durante le attese.\n'
       'Le coroutine possono sospendere e poi riprendere l’esecuzione.\n')
@@ -14,6 +14,22 @@ RAW=json.dumps({'claims':[{'passage':1,'text':'Il codice asincrono prosegue altr
                          {'passage':2,'text':'Una coroutine può sospendersi e successivamente riprendere.'}]})
 
 class ContractParityTests(unittest.TestCase):
+    def test_reviewed_concurrency_generation_and_observed_failure(self):
+        bank=['Con la programmazione asincrona in Python, il tuo codice può gestire più attività contemporaneamente.\n',
+              'Nel Python sincrono tradizionale, il codice viene eseguito una riga alla volta. Per esempio, quando chiami un’API, il programma si ferma e aspetta la risposta.\n']
+        texts=["L'asincronia permette al codice di gestire più attività contemporaneamente.",
+               'In Python sincrono, il codice esegue una riga alla volta e si ferma in attesa.']
+        raw=json.dumps({'claims':[{'passage':i+1,'text':text} for i,text in enumerate(texts)]})
+        accepted=contract.validate(raw,bank,True)
+        self.assertEqual(accepted['outcome'],'accepted_pending_semantic_review')
+        self.assertEqual([x['text'] for x in accepted['claims']],texts)
+        self.assertEqual([x['quote'] for x in accepted['claims']],bank)
+        bad=json.dumps({'claims':[{'passage':1,'text':"L'asincrono permette di eseguire attività in parallelo mentre si aspetta."}]})
+        rejected=contract.validate(bad,bank,True)
+        self.assertEqual(rejected['outcome'],'rejected')
+        self.assertEqual(rejected['claims'],[])
+        self.assertEqual(rejected['details']['missingConcepts'],['parallel_execution'])
+
     def test_reviewed_mac_claims_preserve_exact_support_and_pending_api_verdict(self):
         bank=['Contesto introduttivo della pagina.\n',
               'Con la programmazione asincrona in Python, il tuo codice può gestire più attività contemporaneamente.\n',
