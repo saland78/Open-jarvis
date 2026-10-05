@@ -20,7 +20,9 @@ page read replaces the normal ephemeral current page in server RAM.
 The candidate uses whole lines or sentence boundaries instead of cutting at
 300 characters. All text is retained in the prompt. Units longer than 600 or
 shorter than 20 characters stay as context but cannot be cited. A generated
-claim is limited to 100 characters and must finish with punctuation; it must
+claim now has a soft target below 100 characters and a hard safety cap of 200
+(the earlier 100-character hard-cap failure is recorded below). It must finish
+with punctuation; it must
 not be an exact source copy. Exact evidence is recovered by ID. Numeric and
 narrow technical-term checks reject unsupported tokens in the selected unit.
 These are conservative structural/lexical checks, not a general entailment
@@ -94,3 +96,35 @@ Primary references consulted: upstream OpenJarvis tests/tools/test_web_search.py
 Ollama structured-output documentation, and llama.cpp grammars/README.md and
 examples/json_schema_to_grammar.py. The upstream search tests do not fix this
 personal synthesis contract.
+
+## Mac bounded-string result and completion headroom
+
+The pattern-free Mac request completed with two claims, but both ended at
+exactly 100 characters, without final punctuation; one ended mid-word.
+The result was correctly rejected as sentence_not_complete. Client total:
+31.295 seconds; first content: 18.980 seconds. Native prompt tokens: 2,224,
+cached prompt tokens: 1,024; generated tokens: 74. These cached-context
+conditions differ from the earlier run, so this is not evidence of a stable
+latency improvement. Removing the pattern coincided with compliance with
+the two-item/100-character bounds; that observation alone does not inspect
+or prove the exact installed converter's behavior.
+
+The arbitrary 100-character hard cap was too close to the requested prose
+length. This revision explicitly changes that candidate contract: the
+prompt aims for 6–10 words and fewer than 100 characters, while the native
+schema and Python validator allow 20–200 characters as safety headroom for
+completion. A complete 101–200-character point is now structurally allowed;
+this is not a claim that the old <=100-character criterion has passed.
+Shortness and semantic fidelity still require review of the actual output.
+
+The prompt encourages one fact and no incidental clauses. It contains no
+article-specific expected answer. All 6,000 source characters, two-point
+limit, exact evidence IDs, punctuation, verbatim, numerical and lexical
+checks, model/options and one-request/no-retry behavior are preserved.
+No answer is cut, repaired with a period, or automatically regenerated.
+The candidateRevision and claimLengthPolicy are printed for comparison.
+The actual previously rejected 100-character strings remain regression
+cases and are still rejected. There is no live passed verdict yet.
+
+The selected deterministic suite passes 57 tests. These do not run the
+Mac model; the next explicit live result must be reviewed separately.

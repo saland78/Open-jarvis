@@ -40,7 +40,7 @@ class SentenceTests(unittest.TestCase):
                     '{"claims":[{"text":"Una frase completa ma senza supporto.","passage":true}]}',
                     '{"claims":[{"text":"Una frase completa ma senza supporto.","passage":99}]}',
                     '{"claims":[],"claims":[]}',
-                    '{"claims":[{"text":"'+('x'*170)+'.","passage":1}]}',
+                    '{"claims":[{"text":"'+('x'*p.MAX_CLAIM_CHARS)+'.","passage":1}]}',
                     '{"claims":[{"text":"Una frase completa ma senza supporto.","passage":1,"quote":"inventata"}]}']:
             self.assertEqual(p.validate(raw,p.sentence_bank(PAGE),True)['outcome'],'rejected')
         self.assertEqual(p.validate('{"claims":[]}',[],True)['outcome'],'abstained')
@@ -51,9 +51,26 @@ class SentenceTests(unittest.TestCase):
         data=json.loads(messages[1]['content'])
         self.assertEqual(data,{'question':'Domanda','passages':[[i+1,v] for i,v in enumerate(bank)]})
         item=schema['properties']['claims']['items']['properties']
-        self.assertEqual(set(item),{'text','passage'});self.assertEqual(item['text']['maxLength'],100)
-        self.assertEqual(item['text'],{'type':'string','minLength':20,'maxLength':100})
+        self.assertEqual(set(item),{'text','passage'});self.assertEqual(item['text']['maxLength'],p.MAX_CLAIM_CHARS)
+        self.assertEqual(item['text'],{'type':'string','minLength':20,'maxLength':200})
         self.assertEqual(schema['properties']['claims']['maxItems'],2)
+        self.assertLess(p.TARGET_CLAIM_CHARS,p.MAX_CLAIM_CHARS)
+
+    def test_soft_goal_is_not_a_character_cut_or_a_quality_verdict(self):
+        text='La programmazione asincrona permette al codice di gestire più attività contemporaneamente durante le attese.'
+        bank=['Durante le attese il codice asincrono può eseguire diverse attività contemporaneamente.\n']
+        self.assertGreater(len(text),p.TARGET_CLAIM_CHARS)
+        raw=json.dumps({'claims':[{'text':text,'passage':1}]})
+        verdict=p.validate(raw,bank,True)
+        self.assertEqual(verdict['outcome'],'accepted_pending_semantic_review')
+        self.assertEqual(verdict['claims'][0]['text'],text)
+
+    def test_previous_hundred_character_incomplete_outputs_still_rejected(self):
+        texts=["La programmazione asincrona permette al codice di gestire più attività contemporaneamente, trasformò",
+               "L'await sospende una coroutine senza bloccare il programma, permettendo l'esecuzione di altre operaz"]
+        for text in texts:
+            self.assertEqual(len(text),100)
+            self.assertEqual(self.verdict(text)['reason'],'sentence_not_complete')
 
     def test_native_schema_still_requires_python_punctuation_check(self):
         # The native pattern was removed, not the acceptance condition.
