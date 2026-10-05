@@ -64,3 +64,14 @@ that production check.
 
 Upstream `open-jarvis/OpenJarvis/tests/engine/test_ollama.py` was consulted again
 for asynchronous stream, timeout/disconnect behavior and schema propagation.
+
+## Package pins
+
+- Source commit: `94504dd9e8bec8349f628e3041808dc4ad7c2e1e`.
+- Previous contract SHA-256: `21ce7da49c28097784c2defd0518503f7abf31fc00842d9e87c659eb1cf8b185`.
+- Installed contract SHA-256: `5b8a73b2a9d534074ec61eb67b9abd0eb6c73d3abb2783e76149ad6b3b7b2285`.
+- Installed-check SHA-256: `1ca35797a9750dcb188454c2f1b89edddca43409b4c3b32ec2c25e4a3001c324`.
+
+The updater downloads only the source contract from that immutable source commit.
+Run the updater with OpenJarvis stopped; restart it for the production check.
+No installed success or final performance claim is assigned before that check.
