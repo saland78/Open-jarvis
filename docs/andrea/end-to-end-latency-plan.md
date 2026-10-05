@@ -144,3 +144,15 @@ Questo task di riuso è chiuso nel suo ambito. La priorità residua della latenz
 web è il costo del contesto alla prima richiesta, da trattare con protocollo e
 collaudo distinti mantenendo le stesse informazioni, qualifiche e controlli.
 Nessun nuovo benchmark o modulo è stato avviato per questa chiusura.
+
+## Riduzione del contesto della prima sintesi web — prova distinta preparata
+
+Andrea autorizza il miglioramento successivo della latenza. La
+[prova delle istruzioni compatte](web-short-instructions-experiment-2026-10-05.md)
+riduce soltanto il messaggio system da 2202 a 1430 caratteri, conservando intero
+estratto, schema, domanda, inventari e tutti i validatori installati. Confronto
+finito di sei richieste sui tre casi originali, ordine opposto nei due confronti
+di pagina, prefissi diagnostici isolati senza unload/warm-up, soglie fissate prima
+dei dati su cache, token nuovi e prefill. 313 controlli pertinenti passati;
+misure e revisione del modello sul Mac ancora da raccogliere. Nessuna modifica
+della produzione o velocità dichiarata; il precedente task di riuso resta chiuso.
