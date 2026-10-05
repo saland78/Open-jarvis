@@ -322,4 +322,9 @@ show an improvement to all first-page requests or to voice latency. The fixed
 order and unforced cache state still limit benchmarking claims.
 
 The one-file production integration, installed check and backup installer are
-described in `web-prefix-reuse-2026-10-05.md`. Its installed Mac result is pending.
+described in `web-prefix-reuse-2026-10-05.md`. Its installed Mac result, collected
+after adoption, passes all three original criteria with explicit manual review.
+The same-page request took 3.592 seconds with 2364/2395 cached tokens; first-page
+requests took 46.691 and 50.260 seconds. See that production record for phases,
+package pins and limits. This finite context-reuse task is closed; first-request
+latency remains a separate task. Earlier failed probes are not reclassified.

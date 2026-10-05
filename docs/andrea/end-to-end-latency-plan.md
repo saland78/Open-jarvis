@@ -121,3 +121,26 @@ La [adozione selettiva](qualification-context-production.md) cambia soltanto le 
 [Adozione installata e chiusa](qualification-context-production.md#collaudo-reale-concluso-e-superato--2026-10-04): un file con backup, avvio Mac, sintesi reale accettata e revisione manuale favorevole dei quattro fatti selezionati, frase corrente completa, qualifiche, date e citazioni. 236 controlli pertinenti passati. Il [lettore numerico](qualification-context-production-mac-2026-10-04.json) conserva le fasi della stessa richiesta senza ulteriori inferenze o lettura del vault: caricamento 5585,045 ms, contesto 8473,515 ms, generazione 5365,669 ms per 53 token, prompt 475 e cache zero. Totale backend 19488,63 ms.
 
 Browser: contenuto 19518 ms, aggiornamento 19521 ms, **scheda osservata in secondo piano**. Escludere questo campione dai confronti UI in primo piano; non attribuire il beneficio del test sintetico al primo testo del browser. Esiti e limite registrati, senza una nuova prova per chiudere l’ambito attuale. Il vecchio confronto confuso dalla cache resta non superato; la diagnosi distinta quasi senza cache mantiene i criteri e il risultato propri. Il modulo successivo pianificato è memoria/correzioni; non attivato. Ulteriori confronti UI o pipeline audio richiedono progetto e protocollo propri.
+
+
+## Riuso del contesto web collaudato in produzione — 2026-10-05
+
+La [modifica di un solo file](web-prefix-reuse-2026-10-05.md#installed-mac-check-completed--2026-10-05)
+è installata con backup e supera la revisione dei tre casi originali attraverso
+OpenJarvis: due funzionalità asyncio fedeli ai passaggi, conversione CSV con
+condizione e qualifica dei campi, astensione sul prezzo non documentato. Restano
+distinti controlli automatici e revisione del significato; nessuna precedente
+prova fallita viene trasformata in un successo. 298 regressioni pertinenti passate.
+
+La domanda successiva sul medesimo estratto richiede 3591,521 ms, con 2364 token
+di contesto riutilizzati su 2395. Le prime due sintesi richiedono 46690,960 e
+50259,793 ms: il prefill nativo occupa 29916,533 e 36879,466 ms, la generazione
+9307,990 e 13128,526 ms. Primo caricamento 7355,740 ms. Letture delle pagine
+364/652 ms; disegno del browser non misurato. Questi tempi non vanno sommati tra
+orologi diversi. Il guadagno osservato riguarda il riuso della pagina, non tutte
+le richieste o la voce.
+
+Questo task di riuso è chiuso nel suo ambito. La priorità residua della latenza
+web è il costo del contesto alla prima richiesta, da trattare con protocollo e
+collaudo distinti mantenendo le stesse informazioni, qualifiche e controlli.
+Nessun nuovo benchmark o modulo è stato avviato per questa chiusura.
