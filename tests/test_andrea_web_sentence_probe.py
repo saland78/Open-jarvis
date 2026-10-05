@@ -151,7 +151,10 @@ class HTTPTests(unittest.TestCase):
             root=Path(directory)
             for relative in p.EXPECTED:
                 path=root/relative;path.parent.mkdir(parents=True,exist_ok=True)
-                path.write_bytes((Path(__file__).resolve().parents[1]/relative).read_bytes())
+                base=Path(__file__).resolve().parents[1]
+                source=(base/'tests/fixtures/andrea/web_page_local.py_before_sentence_contract'
+                        if relative=='scripts/andrea/web_page_local.py' else base/relative)
+                path.write_bytes(source.read_bytes())
             before={str(v.relative_to(root)):v.read_bytes() for v in root.rglob('*') if v.is_file()}
             with redirect_stdout(io.StringIO()):result=p.run(root,Opener())
             after={str(v.relative_to(root)):v.read_bytes() for v in root.rglob('*') if v.is_file()}

@@ -164,3 +164,17 @@ source coverage, options, completeness and no-retry checks are unchanged.
 negative checks for parallel substitution and absent identifiers. These
 tests do not certify the live model. Upstream OpenJarvis web-search tests and
 the Python Coroutines and Tasks documentation were consulted for this task.
+
+## Reviewed Mac result
+
+The technical-fidelity candidate at 29f0e0758c75e7a36fd12c947e99b10589f3d4b0
+returned two complete points: asynchronous code can manage several
+activities concurrently, and synchronous code waits for responses. The
+exact supporting units were returned for both, and manual review passed
+for this particular summary of the selected excerpt. Transport stopped
+normally; client total 55.723 seconds, first JSON 40.800 seconds, no cached
+prompt tokens. The result is not a latency success or a universal quality
+guarantee. The installed UI was still unchanged at the time of this probe.
+Production integration and its separate UI check are described in
+web-sentence-integration.md. The API retains pending_review because it does
+not independently perform this manual semantic review.
