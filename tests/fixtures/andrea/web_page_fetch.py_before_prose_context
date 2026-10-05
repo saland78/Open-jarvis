@@ -147,13 +147,7 @@ class TextParser(HTMLParser):
         excluded, main, title = self.state()
         if excluded: return
         if title: self.title_parts.append(data)
-        else:
-            # HTML source wrapping is whitespace within prose, not an evidence
-            # boundary. Keep real block/<br> boundaries inserted by tag handlers
-            # and code line breaks in <pre>. Preserve spaces around inline tags.
-            if not any(entry[0] == 'pre' for entry in self.stack):
-                data = re.sub(r'\s+', ' ', data)
-            self.append(data, main)
+        else: self.append(data, main)
 
 def extract(body, content_type):
     charset_match = re.search(r'charset\s*=\s*["\']?([\w-]+)', content_type, re.I)

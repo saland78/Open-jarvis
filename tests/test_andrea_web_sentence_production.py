@@ -65,7 +65,7 @@ class ContractParityTests(unittest.TestCase):
         self.assertEqual(verdict['outcome'],'accepted_pending_semantic_review')
         self.assertEqual([x['quote'] for x in verdict['claims']],[bank[1],bank[5]])
 
-    def test_same_prompt_schema_bank_and_validation_as_reviewed_candidate(self):
+    def test_same_schema_bank_and_validation_as_reviewed_candidate_with_revised_prompt(self):
         pages=[PAGE,'X'*700+'\n'+PAGE, 'Una frase breve completa.\n'*200]
         raw_cases=[RAW,'{"claims":[]}', 'not JSON',
                    '{"claims":[{"passage":true,"text":"Un testo completo ma non supportato."}]}',
@@ -74,7 +74,10 @@ class ContractParityTests(unittest.TestCase):
         for page in pages:
             expected=candidate.prepare(page,'Sintesi')
             actual=contract.prepare(page,'Sintesi')
-            self.assertEqual(actual,expected)
+            self.assertEqual(actual[0],expected[0])
+            self.assertEqual(actual[1][1],expected[1][1])
+            self.assertEqual(actual[2],expected[2])
+            self.assertNotEqual(actual[1][0],expected[1][0])
             for raw in raw_cases:
                 for completed in (True,False):
                     self.assertEqual(contract.validate(raw,actual[0],completed),
@@ -96,7 +99,7 @@ class ProductionTests(unittest.IsolatedAsyncioTestCase):
                 yield SimpleNamespace(content=RAW[30:],finish_reason='stop',tool_calls=None)
             finally:closed.append(True)
         result=await self.service().summarize({'pageId':'token','question':'Sintesi'},stream)
-        _,messages,schema=candidate.prepare(PAGE,'Sintesi')
+        _,messages,schema=contract.prepare(PAGE,'Sintesi')
         self.assertEqual(calls,[(messages,schema)])
         self.assertEqual(closed,[True])
         self.assertEqual(result['outcome'],'accepted_pending_semantic_review')

@@ -5,6 +5,7 @@ from types import SimpleNamespace as Chunk
 import unittest
 import web_page_fetch as fetch
 import web_page_local as pages
+import web_sentence_contract as contract
 from native_metrics import capture
 
 BODY = 'Il documento descrive due titoli pubblicati nel 2026. Vendite e royalty non verificate. Il valore assente non significa zero.'
@@ -39,6 +40,50 @@ class ExtractionTests(unittest.TestCase):
     def test_empty_main_does_not_invent_content_from_outside(self):
         with self.assertRaisesRegex(fetch.PageError,'no_readable_text'):
             self.extract('<main></main><p>'+BODY+'</p>')
+
+    def test_wrapped_conversion_paragraph_keeps_negation_exception_and_scope(self):
+        # Regression for the observed CSV evidence: "No" was stranded on the
+        # preceding source line and the selected unit ended before the scope.
+        html=('<main><p>Each row is returned as a list of strings. No\n'
+              'automatic data type conversion is performed unless the '
+              '<code>QUOTE_NONNUMERIC</code> format\n'
+              'option is specified (in which case unquoted fields become floats).</p></main>')
+        expected=('Each row is returned as a list of strings. No automatic data type conversion '
+                  'is performed unless the QUOTE_NONNUMERIC format option is specified '
+                  '(in which case unquoted fields become floats).')
+        text=self.extract(html)
+        self.assertEqual(text,expected)
+        bank,_,schema=contract.prepare(text,'Conserva la condizione.')
+        self.assertEqual(bank,[expected])
+        self.assertEqual(schema['properties']['claims']['items']['properties']['passage']['enum'],[1])
+        result=contract.validate(json.dumps({'claims':[{'passage':1,'text':
+            'Di norma i tipi restano invariati; con QUOTE_NONNUMERIC i campi non quotati diventano float.'}]}),bank,True)
+        self.assertEqual(result['claims'][0]['quote'],expected)
+        self.assertEqual(result['outcome'],'accepted_pending_semantic_review')
+
+    def test_source_wraps_inline_tags_and_entities_preserve_prose_words(self):
+        html=('<main><p>The option\n<code>MODE_A</code> is disabled\n'
+              '<em>unless</em> enabled &amp; confirmed. The limit is <strong>not</strong> zero.</p></main>')
+        self.assertEqual(self.extract(html),
+            'The option MODE_A is disabled unless enabled & confirmed. The limit is not zero.')
+
+    def test_prose_normalization_does_not_join_separate_blocks_or_code_lines(self):
+        html=('<main><p>The first paragraph\ncontains one condition.</p>'
+              '<p>The next paragraph has its own scope.</p>'
+              '<pre><code>first_call()\nsecond_call()</code></pre>'
+              '<ul><li>First supported action\nwith its scope.</li>'
+              '<li>Another action with another scope.</li></ul></main>')
+        self.assertEqual(self.extract(html).splitlines(),[
+            'The first paragraph contains one condition.',
+            'The next paragraph has its own scope.',
+            'first_call()', 'second_call()',
+            'First supported action with its scope.',
+            'Another action with another scope.'])
+
+    def test_explicit_break_is_not_confused_with_soft_source_wrap(self):
+        html='<main><p>First statement\nwith its scope.<br>Second statement\nwith another scope.</p></main>'
+        self.assertEqual(self.extract(html),
+            'First statement with its scope.\nSecond statement with another scope.')
 
     def test_plain_text_and_quotes_remain_unchanged(self):
         _,text,partial=fetch.extract(BODY.encode(),'text/plain')

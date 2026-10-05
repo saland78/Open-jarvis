@@ -2,6 +2,8 @@ import ast
 from contextlib import redirect_stdout
 from hashlib import sha256
 import io
+import importlib.machinery
+import importlib.util
 import json
 from pathlib import Path
 import tempfile
@@ -41,7 +43,11 @@ class ConcurrencyProbeTests(unittest.TestCase):
         for name in ('sentence_bank', 'technical_terms', 'unique_pairs', 'normalized', 'validate'):
             self.assertEqual(before[name], after[name], name)
         bank, messages, schema = candidate.prepare(PAGE, 'Sintetizza.')
-        old_bank, old_messages, old_schema = installed.prepare(PAGE, 'Sintetizza.')
+        path = ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_english_alias'
+        loader = importlib.machinery.SourceFileLoader('historical_contract', str(path))
+        spec = importlib.util.spec_from_loader(loader.name, loader)
+        historical = importlib.util.module_from_spec(spec); loader.exec_module(historical)
+        old_bank, old_messages, old_schema = historical.prepare(PAGE, 'Sintetizza.')
         self.assertEqual(bank, old_bank)
         self.assertEqual(schema, old_schema)
         self.assertEqual(messages[1], old_messages[1])

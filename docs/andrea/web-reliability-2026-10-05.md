@@ -143,3 +143,65 @@ occupied-port refusal, rollback, local edits, symlinks and syntax checks. The
 combined final program test run passed 189 checks. It updates only
 `web_sentence_contract.py`; the revised finite check is run separately from
 `/tmp` and is not installed. Installation and model review are still pending.
+
+
+## Complete production run after the English alias update: semantic failure
+
+The English alias update was installed and the three-case production check
+completed. All three requests ended; this does not make the series pass.
+
+| Case | Program outcome | Semantic review |
+| --- | --- | --- |
+| asyncio scope | accepted pending review | Failed: the network/IPC claim translated IPC as "scambio di processi", which changes its meaning. The concurrent coroutine claim was supported. |
+| CSV conversion | accepted pending review | Failed: an unconditional no-conversion claim omitted the QUOTE_NONNUMERIC exception. |
+| Unrelated service price | abstained | Passed within this excerpt: no price, zero or external absence claim was invented. |
+
+Measured generation and checking times were approximately 37.5, 50.3 and 39.3
+seconds. The model options were unchanged. The original failed results remain
+failed; automatic lexical acceptance did not establish semantic correctness.
+
+The CSV evidence exposes a source preparation defect. HTML source wrapping
+split one prose paragraph into different evidence units, stranding "No" on a
+preceding line and separating the exception from its scope. The asyncio API
+list was likewise broken at source line wraps. These are formatting boundaries,
+not reliable sentence or paragraph boundaries.
+
+## Prose context correction and qualification instructions
+
+The HTML reader now collapses whitespace inside prose data while preserving
+real paragraph/list/block boundaries, explicit br elements and line breaks in
+pre elements. Spaces around inline code, emphasis and entities are retained.
+It neither supplies missing words nor rewrites the source's assertions. Plain
+text, source length limits, private destination blocking, DNS-pinned TLS,
+redirect validation, cancellation, deadlines and model settings are unchanged.
+Evidence quotes still come from the extracted page, never from generated text.
+
+The system instructions no longer require six-to-ten-word sentences or prohibit
+subordinate clauses. The existing 200-character bound remains, with a soft
+100-character goal. Negation, conditions, exceptions, scope, uncertainty and
+attribution take priority over brevity. Acronyms and technical identifiers must
+be retained rather than translated or expanded without a definition in the
+selected passage. No semantic acceptance check is removed or relabeled.
+The validators remain structural and lexical; the model can still make errors.
+
+Four extraction regressions cover the observed conditional paragraph (including
+negation, exception and affected fields), inline whitespace and entities,
+separate prose/list/code blocks and explicit line breaks. Production contract
+checks keep the previous schema, complete evidence coverage, validators,
+transport closure and no-retry behavior, while using the revised prompt.
+Historical pinned installers/candidates use frozen payloads at their original
+hashes. The finite check keeps the same three questions and criteria and updates
+only the two changed installed file fingerprints.
+
+201 selected program tests passed, including eight installer checks for backup,
+verified downloads, syntax, local edits, symlinks, occupied-port refusal and
+rollback after the second replacement fails. This is program verification,
+not a successful local-model review. The two-file correction still needs Mac
+installation and the same three-case production check before this defect can
+be declared resolved. Source comparison remains pending until then.
+
+Upstream consulted for this correction:
+`open-jarvis/OpenJarvis/tests/tools/test_web_search.py`, particularly source
+content preservation and fetch isolation tests. The CSV and asyncio official
+Python documentation was consulted to review the claims; upstream tests do
+not certify the custom local model's answers.

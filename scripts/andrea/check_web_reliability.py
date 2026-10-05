@@ -18,9 +18,9 @@ API = 'http://127.0.0.1:8008'
 MAX_RESPONSE = 65536
 EXPECTED = {
     'scripts/andrea/runtime.py': '395271608f3f6678017064afcb7dc4ac2272f3d75bc249cddbfc240a861bb172',
-    'scripts/andrea/web_page_fetch.py': 'e93b91e964ab04a4344218600aba248dd421683767fd47d410ac4aa4183d54b6',
+    'scripts/andrea/web_page_fetch.py': '2168186c522d1ee07e805f3f20b5d7aa747aef46847a460b1b8c65050efcdfdc',
     'scripts/andrea/web_page_local.py': '06f58558d8a234e3974e3cb7cc0621d7ee1b1bbce0d339c9380b188cb7aa4706',
-    'scripts/andrea/web_sentence_contract.py': 'e444e1d7c08d1f600b05f36495d72a072d812efb7235286bd1db1dfcc80f9860',
+    'scripts/andrea/web_sentence_contract.py': '1b8e18f653be917f328aaee45d53464cb597423194e78acbe2b089fb2d9656ac',
 }
 CASES = (
     {'id':'asyncio_scope', 'url':'https://docs.python.org/3/library/asyncio.html',
