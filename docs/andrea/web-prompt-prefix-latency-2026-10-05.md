@@ -164,3 +164,70 @@ transport remains diagnostic and stops without retry.
 Production is unchanged. New local-model measurements and review are pending;
 the latency task remains open. Upstream `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`
 was consulted again for evidence-content preservation and explicit fetch paths.
+
+## Literal refinement Mac result: two refusals, not a production pass
+
+The three-call run pinned at `e875987dda1132fd2fb6e8d829b598256a602ee4`
+completed without retries or production changes. The same two public excerpts
+were used. asyncio took 49.641 seconds and CSV 48.385 seconds; the repeated CSV
+question abstained in 2.397 seconds, with 2283/2314 cached context tokens and
+1.621 seconds of context evaluation. That preserves the narrow repeated-page
+cache observation; the first requests are still slow.
+
+The asyncio answer correctly used the Italian word "subprocessi" in place of
+`subprocesses`. The literal English-only guard rejected it. This is a false
+lexical refusal introduced by the refinement, unlike the preceding genuinely
+wrong "sottoprogetti" translation. The next candidate must permit the precise
+finite technical equivalent while continuing to refuse the observed wrong word.
+
+CSV was refused for `sentence_not_complete`: its generated string was exactly
+200 characters and ended with "vengono trasformi". The JSON transport ended with
+`stop` after only 67 generated tokens; it did not exhaust the 512-token budget.
+The string ends exactly at the native schema's `maxLength:200`, strong evidence
+that this character bound prevents sentence completion. Adding a period or
+accepting the unfinished word would not repair the meaning. The entire literal
+refinement remains failed and isolated, regardless of the successful abstention.
+
+## Anchored equivalents and completion space: new isolated candidate
+
+`web_alias_prefix_contract_candidate.py` maps only these finite lexical forms
+to the same subprocess concept: `subprocess`, `subprocesses`, `subprocesso`,
+`subprocessi`, `sottoprocesso`, `sottoprocessi`. A generated equivalent requires
+that concept in the selected evidence unit. Single-statement evidence retaining
+the term is still required to retain its concept. "Sottoprogetti" is not an
+equivalent and the actual wrong answer remains rejected. This is a lexical
+check, not general semantic entailment or permission to import other facts.
+The existing source-anchored `APIs` to `API` spelling rule is unchanged.
+
+The native JSON string schema no longer has a character maximum that can force
+closure mid-word. The prompt still targets 100 characters and allows 320 when
+needed to finish a thought and its qualifications. The application refuses a
+complete claim longer than 320 characters; it never trims or repairs it. Two
+claims maximum, source passage selection, original full excerpt, 512 output
+tokens, model settings, 90-second deadline, transport completion, punctuation,
+number/identifier/concurrency guards, no retry, and semantic review all remain.
+The larger completion space may increase generation time for a longer answer;
+this needs measurement instead of an assumption of speed improvement.
+
+`web_alias_prefix_probe.py` repeats the same three questions and semantic
+criteria once, with two selected public reads and no baseline rerun, warm-up,
+option change or installation. The source-first user payload, system prompt and
+schema are identical between the two questions about the CSV excerpt except
+for the final question. Cached token counts and phase timings remain reported;
+character prefix length alone is not a cache metric. Earlier failures remain
+in this record and are not reclassified as passing tests.
+
+Fourteen new regressions and the 71 preceding related checks passed (85 total).
+They reproduce the actual false Italian rejection and exact 200-character
+unfinished CSV output, accept the complete 212-character CSV statement without
+alteration, reject wrong or unanchored terms, excessive or incomplete output,
+unsupported numbers and concurrency, and discard all claims after a later
+failure. They also pin standalone/pure function parity, full evidence, identical
+question-independent prefix/schema, unchanged settings, exactly two reads/three
+calls, no writes, no retry and failure before inference on missing input or local
+changes. These are program regressions; the new Mac generation and its semantic
+review are still pending.
+
+Upstream `open-jarvis/OpenJarvis/tests/engine/test_ollama.py` was consulted again
+for asynchronous stream handling, timeout/disconnect/error behavior and schema
+propagation. Production is unchanged and the latency task remains open.
