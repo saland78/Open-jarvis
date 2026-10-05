@@ -15,6 +15,8 @@ updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater
 
 
 def published_source(relative):
+    if relative == 'scripts/andrea/web_page_fetch.py':
+        return (ROOT/'tests/fixtures/andrea/web_page_fetch.py_before_read_diagnostics').read_bytes()
     if relative == 'scripts/andrea/web_page_local.py':
         return (ROOT/'tests/fixtures/andrea/web_page_local.py_before_sentence_contract').read_bytes()
     return (ROOT/relative).read_bytes()

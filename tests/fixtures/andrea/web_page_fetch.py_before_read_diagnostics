@@ -21,26 +21,6 @@ METADATA = {'metadata.google.internal', 'metadata.google.com'}
 class PageError(ValueError):
     pass
 
-def network_error(exc, phase):
-    """Stable codes only: never expose exception text, destination or TLS details."""
-    if isinstance(exc, ssl.SSLCertVerificationError):
-        return 'tls_certificate_invalid'
-    if isinstance(exc, ssl.SSLError):
-        return 'tls_error'
-    if isinstance(exc, TimeoutError):
-        return phase + '_timeout'
-    if isinstance(exc, ConnectionRefusedError):
-        return phase + '_refused'
-    if isinstance(exc, http.client.IncompleteRead):
-        return 'body_incomplete'
-    if isinstance(exc, http.client.RemoteDisconnected):
-        return phase + '_disconnected'
-    if isinstance(exc, http.client.HTTPException):
-        return phase + '_invalid_http'
-    if isinstance(exc, OSError):
-        return phase + '_network_error'
-    return 'unexpected_worker_error'
-
 def address_allowed(value):
     ip = ipaddress.ip_address(value)
     if isinstance(ip, ipaddress.IPv6Address):
@@ -84,15 +64,9 @@ class PinnedHTTPS(http.client.HTTPSConnection):
     def connect(self):
         # Numeric address from the checked DNS result; TLS authenticates the
         # original hostname. No second hostname lookup or alternative IP retry.
-        try:
-            raw = socket.create_connection((self.address, 443), self.timeout)
-        except OSError as exc:
-            raise PageError(network_error(exc, 'connection')) from None
+        raw = socket.create_connection((self.address, 443), self.timeout)
         try:
             self.sock = self._context.wrap_socket(raw, server_hostname=self.host)
-        except Exception as exc:
-            raw.close()
-            raise PageError(network_error(exc, 'tls')) from None
         except BaseException:
             raw.close()
             raise
@@ -171,10 +145,8 @@ def fetch_page(url):
     for hop in range(3):
         host, address, path = target(current)
         connection = PinnedHTTPS(host, address)
-        phase = 'request'
         try:
             connection.request('GET', path, headers={'User-Agent': 'OpenJarvis-Andrea/1.0', 'Accept': 'text/html,text/plain', 'Accept-Encoding': 'identity'})
-            phase = 'response'
             response = connection.getresponse()
             if response.status in {301, 302, 303, 307, 308}:
                 location = response.getheader('Location')
@@ -187,34 +159,23 @@ def fetch_page(url):
                 raise PageError('unsupported_content_type')
             if response.getheader('Content-Encoding', 'identity').lower() != 'identity':
                 raise PageError('unsupported_encoding')
-            phase = 'body'
             body = response.read(MAX_BYTES + 1)
             if len(body) > MAX_BYTES: raise PageError('page_too_large')
             title, text, partial = extract(body, content_type)
             return {'url': current, 'title': title, 'text': text, 'partial': partial, 'redirects': hop}
-        except PageError:
-            raise
-        except (OSError, http.client.HTTPException) as exc:
-            raise PageError(network_error(exc, phase)) from None
         finally:
             connection.close()
     raise PageError('redirect_limit')
 
-def read_request(raw):
+if __name__ == '__main__':
     try:
+        raw = sys.stdin.buffer.read(4097)
         if len(raw) > 4096: raise PageError('invalid_request')
-        try:
-            data = json.loads(raw)
-        except (ValueError, UnicodeError):
-            raise PageError('invalid_request') from None
+        data = json.loads(raw)
         if not isinstance(data, dict) or set(data) != {'url'}: raise PageError('invalid_request')
         result = fetch_page(data['url'])
     except PageError as exc:
         result = {'error': str(exc)}
     except Exception:
-        result = {'error': 'unexpected_worker_error'}
-    return result
-
-if __name__ == '__main__':
-    result = read_request(sys.stdin.buffer.read(4097))
+        result = {'error': 'network_or_tls_error'}
     print(json.dumps(result, ensure_ascii=False))

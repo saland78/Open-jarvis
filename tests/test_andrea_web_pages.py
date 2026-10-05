@@ -43,7 +43,7 @@ class SecurityTests(unittest.TestCase):
     def test_tls_failure_closes_socket(self):
         sock = MagicMock(); tls = MagicMock(); tls.wrap_socket.side_effect = fetch.ssl.SSLError()
         with patch.object(fetch.ssl, 'create_default_context', return_value=tls), patch.object(fetch.socket, 'create_connection', return_value=sock):
-            with self.assertRaises(fetch.ssl.SSLError): fetch.PinnedHTTPS('example.com', '8.8.8.8').connect()
+            with self.assertRaisesRegex(fetch.PageError, 'tls_error'): fetch.PinnedHTTPS('example.com', '8.8.8.8').connect()
         sock.close.assert_called_once()
 
     def test_redirect_revalidated_before_new_connection(self):

@@ -19,47 +19,6 @@ from web_sentence_contract import prepare as prepare_sentences, validate as vali
 
 READ_TIMEOUT = 25
 MODEL_TIMEOUT = 90
-
-def read_failure(code):
-    """Safe user-facing diagnostics; no remote exception text is displayed."""
-    messages = {
-        'dns_unavailable': 'Il nome del sito non è stato risolto dal DNS.',
-        'tls_certificate_invalid': 'Il certificato HTTPS del sito non supera la verifica.',
-        'tls_error': 'La connessione HTTPS ha restituito un errore TLS.',
-        'body_incomplete': 'Il trasferimento della pagina si è interrotto prima del completamento.',
-        'unexpected_worker_error': 'Il lettore della pagina ha incontrato un errore interno.',
-        'worker_start_failed': 'Il processo di lettura non è stato avviato.',
-        'worker_failed': 'Il processo di lettura è terminato con un errore.',
-        'invalid_response': 'Il processo di lettura ha restituito una risposta non riconosciuta.',
-        'private_destination': 'La destinazione non è una pagina pubblica consentita.',
-        'invalid_url': 'L’indirizzo della pagina non è valido.',
-        'https_public_only': 'È richiesta una pagina HTTPS pubblica senza credenziali.',
-        'redirect_limit': 'Il reindirizzamento manca o supera il limite consentito.',
-        'unsupported_content_type': 'Il formato della pagina non è supportato: sono ammessi HTML e testo.',
-        'unsupported_encoding': 'La compressione della risposta non è supportata.',
-        'unsupported_charset': 'La codifica del testo non è supportata.',
-        'page_too_large': 'La pagina supera il limite di un megabyte.',
-        'no_readable_text': 'La pagina non contiene abbastanza testo leggibile.',
-        'invalid_request': 'La richiesta al lettore della pagina non è valida.',
-    }
-    phases = {'connection': 'Connessione al sito', 'tls': 'Avvio della connessione HTTPS',
-              'request': 'Invio della richiesta', 'response': 'Attesa della risposta del sito',
-              'body': 'Lettura del contenuto della pagina'}
-    failures = {'timeout': 'tempo di attesa scaduto', 'refused': 'connessione rifiutata',
-                'disconnected': 'connessione interrotta', 'invalid_http': 'risposta HTTP non valida',
-                'network_error': 'errore di rete'}
-    for phase, label in phases.items():
-        for failure, detail in failures.items():
-            messages[phase + '_' + failure] = label + ': ' + detail + '.'
-    if isinstance(code, str) and re.fullmatch(r'http_[1-5][0-9]{2}', code):
-        message = f'Il sito ha risposto con HTTP {code[5:]}; la pagina non è stata letta.'
-    elif isinstance(code, str) and code in messages:
-        message = messages[code]
-    else:
-        code = 'invalid_response'
-        message = messages[code]
-    return SearchError(f'{message} Codice: {code}. Nessun tentativo automatico e nessuna sintesi generata.')
-
 SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['claims'], 'properties': {'claims': {'type': 'array', 'maxItems': 2, 'items': {'type': 'object', 'additionalProperties': False, 'required': ['text', 'quote'], 'properties': {'text': {'type': 'string', 'maxLength': 300}, 'quote': {'type': 'string', 'maxLength': 300}}}}}}
 
 def normalized(text):
@@ -197,22 +156,19 @@ class LocalWebPages:
             raise SearchError('Scegli una sola pagina HTTPS da leggere.', 400)
         self.clear()
         started = time.perf_counter()
-        try:
-            process = await asyncio.create_subprocess_exec(sys.executable, str(Path(__file__).with_name('web_page_fetch.py')), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL)
-        except OSError:
-            raise read_failure('worker_start_failed') from None
+        process = await asyncio.create_subprocess_exec(sys.executable, str(Path(__file__).with_name('web_page_fetch.py')), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL)
         try:
             try:
                 output, _ = await asyncio.wait_for(process.communicate(json.dumps(payload).encode()), READ_TIMEOUT)
             except asyncio.TimeoutError:
-                raise SearchError('Lettura scaduta dopo 25 secondi (read_deadline). La fase del blocco non è disponibile. Nessun tentativo automatico e nessuna sintesi generata.', 504) from None
-            if process.returncode != 0: raise read_failure('worker_failed')
-            if len(output) > 50000: raise ValueError()
+                raise SearchError('Lettura scaduta dopo 25 secondi. Nessun tentativo automatico.', 504) from None
+            if process.returncode != 0 or len(output) > 50000: raise ValueError()
             page = json.loads(output)
             if not isinstance(page, dict): raise ValueError()
             if 'error' in page:
-                if set(page) != {'error'}: raise ValueError()
-                raise read_failure(page['error'])
+                code = page['error']
+                if not isinstance(code, str) or not re.fullmatch(r'[a-z0-9_]{1,80}', code): code = 'invalid_response'
+                raise SearchError(f'Pagina non letta ({code}). Nessuna sintesi generata.')
             if set(page) != {'url', 'title', 'text', 'partial', 'redirects'} or not isinstance(page['text'], str) or not 40 <= len(page['text']) <= 6000 or not isinstance(page['title'], str) or len(page['title']) > 200 or not isinstance(page['url'], str) or not page['url'].startswith('https://') or type(page['partial']) is not bool or type(page['redirects']) is not int or not 0 <= page['redirects'] <= 2:
                 raise ValueError()
             page.update({'pageId': secrets.token_urlsafe(24), 'sourceId': 'W1', 'consultedAt': datetime.now(timezone.utc).isoformat(), 'readMs': round((time.perf_counter()-started)*1000), 'modelUsed': False})
@@ -225,7 +181,7 @@ class LocalWebPages:
             raise
         except (ValueError, UnicodeError) as exc:
             if isinstance(exc, SearchError): raise
-            raise read_failure('invalid_response') from None
+            raise SearchError('Risposta della pagina non riconosciuta.') from None
         finally:
             await stop_process(process)
 

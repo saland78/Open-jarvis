@@ -21,6 +21,8 @@ def installed_source(relative):
     # version. Preserve that baseline when the repository advances.
     if relative == 'scripts/andrea/web_sentence_contract.py':
         return (ROOT / 'tests/fixtures/andrea/web_sentence_contract.py_before_concurrency_prompt').read_bytes()
+    if relative in {'scripts/andrea/web_page_fetch.py', 'scripts/andrea/web_page_local.py'}:
+        return (ROOT / ('tests/fixtures/andrea/'+Path(relative).name+'_before_read_diagnostics')).read_bytes()
     return (ROOT / relative).read_bytes()
 
 def baseline(root):
