@@ -75,7 +75,8 @@ The report always retains `qualityVerdict: pending_review` and refuses automatic
 integration. The preceding measured speed pass and semantic failure stay recorded.
 The installed production contract is unchanged with SHA
 `5b8a73b2a9d534074ec61eb67b9abd0eb6c73d3abb2783e76149ad6b3b7b2285`.
-Mac collection for this role-aware candidate is pending.
+Mac collection for this role-aware candidate is completed below. This candidate
+is not adopted: formal and semantic issues remain despite the speed gates.
 
 ## Validation
 
@@ -93,5 +94,48 @@ helper/standalone AST parity, retained guard failures, cache eligibility and
 unaltered performance gates, exactly two reads/six calls, preserved rejected
 diagnostics, early preflight refusal, incomplete-stream stop, and the owned
 reader hook/deadline. With the previous related checks: **383 program tests pass**.
-These checks establish program behavior; local model answer quality and timings
-still require the pending Mac collection. The latency task remains open.
+These checks establish program behavior. The completed Mac collection below
+does not close the latency task.
+
+## Mac collection reviewed — heading fixed, term/type fidelity still open
+
+All six calls complete, without retry. The source snapshots are unchanged from
+the preceding comparison: asyncio SHA
+`db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01`,
+CSV SHA `f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215`.
+The HTML reader marks asyncio range `[0,26]` as context reference 1, and CSV
+ranges `[0,34]` and `[1470,1485]` as references 1 and 13. Neither generated
+asyncio response selects the heading as evidence; both select network I/O/IPC
+and subprocess control from the actual documented items.
+
+| Call in collection order | Uncached input tokens | Native prefill ms | Client total ms | Review |
+|---|---:|---:|---:|---|
+| asyncio installed | 1670 | 23211.678 | 34904.712 | Two faithful functionalities; favorable |
+| asyncio compact | 1328 | 19211.425 | 26604.857 | Faithful input/output expansion; false literal I/O refusal |
+| CSV compact | 2104 | 33535.333 | 45475.086 | Formal acceptance; ambiguous result type, not a semantic pass |
+| CSV installed | 2440 | 37270.574 | 50087.612 | Default, condition, unquoted fields and float preserved; favorable |
+| Missing price installed | 2441 | 36881.563 | 37735.223 | Empty claims; favorable abstention |
+| Missing price compact | 2101 | 32525.442 | 33363.063 | Empty claims; favorable abstention |
+
+Native cache counts are 0–4 and all calls meet the original cache eligibility.
+The asyncio pair reduces uncached tokens by 20.479% and prefill by 17.234%;
+CSV reduces them by 13.770% and 10.022%. Both original speed gates are met.
+The first installed asyncio call includes 4066.436 ms model loading versus
+2.433 ms in the compact call: its full total difference is not attributed
+entirely to the candidate. CSV load durations are 3.601/1.893 ms. First JSON,
+generation, read costs and client totals remain distinct; browser drawing was
+not measured. These six calls do not establish a statistical speed guarantee.
+
+The compact asyncio response says `input/output` with IPC and points to the
+same network IO/IPC item. The existing literal guard still requires `I/O` and
+rejects that standard expansion. The CSV compact response preserves the default
+rule, QUOTE_NONNUMERIC and unquoted-field scope, but replaces the explicit
+Python result type float with “numeri decimali”. Formal identifier/scope
+acceptance does not establish that this type is faithfully preserved.
+
+The original automatic report remains `gates_not_met`, with
+`technicalCaseShapesMet: false`, `qualityVerdict: pending_review` and no
+integration permission. Four outputs have favorable review; the other two
+require the distinct [finite term/type correction](web-type-latency-experiment-2026-10-06.md).
+Replaying old responses with a corrected program cannot retroactively turn
+this collection into an adopted or fully passed variant.

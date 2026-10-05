@@ -207,3 +207,24 @@ prova distinta ripete i sei casi originali senza retry e con le stesse soglie;
 il riferimento installato rimane invariato. 383 regressioni pertinenti passate;
 risposte e misure del Mac restano da raccogliere. Produzione invariata e altri
 moduli rinviati fino alla chiusura del task di latenza e qualità.
+
+## Titoli corretti; equivalenza I/O e tipo CSV da collaudare — 2026-10-06
+
+La [serie con ruoli HTML completata](web-heading-latency-experiment-2026-10-06.md#mac-collection-reviewed--heading-fixed-termtype-fidelity-still-open)
+non seleziona più il titolo come prova. Entrambe le coppie superano le soglie
+originali: token nuovi -20,479%/-13,770%, prefill -17,234%/-10,022%, cache idonea.
+Il caricamento di 4066,436 ms della prima richiesta spiega parte della differenza
+totale asyncio e non viene attribuito alla compattazione. Quattro risposte hanno
+revisione favorevole. Restano un falso rifiuto dell'equivalenza input/output–I/O
+e l'imprecisione “numeri decimali” al posto del tipo float nella sintesi CSV.
+Il rapporto originario resta non superato; nessuna adozione.
+
+La [correzione finita dei termini e del tipo](web-type-latency-experiment-2026-10-06.md)
+riconosce soltanto l'espansione standard di I/O nello stesso passaggio e rende
+esplicito il tipo float nell'inventario derivato dalla regola CSV della fonte.
+Un controllo aggiuntivo rifiuta un diverso tipo di risultato senza correggere
+testi generati. Fonti complete, domanda, riferimento installato, trasporto,
+opzioni, sei casi originali e soglie rimangono invariati; il rilevatore lessicale
+non certifica il significato. 426 regressioni pertinenti passate. Restano da
+raccogliere sei risposte e misure sul Mac per questa revisione distinta: il task
+latenza e qualità rimane aperto, gli altri moduli restano rinviati.
