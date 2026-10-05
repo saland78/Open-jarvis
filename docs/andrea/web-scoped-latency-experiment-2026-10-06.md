@@ -105,6 +105,45 @@ orchestration regressions reused against this candidate. The duplicated CSV
 output is retained as two diagnostic claims, not silently repaired. All other
 source helpers and guards have identical ASTs to the installed contract.
 
-Together with previous related checks: **353 program tests passed**. New Mac
-model answers and performance collection are pending. No production adoption
-is prepared from a failed latency comparison.
+Together with previous related checks: **353 program tests passed**. The Mac
+collection is reviewed below. No production adoption is prepared from a failed
+quality or latency comparison.
+
+## Mac collection reviewed — speed gates met, semantic adoption failed
+
+The six-request run of script commit
+`699dde4fd9536eeb7a26c86473cd8f5dce8504be` completed without retry. Both public
+source hashes match the preceding experiment. All native cache counts are
+eligible: 0–4 cached tokens and at least 99.77% uncached input. Both original
+performance gates now pass independently; these are measured observations,
+not a statistical or universal speed guarantee.
+
+| Case | Installed/compact uncached tokens | Installed/compact native prefill ms | Token reduction | Prefill reduction | Client total ms, installed/compact |
+|---|---:|---:|---:|---:|---:|
+| asyncio | 1667 / 1326 | 24099.595 / 21467.471 | 20.456% | 10.922% | 38052.864 / 31431.191 |
+| CSV | 2438 / 2095 | 38091.108 / 34244.080 | 14.069% | 10.100% | 50910.277 / 46815.908 |
+| Missing price | 2441 / 2090 | 37834.210 / 35379.613 | Diagnostic only | Diagnostic only | 38767.060 / 36246.122 |
+
+First asyncio loading is 4823.832 ms in the installed-prompt call versus
+2.891 ms in the compact call. The entire 6621.673 ms client-total difference
+must not be attributed to instruction compaction. CSV has small loading times
+on both sides and 4094.369 ms lower client total. Native and client times have
+different clocks; no UI rendering or accepted production response is measured.
+
+Manual source-based review finds five responses favorable: two explicit asyncio
+functionalities in the installed-prompt answer; both CSV answers retain the
+default rule, QUOTE_NONNUMERIC condition and unquoted-field qualification;
+both missing-price answers abstain. The compact asyncio answer fails review:
+its first point claims nonblocking execution while selecting only passage 1,
+the heading `asyncio — Asynchronous I/O`. That heading alone does not document
+the added behavior; together with its second I/O point this also fails the
+request for two source-supported functionalities. The raw output and its
+original structural acceptance are not repaired, re-anchored or relabeled.
+
+Both old and candidate lexical validators accept this heading expansion,
+demonstrating why `accepted_pending_semantic_review` is not a quality pass.
+The overall variant is **not adopted**. The next
+[distinct heading-role refinement](web-heading-latency-experiment-2026-10-06.md)
+addresses the observed selection mechanism while retaining the original
+questions, source bytes, speed gates and quality review. No unrelated module
+starts before this task is resolved.

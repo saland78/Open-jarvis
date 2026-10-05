@@ -188,3 +188,22 @@ opzioni, domande, ordine e soglie; entrambe le varianti usano il validatore
 corretto e mostrano separatamente anche il vecchio controllo installato.
 353 regressioni passate; risposte e tempi del modello sul Mac ancora pendenti.
 Il task di latenza resta aperto; gli altri moduli rimangono rinviati.
+
+## Soglie di velocità superate, prova semantica ancora aperta — 2026-10-06
+
+La [serie con correzioni finite](web-scoped-latency-experiment-2026-10-06.md#mac-collection-reviewed--speed-gates-met-semantic-adoption-failed)
+supera le soglie originali per entrambi i confronti: token nuovi -20,456%/-14,069%,
+prefill -10,922%/-10,100%. Cinque risposte hanno revisione favorevole, ma la sintesi
+compatta asyncio aggiunge un comportamento citando soltanto un titolo. Il suo
+controllo strutturale non rileva questa insufficienza: variante non adottata.
+Il tempo di caricamento del primo caso spiega parte del suo guadagno totale;
+non viene attribuito alla sola compattazione. Nessuna dichiarazione di velocità
+universale, disegno del browser o completamento di tutti i collaudi.
+
+La [correzione dei ruoli HTML](web-heading-latency-experiment-2026-10-06.md)
+conserva i titoli nel contesto ma li esclude come prove autonome, sia nello schema
+del modello sia nel controllo del programma, mantenendo il testo identico. Una
+prova distinta ripete i sei casi originali senza retry e con le stesse soglie;
+il riferimento installato rimane invariato. 383 regressioni pertinenti passate;
+risposte e misure del Mac restano da raccogliere. Produzione invariata e altri
+moduli rinviati fino alla chiusura del task di latenza e qualità.
