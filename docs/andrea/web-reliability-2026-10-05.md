@@ -42,9 +42,14 @@ historical installer and model metric tests passed. Historical pinned programs
 use their original fixtures; their expected hashes have not been weakened.
 
 These are program tests with injected failures, not a claim that every real
-website will be readable. Installation on the Mac and one interface confirmation
-are pending. The old 503 remains unexplained unless its detailed code is observed
-again. No repeated live requests are needed merely to make it reappear.
+website will be readable. The update was installed on the Mac with both download
+hashes verified and a backup created. The installed API then returned the expected
+503 with `private_destination` for the deliberately blocked localhost URL.
+An explicit public asyncio documentation read succeeded with HTTP 200 in 565 ms,
+2551 extracted characters and `partial: false`. These confirm the blocked and
+successful reading paths in this installation, not all failures on real sites
+or browser rendering. The old 503 remains unexplained unless its detailed code
+is observed again. No repeated live requests are needed merely to make it reappear.
 
 The pinned two-file installer adds eight passing tests for verified downloads,
 syntax checks, refusing local edits and symlinks, occupied-port refusal without
@@ -60,10 +65,38 @@ escape hatch is not used.
 
 ## Remaining work in this web reliability task
 
-1. Install and confirm the diagnostic messages on the Mac.
-2. Review a finite set of brief syntheses on different content, preserving
+1. Review a finite set of brief syntheses on different content, preserving
    conditions, dates, attribution and uncertainty, and distinguish automatic
    validation from semantic review.
-3. Implement an explicit bounded comparison of sources with separate evidence,
+2. Implement an explicit bounded comparison of sources with separate evidence,
    periods and disagreements. The current latest-page-only API does not compare
    multiple pages.
+
+## Finite production synthesis check
+
+`check_web_reliability.py` verifies the four installed backend hashes and uses
+only the production read/summarize API on port 8008. It reads two explicit public
+Python documentation pages and makes exactly three distinct summary requests:
+asyncio's scope, CSV reader type conversion with its condition, and abstention
+when asked for an unrelated synthetic service price. The CSV page is reused for
+the latter two requests within the installed page lifetime. If the required CSV
+context is absent, the affected summary is not requested. Reading or API failures
+stop the check; rejected model answers remain in the report and do not trigger a
+retry. Each completed case is emitted immediately with its question, criteria,
+original selected evidence, rejection detail and numeric timings.
+
+The check changes no files, options, notes or memory and does not call search
+providers or Ollama directly. Program tests passed for the two reads/three
+requests, page reuse, endpoint isolation, refusing local edits, unchanged files,
+read failure before inference, missing context, quote/page validation, preserving
+rejected outcomes without regeneration, refusing local redirects and disabling
+environment proxies for local API calls. The 32 selected checks passed; these
+test the harness and existing program behavior, not the local model's quality.
+Actual production generations and semantic review are pending. Every generated
+result remains `qualityVerdict: pending_review`; no automatic overall quality
+pass is assigned.
+
+Upstream additionally consulted for this quality check:
+`open-jarvis/OpenJarvis/tests/tools/test_web_search.py`. The production reading
+and synthesis design remains the custom local adapter; no upstream provider
+test is presented as certification of its answers.
