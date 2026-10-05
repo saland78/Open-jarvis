@@ -91,3 +91,76 @@ Upstream consulted for this task:
 
 These references inform the experiment; they do not certify its performance
 or semantic quality on Andrea's Mac.
+
+## First Mac comparison: cache gain, candidate quality failed
+
+The pinned six-call probe at `805117cbbe627ae1d053c2172db97e4b3809c764`
+completed without retry or production changes. Its two source hashes match the
+previous production review. All three baseline cases pass their stated semantic
+criteria. The candidate CSV condition and missing-price abstention pass, but
+asyncio fails: the model translated `subprocesses` as "sottoprogetti". The
+validator rejected its second claim for `API`, because the source said `APIs`.
+That plural spelling is a false lexical rejection, but fixing it alone would
+not fix the actual subprocess mistranslation. The candidate remains failed;
+it has not been integrated into production.
+
+| Case | Baseline client total | Candidate client total | Baseline / candidate cached tokens | Candidate quality |
+| --- | --- | --- | --- | --- |
+| asyncio | 39.666 s | 33.725 s | 0/1461 / 465/1462 | Failed: subprocesses became sottoprogetti |
+| CSV condition | 44.470 s | 48.340 s | 467/2239 / 471/2240 | Passed for the stated criteria |
+| Missing price, different question on the same CSV excerpt | 40.184 s | 2.399 s | 467/2239 / 2208/2239 | Passed: empty claims |
+
+For the repeated-page question, prompt evaluation fell from 39.218 seconds to
+1.682 seconds; output evaluation remained 0.668 versus 0.666 seconds with five
+output tokens in both variants. The total decreased by about 94% in this one
+comparison. The serialized user-content prefix shared across the CSV questions
+increased from 13 to 6861 characters. Native cached-token counts, rather than
+those characters alone, corroborate context reuse in the observed run.
+
+This does not speed up every request. The candidate's first CSV response was
+slower, with 59 instead of 45 output tokens and context evaluation 38.337 versus
+36.043 seconds. The first asyncio comparison also differs in model load cost
+and generated length. Fixed order, unforced cache state and one sample per case
+still limit causal and statistical conclusions. The narrow performance
+hypothesis is supported, but the overall candidate fails its quality gate.
+
+## Literal-term refinement prepared, still isolated
+
+`web_literal_prefix_contract_candidate.py` retains source-first layout and adds
+a sparse inventory of literal `subprocess` / `subprocesses` tokens actually
+present in each eligible passage. The model is instructed to keep those tokens
+instead of translating or expanding them. The validator requires retention for
+single-statement selected units and refuses introducing them without support
+in that same selected unit. This is a narrow conservative literal policy; it
+can refuse a valid partial summary and does not establish general entailment.
+Multi-sentence paragraphs are not forced to retain a term from another sentence.
+No definition, external glossary or suggested replacement fact is supplied.
+
+An explicit finite `APIs` → `API` source spelling equivalence applies only to
+the added-identifier check for the selected passage. It does not add a mandatory
+API retention rule, license other acronyms or use another passage as support.
+Generated text and original evidence remain unmodified. The original bad
+subprocess claim is still refused even after resolving its API false rejection;
+a precise claim retaining `subprocesses` is accepted only pending semantic review.
+
+The standalone `web_literal_prefix_probe.py` makes two public reads and exactly
+three candidate inferences using the original questions/criteria. It does not
+repeat the baseline or retry until a favorable answer appears. The failed first
+candidate remains failed. This is a materially different prompt/validation
+candidate, with model, schema, full source coverage, settings and transport
+unchanged. Its page prefix remains stable across the two CSV questions. It
+reports literal-term inventories, exact evidence, diagnostics, cached tokens
+and timings; acceptance still requires semantic review of actual Mac outputs.
+
+Ten new tests plus 61 related regressions passed (71 total). They reproduce the
+observed bad term after the API alias correction, accept the exact retained
+technical term without repair, keep aliases and terms anchored to their own
+unit, discard all accepted claims when a later claim fails, preserve source,
+schema, the CSV condition and abstention, assert standalone/pure-function parity,
+and verify two reads/three calls without file or option changes. Missing context,
+failed reads or modified installed code stop before inference; incomplete model
+transport remains diagnostic and stops without retry.
+
+Production is unchanged. New local-model measurements and review are pending;
+the latency task remains open. Upstream `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`
+was consulted again for evidence-content preservation and explicit fetch paths.
