@@ -46,6 +46,13 @@ website will be readable. Installation on the Mac and one interface confirmation
 are pending. The old 503 remains unexplained unless its detailed code is observed
 again. No repeated live requests are needed merely to make it reappear.
 
+The pinned two-file installer adds eight passing tests for verified downloads,
+syntax checks, refusing local edits and symlinks, occupied-port refusal without
+killing processes, backup preservation, repeat installation and rollback after
+the second replacement fails. The final combined run passed 170 selected tests.
+The installer replaces only the worker and page service; it requires port 8008
+to be stopped and does not change notes, memory, configuration or dependencies.
+
 Upstream consulted: `open-jarvis/OpenJarvis/tests/security/test_ssrf.py`.
 Primary references: Python `ssl` and `http.client` exception documentation.
 This custom worker keeps DNS failures closed; upstream's optional fail-open
