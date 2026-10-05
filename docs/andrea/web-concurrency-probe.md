@@ -38,8 +38,8 @@ This is not evidence of a latency improvement or universal reliability.
 
 Production now uses exactly the candidate's `prepare` function. All validators,
 schema bounds, source preservation, model options and transport safeguards
-remain unchanged. The installed browser confirmation remains pending until
-the one-file prompt update is installed and exercised. Historical installer
+remain unchanged. The installed browser confirmation passed for the reviewed
+brief Italian excerpt summary described below. Historical installer
 and isolated-probe baselines remain as fixtures, rather than rewriting the
 expected hashes to accept a different historical implementation.
 
@@ -49,6 +49,28 @@ and eight tests for the one-file updater. The updater holds port 8008 while
 checking the baseline, download hash and Python syntax, preserves the old
 module in a private backup, refuses local edits and atomically replaces only
 `scripts/andrea/web_sentence_contract.py`. No frontend rebuild is needed.
+
+## Installed interface verification
+
+After installing the pinned one-file updater and restarting port 8008, the
+Italian page was read and its default summary generated through the browser.
+The visible output contained two complete claims with their original passages:
+concurrent activity management and synchronous execution waiting for operations.
+The previously introduced parallel-execution claim did not appear. Format and
+source checks passed; manual review found both points faithful to their displayed
+evidence for this brief summary. This closes the observed defect for this case,
+not every possible page or future generation.
+
+Observed backend/model measurements: page reading 667 ms, generation and checks
+11.288 s, first partial JSON 237.45 ms, context evaluation 182.808 ms, model load
+2.034 ms, token generation 11.049643 s, context/generated tokens 2434/61.
+The fast context phase differs substantially from the preceding local probe;
+these measurements do not establish why it was faster, a repeatable speedup,
+browser paint time or end-to-end voice latency. The partial JSON was not shown
+as an accepted response. Model options remain unchanged and no second automatic
+generation occurred. The observed interface paraphrases are covered by the
+production regression test; its acceptance remains pending human semantic
+review in the API, without rewriting that verdict to claim automatic quality.
 
 Upstream consulted for this task:
 `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`, plus the official Python
