@@ -88,3 +88,52 @@ Together with existing related regressions: **333 program checks passed**.
 These checks establish program behavior and refusal rules, not a successful
 model answer or a measured performance improvement. No installation is prepared
 from a failed comparison.
+
+## Mac collection completed: still not an adoption pass — 2026-10-06
+
+The next uploaded log verifies this probe's pinned SHA, contains each of the six
+ordered requests exactly once and preserves source hashes/questions. All stop
+frames complete; cache coverage qualifies under the unchanged thresholds.
+
+| Case | Variant | Uncached tokens | Native prefill ms | Native generation ms | Generated tokens | Client total ms |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| asyncio | Installed | 1670 | 37972.152 | 12936.500 | 60 | 56298.137 |
+| asyncio | Compact | 1427 | 32910.583 | 9119.198 | 67 | 42337.554 |
+| CSV | Compact | 2196 | 37463.390 | 19553.836 | 126 | 57209.940 |
+| CSV | Installed | 2442 | 40960.856 | 13697.567 | 84 | 54920.640 |
+| Missing price | Installed | 2438 | 41608.835 | 653.259 | 5 | 42541.919 |
+| Missing price | Compact | 2198 | 38388.695 | 625.764 | 5 | 39382.178 |
+
+Asyncio token/prefill reductions are 14.551%/13.330%. CSV token reduction is
+10.074%, but prefill reduction is **8.539%**, below the original **10%** gate.
+The CSV response repeats the default rule in a second point. Both points are
+source-backed, but the overlap adds output work: 126 vs 84 generated tokens,
+19.554 vs 13.698 seconds of generation and a slower total client response.
+Lower prefill alone does not establish a useful end-to-end improvement. The
+first installed asyncio call additionally loads the model for 5334.663 ms;
+its total difference cannot be wholly attributed to prompt compaction.
+
+The compact asyncio response now preserves **I/O and IPC** and selects two
+descriptive source passages. Its second point is rejected for `event loop`
+being absent from the selected passage, although the source explicitly says
+**event loops**. Local replay proves the finite morphology bug: the installed
+regex recognizes singular `event loop` but not plural `event loops`. Correcting
+only that check exposes another first-error barrier: the validator also demands
+`OS` from `handling OS signals` in the same source catalogue, although the claim
+describes its separate `running subprocesses` item, not signals.
+
+The exact source-backed partial claim is retained unchanged: “asyncio gestisce
+i sottoprocessi attraverso l'API di gestione degli event loop.” Its reference
+contains event loops, APIs and subprocesses. The checker must distinguish a
+literal omission in the selected fact (the prior I/O/IPC failure) from an
+identifier belonging to another independent catalogue item. The installed
+asyncio answer, both CSV formulations and both empty-price answers are reviewed
+favorably for source support; the compact CSV remains unnecessarily repetitive.
+This assessment does not relabel the original technical report or override its
+failed performance gate. The original `gates_not_met` outcome remains.
+
+**No adoption or repeat of the same candidate.** The
+[next isolated refinement](web-scoped-latency-experiment-2026-10-06.md) corrects
+the demonstrated finite validator bugs and tests concise nonrepetitive output
+with unchanged original questions, sources, schema, options and speed gates.
+The full Terminal history is not published.

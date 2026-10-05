@@ -170,3 +170,21 @@ il solo titolo e compatta il messaggio system a 1265 caratteri. Fonti, schema,
 validatore, opzioni, tre casi originali, ordine, cache e soglie restano invariati;
 333 controlli pertinenti passati. Le nuove risposte e i tempi del Mac restano
 da raccogliere: il task latenza è aperto, gli altri moduli rimangono rinviati.
+
+## Diagnosi del plurale e dell’ambito delle sigle — 2026-10-06
+
+La [serie della conservazione esplicita](web-short-retention-experiment-2026-10-05.md#mac-collection-completed-still-not-an-adoption-pass--2026-10-06)
+conserva I/O e IPC, ma incontra due falsi rifiuti nel programma: `event loops`
+non riconosciuto come `event loop` e OS richiesto dal distinto elemento sui
+segnali nello stesso catalogo. CSV supera il criterio token (10,074%) ma non
+il prefill (8,539% sotto 10%); ripete inoltre la regola, generando 126 token
+contro 84 e peggiorando il totale. Esito originale non superato, nessuna adozione.
+
+La [nuova prova isolata](web-scoped-latency-experiment-2026-10-06.md) corregge
+soltanto il plurale finito e l’ambito OS/segnali nel caso esplicito dei sottoprocessi,
+conserva i controlli su I/O/IPC e gli altri limiti, richiede punti non ripetuti
+con istruzioni di 1229 caratteri e output italiano. Stessi estratti, schema,
+opzioni, domande, ordine e soglie; entrambe le varianti usano il validatore
+corretto e mostrano separatamente anche il vecchio controllo installato.
+353 regressioni passate; risposte e tempi del modello sul Mac ancora pendenti.
+Il task di latenza resta aperto; gli altri moduli rimangono rinviati.
