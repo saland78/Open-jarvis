@@ -20,7 +20,7 @@ EXPECTED = {
     'scripts/andrea/runtime.py': '395271608f3f6678017064afcb7dc4ac2272f3d75bc249cddbfc240a861bb172',
     'scripts/andrea/web_page_fetch.py': 'e93b91e964ab04a4344218600aba248dd421683767fd47d410ac4aa4183d54b6',
     'scripts/andrea/web_page_local.py': '06f58558d8a234e3974e3cb7cc0621d7ee1b1bbce0d339c9380b188cb7aa4706',
-    'scripts/andrea/web_sentence_contract.py': 'b41d11412c12a3370b290388564b9353c74a5db12fa0c8dce006469c4778357a',
+    'scripts/andrea/web_sentence_contract.py': 'e444e1d7c08d1f600b05f36495d72a072d812efb7235286bd1db1dfcc80f9860',
 }
 CASES = (
     {'id':'asyncio_scope', 'url':'https://docs.python.org/3/library/asyncio.html',
@@ -110,7 +110,10 @@ def run(project, opener=None, emit=print):
             page = post('/api/andrea/web/read', {'url':case['url']}, 35, opener)
             checked_page(page)
             current_url = case['url']
-        if case.get('requiredContext') and case['requiredContext'] not in page['text']:
+        if case.get('requiredContext') and ' '.join(case['requiredContext'].split()) not in ' '.join(page['text'].split()):
+            emit(json.dumps({'case':case['id'],'requiredContext':case['requiredContext'],
+                             'contextMissing':True,'originalExcerpt':page['text'],
+                             'partial':page.get('partial'),'sourceURL':case['url']},ensure_ascii=False,indent=2))
             raise CheckError('Il passaggio necessario al caso manca dall’estratto; sintesi non richiesta.')
         result = post('/api/andrea/web/summarize',
                       {'pageId':page['pageId'],'question':case['question']}, 110, opener)

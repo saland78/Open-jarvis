@@ -103,6 +103,16 @@ class ReliabilityCheckTests(unittest.TestCase):
                     check.run(root,opener,lambda _:None)
         self.assertEqual(opener.summaries,1);self.assertEqual(opener.reads,2)
 
+    def test_context_check_ignores_only_whitespace_preserving_original_evidence(self):
+        wrapped=TEXT.replace('type conversion','type\nconversion')
+        self.assertNotIn(check.CASES[1]['requiredContext'],wrapped)
+        with tempfile.TemporaryDirectory() as directory:
+            root=self.project(directory);opener=Opener()
+            with patch.dict(globals(),{'TEXT':wrapped}):
+                rows=check.run(root,opener,lambda _:None)
+        self.assertEqual(opener.summaries,3)
+        self.assertEqual(rows[1]['claims'][0]['quote'],wrapped)
+
     def test_unknown_page_and_fabricated_quote_are_refused(self):
         page={'pageId':'page1','text':TEXT}
         result={'pageId':'page2','sourceId':'W1','modelUsed':True,'automaticRetries':0,

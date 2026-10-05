@@ -34,10 +34,10 @@ def baseline(root):
 
 class ConcurrencyProbeTests(unittest.TestCase):
     def test_acceptance_contract_is_unchanged(self):
-        def functions(module):
-            tree = ast.parse(Path(module.__file__).read_text())
+        def functions(module, path=None):
+            tree = ast.parse((path or Path(module.__file__)).read_text())
             return {node.name: ast.dump(node) for node in tree.body if isinstance(node, ast.FunctionDef)}
-        before, after = functions(installed), functions(candidate)
+        before, after = functions(installed, ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_english_alias'), functions(candidate)
         for name in ('sentence_bank', 'technical_terms', 'unique_pairs', 'normalized', 'validate'):
             self.assertEqual(before[name], after[name], name)
         bank, messages, schema = candidate.prepare(PAGE, 'Sintetizza.')

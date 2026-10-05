@@ -100,3 +100,39 @@ Upstream additionally consulted for this quality check:
 `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`. The production reading
 and synthesis design remains the custom local adapter; no upstream provider
 test is presented as certification of its answers.
+
+## First production run: failed, retained
+
+The first asyncio response was rejected after 37.288 seconds:
+`technical_term_missing_from_passage`, missing concept `async`. The diagnostic
+claim was `asyncio serve per I/O asincrono.` and its original selected passage
+was `asyncio — Asynchronous I/O`. The claim preserves that heading's scope;
+the lexical guard recognized Italian `asincrono` but not English `Asynchronous`.
+This is a false technical rejection, not evidence that the full two-feature
+summary met all criteria. Only the first rejected claim was exposed.
+
+The CSV case stopped before inference because a literal context substring was
+not found. No CSV model answer exists from that run; the third case was not run.
+The report did not retain the CSV text, so the exact cause is not established.
+Official documentation contains the intended conversion condition. HTML text
+can preserve line breaks inside that phrase, which the literal precondition
+would incorrectly treat as missing. This possibility is addressed explicitly:
+the harness now compares only whitespace-normalized strings, retaining the
+original excerpt and evidence unmodified. If the phrase is still absent, it
+prints the bounded original excerpt and stops before requesting the summary.
+No missing context is fabricated or filled from external documentation.
+
+The production lexical guard now maps the finite English word `asynchronous`
+to the existing `async` concept alongside the Italian forms. It does not treat
+concurrency as parallelism, accept arbitrary identifiers or alter generated
+text. The observed false rejection is covered by a regression that preserves
+the exact claim and source and accepts it only as pending semantic review.
+Additional cases still reject unsupported parallel execution, await, def and
+asynchronous claims without any async source anchor. Historical pinned programs
+use their original contract fixture; expected historical hashes stay unchanged.
+
+181 selected tests passed after these corrections, including the normalized
+context precondition and preservation of its unmodified original quote.
+Prompt, model options, schema, timeouts and evidence selection are unchanged.
+The initial production run remains failed; new installation and a complete
+three-case production run are required before declaring the series passed.

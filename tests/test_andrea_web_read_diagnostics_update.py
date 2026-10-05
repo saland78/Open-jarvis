@@ -15,6 +15,8 @@ updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater
 
 
 def published_source(relative):
+    if relative == 'scripts/andrea/web_sentence_contract.py':
+        return (ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_english_alias').read_bytes()
     return (ROOT/relative).read_bytes()
 
 

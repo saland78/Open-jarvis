@@ -14,6 +14,28 @@ RAW=json.dumps({'claims':[{'passage':1,'text':'Il codice asincrono prosegue altr
                          {'passage':2,'text':'Una coroutine può sospendersi e successivamente riprendere.'}]})
 
 class ContractParityTests(unittest.TestCase):
+    def test_observed_english_title_supports_italian_async_translation(self):
+        quote='asyncio — Asynchronous I/O\n'
+        text='asyncio serve per I/O asincrono.'
+        raw=json.dumps({'claims':[{'passage':1,'text':text}]})
+        result=contract.validate(raw,[quote],True)
+        self.assertEqual(result['outcome'],'accepted_pending_semantic_review')
+        self.assertEqual(result['claims'][0],{'text':text,'quote':quote,'passage':1})
+        self.assertEqual(contract.technical_terms('asynchronous'),contract.technical_terms('asincrono'))
+
+    def test_english_async_alias_does_not_add_other_technical_concepts(self):
+        quote='This library provides asynchronous input and output operations.\n'
+        for text,missing in [('Il codice asincrono esegue operazioni in parallelo.','parallel_execution'),
+                             ('Await sospende il codice asincrono mentre attende.','await'),
+                             ('Il codice async def gestisce le operazioni asincrone.','def')]:
+            result=contract.validate(json.dumps({'claims':[{'passage':1,'text':text}]}),[quote],True)
+            self.assertEqual(result['outcome'],'rejected')
+            self.assertIn(missing,result['details']['missingConcepts'])
+        result=contract.validate(json.dumps({'claims':[{'passage':1,'text':'Il codice gestisce operazioni asincrone durante le attese.'}]}),
+                                 ['The library manages input and output operations.\n'],True)
+        self.assertEqual(result['outcome'],'rejected')
+        self.assertEqual(result['details']['missingConcepts'],['async'])
+
     def test_reviewed_concurrency_generation_and_observed_failure(self):
         bank=['Con la programmazione asincrona in Python, il tuo codice può gestire più attività contemporaneamente.\n',
               'Nel Python sincrono tradizionale, il codice viene eseguito una riga alla volta. Per esempio, quando chiami un’API, il programma si ferma e aspetta la risposta.\n']
