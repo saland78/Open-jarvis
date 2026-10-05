@@ -297,3 +297,29 @@ content preservation and bounded extraction. Python's primary CSV documentation
 at https://docs.python.org/3/library/csv.html explicitly ties QUOTE_NONNUMERIC
 reader conversion to non-quoted fields; that source informs review and this
 finite lexical equivalence, not additional factual context given to the model.
+
+## Qualified-field Mac run: three-case semantic gate passed
+
+The run at `1e7315be28de6fdcf24680db5aa63145846e90c0` completed all three
+original cases once with unchanged model settings and source hashes. Manual
+review now passes each stated criterion: asyncio reports I/O/IPC and subprocess
+control supported by their selected passages; CSV retains the default lack of
+conversion, QUOTE_NONNUMERIC exception and non-quoted-field scope; the unsupported
+price returns empty claims without inventing a number or asserting external
+absence. The API's `pending_review` flag remains a program flag, distinct from
+this explicit manual review. Previous failed runs remain failed in this record.
+
+| Case | Client total | Native context evaluation | Cached / context tokens |
+| --- | --- | --- | --- |
+| asyncio | 47.448 s | 31.641 s | 0 / 1624 |
+| CSV conversion | 53.750 s | 40.352 s | 616 / 2396 |
+| Missing price, same CSV excerpt | 2.526 s | 1.741 s | 2364 / 2395 |
+
+The first call also loaded the model for 5.595 seconds. Output generation took
+10.169, 13.164 and 0.738 seconds respectively, for 58, 73 and 5 tokens. Native
+cached-token counts support the narrow repeated-page improvement; they do not
+show an improvement to all first-page requests or to voice latency. The fixed
+order and unforced cache state still limit benchmarking claims.
+
+The one-file production integration, installed check and backup installer are
+described in `web-prefix-reuse-2026-10-05.md`. Its installed Mac result is pending.

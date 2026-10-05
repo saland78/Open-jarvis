@@ -4,7 +4,7 @@ import time
 import unittest
 from types import SimpleNamespace
 
-import web_identifier_contract_candidate as candidate
+import web_qualified_prefix_contract_candidate as candidate
 import web_page_local as local
 import web_sentence_contract as production
 
@@ -45,13 +45,17 @@ class IdentifierIntegrationTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result['qualityVerdict'], 'pending_review')
         return result
 
-    async def test_both_reviewed_rounds_replay_exact_claims_and_quotes_in_production(self):
-        for texts in ROUNDS:
+    async def test_precise_reviewed_round_passes_and_omitted_subprocess_term_is_refused(self):
+        for index, texts in enumerate(ROUNDS):
             result = await self.replay(IPC + LOOPS, [
                 {'passage': i + 1, 'text': text} for i, text in enumerate(texts)])
-            self.assertEqual(result['outcome'], 'accepted_pending_semantic_review')
-            self.assertEqual([x['text'] for x in result['claims']], texts)
-            self.assertEqual([x['quote'] for x in result['claims']], [IPC, LOOPS])
+            if index == 0:
+                self.assertEqual(result['outcome'], 'accepted_pending_semantic_review')
+                self.assertEqual([x['text'] for x in result['claims']], texts)
+                self.assertEqual([x['quote'] for x in result['claims']], [IPC, LOOPS])
+            else:
+                self.assertEqual(result['reason'], 'source_technical_terms_not_preserved')
+                self.assertEqual(result['claims'], [])
             result = await self.replay(CSV, [{'passage': 1, 'text': CSV_CLAIM}])
             self.assertEqual(result['claims'], [{'passage': 1, 'text': CSV_CLAIM, 'quote': CSV}])
             result = await self.replay(CSV, [])

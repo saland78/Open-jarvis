@@ -65,7 +65,7 @@ class ContractParityTests(unittest.TestCase):
         self.assertEqual(verdict['outcome'],'accepted_pending_semantic_review')
         self.assertEqual([x['quote'] for x in verdict['claims']],[bank[1],bank[5]])
 
-    def test_same_schema_bank_and_validation_as_reviewed_candidate_with_revised_prompt(self):
+    def test_full_bank_and_old_general_guards_survive_completion_schema_change(self):
         pages=[PAGE,'X'*700+'\n'+PAGE, 'Una frase breve completa.\n'*200]
         raw_cases=[RAW,'{"claims":[]}', 'not JSON',
                    '{"claims":[{"passage":true,"text":"Un testo completo ma non supportato."}]}',
@@ -79,7 +79,9 @@ class ContractParityTests(unittest.TestCase):
             expected_payload=json.loads(expected[1][1]['content'])
             self.assertEqual(actual_payload['question'],expected_payload['question'])
             self.assertEqual(actual_payload['passages'],expected_payload['passages'])
-            self.assertEqual(actual[2],expected[2])
+            expected_schema=json.loads(json.dumps(expected[2]))
+            del expected_schema['properties']['claims']['items']['properties']['text']['maxLength']
+            self.assertEqual(actual[2],expected_schema)
             self.assertNotEqual(actual[1][0],expected[1][0])
             for raw in raw_cases:
                 for completed in (True,False):

@@ -9,10 +9,9 @@ import unittest
 import urllib.error
 from unittest.mock import patch
 
-from web_prefix_baseline import source as baseline_source
 
 ROOT=Path(__file__).resolve().parents[1]
-spec=importlib.util.spec_from_file_location('web_check',ROOT/'scripts/andrea/check_web_reliability.py')
+spec=importlib.util.spec_from_file_location('web_prefix_check',ROOT/'scripts/andrea/check_web_prefix_reuse.py')
 check=importlib.util.module_from_spec(spec);spec.loader.exec_module(check)
 TEXT='No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified.'
 
@@ -46,11 +45,11 @@ class Opener:
                          'details':{'diagnosticOnly':True} if outcome=='rejected' else None})
 
 
-class ReliabilityCheckTests(unittest.TestCase):
+class InstalledPrefixCheckTests(unittest.TestCase):
     def project(self,directory):
         root=Path(directory)
         for relative,expected in check.EXPECTED.items():
-            source=baseline_source(relative)
+            source=(ROOT/relative).read_bytes()
             self.assertEqual(hashlib.sha256(source).hexdigest(),expected)
             path=root/relative;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(source)
         return root

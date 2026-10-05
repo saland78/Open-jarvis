@@ -10,8 +10,10 @@ from unittest.mock import patch
 import check_web_reliability as production_check
 import web_prefix_contract_candidate as candidate
 import web_prompt_prefix_probe as probe
-import web_sentence_contract as production
+from web_prefix_baseline import contract as production
 from test_andrea_web_identifier_probe import Opener, ASYNC, CSV, GOOD, CONCURRENT, CONDITION, BAD, raw
+
+from web_prefix_baseline import source as baseline_source
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -64,7 +66,7 @@ class PrefixProbeTests(unittest.TestCase):
     def project(self, directory):
         root = Path(directory)
         for relative, digest in probe.EXPECTED.items():
-            data = (ROOT/relative).read_bytes()
+            data = baseline_source(relative)
             self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
             target = root/relative
             target.parent.mkdir(parents=True, exist_ok=True)

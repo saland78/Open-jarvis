@@ -13,6 +13,8 @@ import web_literal_prefix_contract_candidate as previous
 from test_andrea_web_literal_prefix import LOOPS, BAD, GOOD_LOOPS
 from test_andrea_web_identifier_probe import Opener, ASYNC, CSV, GOOD, CONCURRENT, CONDITION, raw
 
+from web_prefix_baseline import source as baseline_source
+
 ROOT = Path(__file__).resolve().parents[1]
 OBSERVED_LOOPS = "asyncio consente di creare e gestire loop di eventi per networking, esecuzione di subprocessi, e gestione di segnali dell'OS."
 OBSERVED_CUT = ('csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, '
@@ -124,7 +126,7 @@ class AliasProbeTests(unittest.TestCase):
     def project(self, directory):
         root = Path(directory)
         for relative, digest in probe.EXPECTED.items():
-            data = (ROOT/relative).read_bytes()
+            data = baseline_source(relative)
             self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
             target = root/relative; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(data)
         return root

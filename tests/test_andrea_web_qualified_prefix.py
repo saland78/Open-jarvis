@@ -14,6 +14,8 @@ from test_andrea_web_alias_prefix import OBSERVED_CUT, OBSERVED_LOOPS, COMPLETE_
 from test_andrea_web_literal_prefix import LOOPS, BAD
 from test_andrea_web_identifier_probe import Opener, ASYNC, CSV, GOOD, CONCURRENT, CONDITION, raw
 
+from web_prefix_baseline import source as baseline_source
+
 ROOT=Path(__file__).resolve().parents[1]
 OBSERVED_BAD=('csv.reader restituisce ogni riga come lista di stringhe; la conversione automatica dei tipi '
               'avviene solo se specificato il formato QUOTE_NONNUMERIC, trasformando i campi non incorniciati in float.')
@@ -100,7 +102,7 @@ class QualifiedProbeTests(unittest.TestCase):
     def project(self,directory):
         root=Path(directory)
         for relative,digest in probe.EXPECTED.items():
-            data=(ROOT/relative).read_bytes()
+            data=baseline_source(relative)
             self.assertEqual(hashlib.sha256(data).hexdigest(),digest)
             target=root/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
         return root
