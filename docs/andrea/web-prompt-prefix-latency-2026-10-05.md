@@ -231,3 +231,69 @@ review are still pending.
 Upstream `open-jarvis/OpenJarvis/tests/engine/test_ollama.py` was consulted again
 for asynchronous stream handling, timeout/disconnect/error behavior and schema
 propagation. Production is unchanged and the latency task remains open.
+
+## Anchored-alias Mac result: cache confirmed, CSV meaning failed review
+
+The three requests at `11c6721260a3df29e3cbc72c1711744b08a54c0c` completed
+without retries, option changes or installation. The source hashes match the
+previous runs. Structural results were two `accepted_pending_semantic_review`
+and one abstention. Manual review passes asyncio's two features and the
+missing-price abstention. CSV fails its field-scope criterion: the output
+translated `unquoted fields` as "campi non incorniciati". The source qualifies
+fields by quoting, not by framing. A valid complete JSON and the correct option
+name do not resolve that semantic error. The candidate is not a 3/3 pass and
+has not been integrated.
+
+| Case | Client total | Native context evaluation | Cached / context tokens | Manual semantic review |
+| --- | --- | --- | --- | --- |
+| asyncio | 38.948 s | 28.428 s | 158 / 1558 | Passed: I/O, IPC and subprocess control |
+| CSV conversion | 55.281 s | 40.692 s | 550 / 2325 | Failed: unquoted became non incorniciati |
+| Missing price, same CSV excerpt | 2.798 s | 1.946 s | 2293 / 2324 | Passed: empty claims |
+
+The repeated-page prefix was 6887 characters; actual cached-token counts again
+corroborate context reuse. First-page responses remain slow and this run does
+not establish their improvement. CSV decoding took 14.346 seconds for 74 output
+tokens. The task remains both quality and latency; first-request cost must not
+be hidden by the fast repeated-page abstention.
+
+## Source-qualified conversion candidate, still isolated
+
+`web_qualified_prefix_contract_candidate.py` keeps the previous source-first
+layout, completion space and precise subprocess equivalents. It adds finite
+equivalents for `unquoted`: `non-quoted`, `non quoted`, `non quotato/quotati`,
+`non virgolettato/virgolettati`, `non racchiuso/racchiusi tra/in virgolette`,
+and `senza virgolette`. These words license only the same qualifier present in
+the selected evidence unit, not an arbitrary negation or another field property.
+The sparse source-term inventory now includes that qualifier when it occurs.
+
+A narrow guard checks the source predicate: QUOTE_NONNUMERIC with unquoted
+fields converted to float. If a generated claim describes those converted
+fields, it must preserve both the option name and the unquoted qualifier. It
+refuses the observed "non incorniciati", wrong or universal field scopes and
+removal of the condition, without editing the answer. A partial default-rule
+summary that does not describe converted fields is not forced to restate a
+different sentence. Added qualifiers still require their own selected passage.
+This guard detects the measured failure class; it is not a general semantic
+entailment check. All outputs still require semantic review against their quotes.
+
+`web_qualified_prefix_probe.py` uses the original two public pages and the same
+three questions/criteria once. It keeps the model, temperature, context/output
+budgets, full excerpt, schema, request order, deadlines and no-retry behavior.
+No baseline rerun, forced cache state, settings or installed files are changed.
+
+Fourteen new regressions and the preceding 85 related checks passed (99 total).
+They reproduce the actual prior structural acceptance of the incorrect CSV
+answer and require its new refusal; accept the precise source qualifier without
+rewriting; reject unsupported properties, removal of the condition and use of
+a qualifier from another passage; preserve abstention, valid partial summaries,
+previous technical aliases and complete statements; discard all claims after
+a later failure; preserve standalone parity, full evidence, stable prefix and
+schema; verify the same two reads/three calls, no writes/options/retries and
+bounded diagnostic-only failure. The candidate's actual Mac quality/latency
+result is pending. Production is unchanged.
+
+Consulted again: `open-jarvis/OpenJarvis/tests/tools/test_web_search.py` for fetch,
+content preservation and bounded extraction. Python's primary CSV documentation
+at https://docs.python.org/3/library/csv.html explicitly ties QUOTE_NONNUMERIC
+reader conversion to non-quoted fields; that source informs review and this
+finite lexical equivalence, not additional factual context given to the model.
