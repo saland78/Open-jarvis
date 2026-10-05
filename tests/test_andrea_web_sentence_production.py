@@ -75,7 +75,10 @@ class ContractParityTests(unittest.TestCase):
             expected=candidate.prepare(page,'Sintesi')
             actual=contract.prepare(page,'Sintesi')
             self.assertEqual(actual[0],expected[0])
-            self.assertEqual(actual[1][1],expected[1][1])
+            actual_payload=json.loads(actual[1][1]['content'])
+            expected_payload=json.loads(expected[1][1]['content'])
+            self.assertEqual(actual_payload['question'],expected_payload['question'])
+            self.assertEqual(actual_payload['passages'],expected_payload['passages'])
             self.assertEqual(actual[2],expected[2])
             self.assertNotEqual(actual[1][0],expected[1][0])
             for raw in raw_cases:

@@ -1,5 +1,7 @@
 """Identifier failure regressions and finite, read-only candidate orchestration."""
 import ast
+import importlib.machinery
+import importlib.util
 from hashlib import sha256
 import io
 import json
@@ -10,10 +12,12 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 import web_identifier_preservation_probe as probe
 import web_identifier_contract_candidate as candidate
-import web_sentence_contract as installed
 import check_web_reliability as production_check
 
 ROOT=Path(__file__).resolve().parents[1]
+loader=importlib.machinery.SourceFileLoader('identifier_probe_baseline',str(ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_identifier_retention'))
+spec=importlib.util.spec_from_loader(loader.name,loader)
+installed=importlib.util.module_from_spec(spec);loader.exec_module(installed)
 ASYNC=('run Python coroutines concurrently and have full control over their execution;\n'
        'perform network IO and IPC;\n')
 CSV=('Each row read from the csv file is returned as a list of strings. No automatic '
@@ -124,13 +128,17 @@ class OrchestrationTests(unittest.TestCase):
     def project(self,directory):
         project=Path(directory)
         for relative,expected in probe.EXPECTED.items():
-            data=(ROOT/relative).read_bytes();self.assertEqual(sha256(data).hexdigest(),expected)
+            path=(ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_identifier_retention') if relative=='scripts/andrea/web_sentence_contract.py' else ROOT/relative
+            data=path.read_bytes();self.assertEqual(sha256(data).hexdigest(),expected)
             dest=project/relative;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
         return project
 
     def test_same_three_cases_two_reads_three_inferences_no_file_or_option_changes(self):
         self.assertEqual(probe.CASES,production_check.CASES)
-        self.assertEqual(probe.EXPECTED,production_check.EXPECTED)
+        self.assertEqual(set(probe.EXPECTED),set(production_check.EXPECTED))
+        for relative in probe.EXPECTED:
+            if relative!='scripts/andrea/web_sentence_contract.py':
+                self.assertEqual(probe.EXPECTED[relative],production_check.EXPECTED[relative])
         with tempfile.TemporaryDirectory() as directory:
             project=self.project(directory)
             before={p:p.read_bytes() for p in project.rglob('*') if p.is_file()}

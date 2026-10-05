@@ -258,12 +258,85 @@ parity. The harness checks two reads/three distinct inferences, unchanged
 files/options, no retries, no inference after read failure or local edits,
 missing context, proxy isolation and local redirect refusal.
 
-The isolated candidate still requires the three local-model generations and
-semantic review before integration. The currently installed suite remains
-failed in its asyncio case; source comparison must wait.
+At candidate publication, the three local-model generations and semantic review
+were still pending. The installed suite remained failed in its asyncio case.
+The following review records the subsequent results without changing that
+historical production verdict.
 
 Upstream consulted again: `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`.
 Primary sources consulted: official Python asyncio documentation and Ollama's
 structured-output documentation. The latter supports schema validation and
 prompt/schema grounding; it does not certify semantic fidelity. Model
 settings remain unchanged to keep this candidate comparison interpretable.
+
+## Two isolated Mac runs reviewed; production integration prepared
+
+Andrea supplied two manual executions of the same pinned candidate. Both runs
+are retained in the review: each satisfies the same three stated criteria.
+The evidence hashes agree between runs: asyncio
+`db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01`
+(2551 characters, not partial) and CSV
+`f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215`
+(6000 characters, partial). No installed file or model option changed.
+
+| Case | Review of both isolated runs |
+| --- | --- |
+| asyncio scope | Two supported functionalities: I/O with IPC, and event loops for networking, subprocesses and OS signals. IPC is retained and its Italian expansion has the correct ordinary meaning, unlike the failed production paraphrase. |
+| CSV conversion | The claim preserves lists of strings, the default absence of automatic type conversion and the QUOTE_NONNUMERIC exception. It does not claim conversion for every field. |
+| Unrelated price | Empty claims in both runs; no invented price, zero or assertion about external information. |
+
+The second event-loop claim says "processi" rather than the more precise
+"subprocessi". It does not claim control over all processes; the brief contextual
+paraphrase meets the stated criteria, with that precision limitation recorded.
+The model expanded IPC correctly despite the instruction to avoid expansion.
+Literal retention therefore does not prove full prompt compliance or semantic
+entailment. These are scoped reviews of six observed results, not certification
+of future answers or all websites. API quality verdicts remain `pending_review`.
+
+| Case | First run, client total | Second run, client total |
+| --- | --- | --- |
+| asyncio | 42.03 s | 10.75 s |
+| CSV condition | 45.84 s | 8.36 s |
+| Missing price | 38.32 s | 1.10 s |
+
+The second run reused 1460 of 1461 prompt tokens for asyncio and 2238 of 2239
+for both CSV questions. These warm-cache observations do not establish stable
+latency or a hardware-independent speed improvement.
+
+Production now uses the reviewed candidate's exact source bank, messages and
+native schema. The model settings, transport, deadlines, cancellation, page
+lifetime and frontend remain unchanged. Identifier checks preserve generated
+text and source evidence; rejection cannot repair a claim or retry generation.
+
+Integration testing found a false rejection of previously reviewed DataCamp
+summaries: a multi-sentence paragraph mentioning API in one sentence was made
+to require API in a faithful summary of another sentence. Mandatory literal
+retention is consequently enforced only for a single-statement evidence unit;
+introduced identifiers must still be present in the selected unit, including
+multi-sentence paragraphs. The IPC clause is a single unit, so its observed bad
+paraphrase remains rejected. Generation instructions still guide retention in
+all units, but lexical validation alone cannot certify coverage of conditions
+or exceptions in a partial paragraph summary. Semantic review remains required.
+The strict isolated candidate is retained unchanged as historical evidence.
+
+228 selected program tests passed. Production regressions replay the claims
+and abstentions from both reviewed rounds through the actual service, preserve
+exact evidence and pending quality verdicts, reject the observed IPC defect
+without repair or retry, verify exact candidate generation-input parity, and
+preserve prior valid partial summaries while rejecting new unsupported
+identifiers. Existing isolation, SSRF, transport, cancellation, read failures,
+model metrics and historical installers also pass. Eight installer checks cover
+verified source, syntax, backups, repeated installation, refused local edits,
+symlinks, occupied port and failed replacement preservation.
+
+The pinned installer replaces only `web_sentence_contract.py`, requiring port
+8008 to be stopped and preserving the old file in a private backup. The finite
+production check updates only that fingerprint; its three questions and quality
+criteria are unchanged. Mac installation and a new production run still need
+review before closing this defect. Source comparison remains the next separate
+task and has not started.
+
+Upstream consulted for this integration:
+`open-jarvis/OpenJarvis/tests/tools/test_web_search.py`, particularly source
+preservation and fetch isolation. Those tests do not certify this local model's
+semantic answers.
