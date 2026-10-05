@@ -28,6 +28,38 @@ class SentenceTests(unittest.TestCase):
     def test_missing_definition_anchor_rejected(self):
         self.assertEqual(self.verdict('Le coroutine sono funzioni async def che possono sospendersi e riprendere.',2)['reason'],'technical_term_missing_from_passage')
 
+    def test_finite_async_language_alias_without_source_rewriting(self):
+        quote='La programmazione asincrona gestisce più attività durante le attese.\n'
+        text='L’async gestisce altre attività mentre una è in attesa.'
+        result=p.validate(json.dumps({'claims':[{'text':text,'passage':1}]}),[quote],True)
+        self.assertEqual(result['outcome'],'accepted_pending_semantic_review')
+        self.assertEqual(result['claims'][0]['quote'],quote)
+        self.assertEqual(result['claims'][0]['text'],text)
+        self.assertEqual(p.technical_terms('async'),p.technical_terms('asincrona'))
+
+    def test_concurrent_does_not_supply_parallel_execution_anchor(self):
+        quote='La programmazione asincrona gestisce più attività contemporaneamente durante le attese.\n'
+        text="L'async permette di eseguire operazioni in parallelo mentre si aspetta."
+        result=p.validate(json.dumps({'claims':[{'text':text,'passage':1}]}),[quote],True)
+        self.assertEqual(result['outcome'],'rejected')
+        self.assertEqual(result['details']['missingConcepts'],['parallel_execution'])
+        self.assertEqual(result['details']['quote'],quote)
+        self.assertTrue(result['details']['diagnosticOnly'])
+        self.assertEqual(result['claims'],[])
+
+    def test_alias_does_not_supply_await_or_def(self):
+        for text in ['Il codice async def gestisce attività durante le attese.',
+                     'Await sospende il codice asincrono durante le attese.']:
+            result=p.validate(json.dumps({'claims':[{'text':text,'passage':1}]}),
+                              ['La programmazione asincrona gestisce attività durante le attese.'],True)
+            self.assertEqual(result['outcome'],'rejected')
+
+    def test_parallel_guard_is_only_lexical_not_a_truth_verdict(self):
+        # A literal parallel anchor is not evidence of entailment by itself.
+        quote='Non si eseguono operazioni in parallelo in questo sistema asincrono.\n'
+        self.assertIn('parallel_execution',p.technical_terms(quote))
+        self.assertEqual(p.technical_terms('concorrenza contemporaneamente'),set())
+
     def test_truncated_sentence_and_ellipsis_rejected(self):
         for text in ['Le coroutine possono interrompersi nel fratt','Le coroutine possono…','Le coroutine possono...']:
             self.assertEqual(self.verdict(text)['reason'],'sentence_not_complete')

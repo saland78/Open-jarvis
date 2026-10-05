@@ -128,3 +128,39 @@ cases and are still rejected. There is no live passed verdict yet.
 
 The selected deterministic suite passes 57 tests. These do not run the
 Mac model; the next explicit live result must be reviewed separately.
+
+## Completion passed in one diagnostic; fidelity still failed
+
+The next Mac request completed in 48.894 seconds with two complete short
+sentences, 2,271 prompt tokens (62 cached) and 55 generated tokens. The
+validator rejected a missing technical term. Raw output referred to async
+in passage 2 and said operations run in parallel; passage 9 was cited for
+coroutine suspension/resumption. The previous 31.295-second run had 1,024
+cached tokens, so the timing change does not isolate a prompt performance
+effect. No quality pass or production integration is recorded.
+
+The async-versus-asincrona language mismatch is a false-positive lexical
+comparison. A finite alias now maps Italian asincrono/asincrona/asincroni/
+asincrone to the same lexical concept as async. It does not supply identifiers
+such as await or def, add text to the source, or prove semantic entailment.
+
+Parallel execution is a different claim from concurrent progress. Python's
+Task documentation says the event loop runs one task at a time while other
+tasks may run when it waits. A new lexical anchor requires explicit parallel
+terminology in the cited passage when that wording occurs in the claim.
+This cannot detect every negation or contradiction; semantic review remains
+mandatory. It prevents this particular stronger phrasing from passing
+merely because the async alias was corrected.
+
+The prompt now asks the model to preserve technical terminology rather
+than exchange it for a different concept. It includes no article-specific
+expected answer. Rejected technical checks print the claim, cited source
+unit and missing concepts as diagnostic-only, so rejection is inspectable
+without a second inference. A SHA-256 of the provided source text is printed
+for source comparability; no source file is saved. The remaining schema,
+source coverage, options, completeness and no-retry checks are unchanged.
+
+61 deterministic tests pass, including a finite-alias positive case and
+negative checks for parallel substitution and absent identifiers. These
+tests do not certify the live model. Upstream OpenJarvis web-search tests and
+the Python Coroutines and Tasks documentation were consulted for this task.
