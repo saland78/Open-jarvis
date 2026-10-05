@@ -340,3 +340,39 @@ Upstream consulted for this integration:
 `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`, particularly source
 preservation and fetch isolation. Those tests do not certify this local model's
 semantic answers.
+
+## Installed production review: 2026-10-05, three criteria passes
+
+The one-file identifier update was installed with its verified pinned download
+and backup `20261005-191224-fq8qft22`. OpenJarvis was restarted and the production
+check at `02899a589183d8f93fb2759d51bf6e91d49d1ca3` completed all three cases,
+checking the expected installed fingerprints. The questions and semantic
+criteria are the original finite suite, without automatic retry or changes to
+the model settings. The asyncio and CSV evidence hashes match the two earlier
+isolated runs; CSV remains a partial 6000-character excerpt.
+
+| Case | Installed answer and semantic review |
+| --- | --- |
+| asyncio scope | Passed: I/O and communications between processes (IPC), plus event loops for networking and interaction with the OS. The selected event-loop passage explicitly includes OS signal handling. The wording is broad, but does not assert arbitrary OS actions or universal parallelism. |
+| CSV conversion condition | Passed: lists of strings without automatic type conversion, unless QUOTE_NONNUMERIC is specified. It does not assert conversion of all fields. |
+| Unrelated service price | Passed within this excerpt: empty claims, with no invented price, zero or claim about external information. |
+
+The original IPC mistranslation is absent in this production run. The finite
+synthesis defect is closed for the stated three cases following semantic review,
+not merely because the requests completed or the JSON was accepted. Historical
+failed runs stay failed. Program response verdicts remain `pending_review`;
+this document records the separate human-facing semantic assessment.
+
+Generation and checks took 41.810, 46.278 and 36.728 seconds, respectively.
+Public reads took 452 and 601 milliseconds. Ollama reported prompt evaluation
+of 26.231, 38.076 and 35.713 seconds, with cached prompt tokens 0/1461,
+467/2239 and 467/2239. These observations leave substantial latency work;
+passing the quality criteria does not make the response fast. Browser rendering
+was not measured in this terminal check, and the review does not certify all
+future answers or websites. No additional model run is needed to relabel the
+same result.
+
+Source comparison is still a separate, unimplemented next task. No update is
+needed to install this review: it changes project documentation only. Upstream
+`open-jarvis/OpenJarvis/tests/tools/test_web_search.py` was consulted again for
+source preservation and fetch isolation; it is not treated as a semantic judge.
