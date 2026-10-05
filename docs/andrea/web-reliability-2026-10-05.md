@@ -205,3 +205,65 @@ Upstream consulted for this correction:
 content preservation and fetch isolation tests. The CSV and asyncio official
 Python documentation was consulted to review the claims; upstream tests do
 not certify the custom local model's answers.
+
+
+## Production review after prose-context correction: two passes, one failure
+
+The two-file correction was installed, OpenJarvis restarted, and the same
+three-case production check completed with its four expected file hashes.
+
+| Case | Semantic review | Observed evidence |
+| --- | --- | --- |
+| asyncio scope | Failed | The coroutine/control claim is supported. The network/IPC claim still invents "scambio di processi tra processi" instead of retaining IPC. |
+| CSV conversion condition | Passed for the stated criteria | The claim now preserves the no-conversion rule with the QUOTE_NONNUMERIC exception; it does not claim that every field converts. Its original quote contains the whole condition and the unquoted-field scope. |
+| Unrelated price | Passed within the selected excerpt | Empty claims; no price, zero or external absence assertion. |
+
+Generation plus checks took about 40.0, 42.7 and 35.4 seconds, respectively.
+These individual observations are not a controlled performance benchmark.
+The previous CSV source-wrap defect is corrected in the observed run. The
+overall quality suite is still failed because the IPC paraphrase is inaccurate.
+
+## Isolated literal-identifier candidate
+
+`web_identifier_preservation_probe.py` is a standalone, read-only candidate
+requiring the currently installed four backend hashes. It uses the same three
+questions, criteria, two explicit public pages and model settings. Page reads
+use the production API; each case's inference goes once to local Ollama with
+candidate messages/schema/validation. It is not a production integration or
+browser test. It changes no project files and imports no personal context.
+The candidate contract is also retained as a pure module for reviewed future
+integration, but production still uses `web_sentence_contract.py` unchanged.
+
+For each eligible passage, a sparse prompt inventory lists literal uppercase
+source tokens. The candidate requires their retention in the generated claim
+and rejects tokens introduced without support in that selected passage.
+IO/I/O is one finite spelling equivalence; no acronym definition, translation
+or external glossary is supplied. It preserves source quotes and generated
+text exactly: a rejection yields no accepted claims, no repair and no retry.
+Raw model JSON remains marked diagnostic, even when the candidate refuses it.
+
+This is a conservative retention policy, not a semantic classifier. A faithful
+partial paraphrase that omits an acronym from the selected unit can be refused;
+retaining an acronym does not prove the rest of the sentence is faithful. The
+model must choose a faithful supported unit or abstain, and the original
+semantic criteria still decide whether a case passes. No failing generated
+answer is relabeled as success, and no native regex grammar is introduced.
+
+15 new program tests pass. They reproduce the observed bad IPC answer, verify
+its refusal without repair, retain supported IO/I/O + IPC paraphrases, reject
+missing/added identifiers and identifiers anchored only in another passage,
+preserve the passing CSV condition and abstention, preserve prior completion,
+number and parallelism checks, and assert exact standalone/pure-contract
+parity. The harness checks two reads/three distinct inferences, unchanged
+files/options, no retries, no inference after read failure or local edits,
+missing context, proxy isolation and local redirect refusal.
+
+The isolated candidate still requires the three local-model generations and
+semantic review before integration. The currently installed suite remains
+failed in its asyncio case; source comparison must wait.
+
+Upstream consulted again: `open-jarvis/OpenJarvis/tests/tools/test_web_search.py`.
+Primary sources consulted: official Python asyncio documentation and Ollama's
+structured-output documentation. The latter supports schema validation and
+prompt/schema grounding; it does not certify semantic fidelity. Model
+settings remain unchanged to keep this candidate comparison interpretable.
