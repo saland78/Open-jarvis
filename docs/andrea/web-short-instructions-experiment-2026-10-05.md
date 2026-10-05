@@ -119,3 +119,54 @@ web/metrics/service/install regressions, 313 program checks pass.
 speedup is claimed and no production update is applied by this experiment. The
 prior reuse adoption and the historical failed candidates keep their existing
 outcomes; they are not rerun or relabeled to close this distinct task.
+
+## Mac series completed: original gates not met — 2026-10-05
+
+The uploaded Terminal output verifies the pinned standalone script and contains
+all six requests exactly once, with complete `stop` frames, unchanged original
+questions/criteria and source hashes. All cache counts are eligible under the
+predeclared limits: 0–4 cached tokens, at least 99.7952% uncached coverage.
+There is no retry, incomplete transport or private read in this series.
+
+| Case | Variant | Uncached prompt tokens | Native prefill ms | Client total ms | Reviewed quality |
+| --- | --- | ---: | ---: | ---: | --- |
+| asyncio | Installed | 1673 | 34712.084 | 49451.414 | Favorable: I/O and IPC; subprocess control |
+| asyncio | Compact | 1462 | 28575.263 | 37067.444 | Failed: missing I/O, then missing IPC |
+| CSV | Compact | 2233 | 44495.310 | 56526.163 | Favorable: default, exception and unquoted-field scope |
+| CSV | Installed | 2444 | 53422.591 | 68000.628 | Favorable: default, exception and unquoted-field scope |
+| Missing price | Installed | 2438 | 51022.260 | 52066.814 | Favorable: empty claims |
+| Missing price | Compact | 2235 | 46610.606 | 47680.045 | Favorable: empty claims |
+
+The instruction reduction gives 12.612% fewer uncached tokens and 17.679% lower
+prefill cost for asyncio. CSV prefill is 16.711% lower, but token reduction is
+only **8.633%**, below the original **10%** gate. This result remains
+`gates_not_met`; the threshold is not reduced after collection. The first
+installed call additionally has 5337.202 ms of load time, unlike the compact
+call's 2.254 ms. Their total difference cannot be assigned wholly to instruction
+compaction. Native prefill comparisons and total client time remain separate.
+
+The failed compact asyncio JSON contains these two unchanged generated claims:
+
+- Passage 1, `asyncio — Asynchronous I/O`: “asyncio serve per gestire operazioni
+  asincrone di input/output.” The literal `I/O` is replaced by an expansion, so
+  the existing identifier check rejects it. It also selects a title rather than
+  a descriptive functionality and is not an independent second functionality
+  alongside its other I/O claim.
+- Passage 10, `perform network IO and IPC;`: “asyncio permette di eseguire
+  operazioni di I/O e comunicazione tra processi.” This preserves I/O, but drops
+  the literal **IPC**. The first rejection prevented this second omission from
+  appearing in the original first-error diagnostic. Independent replay verifies
+  that the unchanged validator also rejects this claim for missing IPC.
+
+Manual review is favorable for the other five answers: both CSV formulations
+preserve no automatic conversion by default and the QUOTE_NONNUMERIC exception
+for unquoted fields; both missing-price answers abstain; the installed asyncio
+answer preserves I/O, IPC and subprocess meaning without promising parallelism
+or universal speedup. The protocol flags remain `pending_review`; review does
+not modify the emitted answers or make the failed candidate acceptable.
+
+**No production adoption.** A different compact instruction revision is prepared
+in [the retention refinement](web-short-retention-experiment-2026-10-05.md).
+The exact failure and original performance gates are retained in regressions.
+The full uploaded Terminal history is not published. No further series is run
+merely to obtain a favorable repeat of this same candidate.

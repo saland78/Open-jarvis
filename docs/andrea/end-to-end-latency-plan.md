@@ -156,3 +156,17 @@ di pagina, prefissi diagnostici isolati senza unload/warm-up, soglie fissate pri
 dei dati su cache, token nuovi e prefill. 313 controlli pertinenti passati;
 misure e revisione del modello sul Mac ancora da raccogliere. Nessuna modifica
 della produzione o velocità dichiarata; il precedente task di riuso resta chiuso.
+
+## Prima prova della latenza web non superata — correzione delle istruzioni
+
+La [serie di sei richieste sul Mac](web-short-instructions-experiment-2026-10-05.md#mac-series-completed-original-gates-not-met--2026-10-05)
+si completa con cache idonea. Prefill inferiore del 17,679%/16,711%, ma perdita
+di I/O e IPC nella risposta compatta asyncio e riduzione dei token CSV dell’8,633%
+sotto la soglia originale del 10%. Cinque risposte riesaminate favorevolmente;
+nessuna adozione, soglia ridotta o ripetizione per cercare un successo.
+La [revisione distinta di conservazione delle sigle](web-short-retention-experiment-2026-10-05.md)
+rende esplicita la copia di tutte le sigle per numero, sceglie descrizioni anziché
+il solo titolo e compatta il messaggio system a 1265 caratteri. Fonti, schema,
+validatore, opzioni, tre casi originali, ordine, cache e soglie restano invariati;
+333 controlli pertinenti passati. Le nuove risposte e i tempi del Mac restano
+da raccogliere: il task latenza è aperto, gli altri moduli rimangono rinviati.
