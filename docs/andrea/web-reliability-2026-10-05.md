@@ -136,3 +136,10 @@ context precondition and preservation of its unmodified original quote.
 Prompt, model options, schema, timeouts and evidence selection are unchanged.
 The initial production run remains failed; new installation and a complete
 three-case production run are required before declaring the series passed.
+
+The pinned one-file installer for the English alias requires the installed
+reading-diagnostics baseline. Eight installer tests passed for hashes, backup,
+occupied-port refusal, rollback, local edits, symlinks and syntax checks. The
+combined final program test run passed 189 checks. It updates only
+`web_sentence_contract.py`; the revised finite check is run separately from
+`/tmp` and is not installed. Installation and model review are still pending.
