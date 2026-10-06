@@ -1,0 +1,1776 @@
+{
+  "schema": 1,
+  "mode": "manual_review_source_networking_scope_latency_comparison",
+  "collectionDate": "2026-10-06",
+  "seriesWithinSubmission": 2,
+  "candidateCommit": "9b6e026bbf40b389c0d0c1776a548b1777082341",
+  "rows": [
+    {
+      "case": "asyncio_scope",
+      "variant": "production",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 829.973,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 2202,
+      "nativeClaimArrayLimit": 2,
+      "nativeSchemaSha256": "e4e56aa5881c46730958fe53fa311a0da7950b3170cf1e3c1803927c8e300add",
+      "unisolatedPromptSha256": "bd26fab8e82f13c2664a3cf2f982efda864832a96d5b1e790a9a8ab2e1fa7006",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 36243.598,
+        "totalClientMs": 44117.287,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 44113.506,
+          "loadMs": 6348.524,
+          "prompt_evalMs": 29828.752,
+          "evalMs": 7875.896,
+          "prompt_eval_count": 1673,
+          "prompt_eval_cached_count": 0,
+          "eval_count": 58,
+          "evalTokensPerSecond": 7.364
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":10,\"text\":\"asyncio permette di eseguire operazioni di I/O e comunicazione tra processi (IPC).\"},{\"passage\":11,\"text\":\"asyncio consente di gestire sottoprocessi.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "asyncio permette di eseguire operazioni di I/O e comunicazione tra processi (IPC).",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio consente di gestire sottoprocessi.",
+            "quote": "control subprocesses;\n",
+            "passage": 11
+          }
+        ]
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "asyncio permette di eseguire operazioni di I/O e comunicazione tra processi (IPC).",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio consente di gestire sottoprocessi.",
+            "quote": "control subprocesses;\n",
+            "passage": 11
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1673,
+        "uncachedFraction": 1.0,
+        "reason": null
+      },
+      "validationClientMs": 5.683,
+      "thermalBefore": {
+        "startedMonotonic": 111341.434635836,
+        "finishedMonotonic": 111341.452950475,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6004.337,
+          "finishedWorkerOffsetMs": 6030.63,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 60,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18004.341,
+          "finishedWorkerOffsetMs": 18034.369,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36000.864,
+          "finishedWorkerOffsetMs": 36022.74,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 111385.74294186,
+        "finishedMonotonic": 111385.772474545,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    },
+    {
+      "case": "asyncio_scope",
+      "variant": "compact",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 829.973,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [
+          18
+        ],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": [
+          18
+        ]
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 1270,
+      "nativeClaimArrayLimit": 2,
+      "nativeSchemaSha256": "2f8d40f210aab73350ca05357dfd4a793c95ea9329fa2fe49e04f412e7298772",
+      "unisolatedPromptSha256": "d6592976cdd19f6997d65548f4d74e9420e8dd9624d6479cb1c22a544388e15b",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 23998.152,
+        "totalClientMs": 31656.726,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 31651.609,
+          "loadMs": 1.486,
+          "prompt_evalMs": 23787.695,
+          "evalMs": 7658.164,
+          "prompt_eval_count": 1347,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 60,
+          "evalTokensPerSecond": 7.835
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":10,\"text\":\"asyncio permette di eseguire operazioni di rete e comunicazione tra processi (IPC).\"},{\"passage\":11,\"text\":\"asyncio consente di controllare sottoprocessi.\"}]}"
+      },
+      "checks": {
+        "outcome": "rejected",
+        "reason": "source_identifiers_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 1,
+          "passage": 10,
+          "text": "asyncio permette di eseguire operazioni di rete e comunicazione tra processi (IPC).",
+          "quote": "perform network IO and IPC;\n",
+          "missingIdentifiers": [
+            "I/O"
+          ],
+          "addedIdentifiers": [],
+          "diagnosticOnly": true
+        }
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "rejected",
+        "reason": "source_identifiers_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 1,
+          "passage": 10,
+          "text": "asyncio permette di eseguire operazioni di rete e comunicazione tra processi (IPC).",
+          "quote": "perform network IO and IPC;\n",
+          "missingIdentifiers": [
+            "I/O"
+          ],
+          "addedIdentifiers": [],
+          "diagnosticOnly": true
+        }
+      },
+      "caseShapeMet": false,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1344,
+        "uncachedFraction": 0.997773,
+        "reason": null
+      },
+      "validationClientMs": 0.298,
+      "thermalBefore": {
+        "startedMonotonic": 111385.79564117,
+        "finishedMonotonic": 111385.827249362,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 79,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6004.823,
+          "finishedWorkerOffsetMs": 6031.443,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18004.879,
+          "finishedWorkerOffsetMs": 18029.62,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 111417.707517895,
+        "finishedMonotonic": 111417.726393786,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": true,
+      "networkingScopeInventoryAddedToPrompt": true,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "compact",
+      "question": "Come si comporta csv.reader rispetto alla conversione automatica dei tipi? Conserva l’eventuale condizione.",
+      "criteria": [
+        "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+        "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 780.845,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": false,
+      "selection": {
+        "mode": "complete_api_entries",
+        "reason": "reader_proven_exact_api_match",
+        "selectedRefs": [
+          1,
+          13,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 1481,
+        "omittedSourceCharacters": 4519,
+        "matchedAnchors": [
+          "csv.reader"
+        ],
+        "sourceSignalScopeRefs": [],
+        "outputPolicy": {
+          "mode": "single_csv_conversion_rule",
+          "maxClaims": 1,
+          "reason": "recognized_single_rule_question_and_one_complete_source_rule",
+          "sourceRuleRefs": [
+            24
+          ],
+          "nativeArrayLimitChanged": true
+        },
+        "sourceNetworkingScopeRefs": []
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 1161,
+      "nativeClaimArrayLimit": 1,
+      "nativeSchemaSha256": "c0896e0ee52720c23ec68157f4aea9ede5f30ccd7c917dc12db39eacbdba706b",
+      "unisolatedPromptSha256": "273895c72a42069cf9d75c0c62559e007bc29934c7d25b9bc926813d7de32718",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 14280.721,
+        "totalClientMs": 23632.112,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 23628.33,
+          "loadMs": 2.449,
+          "prompt_evalMs": 14104.882,
+          "evalMs": 9350.731,
+          "prompt_eval_count": 834,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 82,
+          "evalTokensPerSecond": 8.769
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":24,\"text\":\"csv.reader restituisce ogni riga come lista di stringhe; nessuna conversione automatica dei tipi avviene a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe; nessuna conversione automatica dei tipi avviene a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe; nessuna conversione automatica dei tipi avviene a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 831,
+        "uncachedFraction": 0.996403,
+        "reason": null
+      },
+      "validationClientMs": 3.603,
+      "thermalBefore": {
+        "startedMonotonic": 111417.734031498,
+        "finishedMonotonic": 111417.752745622,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6002.307,
+          "finishedWorkerOffsetMs": 6026.445,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18004.979,
+          "finishedWorkerOffsetMs": 18033.747,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 111441.536127914,
+        "finishedMonotonic": 111441.560572734,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "production",
+      "question": "Come si comporta csv.reader rispetto alla conversione automatica dei tipi? Conserva l’eventuale condizione.",
+      "criteria": [
+        "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+        "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 780.845,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 2202,
+      "nativeClaimArrayLimit": 2,
+      "nativeSchemaSha256": "8952fcc3636c3471a7754f9b6463f09f1f4c0affaaee98ffe4c3530963ef9c6a",
+      "unisolatedPromptSha256": "bba139bcaaa109fb98a1f2265aa130c551e118d5d50e195c1b3d19966864c9c3",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 46016.005,
+        "totalClientMs": 58550.012,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 58546.477,
+          "loadMs": 1.695,
+          "prompt_evalMs": 45885.942,
+          "evalMs": 12533.348,
+          "prompt_eval_count": 2443,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 82,
+          "evalTokensPerSecond": 6.543
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{ \"claims\": [ { \"passage\": 24, \"text\": \"csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non virgolettati vengono trasformati in float.\" } ] }"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non virgolettati vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non virgolettati vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2440,
+        "uncachedFraction": 0.998772,
+        "reason": null
+      },
+      "validationClientMs": 0.647,
+      "thermalBefore": {
+        "startedMonotonic": 111441.570765409,
+        "finishedMonotonic": 111441.589550917,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6003.878,
+          "finishedWorkerOffsetMs": 6028.449,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18002.004,
+          "finishedWorkerOffsetMs": 18024.319,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36004.086,
+          "finishedWorkerOffsetMs": 36026.349,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 111500.28629734,
+        "finishedMonotonic": 111500.306310947,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    },
+    {
+      "case": "missing_price",
+      "variant": "production",
+      "question": "Qual è il prezzo in euro di un abbonamento mensile al servizio Zefiro secondo questo estratto?",
+      "criteria": [
+        "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+        "Non dichiara assenza di informazioni al di fuori di questo estratto."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 780.845,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 2202,
+      "nativeClaimArrayLimit": 2,
+      "nativeSchemaSha256": "8952fcc3636c3471a7754f9b6463f09f1f4c0affaaee98ffe4c3530963ef9c6a",
+      "unisolatedPromptSha256": "2399f6ef20dec3f60cbde39d8907e6b12ac3b39a699e07a6c295bd68f03c9e3b",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 46039.013,
+        "totalClientMs": 46657.356,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 46653.718,
+          "loadMs": 1.874,
+          "prompt_evalMs": 45756.282,
+          "evalMs": 618.173,
+          "prompt_eval_count": 2445,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 5,
+          "evalTokensPerSecond": 8.088
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[]}"
+      },
+      "checks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2442,
+        "uncachedFraction": 0.998773,
+        "reason": null
+      },
+      "validationClientMs": 0.245,
+      "thermalBefore": {
+        "startedMonotonic": 111500.313342927,
+        "finishedMonotonic": 111500.331447196,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 75,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6003.941,
+          "finishedWorkerOffsetMs": 6025.838,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18004.805,
+          "finishedWorkerOffsetMs": 18031.09,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36003.651,
+          "finishedWorkerOffsetMs": 36033.151,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 111547.139933659,
+        "finishedMonotonic": 111547.159675731,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 70,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    },
+    {
+      "case": "missing_price",
+      "variant": "compact",
+      "question": "Qual è il prezzo in euro di un abbonamento mensile al servizio Zefiro secondo questo estratto?",
+      "criteria": [
+        "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+        "Non dichiara assenza di informazioni al di fuori di questo estratto."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 780.845,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": []
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 990,
+      "nativeClaimArrayLimit": 2,
+      "nativeSchemaSha256": "e7c3b63581101ccd6722a24f79aef53b2fb61565063c44cb3fd4a8e67a028d77",
+      "unisolatedPromptSha256": "b46ccca18730e8271fba0228be134df6be499cddd25315387ab6c9d357983ae7",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 37661.677,
+        "totalClientMs": 38252.974,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 38249.115,
+          "loadMs": 1.784,
+          "prompt_evalMs": 37377.258,
+          "evalMs": 591.243,
+          "prompt_eval_count": 2055,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 5,
+          "evalTokensPerSecond": 8.457
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[]}"
+      },
+      "checks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2052,
+        "uncachedFraction": 0.99854,
+        "reason": null
+      },
+      "validationClientMs": 0.238,
+      "thermalBefore": {
+        "startedMonotonic": 111547.168421471,
+        "finishedMonotonic": 111547.188543853,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 70,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6003.183,
+          "finishedWorkerOffsetMs": 6107.327,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18003.805,
+          "finishedWorkerOffsetMs": 18029.555,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36004.42,
+          "finishedWorkerOffsetMs": 36030.311,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 111585.602573693,
+        "finishedMonotonic": 111585.622352825,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 68,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    }
+  ],
+  "originalAutomaticReport": {
+    "mode": "source_networking_scope_latency_comparison",
+    "requested": 6,
+    "completed": 6,
+    "pairs": [
+      {
+        "case": "asyncio_scope",
+        "cacheEligible": true,
+        "uncachedInputReductionPercent": 19.665,
+        "nativePrefillReductionPercent": 20.252,
+        "performanceGateMet": true
+      },
+      {
+        "case": "csv_conversion_condition",
+        "cacheEligible": true,
+        "uncachedInputReductionPercent": 65.943,
+        "nativePrefillReductionPercent": 69.261,
+        "performanceGateMet": true
+      }
+    ],
+    "allNativeCacheCountsEligible": true,
+    "technicalCaseShapesMet": false,
+    "performanceOutcome": "gates_not_met",
+    "qualityVerdict": "pending_review",
+    "productionModified": false,
+    "candidateRevision": "source_networking_inventory_v2",
+    "automaticRetries": 0,
+    "browserRendering": "not_measured",
+    "noStatisticalOrUniversalSpeedClaim": true,
+    "fixedGates": {
+      "maxCachedTokens": 8,
+      "minUncachedFraction": 0.98,
+      "minInputReductionPercent": 10,
+      "minPrefillReductionPercent": 10
+    },
+    "integrationAllowedByThisAutomaticReport": false,
+    "referencePromptRevision": "full_context_before_api_context_integration",
+    "referenceIsCurrentInstalledPrompt": false,
+    "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+    "sourceNetworkingInventoryChangedExplicitly": true,
+    "sourceAnchoredDuplicateConversionRuleCheck": true,
+    "sourceAnchoredSignalScopeCheck": true,
+    "sourceSignalScopeInventoryAddedExplicitly": true,
+    "nativeSingleRuleArrayLimitChangedExplicitly": true,
+    "shorterInstructionTextAlsoChanged": true,
+    "ollamaVersion": "0.35.1",
+    "versionUnchanged": true,
+    "sourceSelectionChangedExplicitly": true,
+    "originalQuestionsAndGatesUnchanged": true,
+    "thermalSamplesDoNotProvePhaseOrCausality": true,
+    "noCoolingWaitsOrThermalBasedExclusions": true
+  },
+  "manualReview": [
+    {
+      "case": "asyncio_scope",
+      "variant": "production",
+      "verdict": "unfavorable",
+      "reason": "The reference first point reports unqualified I/O, while its own source names network IO. It does not preserve that narrower qualifier. Original technical acceptance remains unchanged; the subprocess point is supported."
+    },
+    {
+      "case": "asyncio_scope",
+      "variant": "compact",
+      "verdict": "unfavorable",
+      "reason": "The first point omits the source I/O identifier. The original guard refuses the whole answer. The remaining raw point is reviewed separately and is not used to turn the result into an acceptance."
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "compact",
+      "verdict": "favorable",
+      "reason": "The single rule retains the default list of strings, the QUOTE_NONNUMERIC exception, unquoted field qualifier and float target."
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "production",
+      "verdict": "favorable",
+      "reason": "The single rule retains the default list of strings, the QUOTE_NONNUMERIC exception, unquoted field qualifier and float target."
+    },
+    {
+      "case": "missing_price",
+      "variant": "production",
+      "verdict": "favorable",
+      "reason": "The genuine empty claims abstain for unsupported price without inventing zero, an amount or an absence elsewhere."
+    },
+    {
+      "case": "missing_price",
+      "variant": "compact",
+      "verdict": "favorable",
+      "reason": "The genuine empty claims abstain for unsupported price without inventing zero, an amount or an absence elsewhere."
+    }
+  ],
+  "manualReviewCounts": {
+    "favorable": 4,
+    "unfavorable": 2
+  },
+  "overallReview": "not_passed_no_adoption",
+  "originalAutomaticChecksPreserved": true,
+  "terminalHistoryExcluded": true,
+  "comparisonReference": "archived_full_context_not_current_installed_prompt",
+  "noStatisticalOrUniversalSpeedClaim": true,
+  "browserRendering": "not_measured"
+}

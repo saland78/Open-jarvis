@@ -103,3 +103,13 @@ Andrea's native Terminal.
 
 Other project tasks remain paused until this failure is resolved on the
 installed path and its responses have been reviewed.
+
+## Subsequent actual v2 results
+
+Two submitted balanced v2 series both meet the latency and cache thresholds
+but fail the first asyncio claim: its own source IO identifier is omitted.
+Each series has four favorable and two unfavorable source reviews; original
+automatic refusals stay unchanged. v2 is not adopted. See the separate
+[series 1](web-networking-scope-v2-mac-series-1-2026-10-06.json),
+[series 2](web-networking-scope-v2-mac-series-2-2026-10-06.json) and the
+[native-identifier experiment](web-native-identifier-fix-2026-10-06.md).
