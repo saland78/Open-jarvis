@@ -1,6 +1,13 @@
 # Generate the source control verb before its free complement
 
-Status: **v9 locally verified; actual Mac answers and latency remain pending**.
+Status: **v9 measured: six technical passes, five favorable meaning reviews, one unfavorable archived-reference answer**.
+
+The [actual v9 record](web-native-operation-verb-v9-mac-2026-10-06.json) preserves
+the complete result. All three compact answers are favorable; the original
+six-answer adoption gate remains unmet. Further generation variants are stopped.
+See the [consolidation decision](web-synthesis-consolidation-2026-10-06.md) for
+the isolated candidate adapter and the remaining production acceptance work.
+The sections below document the original v9 preparation.
 No new version is installed. This synthesis defect remains the only active task.
 
 ## Observed failure
