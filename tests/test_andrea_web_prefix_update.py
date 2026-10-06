@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import io
 from pathlib import Path
+from web_prefix_baseline import before_api_context_source
 import shutil
 import socket
 import tempfile
@@ -15,7 +16,7 @@ updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater
 
 
 def published_source(relative):
-    return (ROOT/relative).read_bytes()
+    return before_api_context_source(relative)
 
 
 def original(relative):

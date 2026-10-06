@@ -5,7 +5,7 @@ type Source = { title: string; url: string; snippet: string };
 export type SearchResult = { provider: Provider; providerLabel: string; query: string; consultedAt: string; elapsedMs: number; sources: Source[]; pagesFetched: false; modelUsed: false; automaticRetries: 0 };
 export type PageRead = { pageId: string; sourceId: string; url: string; title: string; text: string; partial: boolean; consultedAt: string; readMs: number; redirects: number; modelUsed: false };
 type NativePhases = { terminalFrameReceived: boolean; loadMs: number | null; promptEvalMs: number | null; evalMs: number | null; promptEvalCount: number | null; evalCount: number | null; evalTokensPerSecond: number | null };
-export type PageSummary = { outcome: string; reason?: string; claims: { text: string; quote: string }[]; sourceId: string; pageId: string; generationAndChecksMs: number; qualityVerdict: 'pending_review'; automaticRetries: 0; contextSelection?: { mode: string; sourceCharacters: number; modelSourceCharacters: number; omittedSourceCharacters: number }; timings?: { inputCharacters: number; sourceCharacters?: number; firstJsonMs: number | null; generationMs: number | null; validationMs: number | null; outputCharacters: number | null; ollamaNative: NativePhases } };
+export type PageSummary = { outcome: string; reason?: string; claims: { text: string; quote: string }[]; sourceId: string; pageId: string; generationAndChecksMs: number; qualityVerdict: 'pending_review'; automaticRetries: 0; timings?: { inputCharacters: number; firstJsonMs: number | null; generationMs: number | null; validationMs: number | null; outputCharacters: number | null; ollamaNative: NativePhases } };
 
 export function PageTimings({ summary }: { summary: PageSummary }) {
   const timing = summary.timings;
@@ -14,7 +14,6 @@ export function PageTimings({ summary }: { summary: PageSummary }) {
   const ms = (value: number | null | undefined) => typeof value === 'number' ? `${value} ms` : 'Non disponibile';
   return <details><summary>Tempi e dimensioni di questa sintesi</summary><table className="mt-2 text-sm"><tbody>
     <tr><th className="text-left pr-4">Caratteri dell’estratto fornito</th><td>{timing.inputCharacters}</td></tr>
-    {typeof timing.sourceCharacters === 'number' && <tr><th className="text-left pr-4">Caratteri del testo conservato per confronto</th><td>{timing.sourceCharacters}</td></tr>}
     <tr><th className="text-left pr-4">Primo frammento JSON (non mostrato)</th><td>{ms(timing.firstJsonMs)}</td></tr>
     <tr><th className="text-left pr-4">Stream del modello e sua chiusura</th><td>{ms(timing.generationMs)}</td></tr>
     <tr><th className="text-left pr-4">Controlli del programma</th><td>{ms(timing.validationMs)}</td></tr>
@@ -37,11 +36,10 @@ export function PageEvidence({ page, summary }: { page: PageRead; summary: PageS
     <h2 className="text-lg font-semibold">Pagina letta: {page.title || page.url}</h2>
     <p>{page.readMs} ms · {new Date(page.consultedAt).toLocaleString('it-IT')} · {page.redirects} reindirizzamenti</p>
     {safeSearchLink(page.url) && <a className="underline break-all" href={page.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Fonte [W1]: {page.url}</a>}
-    <p>{page.partial ? 'Testo conservato limitato ai primi 6000 caratteri del contenuto selezionato: il resto non è disponibile per la sintesi.' : 'Testo estratto dal contenuto principale, quando identificabile; possono restare elementi non pertinenti.'} Il contenuto non è stato verificato su altre fonti. PDF e pagine che richiedono JavaScript non sono supportati in questa fase.</p>
+    <p>{page.partial ? 'Estratto limitato ai primi 6000 caratteri del contenuto selezionato: il resto non viene fornito al modello.' : 'Testo estratto dal contenuto principale, quando identificabile; possono restare elementi non pertinenti.'} Il contenuto non è stato verificato su altre fonti. PDF e pagine che richiedono JavaScript non sono supportati in questa fase.</p>
     {summary && <div aria-label="Sintesi della pagina" className="space-y-3">
       <h3 className="font-semibold">Sintesi da verificare</h3>
       <p>Generazione e controlli: {summary.generationAndChecksMs} ms. Nessuna seconda generazione automatica.</p>
-      {summary.contextSelection?.mode === 'complete_api_entries' && <p>Per questa domanda il modello ha ricevuto sezioni complete delle API nominate: {summary.contextSelection.modelSourceCharacters} caratteri dei {summary.contextSelection.sourceCharacters} conservati. La selezione è parziale; il testo conservato resta qui sotto per confronto.</p>}
       <PageTimings summary={summary} />
       {summary.outcome === 'accepted_pending_semantic_review' ? <>
         <p>Formato e corrispondenza dei passaggi controllati. Questi controlli non dimostrano che la sintesi interpreti correttamente la fonte.</p>
@@ -165,7 +163,7 @@ export function AndreaWebPage() {
       <section ref={pagePanel} tabIndex={-1} aria-label="Esito lettura e sintesi"><PageEvidence page={page} summary={summary} /></section>
       <form className="space-y-3 max-w-2xl" onSubmit={e => { e.preventDefault(); void pageAction('summarize'); }}>
         <label className="block">Domanda sul testo letto<input className="w-full border rounded p-2 bg-transparent" required maxLength={200} disabled={pending} value={question} onChange={e => setQuestion(e.target.value)} /></label>
-        <p>La sintesi usa soltanto il testo letto e questa domanda, con il modello locale. Per API nominate può usare sezioni complete pertinenti; l’eventuale selezione è indicata nella risposta. Non consulta altre pagine, note, memoria o conversazioni. La lettura resta disponibile per cinque minuti in questo avvio.</p>
+        <p>La sintesi usa soltanto questo estratto e questa domanda, con il modello locale. Non consulta altre pagine, note, memoria o conversazioni. La lettura resta disponibile per cinque minuti in questo avvio.</p>
         <button className="border rounded px-3 py-2" disabled={pending || !question.trim()}>Sintetizza questa pagina</button>
       </form>
     </>}

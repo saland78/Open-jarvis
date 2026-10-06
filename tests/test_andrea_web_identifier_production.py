@@ -38,7 +38,7 @@ class IdentifierIntegrationTests(unittest.IsolatedAsyncioTestCase):
         service.page = {'pageId': 'token', 'text': page}
         service.expires = time.monotonic() + 300
         result = await service.summarize({'pageId': 'token', 'question': 'Sintesi'}, stream)
-        _, messages, schema = production.prepare(page, 'Sintesi')
+        _, messages, schema, _ = local.page_context.prepare({'text': page}, 'Sintesi')
         self.assertEqual(calls, [(messages, schema)])
         self.assertEqual(closed, [True])
         self.assertEqual(result['automaticRetries'], 0)

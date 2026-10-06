@@ -118,7 +118,7 @@ class PageServiceTests(unittest.IsolatedAsyncioTestCase):
             yield Chunk(content='{"claims":[]}',finish_reason='stop')
         result=await pages.summarize({'pageId':'token','question':'Che cosa dice?'},stream)
         self.assertEqual(result['outcome'],'abstained'); self.assertEqual(result['automaticRetries'],0)
-        self.assertEqual(json.loads(captured[0][1]['content']),{'question':'Che cosa dice?','protectedIdentifiers':{},'sourceTechnicalTerms':{},'passages':[[i+1,p] for i,p in enumerate(local.evidence_passages(TEXT))]})
+        self.assertEqual(json.loads(captured[0][1]['content']),{'question':'Che cosa dice?','protectedIdentifiers':{},'sourceTechnicalTerms':{},'contextOnly':[],'passages':[[i+1,p] for i,p in enumerate(local.evidence_passages(TEXT))]})
         self.assertEqual(len(captured),1)
 
     async def test_stream_closes_on_length_or_timeout(self):

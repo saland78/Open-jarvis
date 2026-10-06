@@ -4,7 +4,6 @@ import importlib.util
 import io
 import json
 from pathlib import Path
-from web_prefix_baseline import before_api_context_source
 import tempfile
 import unittest
 import urllib.error
@@ -12,7 +11,7 @@ from unittest.mock import patch
 
 
 ROOT=Path(__file__).resolve().parents[1]
-spec=importlib.util.spec_from_file_location('web_prefix_check',ROOT/'scripts/andrea/check_web_prefix_reuse.py')
+spec=importlib.util.spec_from_file_location('web_api_context_check',ROOT/'scripts/andrea/check_web_api_context.py')
 check=importlib.util.module_from_spec(spec);spec.loader.exec_module(check)
 TEXT='No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified.'
 
@@ -43,14 +42,16 @@ class Opener:
         return Response({'pageId':payload['pageId'],'sourceId':'W1','modelUsed':True,
                          'automaticRetries':0,'qualityVerdict':'pending_review',
                          'outcome':outcome,'claims':claims,'reason':'synthetic_rejection' if outcome=='rejected' else None,
-                         'details':{'diagnosticOnly':True} if outcome=='rejected' else None})
+                         'details':{'diagnosticOnly':True} if outcome=='rejected' else None,
+                         'contractRevision':'complete_api_entries_signal_scope_v1',
+                         'contextSelection':{'mode':'full_context','sourceCharacters':len(TEXT),'modelSourceCharacters':len(TEXT),'omittedSourceCharacters':0}})
 
 
-class InstalledPrefixCheckTests(unittest.TestCase):
+class InstalledApiContextCheckTests(unittest.TestCase):
     def project(self,directory):
         root=Path(directory)
         for relative,expected in check.EXPECTED.items():
-            source=before_api_context_source(relative)
+            source=(ROOT/relative).read_bytes()
             self.assertEqual(hashlib.sha256(source).hexdigest(),expected)
             path=root/relative;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(source)
         return root
@@ -118,7 +119,8 @@ class InstalledPrefixCheckTests(unittest.TestCase):
     def test_unknown_page_and_fabricated_quote_are_refused(self):
         page={'pageId':'page1','text':TEXT}
         result={'pageId':'page2','sourceId':'W1','modelUsed':True,'automaticRetries':0,
-                'qualityVerdict':'pending_review','outcome':'accepted_pending_semantic_review','claims':[]}
+                'qualityVerdict':'pending_review','outcome':'accepted_pending_semantic_review','claims':[],
+                'contractRevision':'complete_api_entries_signal_scope_v1'}
         with self.assertRaises(check.CheckError):check.checked_result(result,page)
         result['pageId']='page1';result['claims']=[{'text':'Frase inventata.','quote':'Not in page'}]
         with self.assertRaisesRegex(check.CheckError,'Passaggio'):check.checked_result(result,page)
@@ -135,6 +137,25 @@ class InstalledPrefixCheckTests(unittest.TestCase):
             handlers=build.call_args.args
             self.assertEqual(handlers[0].proxies,{})
             self.assertIsInstance(handlers[1],check.NoRedirect)
+
+
+    def test_same_original_questions_and_server_revision_are_required(self):
+        from check_web_prefix_reuse import CASES as original_cases
+        self.assertEqual(check.CASES, original_cases)
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.project(directory)
+            opener = Opener()
+            original_open = opener.open
+            def old_server(request, timeout):
+                response = original_open(request, timeout)
+                data = json.loads(response.data)
+                data.pop('contractRevision', None)
+                return Response(data)
+            opener.open = old_server
+            with self.assertRaisesRegex(check.CheckError, 'contratto precedente'):
+                check.run(root, opener, lambda _: None)
+            self.assertEqual(opener.summaries, 1)
+            self.assertEqual(opener.reads, 1)
 
 
 if __name__=='__main__':unittest.main()

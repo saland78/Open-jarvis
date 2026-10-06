@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import io
 from pathlib import Path
+from web_prefix_baseline import before_api_context_source
 import shutil
 import socket
 import tempfile
@@ -17,7 +18,7 @@ updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater
 def published_source(relative):
     if relative == 'scripts/andrea/web_sentence_contract.py':
         return (ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_prefix_reuse').read_bytes()
-    return (ROOT/relative).read_bytes()
+    return before_api_context_source(relative)
 
 
 def original(relative):

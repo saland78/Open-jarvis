@@ -95,7 +95,7 @@ class ProductionTests(unittest.IsolatedAsyncioTestCase):
         service.expires=time.monotonic()+300
         return service
 
-    async def test_production_uses_candidate_contract_one_call_exact_quotes_and_metrics(self):
+    async def test_production_uses_reviewed_context_contract_one_call_exact_quotes_and_metrics(self):
         calls=[];closed=[]
         async def stream(messages,schema):
             calls.append((messages,schema))
@@ -104,7 +104,7 @@ class ProductionTests(unittest.IsolatedAsyncioTestCase):
                 yield SimpleNamespace(content=RAW[30:],finish_reason='stop',tool_calls=None)
             finally:closed.append(True)
         result=await self.service().summarize({'pageId':'token','question':'Sintesi'},stream)
-        _,messages,schema=contract.prepare(PAGE,'Sintesi')
+        _,messages,schema,_=local.page_context.prepare({'text':PAGE},'Sintesi')
         self.assertEqual(calls,[(messages,schema)])
         self.assertEqual(closed,[True])
         self.assertEqual(result['outcome'],'accepted_pending_semantic_review')

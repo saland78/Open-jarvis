@@ -15,5 +15,18 @@ contract=importlib.util.module_from_spec(spec)
 loader.exec_module(contract)
 
 def source(relative):
-    path=FIXTURE if relative=='scripts/andrea/web_sentence_contract.py' else ROOT/relative
+    if relative=='scripts/andrea/web_sentence_contract.py':
+        return FIXTURE.read_bytes()
+    return before_api_context_source(relative)
+
+
+def before_api_context_source(relative):
+    """Replay old pins against their actual source, never the new live service.
+
+    The new complete-API integration has its own live-service, updater and
+    checker tests. Historical manifests and gates are not rewritten.
+    """
+    fixtures = {'scripts/andrea/web_page_local.py': 'web_page_local.py_before_api_context',
+                'frontend/src/pages/AndreaWebPage.tsx': 'AndreaWebPage.tsx_before_api_context'}
+    path = ROOT/'tests/fixtures/andrea'/fixtures[relative] if relative in fixtures else ROOT/relative
     return path.read_bytes()

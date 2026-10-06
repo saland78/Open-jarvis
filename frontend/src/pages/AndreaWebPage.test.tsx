@@ -49,6 +49,12 @@ describe('web timing disclosure', () => {
     const html=renderToStaticMarkup(<PageTimings summary={{ ...measured, timings: { ...measured.timings!, ollamaNative: { terminalFrameReceived: false, loadMs: null, promptEvalMs: null, evalMs: null, promptEvalCount: null, evalCount: null, evalTokensPerSecond: null } } }} />);
     expect(html).toContain('Non disponibile');
   });
+  it('distinguishes selected model input from the retained audit text', () => {
+    const html = renderToStaticMarkup(<PageTimings summary={{ ...measured, timings: { ...measured.timings!, inputCharacters: 1481, sourceCharacters: 6000 } }} />);
+    expect(html).toContain('1481'); expect(html).toContain('6000');
+    expect(html).toContain('testo conservato per confronto');
+    expect(html).not.toContain('velocità migliorata');
+  });
 });
 
 const page: PageRead = { pageId: 'token', sourceId: 'W1', url: 'https://example.com/manual', title: 'Manuale', text: 'Testo originale <script>non eseguire</script>.', partial: true, consultedAt: result.consultedAt, readMs: 100, redirects: 0, modelUsed: false };
@@ -73,6 +79,17 @@ describe('explicit selected page', () => {
     const html = renderToStaticMarkup(<PageEvidence page={page} summary={{ ...summary, outcome: 'rejected', reason: 'unsupported_number', claims: [{ text: 'FAKE CLAIM', quote: 'FAKE QUOTE' }] }} />);
     expect(html).not.toContain('FAKE CLAIM'); expect(html).not.toContain('FAKE QUOTE');
     expect(html).toContain('Sintesi non mostrata'); expect(html).toContain('unsupported_number');
+  });
+  it('discloses complete API selection and still displays the retained source', () => {
+    const selected: PageSummary = { ...summary, contextSelection: { mode: 'complete_api_entries', sourceCharacters: 6000, modelSourceCharacters: 1481, omittedSourceCharacters: 4519 } };
+    const html = renderToStaticMarkup(<PageEvidence page={page} summary={selected} />);
+    expect(html).toContain('sezioni complete delle API nominate');
+    expect(html).toContain('1481'); expect(html).toContain('6000');
+    expect(html).toContain('La selezione è parziale');
+    expect(html).toContain('Testo originale');
+    expect(html).not.toContain('il resto non viene fornito al modello');
+    const full = renderToStaticMarkup(<PageEvidence page={page} summary={{ ...selected, contextSelection: { ...selected.contextSelection!, mode: 'full_context' } }} />);
+    expect(full).not.toContain('sezioni complete delle API nominate');
   });
   it('requires an explicit page action and never fetches during initial rendering', () => {
     const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);

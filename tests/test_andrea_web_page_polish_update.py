@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import io
 from pathlib import Path
+from web_prefix_baseline import before_api_context_source
 import shutil
 import socket
 import tempfile
@@ -19,7 +20,7 @@ def published_source(relative):
         return (ROOT/'tests/fixtures/andrea/web_page_fetch.py_before_read_diagnostics').read_bytes()
     if relative == 'scripts/andrea/web_page_local.py':
         return (ROOT/'tests/fixtures/andrea/web_page_local.py_before_indexed_evidence').read_bytes()
-    return (ROOT/relative).read_bytes()
+    return before_api_context_source(relative)
 
 
 def original(relative):

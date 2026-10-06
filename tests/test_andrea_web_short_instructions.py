@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+from web_prefix_baseline import before_api_context_source
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -149,7 +150,7 @@ class FiniteProbeTests(unittest.TestCase):
     def project(self,directory):
         root=Path(directory)
         for relative,digest in probe.EXPECTED.items():
-            data=(ROOT/relative).read_bytes()
+            data=before_api_context_source(relative)
             self.assertEqual(hashlib.sha256(data).hexdigest(),digest)
             dest=root/relative;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
         (root/'private-note.md').write_text('must not be read')

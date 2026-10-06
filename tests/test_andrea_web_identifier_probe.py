@@ -6,6 +6,7 @@ from hashlib import sha256
 import io
 import json
 from pathlib import Path
+from web_prefix_baseline import before_api_context_source
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -128,8 +129,9 @@ class OrchestrationTests(unittest.TestCase):
     def project(self,directory):
         project=Path(directory)
         for relative,expected in probe.EXPECTED.items():
-            path=(ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_identifier_retention') if relative=='scripts/andrea/web_sentence_contract.py' else ROOT/relative
-            data=path.read_bytes();self.assertEqual(sha256(data).hexdigest(),expected)
+            data=((ROOT/'tests/fixtures/andrea/web_sentence_contract.py_before_identifier_retention').read_bytes()
+                  if relative=='scripts/andrea/web_sentence_contract.py' else before_api_context_source(relative))
+            self.assertEqual(sha256(data).hexdigest(),expected)
             dest=project/relative;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
         return project
 
