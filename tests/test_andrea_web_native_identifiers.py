@@ -16,7 +16,7 @@ from unittest.mock import patch
 import web_native_identifier_schema as native
 import web_native_identifier_probe as candidate
 import web_networking_scope_probe as previous
-import web_page_context_contract as live
+from frozen_web_context import contract as live
 import web_page_fidelity as fidelity
 from test_andrea_web_definition_context import extracted, html_entry
 from test_andrea_web_request_resources import Child, StubObserver

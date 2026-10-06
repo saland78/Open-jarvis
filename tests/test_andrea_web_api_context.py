@@ -7,7 +7,8 @@ from types import SimpleNamespace as Chunk
 import unittest
 from unittest.mock import AsyncMock, patch
 
-import web_page_context_contract as contract
+# Frozen v1 regression suite; v9 has separate real-service integration tests.
+from frozen_web_context import contract
 import web_page_context_fetch as worker
 import web_page_fetch as fetch
 import web_page_fidelity as fidelity
@@ -150,6 +151,11 @@ class ReaderWorkerTests(unittest.TestCase):
 
 
 class LivePageIntegrationTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.contract_patch = patch.object(service, 'page_context', contract)
+        self.contract_patch.start()
+        self.addCleanup(self.contract_patch.stop)
+
     async def test_actual_service_reader_uses_new_worker_roles_and_retains_full_audit_source(self):
         page = prepared_csv()
         page.pop('readMs')

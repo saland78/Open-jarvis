@@ -1,4 +1,4 @@
-"""Consolidated v9 compact pipeline, staged but not connected to the live server.
+"""Consolidated v9 compact preparation and validation for the web service.
 
 This adapter preserves the reviewed preparation and validation byte for byte at
 the interface. It imports no benchmark, creates no model requests, and makes no
@@ -7,7 +7,6 @@ adoption decision. General source entailment still requires meaning review.
 from __future__ import annotations
 
 import importlib.util
-from pathlib import Path
 
 import web_definition_context as context
 import web_single_rule_budget as rule_budget
@@ -21,12 +20,12 @@ import web_question_focus as question_focus
 import web_operation_predicate_scope as operations
 import web_native_operation_verb as verbs
 
-CONTRACT_REVISION = 'staged_compact_v9_no_live_adoption'
+CONTRACT_REVISION = 'compact_web_evidence_v9'
 
 # Isolate the exact reviewed finite CSV alias without changing the contract
 # currently used by the installed server or another request path.
 _spec = importlib.util.spec_from_file_location(
-    '_staged_web_candidate_fidelity', Path(__file__).with_name('web_page_fidelity.py'))
+    '_staged_web_candidate_fidelity', importlib.util.find_spec('web_page_fidelity').origin)
 contract = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(contract)
 labels.install_csv_file_aliases(contract)

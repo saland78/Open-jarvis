@@ -76,12 +76,12 @@ class CandidateConsolidationTests(unittest.TestCase):
         self.assertEqual(incomplete['outcome'],'rejected')
         self.assertEqual(staged.validate('{"claims":[]}',bank,True,source,selection)['outcome'],'abstained')
 
-    def test_aliases_are_isolated_and_current_live_contract_is_not_replaced(self):
+    def test_aliases_are_isolated_and_frozen_v1_contract_is_preserved(self):
         self.assertIsNot(staged.contract,installed_fidelity)
         self.assertEqual(staged.contract.source_identifier_aliases('csv file'),{'CSV'})
         self.assertEqual(installed_fidelity.source_identifier_aliases('csv file'),set())
-        self.assertEqual(installed.CONTRACT_REVISION,'complete_api_entries_signal_scope_v1')
-        self.assertEqual(hashlib.sha256((ROOT/'scripts/andrea/web_page_context_contract.py').read_bytes()).hexdigest(),
+        self.assertEqual(installed.CONTRACT_REVISION,'compact_web_evidence_v9')
+        self.assertEqual(hashlib.sha256((ROOT/'tests/fixtures/andrea/web_page_context_contract.py_before_compact_v9').read_bytes()).hexdigest(),
                          'a7fa689865126891912e5f9c280ef9afc8b68771770ee5b7902cc46eac7b02e1')
 
     def test_staged_pipeline_has_no_benchmark_or_generation_transport(self):

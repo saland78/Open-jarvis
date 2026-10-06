@@ -1,3 +1,5 @@
+from frozen_web_context import contract as frozen_contract
+from unittest.mock import patch
 import asyncio
 import json
 from types import SimpleNamespace as Chunk
@@ -81,6 +83,13 @@ class ContractTests(unittest.TestCase):
             self.assertEqual(result['reason'],reason); self.assertEqual(result['claims'],[])
 
 class PageServiceTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        # Replay the exact historical v1 service contract. Live v9 has a
+        # separate service suite with the current facade and actual schema.
+        guard = patch.object(local, 'page_context', frozen_contract)
+        guard.start()
+        self.addCleanup(guard.stop)
+
     async def test_read_only_url_and_ephemeral_page(self):
         process = Process(PAGE)
         pages = local.LocalWebPages()

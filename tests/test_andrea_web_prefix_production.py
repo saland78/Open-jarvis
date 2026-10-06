@@ -1,3 +1,5 @@
+from frozen_web_context import contract as frozen_contract
+from unittest.mock import patch
 """Reviewed Mac claims through the actual production service and contract."""
 import ast
 import json
@@ -34,6 +36,13 @@ class ContractPinTests(unittest.TestCase):
 
 
 class PrefixProductionTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        # Replay the exact historical v1 service contract. Live v9 has a
+        # separate service suite with the current facade and actual schema.
+        guard = patch.object(local, 'page_context', frozen_contract)
+        guard.start()
+        self.addCleanup(guard.stop)
+
     def service(self,page):
         service=local.LocalWebPages()
         service.page={'pageId':'token','text':page}

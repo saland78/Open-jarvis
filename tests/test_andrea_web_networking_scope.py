@@ -11,7 +11,7 @@ from unittest.mock import patch
 import web_networking_scope as networking
 import web_networking_scope_probe as candidate
 import web_definition_latency_probe as archived
-import web_page_context_contract as live
+from frozen_web_context import contract as live
 import web_page_fidelity as fidelity
 from test_andrea_web_definition_context import extracted, html_entry
 from test_andrea_web_request_resources import Child, StubObserver
@@ -193,7 +193,7 @@ class IsolatedProbeTests(unittest.TestCase):
         self.assertEqual(candidate.ARCHIVED_BASELINE_REVISION, 'full_context_before_api_context_integration')
         for path, fingerprint in candidate.baseline.EXPECTED.items():
             with self.subTest(path=path):
-                self.assertEqual(hashlib.sha256((ROOT/path).read_bytes()).hexdigest(), fingerprint)
+                self.assertEqual(hashlib.sha256(((ROOT/'tests/fixtures/andrea/web_page_context_contract.py_before_compact_v9') if path == 'scripts/andrea/web_page_context_contract.py' else ROOT/path).read_bytes()).hexdigest(), fingerprint)
         self.assertNotEqual(candidate.baseline.EXPECTED['scripts/andrea/web_page_local.py'],
                             archived.baseline.EXPECTED['scripts/andrea/web_page_local.py'])
 

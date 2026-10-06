@@ -51,7 +51,7 @@ class InstalledApiContextCheckTests(unittest.TestCase):
     def project(self,directory):
         root=Path(directory)
         for relative,expected in check.EXPECTED.items():
-            source=(ROOT/relative).read_bytes()
+            source=((ROOT/'tests/fixtures/andrea/web_page_context_contract.py_before_compact_v9') if relative == 'scripts/andrea/web_page_context_contract.py' else (ROOT/relative)).read_bytes()
             self.assertEqual(hashlib.sha256(source).hexdigest(),expected)
             path=root/relative;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(source)
         return root

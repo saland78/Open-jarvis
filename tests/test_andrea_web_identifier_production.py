@@ -1,3 +1,5 @@
+from frozen_web_context import contract as frozen_contract
+from unittest.mock import patch
 """Replay reviewed evidence through production without certifying model quality."""
 import json
 import time
@@ -25,6 +27,13 @@ CSV_CLAIM = ('csv.reader restituisce liste di stringhe senza conversione automat
 
 
 class IdentifierIntegrationTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        # Replay the exact historical v1 service contract. Live v9 has a
+        # separate service suite with the current facade and actual schema.
+        guard = patch.object(local, 'page_context', frozen_contract)
+        guard.start()
+        self.addCleanup(guard.stop)
+
     async def replay(self, page, claims):
         calls = []; closed = []
         async def stream(messages, schema):

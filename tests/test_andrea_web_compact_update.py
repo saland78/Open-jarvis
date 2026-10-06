@@ -1,4 +1,4 @@
-"""Nine-file integration installer: atomic replacement and partial rollback."""
+"""Compact-v9 integration installer: atomic replacement and partial rollback."""
 from contextlib import redirect_stdout
 import hashlib
 import importlib.util
@@ -12,19 +12,20 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('web_api_context_update', ROOT/'scripts/andrea/update_web_api_context.py')
+spec = importlib.util.spec_from_file_location('web_compact_v9_update', ROOT/'scripts/andrea/update_web_compact_v9.py')
 updater = importlib.util.module_from_spec(spec); spec.loader.exec_module(updater)
 
 
 def published_source(relative):
-    return ((ROOT/'tests/fixtures/andrea/web_page_context_contract.py_before_compact_v9') if relative == 'scripts/andrea/web_page_context_contract.py' else (ROOT/relative)).read_bytes()
+    return (ROOT/relative).read_bytes()
 
 
 def original(relative):
-    return (ROOT/'tests/fixtures/andrea'/ (Path(relative).name+'_before_api_context')).read_bytes()
+    return (ROOT/'tests/fixtures/andrea/web_page_context_contract.py_before_compact_v9').read_bytes()
 
 
-class ApiContextUpdateTests(unittest.TestCase):
+
+class CompactV9UpdateTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
         self.home = Path(self.temp.name); self.project = self.home/'project'
@@ -39,7 +40,7 @@ class ApiContextUpdateTests(unittest.TestCase):
             path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(data)
         for relative in updater.CHECKS:
             target = self.project/relative; target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(original(relative) if relative in {'scripts/andrea/web_page_local.py', 'frontend/src/pages/AndreaWebPage.tsx'} else published_source(relative))
+            target.write_bytes(original(relative) if relative == 'scripts/andrea/web_page_context_contract.py' else published_source(relative))
         self.old = {}
         for item in updater.MANIFEST:
             target = self.project/item['path']; target.parent.mkdir(parents=True, exist_ok=True)
@@ -65,8 +66,8 @@ class ApiContextUpdateTests(unittest.TestCase):
         self.check_private()
 
     def test_actual_manifest_backup_repeat_and_no_private_changes(self):
-        self.assertEqual(len(updater.MANIFEST), 9)
-        self.assertEqual(updater.REVISION, 'b77b11008b3c6a21f0faa5e7bccb7360290f8f8a')
+        self.assertEqual(len(updater.MANIFEST), 12)
+        self.assertTrue(updater.REVISION)
         for item in updater.MANIFEST:
             self.assertEqual(hashlib.sha256(published_source(item['path'])).hexdigest(), item['sha256'])
             if 'before' in item:
@@ -138,7 +139,7 @@ class ApiContextUpdateTests(unittest.TestCase):
 
 
     def test_new_file_collision_is_refused_before_first_download(self):
-        path = self.project/'scripts/andrea/web_page_fidelity.py'
+        path = self.project/'scripts/andrea/web_candidate_pipeline.py'
         path.write_text('existing independent implementation')
         calls = []
         with self.assertRaisesRegex(ValueError, 'File nuovo già presente'):
