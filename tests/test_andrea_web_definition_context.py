@@ -208,6 +208,95 @@ class SelectionTests(unittest.TestCase):
                                  mechanism.validate(answer, [quote], True, heading_ranges=[]))
 
 
+class ObservedMacTermTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.report = json.loads((ROOT/'docs/andrea/web-complete-api-context-mac-2026-10-06.json').read_text())
+        cls.rows = cls.report['rows']
+
+    def source_bank(self, case):
+        # Actual public source quotations from the unchanged six-case report.
+        # Missing units are not evidence in these regression tests.
+        quotes = {}
+        for row in self.rows:
+            if row['case'] != case:
+                continue
+            for claim in row['checks']['claims']:
+                quotes[claim['passage']] = claim['quote']
+            details = row['checks'].get('details', {})
+            if 'quote' in details:
+                quotes[details['passage']] = details['quote']
+        bank = ['Unused source unit for this regression.\n']*max(quotes)
+        for ref, quote in quotes.items():
+            bank[ref-1] = quote
+        return bank
+
+    def test_actual_process_and_encapsulated_translations_remain_rejected_without_repair(self):
+        for position, reason in ((1, 'source_technical_terms_not_preserved'),
+                                 (2, 'unquoted_field_scope_not_preserved')):
+            row = self.rows[position]
+            bank = self.source_bank(row['case'])
+            answer, original_bank = row['result']['modelAnswer'], list(bank)
+            result = context.validate(answer, bank, True, heading_ranges=[], contract=baseline)
+            self.assertEqual(result['reason'], reason)
+            self.assertEqual(result['claims'], [])
+            self.assertEqual(result['details']['text'], row['checks']['details']['text'])
+            self.assertEqual(bank, original_bank)
+            self.assertEqual(row['result']['modelAnswer'], answer)
+
+    def test_source_subprocess_equivalent_and_existing_io_claim_are_supported(self):
+        bank = self.source_bank('asyncio_scope')
+        data = json.loads(self.rows[1]['result']['modelAnswer'])
+        data['claims'][1]['text'] = 'asyncio consente di creare e gestire event loop per rete, sottoprocessi e segnali dell’OS.'
+        counterexample = json.dumps(data, ensure_ascii=False)
+        result = context.validate(counterexample, bank, True, heading_ranges=[], contract=baseline)
+        self.assertEqual(result['outcome'], 'accepted_pending_semantic_review')
+        self.assertEqual([claim['text'] for claim in result['claims']], [claim['text'] for claim in data['claims']])
+        self.assertEqual(self.report['overallReview'], 'not_passed_no_adoption')
+
+    def test_actual_single_complete_csv_rule_is_preserved(self):
+        row = self.rows[3]
+        result = context.validate(row['result']['modelAnswer'], self.source_bank(row['case']), True,
+                                  heading_ranges=[], contract=baseline)
+        self.assertEqual(result['outcome'], 'accepted_pending_semantic_review')
+        self.assertEqual(result['claims'], row['checks']['claims'])
+
+    def test_correct_technical_terms_do_not_make_two_copies_of_a_rule_distinct(self):
+        row = self.rows[2]
+        data = json.loads(row['result']['modelAnswer'])
+        for claim in data['claims']:
+            claim['text'] = claim['text'].replace('non incapsulati', 'non racchiusi tra virgolette')
+        answer = json.dumps(data, ensure_ascii=False)
+        bank = self.source_bank(row['case'])
+        original = list(bank)
+        self.assertEqual(baseline.validate(answer, bank, True, heading_ranges=[])['outcome'],
+                         'accepted_pending_semantic_review')
+        result = context.validate(answer, bank, True, heading_ranges=[], contract=baseline)
+        self.assertEqual(result['reason'], 'csv_conversion_rule_repeated')
+        self.assertEqual(result['details']['earlierClaimIndex'], 1)
+        self.assertEqual(result['details']['claimIndex'], 2)
+        self.assertEqual(result['details']['text'], data['claims'][1]['text'])
+        self.assertEqual(result['claims'], [])
+        self.assertEqual(bank, original)
+
+    def test_same_passage_can_support_two_distinct_facts(self):
+        quote = 'Network operations exchange data while callbacks schedule independent work.\n'
+        claims = [{'passage': 1, 'text': 'Le operazioni di rete scambiano dati.'},
+                  {'passage': 1, 'text': 'I callback pianificano lavoro indipendente.'}]
+        result = context.validate(json.dumps({'claims': claims}), [quote], True,
+                                  heading_ranges=[], contract=baseline)
+        self.assertEqual(result['outcome'], 'accepted_pending_semantic_review')
+        self.assertEqual(len(result['claims']), 2)
+
+    def test_actual_performance_pairs_pass_but_failed_answers_cannot_close_the_gate(self):
+        report = baseline.comparison(self.rows)
+        self.assertEqual(report['pairs'], self.report['originalAutomaticReport']['pairs'])
+        self.assertTrue(all(pair['performanceGateMet'] for pair in report['pairs']))
+        self.assertFalse(report['technicalCaseShapesMet'])
+        self.assertEqual(report['performanceOutcome'], 'gates_not_met')
+        self.assertFalse(report['integrationAllowedByThisAutomaticReport'])
+
+
 class ProtocolTests(unittest.TestCase):
     def test_exact_embedded_sources_and_body(self):
         folder = ROOT/'scripts/andrea'

@@ -27,6 +27,7 @@ EXPECTED_OLLAMA_VERSION = '0.35.1'
 WORKER_SECONDS = 95
 MAX_WORKER_BYTES = 65536
 THERMAL_SAMPLE_SECONDS = (6, 18, 36)
+CANDIDATE_REVISION = 'complete_api_entries_canonical_terms_distinct_rule'
 
 
 def embedded_module(name, source):
@@ -290,6 +291,7 @@ def run(project, *, emit=print):
                'thermalAfter': after, 'observerCleanupCompleted': cleaned,
                'thermalObservationErrors': observation_errors,
                'sameSourceAnchoredTypeScopeAndMechanismChecks': True,
+               'sourceAnchoredDuplicateConversionRuleCheck': True,
                'qualityVerdict': 'pending_review', 'productionModified': False, 'modelOptionsChanged': False,
                'automaticRetries': 0, 'vaultRead': False, 'browserRendering': 'not_measured'}
         rows.append(row)
@@ -297,14 +299,15 @@ def run(project, *, emit=print):
         baseline.verify_project(project)
         if result['status'] != 'completed' or not cleaned:
             report = baseline.comparison(rows)
-            report['candidateRevision'] = 'complete_reader_proven_api_entries'
+            report['candidateRevision'] = CANDIDATE_REVISION
             emit(json.dumps(report, ensure_ascii=False, indent=2))
             raise ValueError('series_stopped_after_incomplete_request_no_retry')
     after_version = resources.Reader().get('/api/version')
     stable = isinstance(after_version, dict) and after_version.get('version') == EXPECTED_OLLAMA_VERSION
     report = baseline.comparison(rows)
     report.update({'mode': 'first_request_complete_api_context_comparison',
-                   'candidateRevision': 'complete_reader_proven_api_entries',
+                   'candidateRevision': CANDIDATE_REVISION,
+                   'sourceAnchoredDuplicateConversionRuleCheck': True,
                    'shorterInstructionTextAlsoChanged': True,
                    'ollamaVersion': EXPECTED_OLLAMA_VERSION, 'versionUnchanged': stable,
                    'sourceSelectionChangedExplicitly': True, 'originalQuestionsAndGatesUnchanged': True,

@@ -295,3 +295,34 @@ supportata. Le letture termiche sono leggere e non fanno scartare risultati;
 nessuna attesa per raffreddamento, warm-up o retry. Risposte e tempi Mac da
 raccogliere. Nessuna adozione o dichiarazione di riduzione già misurata.
 Il task latenza e qualità resta aperto; gli altri moduli rimangono rinviati.
+
+## Contesto API più veloce; due errori tecnici da correggere — 2026-10-06
+
+La [serie Mac delle sei richieste](web-complete-api-context-mac-2026-10-06.json)
+è completata senza retry: entrambe le coppie superano le soglie originali.
+Token nuovi/prefill: asyncio −26,734%/−18,688%; CSV −68,307%/−67,946%.
+La selezione CSV conserva tutta la definizione di `csv.reader` in 1481
+caratteri; fonte completa e numeri dei passaggi restano disponibili per audit.
+
+Il confronto complessivo non è superato. Due risposte compatte trasformano
+`subprocesses` in generici processi e `unquoted` in campi non incapsulati;
+la risposta CSV ripete inoltre la stessa conversione. I validatori rifiutano
+correttamente i due errori. Le altre quattro risposte hanno revisione
+favorevole. Nessun testo errato corretto dopo la generazione, soglia abbassata
+o precedente report trasformato in successo; nessuna adozione.
+
+La [correzione delle forme tecniche](web-canonical-term-latency-fix-2026-10-06.md)
+mantiene la selezione completa e rende espliciti sottoprocessi e campi non
+racchiusi tra virgolette. Una regola condizionata resta un unico punto;
+un controllo ristretto, applicato a entrambe le varianti, rifiuta due
+ripetizioni positive della medesima conversione CSV senza rimuoverle.
+Istruzioni 990/1157 caratteri: leggermente più lavoro rispetto al candidato
+fallito, ancora sotto i 2202 della produzione. Il nuovo effetto sui tempi
+deve essere misurato, non dedotto da queste dimensioni.
+
+496 controlli del programma superati, inclusi gli errori effettivi appena
+raccolti. Nuova revisione isolata con gli stessi tre casi, sei richieste,
+fonti, opzioni e soglie originali. Nessun warm-up, retry, cambiamento termico,
+lettura di note personali o installazione. Restano nuove risposte e metriche
+del Mac da raccogliere e verificare: latenza e qualità hanno priorità sugli
+altri moduli. Nessun miglioramento universale o rendering browser certificato.

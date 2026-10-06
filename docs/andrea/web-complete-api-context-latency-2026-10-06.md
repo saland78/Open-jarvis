@@ -1,8 +1,9 @@
 # First-request latency: complete API entries and shorter instructions
 
-Status: isolated implementation tested; Mac A/B results pending. No installation
-or successful latency claim. The installed contract and original failed
-performance reports retain their original verdicts.
+Status: the six-request Mac comparison completed. Both original latency pairs
+passed, but the compact asyncio and CSV answers failed technical fidelity and
+semantic review. No adoption. The original automatic report retains
+`gates_not_met`; all earlier failed reports retain their original verdicts.
 
 ## Evidence motivating the change
 
@@ -110,12 +111,58 @@ limits do not cause an unfavorable result to be dropped. First JSON is not
 accepted or painted UI text. No universal/statistical speed claim follows from
 this finite comparison. Ollama version must remain 0.35.1 throughout.
 
-490 relevant program regressions passed, including 24 new selector/protocol
+At initial publication, 490 relevant program regressions passed, including 24 new selector/protocol
 tests, previous observed failures, complete exception-tail retention, the 6000
 cap, nested and duplicate entries, hidden/malformed definitions, full-context
 fallback, omitted-reference rejection, exact bundled-source parity, owned child
 cleanup, and the unchanged six-request gate. Test fixtures/mock timings do not
-measure Mac model latency. Actual Mac answers and native metrics remain pending.
+measure Mac model latency. The subsequent Mac results are recorded below.
+
+## Mac comparison completed: latency pairs pass, quality does not
+
+The [six original rows, native metrics and separate manual review](web-complete-api-context-mac-2026-10-06.json)
+come from pinned probe commit `fb99f125bd61238ef3aac066b16006570f75ffa7`.
+All six requests completed, with 0–4 cached tokens and no automatic retries.
+The entire asyncio extract remained in both prompts; the CSV candidate supplied
+the complete reader entry and preceding headings (1481 of 6000 source
+characters). The full original source remained in the audit bank.
+
+| Original case | Production uncached tokens | Compact uncached tokens | Input reduction | Production native prefill ms | Compact native prefill ms | Prefill reduction |
+|---|---:|---:|---:|---:|---:|---:|
+| asyncio scope | 1672 | 1225 | 26.734% | 28435.803 | 23121.832 | 18.688% |
+| CSV conversion | 2439 | 773 | 68.307% | 43380.801 | 13905.445 | 67.946% |
+
+Both pairs exceed the original 10% input and 10% native-prefill thresholds.
+The overall report nevertheless remains `gates_not_met`, because two compact
+answers fail the existing technical checks. Four other answers have favorable
+manual source comparison; this does not close the combined gate.
+
+- Compact asyncio substitutes generic Italian `processi` for the source's
+  `subprocesses` in the event-loop catalogue. The source-term check correctly
+  rejects that broadening. The earlier IO/IPC point is supported.
+- Compact CSV substitutes `non incapsulati` for `unquoted`. This is not an
+  equivalent field qualifier, and the existing scope check correctly rejects
+  it. Its two claims also repeat the same conditional conversion rule.
+- Production asyncio, production CSV and both empty missing-price answers
+  preserve their respective source-supported facts or bounded abstention.
+
+CSV client completion fell from 57414.632 to 31293.985 ms in this finite run,
+but the faster compact answer is wrong and unusable. Its 106 generated tokens
+also exceed production's 86, consistent with the observed repetition. Asyncio
+production includes a 4821.740 ms load, while the compact request reports
+6.733 ms; total-duration differences cannot be attributed wholly to the prompt.
+The reported prefill reductions use the native phase measurements instead.
+
+All owned observers closed, with no unavailable thermal queries. CPU speed-limit
+readings during requests vary from 60 to 100. They are request-relative samples,
+not proven native-prefill intervals, temperatures, clock measurements or a
+causal explanation of the performance difference. No row is discarded for its
+thermal reading. Browser rendering is still not measured.
+
+The next [canonical-term correction](web-canonical-term-latency-fix-2026-10-06.md)
+keeps the successful complete-entry selection and original benchmark gates.
+It adds explicit correct term forms and a finite duplicate-conversion check;
+the failed answers and original report are never repaired or relabelled.
 
 ## Upstream and primary sources consulted for this task
 
