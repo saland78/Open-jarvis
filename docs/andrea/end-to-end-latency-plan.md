@@ -326,3 +326,33 @@ fonti, opzioni e soglie originali. Nessun warm-up, retry, cambiamento termico,
 lettura di note personali o installazione. Restano nuove risposte e metriche
 del Mac da raccogliere e verificare: latenza e qualità hanno priorità sugli
 altri moduli. Nessun miglioramento universale o rendering browser certificato.
+
+## Forme tecniche corrette; vincolo nativo per la singola regola — 2026-10-06
+
+La [nuova serie Mac](web-canonical-term-mac-2026-10-06.json) è completata:
+token nuovi/prefill −23,321%/−55,233% per asyncio e −66,025%/−69,533% per
+CSV. Le traduzioni ora conservano sottoprocessi e campi non racchiusi tra
+virgolette. Cinque risposte hanno revisione favorevole secondo il controllo
+dei fatti effettivamente selezionati; la risposta CSV ripete la medesima
+conversione e viene correttamente rifiutata. Il vecchio controllo installato
+continua a segnalare OS nel punto asyncio che non seleziona i segnali: il
+report conserva separatamente questo esito e la motivazione dell'ambito.
+Il confronto complessivo resta non superato, senza adozione.
+
+La [correzione della cardinalità](web-single-rule-cardinality-2026-10-06.md)
+interviene prima della generazione. Un modulo distinto riconosce solo le
+domande supportate sulla regola di conversione di `csv.reader`, verifica
+una sola regola completa nella sezione originale e invia uno schema nativo
+con al massimo un punto. Le condizioni restano nella stessa frase, con
+lo spazio necessario a completarla. Domande generali, più fatti o API,
+forme sconosciute e fonti ambigue conservano due punti. Nessuna risposta
+precompilata, rimozione di frasi, taglio di parole o retry.
+
+507 regressioni passate. Le sei domande, fonti, modello/opzioni e soglie
+originali restano fisse. Solo la variante CSV riconosciuta cambia il limite
+nativo: `[2, 2, 1, 2, 2, 2]` nei sei invii. Lo schema e il motivo sono
+registrati, mentre la baseline installata rimane identica. Il rispetto
+effettivo del vincolo e la fedeltà di tutti i fatti devono ancora essere
+misurati con il modello sul Mac. Il programma non elimina un eccesso per
+farlo passare: lo rifiuta e conserva il testo diagnostico. Qualità e latenza
+restano il task aperto; gli altri moduli non vengono avviati.

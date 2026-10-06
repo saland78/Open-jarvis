@@ -1,8 +1,9 @@
 # Canonical technical terms with complete-entry latency optimization
 
-Status: corrected isolated candidate passes 496 relevant program regressions.
-New Mac inference results are pending. No production change or successful model
-quality claim follows from the program tests.
+Status: the corrected candidate's Mac comparison completed. Technical word
+forms are faithful, but the compact CSV response repeats the conversion rule
+and correctly fails the combined gate. No adoption. The next change uses a
+native single-rule output budget; its Mac results remain pending.
 
 ## Diagnosis from the completed Mac comparison
 
@@ -97,3 +98,45 @@ test run is needed before obtaining the new Mac measurements.
 No upstream test certifies arbitrary model paraphrases. Its bounded transport
 and source-regression patterns are reused; the two observed lexical errors need
 the explicit compact instructions and independent source checks above.
+
+## Mac collection completed: remaining duplicate rule
+
+The [six original rows and separate manual review](web-canonical-term-mac-2026-10-06.json)
+were collected with commit `af5f0c37e58bec99cd59f4becb3a5a601ee5ef68`.
+All six requests completed; native cache counts are 0–4 and all cache gates
+are eligible. Both original input/prefill pairs pass:
+
+| Case | Production new tokens | Compact new tokens | Input reduction | Production prefill ms | Compact prefill ms | Prefill reduction |
+|---|---:|---:|---:|---:|---:|---:|
+| asyncio | 1668 | 1279 | 23.321% | 49341.554 | 22088.734 | 55.233% |
+| CSV | 2443 | 830 | 66.025% | 37905.964 | 11548.677 | 69.533% |
+
+The large asyncio difference is a finite observation, not a universal speed
+estimate. Production reports an 11737.152 ms load and the compact request
+2.387 ms. CPU-limit readings vary between 58 and 100 during that pair; neither
+the measurements nor their timing prove a causal explanation. No row is removed
+and no source snapshot, option or question is changed.
+
+Both compact responses now preserve the correct technical terms. CSV preserves
+its default no-conversion rule, QUOTE_NONNUMERIC exception, unquoted field scope
+and float target, but generates the exception twice. The new duplicate guard
+refuses it as `csv_conversion_rule_repeated`. Generation emits 114 tokens,
+compared with production's 86, despite the reduced context. The failed output
+is kept intact and the report remains `gates_not_met`.
+
+Five other responses have favorable source review under the candidate's
+previously reviewed own-source identifier policy. Compact asyncio's partial
+event-loop statement covers networking and subprocesses; it does not claim the
+catalogue's OS-signals function. The legacy installed guard still reports
+missing OS. That diagnostic remains visible: OS belongs to the unselected
+signals item, not a required qualifier of the selected subprocess fact. This
+finite source-scope distinction is not a general permission to drop identifiers
+or a new relaxation in this collection.
+
+Client completion is 31904.482 ms for compact asyncio and 25084.357 ms for
+compact CSV. Browser rendering remains unmeasured. The CSV answer is redundant
+and unusable despite its faster completion. The next
+[single-rule schema correction](web-single-rule-cardinality-2026-10-06.md)
+changes cardinality before generation, instead of repeating the same prompt
+or deleting a generated point afterward. All original questions and performance
+thresholds stay fixed; actual new model responses are still required.

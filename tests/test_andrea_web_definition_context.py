@@ -302,7 +302,8 @@ class ProtocolTests(unittest.TestCase):
         folder = ROOT/'scripts/andrea'
         for name, filename in (('BASELINE_SOURCE', 'web_type_latency_probe.py'),
                                ('RESOURCE_SOURCE', 'latency_resource_diagnostic.py'),
-                               ('CONTEXT_SOURCE', 'web_definition_context.py')):
+                               ('CONTEXT_SOURCE', 'web_definition_context.py'),
+                               ('RULE_BUDGET_SOURCE', 'web_single_rule_budget.py')):
             self.assertEqual(getattr(probe, name), (folder/filename).read_text())
         body = (folder/'web_definition_latency_probe_body.py').read_text().replace('from __future__ import annotations\n', '')
         self.assertTrue((folder/'web_definition_latency_probe.py').read_text().endswith(body))
@@ -431,6 +432,7 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(report['performanceOutcome'], 'measured_gates_met_pending_semantic_review')
         rows = [json.loads(item) for item in emitted if item.startswith('{') and '"selection"' in item]
         self.assertEqual(len(rows), 6)
+        self.assertEqual([row['nativeClaimArrayLimit'] for row in rows], [2, 2, 1, 2, 2, 2])
         self.assertEqual([row['fullSourceSuppliedToModel'] for row in rows], [True, True, False, True, True, True])
         self.assertEqual(rows[2]['sourceTextSha256'], rows[3]['sourceTextSha256'])
         self.assertTrue(all(row['sameSourceAnchoredTypeScopeAndMechanismChecks'] for row in rows))

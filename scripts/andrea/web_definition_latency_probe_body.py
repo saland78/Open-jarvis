@@ -27,7 +27,7 @@ EXPECTED_OLLAMA_VERSION = '0.35.1'
 WORKER_SECONDS = 95
 MAX_WORKER_BYTES = 65536
 THERMAL_SAMPLE_SECONDS = (6, 18, 36)
-CANDIDATE_REVISION = 'complete_api_entries_canonical_terms_distinct_rule'
+CANDIDATE_REVISION = 'native_single_rule_budget_with_canonical_terms'
 
 
 def embedded_module(name, source):
@@ -40,6 +40,7 @@ def embedded_module(name, source):
 baseline = embedded_module('_definition_baseline', BASELINE_SOURCE)
 resources = embedded_module('_definition_resources', RESOURCE_SOURCE)
 context = embedded_module('_definition_context', CONTEXT_SOURCE)
+rule_budget = embedded_module('_single_rule_budget', RULE_BUDGET_SOURCE)
 
 
 def checked_page(page):
@@ -103,11 +104,15 @@ def prepared(page, case, variant):
         selection = {'mode': 'full_context', 'selectedRefs': list(range(1, len(bank)+1)),
                      'sourceCharacters': len(page['text']), 'modelSourceCharacters': len(page['text']),
                      'omittedSourceCharacters': 0, 'matchedAnchors': [], 'reason': 'installed_baseline'}
+        policy = rule_budget.ordinary_policy('installed_baseline')
     elif variant == 'compact':
         bank, messages, schema, selection = context.prepare(page['text'], case['question'],
             heading_ranges=page['headingRanges'], definition_ranges=page['definitionRanges'], contract=baseline)
+        policy = rule_budget.plan(case['question'], bank, selection, contract=baseline)
+        messages, schema = rule_budget.apply(messages, schema, policy)
     else:
         raise ValueError('invalid_variant')
+    selection = {**selection, 'outputPolicy': policy}
     if ''.join(bank) != page['text']:
         raise ValueError('audit_source_changed')
     payload = json.loads(messages[1]['content'], object_pairs_hook=baseline.unique_pairs)
@@ -118,6 +123,7 @@ def prepared(page, case, variant):
         raise ValueError('selected_source_or_numbers_changed')
     if variant == 'compact' and case['id'] == 'csv_conversion_condition':
         if (selection['mode'] != 'complete_api_entries'
+                or policy['maxClaims'] != 1
                 or baseline.normalized(case['requiredContext']) not in baseline.normalized(''.join(p for _, p in expected_passages))):
             raise ValueError('complete_csv_definition_not_available_no_inference')
     return bank, messages, schema, selection
@@ -251,7 +257,7 @@ def run(project, *, emit=print):
     if (loaded['loadedModelCount'] not in (0, 1)
             or (loaded['loadedModelCount'] == 1 and loaded['expectedModelLoaded'] is not True)):
         raise ValueError('unknown_loaded_state_or_other_model')
-    emit('Sei domande originali, una richiesta per variante. Sezioni API intere per nomi espliciti; contesto completo negli altri casi. Nessuna installazione, nota personale, warm-up o retry. Lascia OpenJarvis acceso e non inviare altre richieste durante la serie.')
+    emit('Sei domande originali, una richiesta per variante. Un solo punto nativo per la singola regola CSV riconosciuta; due punti per le altre domande. Sezioni API intere, stessi criteri e soglie. Nessuna installazione, nota personale, warm-up o retry. Lascia OpenJarvis acceso e non inviare altre richieste durante la serie.')
     pages = {}
     for case in baseline.CASES:
         if case['url'] not in pages:
@@ -274,6 +280,7 @@ def run(project, *, emit=print):
         started = time.monotonic()
         checks = context.validate(result['modelAnswer'], bank, result['status'] == 'completed',
                                   heading_ranges=page['headingRanges'], contract=baseline, selection=selection)
+        checks = rule_budget.validate_cardinality(checks, selection['outputPolicy'])
         validation_ms = round((time.monotonic()-started)*1000, 3)
         row = {'case': case['id'], 'variant': variant, 'question': case['question'], 'criteria': case['criteria'],
                'sourceURL': case['url'], 'readMs': page['readMs'], 'inputCharacters': len(page['text']),
@@ -282,6 +289,8 @@ def run(project, *, emit=print):
                'fullSourceSuppliedToModel': selection['mode'] == 'full_context', 'selection': selection,
                'definitionRanges': page['definitionRanges'], 'headingRanges': page['headingRanges'],
                'systemCharacters': len(messages[0]['content']),
+               'nativeClaimArrayLimit': schema['properties']['claims']['maxItems'],
+               'nativeSchemaSha256': hashlib.sha256(json.dumps(schema, sort_keys=True).encode()).hexdigest(),
                'unisolatedPromptSha256': hashlib.sha256(json.dumps(messages, ensure_ascii=False).encode()).hexdigest(),
                'result': result, 'checks': checks,
                'installedPolicyChecks': baseline.installed_validate(result['modelAnswer'], bank, result['status'] == 'completed'),
@@ -305,9 +314,10 @@ def run(project, *, emit=print):
     after_version = resources.Reader().get('/api/version')
     stable = isinstance(after_version, dict) and after_version.get('version') == EXPECTED_OLLAMA_VERSION
     report = baseline.comparison(rows)
-    report.update({'mode': 'first_request_complete_api_context_comparison',
+    report.update({'mode': 'first_request_single_rule_cardinality_comparison',
                    'candidateRevision': CANDIDATE_REVISION,
                    'sourceAnchoredDuplicateConversionRuleCheck': True,
+                   'nativeSingleRuleArrayLimitChangedExplicitly': True,
                    'shorterInstructionTextAlsoChanged': True,
                    'ollamaVersion': EXPECTED_OLLAMA_VERSION, 'versionUnchanged': stable,
                    'sourceSelectionChangedExplicitly': True, 'originalQuestionsAndGatesUnchanged': True,
