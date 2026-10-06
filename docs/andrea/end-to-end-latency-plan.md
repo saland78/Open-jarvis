@@ -268,3 +268,30 @@ e servizi. I campioni precedenti al JSON non sono automaticamente misure della
 sola fase di prefill. 466 controlli del programma superati; raccolta Mac da fare.
 Il profilo guida la scelta della prossima ottimizzazione e non chiude il test
 precedente. Il task latenza rimane aperto, gli altri moduli restano rinviati.
+
+## Limiti CPU osservati; riduzione del contesto API da confrontare — 2026-10-06
+
+Il profilo CSV è completato: 57,696 s lato client, con 39,745 s di prefill,
+4,821 s di caricamento e 13,090 s di generazione dichiarati da Ollama.
+La risposta conserva condizione, campi non quotati e tipo float; revisione
+favorevole per questa sola risposta. Il limite CPU dichiarato passa da 100
+a 64 e 62 durante la stessa richiesta. Swap zero; misura di temperatura,
+frequenza effettiva e causalità non disponibile. Le query CPU a intervallo
+scadono e il processo runner attuale non viene individuato: CPU server quasi
+zero non significa inferenza inattiva. Il profilo non supera un confronto A/B.
+
+La [riduzione del contesto per API nominate](web-complete-api-context-latency-2026-10-06.md)
+adatta il budget e la provenienza dei passaggi consultati nei test OpenJarvis.
+Istruzioni ridotte a 772 caratteri; per nomi qualificati presenti nella domanda
+il modello riceve sezioni HTML intere, complete e con numeri originali. Le
+domande generali mantengono l'estratto completo. La selezione è dichiarata:
+fonti integrali conservate per controllo, contesto del modello eventualmente
+parziale. Nessuna condizione tagliata per rispettare il budget; fallback
+completo se la sezione è incompleta, troppo grande, ambigua o non allineata.
+
+490 regressioni pertinenti passate. La prova distinta mantiene le sei domande
+originali, ordine bilanciato, opzioni, controlli e soglie del 10% in ogni coppia
+supportata. Le letture termiche sono leggere e non fanno scartare risultati;
+nessuna attesa per raffreddamento, warm-up o retry. Risposte e tempi Mac da
+raccogliere. Nessuna adozione o dichiarazione di riduzione già misurata.
+Il task latenza e qualità resta aperto; gli altri moduli rimangono rinviati.

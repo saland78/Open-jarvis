@@ -110,3 +110,23 @@ suite, **466 program checks pass**. The four installed hashes are unchanged.
 No actual Mac profiling request has been executed during development. It is
 the next finite collection needed to choose a hardware/engine/context change
 from contemporaneous evidence, rather than from an idle snapshot or guesses.
+## Mac collection reviewed: CPU limits fall during the same request
+
+The unchanged CSV request completed in 57695.697 ms client time, with native
+load 4821.433 ms, prefill 39744.500 ms (2440 input tokens, cache zero), and
+generation 13090.141 ms. The response preserves the QUOTE_NONNUMERIC exception,
+unquoted-field scope and float type; manual review of this one response is
+favorable. The profile remains diagnostic, not an A/B latency pass.
+
+CPU_Speed_Limit changes from 100 before/near 6 s to 64 near 18 s and 62 near
+36 s, while the expected model is loaded with size_vram=0 and no observed swap
+use. These sample windows precede JSON arrival, but native-prefill-only phase,
+temperature, actual frequency and causal contribution are not established.
+All three top CPU interval queries time out; the legacy runner query misses
+the current runner. Near-zero detected-server CPU is not idle-model proof.
+
+The [next isolated implementation](web-complete-api-context-latency-2026-10-06.md)
+reduces instruction repetition and sends complete reader-proven API definitions
+for explicitly named API questions. It retains full-context fallback, original
+sources/questions/gates and semantic review. Global settings and installed
+production remain unchanged; the latency task stays open.
