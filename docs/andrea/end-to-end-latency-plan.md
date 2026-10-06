@@ -228,3 +228,26 @@ opzioni, sei casi originali e soglie rimangono invariati; il rilevatore lessical
 non certifica il significato. 426 regressioni pertinenti passate. Restano da
 raccogliere sei risposte e misure sul Mac per questa revisione distinta: il task
 latenza e qualità rimane aperto, gli altri moduli restano rinviati.
+
+## Prefill variabile e diagnosi delle risorse — 2026-10-06
+
+La [serie della fedeltà del tipo completata](web-type-latency-experiment-2026-10-06.md#mac-collection-completed--original-latency-gates-not-met)
+mantiene float in entrambe le sintesi CSV; cinque risposte hanno revisione
+favorevole. La variante compatta asyncio aggiunge un'interfaccia non documentata
+nel proprio passaggio. Le soglie originali non passano: token nuovi -20,551% e
+-13,864%, ma prefill -4,175% e -0,328% contro il minimo del 10%. Cache idonea e
+controlli formali completati non bastano. Nessuna adozione o soglia ridotta.
+
+La velocità per token nuovo cambia tra le varianti; non è stata misurata la
+causa. Le letture delle pagine richiedono meno di mezzo secondo, il prefill
+31–56 secondi. Prima di un altro confronto del modello, la
+[diagnosi in sola lettura](web-resource-diagnosis-2026-10-06.md) rileva CPU,
+memoria, alimentazione, limiti termici dichiarati e stato Ollama senza inferenza,
+warm-up, modifiche globali o lettura di dati personali. Uno snapshot attuale
+non ricostruisce il carico della serie precedente; dati assenti restano sconosciuti.
+
+Un candidato isolato conserva fonti e schema e rifiuta il meccanismo aggiunto
+nel noto passaggio breve sui sottoprocessi, senza correggere il testo generato.
+448 controlli pertinenti passati. Diagnosi Mac ancora da raccogliere; successiva
+ottimizzazione da scegliere in base a quelle misure, mantenendo qualità e soglie.
+Il task latenza resta aperto e gli altri moduli restano rinviati.

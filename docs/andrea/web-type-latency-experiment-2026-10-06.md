@@ -92,7 +92,7 @@ automatic integration. Loading, prefill, generation, read and client costs are
 separate; first JSON is not accepted text or browser rendering. A small finite
 comparison cannot establish a statistical or universal speed guarantee.
 
-## Program validation completed; Mac collection pending
+## Program validation before Mac collection
 
 43 checks of this candidate pass: the two exact observed outputs are replayed,
 the old false refusal is corrected without changing text/quotes, and the decimal
@@ -104,7 +104,52 @@ addition, unchanged baseline/legacy transport, and standalone helper parity.
 The heading, cache and finite six-call protocol regressions are also applied to
 this candidate. With the existing suite: **426 program tests pass**.
 
-No new Mac model answer or latency is yet measured for this revision. Program
-replay establishes the correction's behavior, not a successful local model run.
-Production remains unchanged; installation and unrelated modules remain pending
-until the fresh finite comparison passes both quality and the original gates.
+At preparation, no new Mac model answer or latency was measured for this revision.
+Program replay established the correction's behavior, not a successful local
+model run. The subsequent completed collection is reviewed below.
+
+## Mac collection completed — original latency gates not met
+
+All six original calls complete with eligible cache counts 0/3, the same full
+source snapshots and no retry. Both CSV responses now preserve the explicit
+float type, the QUOTE_NONNUMERIC condition and the unquoted-field qualification.
+Both missing-price responses abstain. The installed asyncio response gives two
+faithful capabilities. Five outputs therefore have favorable semantic review.
+
+The compact asyncio response adds “attraverso un'interfaccia specifica” to the
+bare cited unit `control subprocesses;`. That mechanism is not stated in that
+selected unit. Under the existing own-passage rule, the surrounding API
+introduction in another unit cannot supply that additional relation. The
+formal validator accepts it, showing another limit of lexical checks. This
+output is not a semantic adoption pass.
+
+| Call in collection order | Uncached input tokens | Native prefill ms | New input tokens/s | Client total ms |
+|---|---:|---:|---:|---:|
+| asyncio installed | 1669 | 32466.357 | 51.407 | 50683.601 |
+| asyncio compact | 1326 | 31110.797 | 42.622 | 47201.600 |
+| CSV compact | 2100 | 54450.971 | 38.567 | 73396.663 |
+| CSV installed | 2438 | 54630.158 | 44.627 | 75492.816 |
+| Missing price installed | 2441 | 55773.455 | 43.766 | 57202.984 |
+| Missing price compact | 2108 | 56087.890 | 37.584 | 57300.006 |
+
+Input reduction passes: 20.551% for asyncio and 13.864% for CSV. Native prefill
+reduction is only 4.175% and 0.328%, respectively, below the original 10% gate
+in both pairs. The compact variant has lower processing throughput per new
+input token in this observation; fewer tokens do not establish an equal-time
+speed benefit. These small serial pairs cannot determine whether CPU limits,
+background work, memory pressure, batch behavior or another factor caused the
+variation. No such cause was measured during this collection.
+
+The first installed call has 4638.467 ms model loading, versus 2.574 ms for its
+compact counterpart; the total difference is not attributed wholly to the
+candidate. Page reads take 477.228/446.303 ms. Generation and client totals
+remain distinct from prefill; clocks are not added, and browser drawing is not
+measured. The original report remains `gates_not_met`, despite
+`technicalCaseShapesMet: true`, and semantic adoption also fails. No integration,
+lowered gate, selected successful subset or repeat-until-pass is authorized by
+this result.
+
+The [next diagnosis](web-resource-diagnosis-2026-10-06.md) checks current local
+resources without inference and prepares a finite correction for the added
+mechanism. It cannot reconstruct the conditions of these past six calls.
+Production and unrelated modules remain unchanged; the latency task stays open.
