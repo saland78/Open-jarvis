@@ -106,3 +106,15 @@ checks, not measurements on the user's Mac.
 The installed production contract retains SHA
 `5b8a73b2a9d534074ec61eb67b9abd0eb6c73d3abb2783e76149ad6b3b7b2285`.
 The broader latency/quality task remains open; no unrelated module is started.
+
+## Idle Mac snapshot collected
+
+The diagnostic completed in 3006.43 ms: 88.43% aggregate CPU idle, no swap used
+or swap/pageout counter delta, CPU limits reported as 100, AC power and
+low-power mode disabled. It reports 8 physical/16 logical cores and 32 GiB RAM.
+Ollama is now 0.35.1 and no model is loaded, so no inference runner settings or
+placement can be observed. These current idle measurements cannot identify
+the cause of the earlier prefill variation. The next
+[single-request resource profile](web-active-resource-profile-2026-10-06.md)
+collects contemporaneous observations without adopting or changing settings.
+466 related program checks pass; the Mac profiling request is still pending.

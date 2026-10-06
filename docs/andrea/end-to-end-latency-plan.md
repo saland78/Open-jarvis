@@ -251,3 +251,20 @@ nel noto passaggio breve sui sottoprocessi, senza correggere il testo generato.
 448 controlli pertinenti passati. Diagnosi Mac ancora da raccogliere; successiva
 ottimizzazione da scegliere in base a quelle misure, mantenendo qualità e soglie.
 Il task latenza resta aperto e gli altri moduli restano rinviati.
+
+## Osservazione sotto inferenza da raccogliere — 2026-10-06
+
+La diagnosi del Mac si è conclusa in 3006,43 ms con CPU libera per l'88,43%,
+swap usato zero e limiti CPU riportati al 100. Nessun modello era caricato;
+Ollama risulta 0.35.1. Il campione a riposo non determina il costo delle risorse
+durante il precedente prefill, né prova una causa termica o una scelta errata
+di thread/batch. Le soglie originali della serie restano non superate.
+
+Il [profilo di una sola richiesta CSV](web-active-resource-profile-2026-10-06.md)
+conserva il prompt di produzione, la domanda, fonti, schema e opzioni. Raccoglie
+al massimo tre letture delle risorse durante il processo posseduto, con limite
+complessivo di 95 s per quel processo e nessun retry o modifica a impostazioni
+e servizi. I campioni precedenti al JSON non sono automaticamente misure della
+sola fase di prefill. 466 controlli del programma superati; raccolta Mac da fare.
+Il profilo guida la scelta della prossima ottimizzazione e non chiude il test
+precedente. Il task latenza rimane aperto, gli altri moduli restano rinviati.
