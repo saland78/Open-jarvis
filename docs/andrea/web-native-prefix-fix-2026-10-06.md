@@ -125,3 +125,17 @@ the eventual installed path are verified.
 - [Pinned llama.cpp grammar guide](https://github.com/ggml-org/llama.cpp/blob/b11232/grammars/README.md): repetition constructs, performance caveats, schema/prompt separation and unsupported schema features.
 - [Pinned native grammar implementation](https://github.com/ggml-org/llama.cpp/blob/b11232/src/llama-grammar.cpp): valid grammar prefixes, repetition paths and completion handling.
 - [Pinned pattern converter](https://github.com/ggml-org/llama.cpp/blob/b11232/common/json-schema-to-grammar.cpp): literal prefix followed by the chosen simple character-class repetition.
+
+## Subsequent actual v4 Mac evidence
+
+The latest complete v4 run now finishes all six transports without timeout.
+Both original input/native-prefill pair thresholds and cache eligibility pass,
+but its overall report remains `gates_not_met`: the compact asyncio point
+borrows a foreign `I/O:` label and the compact CSV point is refused for `CSV`
+despite its own literal `csv file` source. The reference also drops `often`
+from its perfection statement during meaning review. All raw checks and
+outputs are retained in the [complete report](web-native-prefix-v4-mac-2026-10-06.json).
+A separate earlier interrupted v4 attempt is preserved without inventing
+missing request-five metrics. No installation was made. The next isolated
+[source-label correction](web-source-label-scope-fix-2026-10-06.md) retains
+the original questions and performance thresholds; its new Mac run is pending.
