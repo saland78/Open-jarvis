@@ -143,3 +143,14 @@ paused until this defect is resolved and the installed path is verified.
 - [Pinned grammar parser](https://github.com/ggml-org/llama.cpp/blob/b11232/src/llama-grammar.cpp): supported hex and Unicode escapes in grammar character classes.
 
 No blanket guarantee of perfect future model answers is claimed.
+
+## Actual v3 run and subsequent correction
+
+The Mac run completes the reference with source-faithful network I/O/IPC and
+subprocess statements. Its compact request emits a repetitive incomplete
+string and reaches the unchanged 90-second deadline. Four remaining requests
+are not executed. There is no new qualified latency comparison and no v3
+adoption. The original report is retained in the separate
+[interrupted-run record](web-native-identifier-v3-interrupted-mac-2026-10-06.json).
+The [prefix correction](web-native-prefix-fix-2026-10-06.md) removes the
+unbounded repetition before mandatory names without altering that result.
