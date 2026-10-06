@@ -1,6 +1,17 @@
 # Keep operation predicates within their own evidence
 
-Status: **v8 prepared for a new Mac comparison; no installation**.
+Status: **v8 measured on the Mac: five favorable answers and one unfavorable; no adoption**.
+
+The [v8 record](web-operation-predicate-v8-mac-2026-10-06.json) preserves all six
+raw answers and the unchanged automatic report. The reference asyncio claim
+changes `control subprocesses;` into subprocess execution. The new v8 operation
+guard correctly rejects it, but refusal is still a failed model answer. Both
+original performance pairs pass; the complete series does not pass.
+
+The active correction is now the [native source-verb experiment](web-native-operation-verb-fix-2026-10-06.md).
+It constrains the main control verb during generation and still requires new
+Mac outputs and meaning review. The preparation and local tests below document
+the original v8 attempt; they are not a successful real-model result.
 
 The [complete v7 Mac record](web-question-focus-v7-mac-2026-10-06.json) preserves
 all six raw model outputs, the original automatic report and separate meaning
@@ -84,7 +95,8 @@ eight tokens maximum and 98% uncached input minimum. Both supported pairs still
 require at least 10% reductions in uncached input and native prefill. The archived
 full-context reference is not the currently installed v1 prompt.
 
-All actual v8 outputs and times must be measured anew. The 705 tests include the
+Actual v8 outputs and times have now been measured and are recorded above. The
+complete result remains failed; no prior times will be reused for v9. The 705 tests include the
 previous pinned b11232 native-pattern conversion fixture, but no new native
 pattern or full native schema converter/sampler is introduced or executed here.
 Local program tests and mocked series are not a new Mac model run. Thermal
@@ -95,8 +107,9 @@ have favorable meaning reviews and the original performance gates pass.
 ## Mac protocol and primary sources
 
 Run the checksum-verified v8 standalone probe in **Controlli** with Ollama running
-and no other model requests during the six calls. OpenJarvis may remain stopped;
-the probe uses Ollama directly and the verified reader in an owned worker.
+and no other model requests during the six calls. For read-only probes, leave the OpenJarvis window exactly as it is. Do not press
+Command+R or Control+C. The probe uses Ollama directly and the verified reader
+in an owned worker; no OpenJarvis server state change is required.
 No files are installed and no personal notes are read. Wait for `Serie conclusa`
 and the terminal prompt, then attach the new saved results file.
 
