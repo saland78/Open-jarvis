@@ -1,6 +1,17 @@
 # Operation evidence and own-source performance vocabulary
 
-Status: **v6 prepared for a new Mac comparison; no installation**.
+Status: **v6 Mac comparison reviewed: five favorable answers, one unfavorable;
+no installation**.
+
+The [complete v6 Mac record](web-capability-scope-v6-mac-2026-10-06.json) preserves
+all six raw outputs and original checks. Both supported performance pairs pass
+the original thresholds. The last compact absent-price answer describes CSV
+instead of abstaining and also changes floats into decimal numbers; the existing
+type guard refuses it. A program refusal is not a model abstention. The overall
+result remains `not_passed_no_adoption`. The next candidate addresses the actual
+question's presentation and a finite relevance guard in the
+[v7 correction](web-question-focus-fix-2026-10-06.md). The v6 design below is retained
+as the experiment record, not the next Mac instruction.
 
 The submitted v5 series completes all six transports. All six original technical
 case shapes pass and both uncached-input/native-prefill pairs meet the original
@@ -99,7 +110,7 @@ answer must pass its original meaning criteria. Browser rendering, voice
 end-to-end latency and a comparison to the currently installed prompt remain
 unmeasured. Automatic integration remains disabled.
 
-## Running on the Mac
+## Archived v6 Mac protocol
 
 Run the checksum-verified v6 standalone probe in **Controlli**, with Ollama
 running. This probe uses the Ollama API directly and the verified project reader
@@ -115,5 +126,5 @@ prompt, then attach the new saved results.
 - [Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs): schema-constrained generation and prompt grounding; application validation remains explicit.
 
 This defect remains the active task; unrelated roadmap work is paused. The v6
-code is a tested candidate awaiting actual outputs, not a declaration that the
-installed system or every future synthesis is perfect.
+outputs are now reviewed and the remaining failure is recorded above; no
+declaration that the installed system or every future synthesis is perfect is made.
