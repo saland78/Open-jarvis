@@ -356,3 +356,29 @@ effettivo del vincolo e la fedeltà di tutti i fatti devono ancora essere
 misurati con il modello sul Mac. Il programma non elimina un eccesso per
 farlo passare: lo rifiuta e conserva il testo diagnostico. Qualità e latenza
 restano il task aperto; gli altri moduli non vengono avviati.
+
+## Regola CSV completa; precisione dei segnali OS — 2026-10-06
+
+La [serie con limite nativo di un punto CSV](web-single-rule-cardinality-mac-2026-10-06.json)
+completa le sei richieste e supera entrambe le coppie di soglie originali:
+token nuovi/prefill −23,610%/−21,032% per asyncio e −65,929%/−72,821% per
+CSV. La regola CSV è unica e conserva default, condizione, campi senza
+virgolette e tipo float. Il difetto di duplicazione è risolto in questa prova.
+
+Il report automatico resta accettato con revisione pendente. La revisione
+separata trova cinque risposte fedeli e una non fedele: la seconda frase
+asyncio trasforma la gestione dei segnali dell’OS in generica comunicazione
+con l’OS. Il confronto completo non è superato e non viene adottato; il
+report automatico originale e il testo del modello restano integri.
+
+La [correzione della qualifica](web-signal-scope-latency-fix-2026-10-06.md)
+lega il termine e il suo controllo al passaggio originale prima e dopo la
+generazione. Non impone di menzionare i segnali quando il fatto selezionato
+riguarda soltanto sottoprocessi. Il vincolo CSV riuscito, la selezione completa
+e le soglie restano invariati. Istruzioni aggiuntive solo nei contesti che
+documentano quella relazione; nessuna riparazione o seconda generazione.
+
+519 regressioni passate, compreso l’errore effettivo accettato dai vecchi
+controlli. La nuova serie Mac serve a verificare risposte e tempi dopo questa
+correzione. La misura del disegno a schermo e un miglioramento statistico o
+universale non sono certificati. Qualità e latenza restano l’unico task attivo.

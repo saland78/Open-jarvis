@@ -25,6 +25,38 @@ SHORT_SYSTEM = ('From supplied passages only, produce Italian JSON claims: up to
                 'Omit unsupported facts; abstain with {"claims":[]}.')
 SELECTION_INSTRUCTION = (' The supplied passages are a selection of complete API entries, not the whole page. '
                          'Use only their numbered evidence; missing support does not prove absence elsewhere.')
+SIGNAL_SCOPE_INSTRUCTION = (' For OS signals use segnali dell\u2019OS, retaining signals when mentioning OS; '
+                            'for event loops keep event loop. Do not broaden signals into OS communication.')
+
+
+def os_signals_only_scope(quote):
+    """Prove the narrow catalogue item, not arbitrary operating-system facts.
+
+    Every OS mention must belong to the source's literal handling-OS-signals
+    item. Another OS relationship in the same passage leaves scope unknown.
+    This is a finite qualifier check, not a general entailment classifier.
+    """
+    items = list(re.finditer(r'\bhandling\s+OS\s+signals\b', quote, re.I))
+    mentions = list(re.finditer(r'\bOS\b', quote, re.I))
+    return bool(items and mentions) and all(
+        any(item.start() <= mention.start() and mention.end() <= item.end() for item in items)
+        for mention in mentions)
+
+
+def os_signal_scope_error(text, quote):
+    if not os_signals_only_scope(quote):
+        return None
+    # Check the qualifier's attachment to each OS mention. Merely adding the
+    # word signals somewhere else cannot license broad OS communication.
+    qualified = list(re.finditer(
+        r'\b(?:OS\s+signals?|signals?\s+(?:of|from)\s+(?:the\s+)?OS|'
+        r'segnal[ei]\s+(?:(?:del|dal)\s+|(?:dell|dall)[\u2019\']\s*)?(?:OS|sistema\s+operativo))\b',
+        text, re.I))
+    mentions = re.finditer(r'\bOS\b|\bsistema\s+operativo\b', text, re.I)
+    if any(not any(item.start() <= mention.start() and mention.end() <= item.end()
+                   for item in qualified) for mention in mentions):
+        return 'os_signal_scope_not_preserved'
+    return None
 
 
 def parser_with_definition_roles(base_parser):
@@ -194,20 +226,28 @@ def prepare(page, question, *, heading_ranges, definition_ranges, contract):
                        definition_ranges=definition_ranges, contract=contract)
     messages = copy.deepcopy(messages)
     messages[0]['content'] = SHORT_SYSTEM + MECHANISM_INSTRUCTION
+    payload = json.loads(messages[1]['content'])
+    signal_refs = [ref for ref in selection['selectedRefs'] if os_signals_only_scope(bank[ref-1])]
+    selection['sourceSignalScopeRefs'] = signal_refs
+    if signal_refs:
+        for ref in signal_refs:
+            terms = payload['sourceTechnicalTerms'].setdefault(str(ref), [])
+            payload['sourceTechnicalTerms'][str(ref)] = sorted(set(terms) | {'OS signals'})
+        messages[0]['content'] += SIGNAL_SCOPE_INSTRUCTION
     if selection['mode'] == 'complete_api_entries':
         chosen = set(selection['selectedRefs'])
-        payload = json.loads(messages[1]['content'])
         payload['passages'] = [unit for unit in payload['passages'] if unit[0] in chosen]
         for field in ('protectedIdentifiers', 'sourceTechnicalTerms'):
             payload[field] = {ref: value for ref, value in payload[field].items() if int(ref) in chosen}
         payload['contextOnly'] = [ref for ref in payload['contextOnly'] if ref in chosen]
-        messages[1]['content'] = json.dumps(payload, ensure_ascii=False, separators=(',', ':'))
         messages[0]['content'] += SELECTION_INSTRUCTION
         schema = copy.deepcopy(schema)
         field = schema['properties']['claims']['items']['properties']['passage']
         field['enum'] = [ref for ref in field['enum'] if ref in chosen]
         if not field['enum']:
             raise ValueError('no_selected_evidence')
+    if signal_refs or selection['mode'] == 'complete_api_entries':
+        messages[1]['content'] = json.dumps(payload, ensure_ascii=False, separators=(',', ':'))
     return bank, messages, schema, selection
 
 
@@ -225,6 +265,8 @@ def validate(raw, bank, complete, *, heading_ranges, contract, selection=None):
                 r'\b(?:attraverso|tramite|mediante|usando|utilizzando|through|via|using|'
                 r'interfacci[ae]|interfaces?|protocoll[oi]|protocols?)\b|\bper\s+mezzo\s+di\b', text, re.I):
             error = 'subprocess_mechanism_not_in_passage'
+        else:
+            error = os_signal_scope_error(text, quote)
         if error:
             return {'outcome': 'rejected', 'reason': error, 'claims': [],
                     'details': {'claimIndex': index, 'passage': claim['passage'],

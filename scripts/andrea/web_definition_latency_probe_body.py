@@ -27,7 +27,7 @@ EXPECTED_OLLAMA_VERSION = '0.35.1'
 WORKER_SECONDS = 95
 MAX_WORKER_BYTES = 65536
 THERMAL_SAMPLE_SECONDS = (6, 18, 36)
-CANDIDATE_REVISION = 'native_single_rule_budget_with_canonical_terms'
+CANDIDATE_REVISION = 'native_single_rule_budget_with_signal_scope'
 
 
 def embedded_module(name, source):
@@ -301,6 +301,8 @@ def run(project, *, emit=print):
                'thermalObservationErrors': observation_errors,
                'sameSourceAnchoredTypeScopeAndMechanismChecks': True,
                'sourceAnchoredDuplicateConversionRuleCheck': True,
+               'sourceAnchoredSignalScopeCheck': True,
+               'signalScopeInventoryAddedToPrompt': variant == 'compact' and bool(selection.get('sourceSignalScopeRefs')),
                'qualityVerdict': 'pending_review', 'productionModified': False, 'modelOptionsChanged': False,
                'automaticRetries': 0, 'vaultRead': False, 'browserRendering': 'not_measured'}
         rows.append(row)
@@ -314,9 +316,11 @@ def run(project, *, emit=print):
     after_version = resources.Reader().get('/api/version')
     stable = isinstance(after_version, dict) and after_version.get('version') == EXPECTED_OLLAMA_VERSION
     report = baseline.comparison(rows)
-    report.update({'mode': 'first_request_single_rule_cardinality_comparison',
+    report.update({'mode': 'first_request_signal_scope_latency_comparison',
                    'candidateRevision': CANDIDATE_REVISION,
                    'sourceAnchoredDuplicateConversionRuleCheck': True,
+                   'sourceAnchoredSignalScopeCheck': True,
+                   'sourceSignalScopeInventoryAddedExplicitly': True,
                    'nativeSingleRuleArrayLimitChangedExplicitly': True,
                    'shorterInstructionTextAlsoChanged': True,
                    'ollamaVersion': EXPECTED_OLLAMA_VERSION, 'versionUnchanged': stable,

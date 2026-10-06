@@ -1,8 +1,11 @@
 # Single-rule cardinality before generation
 
-Status: isolated implementation and 507 relevant program regressions pass.
-The new six-request Mac comparison is pending. No production installation,
-successful model-quality verdict, or new latency measurement is claimed.
+Status: the six-request Mac comparison is complete. The native one-item
+CSV budget is honored, its full rule has favorable semantic review, and both
+original performance pairs pass. A different asyncio qualifier error prevents
+adoption: five responses have favorable review and one does not. Original
+automatic acceptance remains separate from semantic review. No production
+installation is claimed.
 
 ## Problem and resulting behavior
 
@@ -58,7 +61,8 @@ no accepted answer. Existing duplicate, identifier, qualifier, type, condition,
 own-source, heading and complete-sentence checks still run. There is no repair
 or second generation. Native schema delivery is tested at the request boundary;
 actual honoring of this array constraint by the Mac's engine remains part of
-the new real comparison, not a program-test assumption.
+the real comparison, not a program-test assumption; the collected run below
+demonstrates it for this request and engine version.
 
 ## Same finite comparison, stronger generation contract
 
@@ -95,6 +99,44 @@ current duplicate replay, correct single-rule qualifications, unsupported type
 and field rejection, two-function retention, full-context missing-price
 inference, exact embedded-source parity and the original balanced six-case
 protocol. Program fixtures and mocked transport do not measure Mac inference.
+
+## Collected result and separate semantic review
+
+The [six raw responses and unmodified automatic report](web-single-rule-cardinality-mac-2026-10-06.json)
+come from probe commit `81513b44a740ef8ebf6889c1fe36316a9ffae0f4`.
+No earlier private Terminal history is included. All six streams complete,
+all native cache counts qualify, and Ollama stays at 0.35.1. The native array
+limits remain `[2, 2, 1, 2, 2, 2]`. CSV compact generates one complete rule,
+preserving string rows, no automatic conversion, the QUOTE_NONNUMERIC
+condition, unquoted fields and float target. Its duplicate problem is resolved
+in this run.
+
+| Supported pair | New tokens, baseline → compact | Native prefill, baseline → compact | Client total, baseline → compact |
+|---|---:|---:|---:|
+| asyncio | 1673 → 1278 (−23.610%) | 31.592 → 24.948 s (−21.032%) | 47.453 → 37.000 s |
+| CSV reader rule | 2439 → 831 (−65.929%) | 54.164 → 14.722 s (−72.821%) | 73.447 → 25.149 s |
+
+These are individual observations, not distributions or universal speed
+claims. The first production call includes a 7.347-second model load; its
+client-total difference is therefore not an isolated measure of prompt work.
+The fixed gates use new input tokens and native prefill separately.
+CPU-limit samples vary and do not establish temperature, native-prefill phase
+or causality. No cooling delay or thermal-based exclusion was used.
+
+The automatic report correctly says
+`measured_gates_met_pending_semantic_review`; its checks are retained exactly.
+Manual review finds the compact asyncio second point replaces the source's
+OS-signal handling with broad communication with the OS. Keeping the acronym
+alone does not preserve that qualifier. Both old validators miss the change.
+The other five responses have favorable review, including both genuine
+missing-price abstentions. This run's overall review is
+`not_passed_no_adoption`, separately recorded rather than retroactively
+changing the original automatic report.
+
+The [signal-scope correction](web-signal-scope-latency-fix-2026-10-06.md)
+retains the successful one-rule budget and context selection. Its new Mac
+comparison is pending; no repaired or regenerated answer is substituted into
+this collected run.
 
 ## Primary sources consulted for this task
 
