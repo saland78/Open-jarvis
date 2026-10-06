@@ -1,6 +1,14 @@
 # Source-local leading labels, literal CSV file names and source frequency
 
-Status: **new Mac inference pending; no installation**. The latest complete v4
+Status: **v5 Mac inference complete; meaning check not passed; no installation**.
+The complete [v5 record](web-source-label-scope-v5-mac-2026-10-06.json) preserves
+all six automatic technical successes and both measured performance gates,
+with four favorable and two unfavorable meaning reviews. Both asyncio variants
+give suitability as one of two requested functionalities; the compact variant
+also adds efficiency to a passage that only documents I/O/IPC support. See the
+[v6 correction](web-capability-scope-fix-2026-10-06.md) for the next isolated test.
+
+The following records the v5 design and its preceding v4 evidence. The latest complete v4
 series completes all six transports without a timeout. Both measured input and
 native-prefill reductions exceed the unchanged 10% thresholds, with eligible
 native cache counts. Its overall automatic result remains `gates_not_met`:

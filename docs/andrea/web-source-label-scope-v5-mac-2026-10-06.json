@@ -1,0 +1,2934 @@
+{
+  "originalAutomaticReport": {
+    "mode": "source_label_scope_latency_comparison",
+    "requested": 6,
+    "completed": 6,
+    "pairs": [
+      {
+        "case": "asyncio_scope",
+        "cacheEligible": true,
+        "uncachedInputReductionPercent": 18.405,
+        "nativePrefillReductionPercent": 33.366,
+        "performanceGateMet": true
+      },
+      {
+        "case": "csv_conversion_condition",
+        "cacheEligible": true,
+        "uncachedInputReductionPercent": 64.195,
+        "nativePrefillReductionPercent": 68.528,
+        "performanceGateMet": true
+      }
+    ],
+    "allNativeCacheCountsEligible": true,
+    "technicalCaseShapesMet": true,
+    "performanceOutcome": "measured_gates_met_pending_semantic_review",
+    "qualityVerdict": "pending_review",
+    "productionModified": false,
+    "candidateRevision": "own_source_labels_and_csv_file_alias_v5",
+    "automaticRetries": 0,
+    "browserRendering": "not_measured",
+    "noStatisticalOrUniversalSpeedClaim": true,
+    "fixedGates": {
+      "maxCachedTokens": 8,
+      "minUncachedFraction": 0.98,
+      "minInputReductionPercent": 10,
+      "minPrefillReductionPercent": 10
+    },
+    "integrationAllowedByThisAutomaticReport": false,
+    "attemptedRequests": 6,
+    "completedTransports": 6,
+    "notExecutedRequests": 0,
+    "referencePromptRevision": "full_context_before_api_context_integration",
+    "referenceIsCurrentInstalledPrompt": false,
+    "referenceBasePreparationFrozen": true,
+    "referenceMessagesAndSchemaMayChangeExplicitly": true,
+    "nativeIdentifierPolicySharedByBothVariants": true,
+    "nativeIdentifierSchemaChangedExplicitly": true,
+    "nativeIdentifierChecksAddedExplicitly": true,
+    "previousV2MeasurementsNotReused": true,
+    "previousV3MeasurementsNotReused": true,
+    "previousV4MeasurementsNotReused": true,
+    "finiteCsvFileAliasChangedExplicitly": true,
+    "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+    "sourceFrequencyQualifierPreservedExplicitly": true,
+    "mandatoryNamesBeforeFreeTextChangedExplicitly": true,
+    "sourceNameLabelsAreNotGeneratedPredicates": true,
+    "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+    "sourceNetworkingInventoryChangedExplicitly": true,
+    "sourceAnchoredDuplicateConversionRuleCheck": true,
+    "sourceAnchoredSignalScopeCheck": true,
+    "sourceSignalScopeInventoryAddedExplicitly": true,
+    "nativeSingleRuleArrayLimitChangedExplicitly": true,
+    "shorterInstructionTextAlsoChanged": true,
+    "ollamaVersion": "0.35.1",
+    "versionUnchanged": true,
+    "sourceSelectionChangedExplicitly": true,
+    "originalQuestionsAndGatesUnchanged": true,
+    "thermalSamplesDoNotProvePhaseOrCausality": true,
+    "noCoolingWaitsOrThermalBasedExclusions": true
+  },
+  "rows": [
+    {
+      "case": "asyncio_scope",
+      "variant": "production",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 576.176,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 1,
+              "mandatoryIdentifiers": [
+                "I/O"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^I/O: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "I/O"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^I/O: spesso [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O: spesso ",
+              "sourceFrequencyQualifier": "often",
+              "renderedFrequencyQualifier": "spesso"
+            },
+            {
+              "passage": 10,
+              "mandatoryIdentifiers": [
+                "I/O",
+                "IPC"
+              ],
+              "networkIOQualifierRequired": true,
+              "pattern": "^I/O di rete e IPC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O di rete e IPC: "
+            },
+            {
+              "passage": 21,
+              "mandatoryIdentifiers": [
+                "WASI"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^WASI: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "WASI: "
+            },
+            {
+              "passage": 24,
+              "mandatoryIdentifiers": [
+                "REPL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^REPL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "REPL: "
+            },
+            {
+              "passage": 56,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API: "
+            },
+            {
+              "passage": 57,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                3,
+                6,
+                7,
+                9,
+                11,
+                12,
+                13,
+                15,
+                16,
+                19,
+                20,
+                22,
+                25,
+                27,
+                28,
+                30,
+                33,
+                34,
+                35,
+                39,
+                41,
+                46,
+                47,
+                51,
+                55,
+                58,
+                59,
+                61
+              ],
+              "forbiddenLeadingLabels": [
+                "API:",
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. AIRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                14,
+                17,
+                18
+              ],
+              "forbiddenLeadingLabels": [
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. IRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                32
+              ],
+              "forbiddenLeadingLabels": [
+                "API:",
+                "I/O di rete e IPC:",
+                "I/O:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. AIW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [
+            4
+          ],
+          "sourceCsvFileAliasRefs": [],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 2590,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "c8605d69cbd2f19ef4c0092a6d5cb5fccdb68ebdbab287f510bee35c83432c2e",
+      "unisolatedPromptSha256": "7121ad1fa061446de5b1e1adb2619b1970b2a8c0bb06a024f27de486d193fa39",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 59159.743,
+        "totalClientMs": 77573.763,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 77570.093,
+          "loadMs": 7374.18,
+          "prompt_evalMs": 51726.878,
+          "evalMs": 18415.986,
+          "prompt_eval_count": 1831,
+          "prompt_eval_cached_count": 0,
+          "eval_count": 84,
+          "evalTokensPerSecond": 4.561
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":4,\"text\":\"I/O: spesso un perfetto adattamento per codice limitato da I/O e strutturato a livello elevato per reti.\"},{\"passage\":10,\"text\":\"I/O di rete e IPC: sono supportati da asyncio per eseguire operazioni di comunicazione tra processi e reti.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un perfetto adattamento per codice limitato da I/O e strutturato a livello elevato per reti.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per eseguire operazioni di comunicazione tra processi e reti.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un perfetto adattamento per codice limitato da I/O e strutturato a livello elevato per reti.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per eseguire operazioni di comunicazione tra processi e reti.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un perfetto adattamento per codice limitato da I/O e strutturato a livello elevato per reti.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per eseguire operazioni di comunicazione tra processi e reti.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un perfetto adattamento per codice limitato da I/O e strutturato a livello elevato per reti.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per eseguire operazioni di comunicazione tra processi e reti.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1831,
+        "uncachedFraction": 1.0,
+        "reason": null
+      },
+      "validationClientMs": 5.415,
+      "thermalBefore": {
+        "startedMonotonic": 120531.765299792,
+        "finishedMonotonic": 120531.784748539,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6000.395,
+          "finishedWorkerOffsetMs": 6023.794,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 79,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18001.177,
+          "finishedWorkerOffsetMs": 18032.603,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 58,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36002.717,
+          "finishedWorkerOffsetMs": 36072.954,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 120609.563976964,
+        "finishedMonotonic": 120609.601811548,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "unfavorable",
+        "reason": "The first point preserves often and the suitability statement faithfully, but suitability is not a second functionality. This answer supplies only one operation for a question asking for two functionalities.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "asyncio_scope",
+      "variant": "compact",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 576.176,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [
+          18
+        ],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": [
+          18
+        ],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "I/O"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^I/O: spesso [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O: spesso ",
+              "sourceFrequencyQualifier": "often",
+              "renderedFrequencyQualifier": "spesso"
+            },
+            {
+              "passage": 10,
+              "mandatoryIdentifiers": [
+                "I/O",
+                "IPC"
+              ],
+              "networkIOQualifierRequired": true,
+              "pattern": "^I/O di rete e IPC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O di rete e IPC: "
+            },
+            {
+              "passage": 21,
+              "mandatoryIdentifiers": [
+                "WASI"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^WASI: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "WASI: "
+            },
+            {
+              "passage": 24,
+              "mandatoryIdentifiers": [
+                "REPL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^REPL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "REPL: "
+            },
+            {
+              "passage": 56,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API: "
+            },
+            {
+              "passage": 57,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                3,
+                6,
+                7,
+                9,
+                11,
+                12,
+                13,
+                15,
+                16,
+                19,
+                20,
+                22,
+                25,
+                27,
+                28,
+                30,
+                33,
+                34,
+                35,
+                39,
+                41,
+                46,
+                47,
+                51,
+                55,
+                58,
+                59,
+                61
+              ],
+              "forbiddenLeadingLabels": [
+                "API:",
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. AIRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                14,
+                17,
+                18
+              ],
+              "forbiddenLeadingLabels": [
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. IRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                32
+              ],
+              "forbiddenLeadingLabels": [
+                "API:",
+                "I/O di rete e IPC:",
+                "I/O:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. AIW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [
+            4
+          ],
+          "sourceCsvFileAliasRefs": [],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 1658,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "7d7880125263e0d73e8ae15b880e091817fd7016c949d0db6f7378212529881b",
+      "unisolatedPromptSha256": "900d2525b970abce42d7665ebc7f101a52cee5e6dcef0468cdbf6f3563bfbfed",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 34780.585,
+        "totalClientMs": 46631.65,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 46626.196,
+          "loadMs": 2.016,
+          "prompt_evalMs": 34467.82,
+          "evalMs": 11850.523,
+          "prompt_eval_count": 1497,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 82,
+          "evalTokensPerSecond": 6.92
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":4,\"text\":\"I/O: spesso un'ottima scelta per codice IO-bound e strutturato a livello alto di rete.\"},{\"passage\":10,\"text\":\"I/O di rete e IPC: sono supportati da asyncio per la gestione efficiente di connessioni e comunicazione tra processi.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un'ottima scelta per codice IO-bound e strutturato a livello alto di rete.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per la gestione efficiente di connessioni e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un'ottima scelta per codice IO-bound e strutturato a livello alto di rete.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per la gestione efficiente di connessioni e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un'ottima scelta per codice IO-bound e strutturato a livello alto di rete.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per la gestione efficiente di connessioni e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O: spesso un'ottima scelta per codice IO-bound e strutturato a livello alto di rete.",
+            "quote": "asyncio is often a perfect fit for IO-bound and high-level structured network code.\n",
+            "passage": 4
+          },
+          {
+            "text": "I/O di rete e IPC: sono supportati da asyncio per la gestione efficiente di connessioni e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1494,
+        "uncachedFraction": 0.997996,
+        "reason": null
+      },
+      "validationClientMs": 0.983,
+      "thermalBefore": {
+        "startedMonotonic": 120609.626711193,
+        "finishedMonotonic": 120609.653559912,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 77,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6004.747,
+          "finishedWorkerOffsetMs": 6037.274,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 58,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18001.163,
+          "finishedWorkerOffsetMs": 18059.418,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 72,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36003.596,
+          "finishedWorkerOffsetMs": 36031.827,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 120656.546698247,
+        "finishedMonotonic": 120656.569519143,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": true,
+      "networkingScopeInventoryAddedToPrompt": true,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "unfavorable",
+        "reason": "The first point is suitability rather than a second operation. The second point adds efficiency and connection management to its own passage, which only says perform network IO and IPC; adjacent efficient-protocol text does not support this claim.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "compact",
+      "question": "Come si comporta csv.reader rispetto alla conversione automatica dei tipi? Conserva l’eventuale condizione.",
+      "criteria": [
+        "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+        "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 695.24,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": false,
+      "selection": {
+        "mode": "complete_api_entries",
+        "reason": "reader_proven_exact_api_match",
+        "selectedRefs": [
+          1,
+          13,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 1481,
+        "omittedSourceCharacters": 4519,
+        "matchedAnchors": [
+          "csv.reader"
+        ],
+        "sourceSignalScopeRefs": [],
+        "outputPolicy": {
+          "mode": "single_csv_conversion_rule",
+          "maxClaims": 1,
+          "reason": "recognized_single_rule_question_and_one_complete_source_rule",
+          "sourceRuleRefs": [
+            24
+          ],
+          "nativeArrayLimitChanged": true
+        },
+        "sourceNetworkingScopeRefs": [],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35
+              ],
+              "forbiddenLeadingLabels": [
+                "CSV:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 1549,
+      "nativeClaimArrayLimit": 1,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "dbd6ab95ca1d867c6529a0025b19c0eebad2c56255d4838f00f57054f5c20caa",
+      "unisolatedPromptSha256": "f70e73de5af4f17750bf16f5b3fabff111e09e33c0200e4fe78f4c7f1c79522c",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 17602.511,
+        "totalClientMs": 28488.159,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 28483.76,
+          "loadMs": 1.921,
+          "prompt_evalMs": 17398.519,
+          "evalMs": 10885.525,
+          "prompt_eval_count": 935,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 71,
+          "evalTokensPerSecond": 6.522
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\": [{\"passage\": 24, \"text\": \"csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 932,
+        "uncachedFraction": 0.996791,
+        "reason": null
+      },
+      "validationClientMs": 4.844,
+      "thermalBefore": {
+        "startedMonotonic": 120656.581340236,
+        "finishedMonotonic": 120656.602119744,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 68,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6004.989,
+          "finishedWorkerOffsetMs": 6027.512,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18003.501,
+          "finishedWorkerOffsetMs": 18030.237,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 120685.304892192,
+        "finishedMonotonic": 120685.331576979,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "Preserves no automatic conversion by default, QUOTE_NONNUMERIC, unquoted fields and float. Omitting the separate list-of-strings detail does not change this conversion rule.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "production",
+      "question": "Come si comporta csv.reader rispetto alla conversione automatica dei tipi? Conserva l’eventuale condizione.",
+      "criteria": [
+        "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+        "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 695.24,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 1,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 3,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "RFC"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e RFC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e RFC: "
+            },
+            {
+              "passage": 6,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 11,
+              "mandatoryIdentifiers": [
+                "API",
+                "CSV",
+                "PEP"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e CSV e PEP: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e CSV e PEP: "
+            },
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 40,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 44,
+              "mandatoryIdentifiers": [
+                "API",
+                "DB"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e DB: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e DB: "
+            },
+            {
+              "passage": 45,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "NULL",
+                "SQL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e NULL e SQL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e NULL e SQL: "
+            },
+            {
+              "passage": 51,
+              "mandatoryIdentifiers": [
+                "QUOTE_MINIMAL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^QUOTE_MINIMAL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "QUOTE_MINIMAL: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                5,
+                7,
+                9,
+                12,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                43,
+                46,
+                47,
+                49,
+                50,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "CSV:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                24
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 2590,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "9ce524b8835493f998a0a7590cbe48c5dd547a4b38204ce8d3b205e8c4f65451",
+      "unisolatedPromptSha256": "ef5bf0ae8bc63ad6c6abb3e389b4240d5b62c30f3ce7f39e37f7bcc45ff65746",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 55515.923,
+        "totalClientMs": 69977.102,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 69968.533,
+          "loadMs": 3.892,
+          "prompt_evalMs": 55283.26,
+          "evalMs": 14460.305,
+          "prompt_eval_count": 2606,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 73,
+          "evalTokensPerSecond": 5.048
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":24,\"text\":\"csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, salvo quando è specificato QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, salvo quando è specificato QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, salvo quando è specificato QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, salvo quando è specificato QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader restituisce ogni riga come lista di stringhe, senza conversione automatica dei tipi, salvo quando è specificato QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2603,
+        "uncachedFraction": 0.998849,
+        "reason": null
+      },
+      "validationClientMs": 6.354,
+      "thermalBefore": {
+        "startedMonotonic": 120685.361716074,
+        "finishedMonotonic": 120685.384029589,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 77,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6004.523,
+          "finishedWorkerOffsetMs": 6029.195,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18004.908,
+          "finishedWorkerOffsetMs": 18032.659,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36004.877,
+          "finishedWorkerOffsetMs": 36034.234,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 120755.661314713,
+        "finishedMonotonic": 120755.686423561,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "Preserves the default list of strings and absence of automatic conversion, with the QUOTE_NONNUMERIC exception, unquoted fields and floats.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "missing_price",
+      "variant": "production",
+      "question": "Qual è il prezzo in euro di un abbonamento mensile al servizio Zefiro secondo questo estratto?",
+      "criteria": [
+        "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+        "Non dichiara assenza di informazioni al di fuori di questo estratto."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 695.24,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 1,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 3,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "RFC"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e RFC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e RFC: "
+            },
+            {
+              "passage": 6,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 11,
+              "mandatoryIdentifiers": [
+                "API",
+                "CSV",
+                "PEP"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e CSV e PEP: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e CSV e PEP: "
+            },
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 40,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 44,
+              "mandatoryIdentifiers": [
+                "API",
+                "DB"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e DB: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e DB: "
+            },
+            {
+              "passage": 45,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "NULL",
+                "SQL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e NULL e SQL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e NULL e SQL: "
+            },
+            {
+              "passage": 51,
+              "mandatoryIdentifiers": [
+                "QUOTE_MINIMAL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^QUOTE_MINIMAL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "QUOTE_MINIMAL: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                5,
+                7,
+                9,
+                12,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                43,
+                46,
+                47,
+                49,
+                50,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "CSV:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                24
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 2590,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "9ce524b8835493f998a0a7590cbe48c5dd547a4b38204ce8d3b205e8c4f65451",
+      "unisolatedPromptSha256": "7af97133fbd006142203199c257cc052c836c39bae0fabd1db2fdcefd863eede",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 58630.464,
+        "totalClientMs": 59331.668,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 59327.038,
+          "loadMs": 2.357,
+          "prompt_evalMs": 58298.513,
+          "evalMs": 701.242,
+          "prompt_eval_count": 2610,
+          "prompt_eval_cached_count": 4,
+          "eval_count": 5,
+          "evalTokensPerSecond": 7.13
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[]}"
+      },
+      "checks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "originalApplicationChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2606,
+        "uncachedFraction": 0.998467,
+        "reason": null
+      },
+      "validationClientMs": 0.507,
+      "thermalBefore": {
+        "startedMonotonic": 120755.724072673,
+        "finishedMonotonic": 120755.744754336,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 79,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6002.199,
+          "finishedWorkerOffsetMs": 6036.069,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18008.28,
+          "finishedWorkerOffsetMs": 18049.182,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36004.544,
+          "finishedWorkerOffsetMs": 36034.891,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 120815.317043129,
+        "finishedMonotonic": 120815.340971489,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 60,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "The model itself returned an empty claims array for a price absent from these excerpts; no invented price, zero or assertion about external availability.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "missing_price",
+      "variant": "compact",
+      "question": "Qual è il prezzo in euro di un abbonamento mensile al servizio Zefiro secondo questo estratto?",
+      "criteria": [
+        "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+        "Non dichiara assenza di informazioni al di fuori di questo estratto."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 695.24,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": [],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 3,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "RFC"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e RFC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e RFC: "
+            },
+            {
+              "passage": 6,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 11,
+              "mandatoryIdentifiers": [
+                "API",
+                "CSV",
+                "PEP"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e CSV e PEP: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e CSV e PEP: "
+            },
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 40,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 44,
+              "mandatoryIdentifiers": [
+                "API",
+                "DB"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e DB: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e DB: "
+            },
+            {
+              "passage": 45,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "NULL",
+                "SQL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e NULL e SQL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e NULL e SQL: "
+            },
+            {
+              "passage": 51,
+              "mandatoryIdentifiers": [
+                "QUOTE_MINIMAL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^QUOTE_MINIMAL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "QUOTE_MINIMAL: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                5,
+                7,
+                9,
+                12,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                43,
+                46,
+                47,
+                49,
+                50,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "CSV:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                24
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 1378,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "2eda3ba17e72471646f12666491d6941743865235a17306df82307a15218b1a9",
+      "unisolatedPromptSha256": "3049f23ca9737210cee7256bca7fc8710ec53cadf15d4758df1b5d9944ce1206",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 49253.339,
+        "totalClientMs": 49963.255,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 49958.052,
+          "loadMs": 5.411,
+          "prompt_evalMs": 48887.282,
+          "evalMs": 709.877,
+          "prompt_eval_count": 2218,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 5,
+          "evalTokensPerSecond": 7.043
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[]}"
+      },
+      "checks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "originalApplicationChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2215,
+        "uncachedFraction": 0.998647,
+        "reason": null
+      },
+      "validationClientMs": 0.473,
+      "thermalBefore": {
+        "startedMonotonic": 120815.371488216,
+        "finishedMonotonic": 120815.396372112,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 60,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 60,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6050.087,
+          "finishedWorkerOffsetMs": 6090.978,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18003.995,
+          "finishedWorkerOffsetMs": 18037.077,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 60,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36007.66,
+          "finishedWorkerOffsetMs": 36042.229,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 120865.641869028,
+        "finishedMonotonic": 120865.664946083,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 62,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "The model itself returned an empty claims array for a price absent from these excerpts; no invented price, zero or assertion about external availability.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    }
+  ],
+  "schema": 1,
+  "date": "2026-10-06",
+  "candidateRevision": "own_source_labels_and_csv_file_alias_v5",
+  "reportScope": "six v5 rows submitted in this conversation, without terminal history",
+  "originalTechnicalShapeCounts": {
+    "met": 6,
+    "notMet": 0
+  },
+  "manualReviewCounts": {
+    "favorable": 4,
+    "unfavorable": 2
+  },
+  "overallReview": "not_passed_no_adoption",
+  "productionModified": false,
+  "automaticIntegrationAllowed": false,
+  "originalAutomaticReportPreserved": true,
+  "allRawModelAnswersPreserved": true,
+  "browserRendering": "not_measured",
+  "noStatisticalOrUniversalSpeedClaim": true
+}
