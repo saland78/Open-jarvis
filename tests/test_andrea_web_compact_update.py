@@ -67,7 +67,7 @@ class CompactV9UpdateTests(unittest.TestCase):
 
     def test_actual_manifest_backup_repeat_and_no_private_changes(self):
         self.assertEqual(len(updater.MANIFEST), 12)
-        self.assertTrue(updater.REVISION)
+        self.assertEqual(updater.REVISION, 'b0cf9a636ab4a198096d86ea3fba18ef9e0c85b0')
         for item in updater.MANIFEST:
             self.assertEqual(hashlib.sha256(published_source(item['path'])).hexdigest(), item['sha256'])
             if 'before' in item:

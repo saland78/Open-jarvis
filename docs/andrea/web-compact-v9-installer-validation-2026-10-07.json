@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-07",
+  "payloadCommit": "b0cf9a636ab4a198096d86ea3fba18ef9e0c85b0",
+  "installerSha256": "f354ea544cc88881ea4ad8558cc87e714089133ab98e9a466967dbeadc144238",
+  "installerFiles": 12,
+  "pinnedInstallerSafetyTests": 11,
+  "pinnedInstallerSafetyOutcome": "passed",
+  "webRegressionSuiteTests": 754,
+  "webRegressionSuiteOutcome": "passed",
+  "baselineContract": "complete_api_entries_signal_scope_v1",
+  "newContract": "compact_web_evidence_v9",
+  "macUpdate": "not_executed_here",
+  "installedAppAcceptance": "pending",
+  "otherRoadmapTasksAdvanced": false
+}
