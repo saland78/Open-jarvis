@@ -1,5 +1,13 @@
 # Integrate the reviewed complete API context in web-page synthesis
 
+Current installed status, 2026-10-06: the updater completed, but the new
+three-question installed check is not passed. CSV and the unsupported price
+are favorable; asyncio is refused for a networking-to-I/O substitution in its
+own cited passage. The separate [installed report](web-api-context-installed-mac-2026-10-06.json)
+preserves all three original rows. See the [networking correction experiment](web-networking-scope-fix-2026-10-06.md).
+The earlier six-case comparison below retains its original finite success;
+it does not override this subsequent installed failure.
+
 The isolated Mac comparison is passed for its six collected cases. Separate
 source review finds all six responses favorable, including the unsupported
 price abstentions. Its original automatic `pending_review` report remains
@@ -84,8 +92,9 @@ changes; generated assets are not separately installed or committed.
 installed endpoints after restart. It checks installed fingerprints and the
 server contract revision, emits original claims, quotes and timings, and keeps
 semantic review pending. It does not read personal notes or change settings.
-Installation and new inference on Andrea's Mac have not been performed from
-this workspace.
+Installation and new inference on Andrea's Mac could not be performed from
+this workspace. Andrea subsequently supplied the updater and installed
+checker output; that result is reviewed separately at the top of this document.
 
 ## Primary sources consulted
 
