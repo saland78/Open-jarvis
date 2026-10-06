@@ -1,6 +1,16 @@
 # Keep the actual question separate from source-format instructions
 
-Status: **v7 prepared for a new Mac comparison; no installation**.
+Status: **v7 Mac comparison reviewed: five favorable answers, one unfavorable;
+no installation**.
+
+The [complete v7 Mac record](web-question-focus-v7-mac-2026-10-06.json) preserves
+all six original automatic passes, favorable missing-price abstentions and both
+passing performance pairs. The compact path has three favorable meaning reviews.
+The reference capability answer adds an external-command execution example to
+a control-only source unit; its whole-answer meaning review is unfavorable.
+Overall adoption remains blocked. The next correction addresses this own-source
+predicate expansion in the [v8 experiment](web-operation-predicate-fix-2026-10-06.md).
+The v7 design below is retained as the experiment record, not the next Mac instruction.
 
 The submitted v6 run completes six transports. Its original input and native
 prefill performance thresholds pass for both supported pairs. Five whole-answer
@@ -90,7 +100,7 @@ answers and new timings. No v6 answer or timing is reused as a v7 measurement.
 Thermal samples do not prove a phase or cause and do not justify exclusions,
 cooling waits or model changes. Automatic integration remains disabled.
 
-## Running on the Mac
+## Archived v7 Mac protocol
 
 Run the checksum-verified v7 standalone probe in **Controlli**, with Ollama
 running and no other model requests during the six calls. It uses Ollama directly
@@ -105,6 +115,7 @@ saved results file.
 - [OpenJarvis prompt-builder tests](https://github.com/open-jarvis/OpenJarvis/blob/main/tests/prompt/test_system_prompt_builder_few_shot.py): prompt construction is tested explicitly; these tests do not establish this candidate's meaning quality.
 - [Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs): schema constraints and prompt grounding support explicit application validation, without guaranteeing a correct substantive answer.
 
-The next evidence required is all six new Mac answers satisfying their original
-meaning criteria and the unchanged performance thresholds. This defect remains
-the active task; unrelated roadmap work is paused.
+The v7 outputs are reviewed and the remaining own-source predicate expansion is
+recorded above. All six new v8 Mac answers must satisfy their original meaning
+criteria and unchanged performance thresholds. This defect remains the active
+task; unrelated roadmap work is paused.
