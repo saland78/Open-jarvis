@@ -4,8 +4,9 @@ The latency task remains open. The completed batch and static-prompt comparisons
 did not satisfy their adoption criteria. The hardware inventory now establishes
 that Andrea's Intel Mac has an AMD Radeon Pro 5500M with 4 GB reported video
 memory. Those trials used Ollama 0.35.1 with `size_vram: 0`. A usable AMD Metal
-backend is the next intervention; its compatibility and performance have not yet
-been measured on this Mac.
+backend is the next intervention. Native GPU initialization is now confirmed,
+but the first GPU request failed with a driver timeout. A complete GPU answer,
+its quality and its latency have not yet been measured on this Mac.
 
 ## Observed Mac initialization and diagnostic correction
 
@@ -49,6 +50,66 @@ This corrects trial initialization diagnostics. Successful execution on the
 Radeon, model-answer quality, latency improvement and application integration
 remain unmeasured. The model, weights, source preparation, schema, validators,
 six-request order and original adoption thresholds are unchanged.
+
+## Observed GPU timeout and the single-request check
+
+The reused-build v2 run proved that the existing Qwen3 GGUF was loaded on the
+Radeon: 34 of 37 layers, `MTL0_Mapped` model allocation 2199.89 MiB, GPU KV
+allocation 528 MiB and GPU compute allocation 298.01 MiB. Context remained
+4096, with logical and physical batches both 512. The native and Ollama chat
+template hashes matched. Partial offload is retained in the result.
+
+The first CPU asyncio request took 59.644 seconds. Its completed answer again
+used the unsupported control predicate for the subprocess operation; the
+supplementary audit rejected it without repairing the answer. This CPU row is
+not a successful quality reference. The following GPU request processed its
+first 512 prompt tokens in 3.11 seconds, then failed during the next chunk with
+`Caused GPU Timeout Error (00000002:kIOAccelCommandBufferCallbackErrorTimeout)`.
+The backend entered an error state and the server returned `Compute error.`.
+The remaining four model requests were not attempted. A completed GPU latency
+or speedup cannot be derived from partial prompt progress. The native log
+reported zero cached prompts before this first GPU request; it does not support
+attributing this timeout to cache contents.
+
+The next check uses `--gpu-check --reuse-build ORIGINAL_TRIAL_FOLDER`. It refuses
+to compile, reads only the public asyncio source, and makes exactly one GPU
+request. There is no CPU model request and no automatic six-request comparison
+after success. The verified existing executable and weights are reused, with
+the same v9 preparation, question, schema, validators, supplementary audit,
+temperature, output limit and context. Every completed raw answer is retained,
+including rejection or incomplete output.
+
+The temporary server requests physical batch 64 while retaining logical batch
+512. Its own child environment sets `GGML_METAL_CONCURRENCY_DISABLE=1`,
+`GGML_METAL_GRAPH_OPTIMIZE_DISABLE=1` and `GGML_METAL_FUSION_DISABLE=1`.
+These controls are present in the exact pinned upstream
+[Metal context](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/ggml/src/ggml-metal/ggml-metal-context.m)
+and
+[Metal device](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/ggml/src/ggml-metal/ggml-metal-device.m)
+implementations. Native logs must confirm the final physical/logical batches
+and all three disabled settings before any inference. `--cache-ram 0` also
+disables the server's RAM prompt cache as an isolation setting, not as a claim
+about the cause of the previous timeout. Its effective state is likewise
+required in the native log. Host environment and production CPU settings are
+unchanged. The original six-request mode keeps its original runtime settings.
+
+This is one bundled compatibility hypothesis: smaller physical blocks and
+serial, unfused GPU execution might avoid the observed timeout. Neither a fix
+nor a causal explanation is established before the Mac result. One POST is
+bounded at 90 seconds and its worker at 95 seconds; initialization retains its
+150-second bound. There is no warmup, retry or repair. Failure codes from a
+bounded native-log tail are included in the result; raw log text and arbitrary
+HTTP error bodies are not included. Model HTTP errors preserve a fixed code
+such as `local_model_http_500_compute_error`, while readiness HTTP 503 retains
+its polling behavior. Setup failures after creation of the trial folder also
+save a diagnostic result and close the owned server.
+
+A completed, structurally accepted response remains
+`completed_pending_semantic_review`. Rejected answers, incomplete responses
+and runtime failures remain explicit. Every single-check outcome has
+`integrationAllowed: false`, `latencyComparisonCollected: false` and
+`automaticFullComparisonAfterSuccess: false`. No adoption decision or full
+application latency measurement follows from this one request.
 
 ## Primary sources and the important release limitation
 
@@ -221,3 +282,12 @@ Logging/reuse correction: **184 relevant local tests passed**, including 56
 Metal-adapter tests and 14 new regression cases. The installed-v9 fingerprints
 still match. This result covers trial setup and the unchanged answer pipeline;
 it is not a Mac inference or latency measurement.
+
+Single-request timeout check: **197 relevant local tests passed**, including
+69 Metal-adapter tests and 13 additional regression cases. These cover the
+one-GPU/no-CPU route, reuse-only enforcement, effective native runtime settings,
+child-environment isolation, safe HTTP error reporting, unchanged readiness
+polling, bounded native timeout evidence, cleanup on failure, saved setup
+diagnostics, retained rejection and the absence of automatic comparison or
+adoption. Python syntax and the 24 installed-v9 fingerprints still pass.
+The smaller-batch Radeon execution itself remains to be tested on the Mac.

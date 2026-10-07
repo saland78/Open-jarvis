@@ -31,6 +31,19 @@ DEVICE = {'id': 'MTL0', 'name': probe.GPU_NAME, 'totalMiB': 4096, 'freeMiB': 350
 LOAD_LOG = ('llama_model_load: using device MTL0 (AMD Radeon Pro 5500M) (id) - 3500 MiB free\n'
             'load_tensors: offloaded 37/37 layers to GPU\n'
             'load_tensors:         MTL0 model buffer size = 2500.00 MiB\n')
+GPU_CHECK_LOG = (LOAD_LOG +
+    '0.02.291.603 I llama_context: n_batch               = 512\n'
+    '0.02.291.603 I llama_context: n_ubatch              = 64\n'
+    '0.02.291.813 I ggml_metal_init: use fusion         = false\n'
+    '0.02.291.813 I ggml_metal_init: use concurrency    = false\n'
+    '0.02.291.814 I ggml_metal_init: use graph optimize = false\n'
+    '0.03.411.817 I srv    load_model: prompt cache is disabled - use `--cache-ram N` to enable it\n')
+TIMEOUT_LOG = (
+    '1.59.723.682 E ggml_metal_synchronize: error: command buffer 0 failed with status 5\n'
+    '1.59.723.691 E error: Caused GPU Timeout Error (00000002:kIOAccelCommandBufferCallbackErrorTimeout)\n'
+    '2.01.062.548 E ggml_metal_graph_compute: backend is in error state from a previous command buffer failure\n'
+    '2.01.062.550 E process_ubatch: failed to compute graph, compute status: -1\n'
+    '2.01.062.702 E srv        decode: Compute error. off = 0, n_batch = 512, ret = -3\n')
 
 
 class Response(io.BytesIO):
@@ -76,6 +89,22 @@ def row(index, engine, total=None):
 
 
 class RequestContractTests(unittest.TestCase):
+    def test_http_compute_failure_reports_fixed_code_and_never_retries_or_exposes_body(self):
+        error_body = b'{"error":{"message":"Compute error. secret '+TOKEN.encode()+b'"}}'
+        transport = SimpleNamespace(open=Mock(side_effect=probe.urllib.error.HTTPError(
+            ENDPOINT + '/v1/chat/completions', 500, 'private reason', {}, io.BytesIO(error_body))))
+        with self.assertRaisesRegex(ValueError, '^local_model_http_500_compute_error$'):
+            probe.completion_once('llama_metal', [], {}, ENDPOINT, TOKEN, transport)
+        transport.open.assert_called_once()
+
+    def test_large_or_unrecognized_http_body_is_not_returned_as_error_text(self):
+        for body in (b'unknown secret '+TOKEN.encode(), b'x' * 4100 + b'Compute error.'):
+            transport = SimpleNamespace(open=Mock(side_effect=probe.urllib.error.HTTPError(
+                ENDPOINT, 500, 'private reason', {}, io.BytesIO(body))))
+            with self.subTest(size=len(body)), self.assertRaisesRegex(ValueError, '^local_model_http_500$'):
+                probe.completion_once('llama_metal', [], {}, ENDPOINT, TOKEN, transport)
+            transport.open.assert_called_once()
+
     def test_exact_production_messages_schema_and_options_on_both_backends(self):
         for index, source in enumerate((page(), csv_page(), csv_page())):
             _, messages, schema, _ = pipeline.prepare(source, check.CASES[index]['question'])
@@ -284,6 +313,53 @@ class WeightIdentityTests(unittest.TestCase):
 
 
 class BuildAndDeviceTests(unittest.TestCase):
+    def test_gpu_check_requires_existing_build_before_any_request_or_compilation(self):
+        with patch.object(probe, 'owned_worker') as worker, patch.object(probe, 'build_engine') as build:
+            with self.assertRaisesRegex(ValueError, '^gpu_check_requires_reuse_build_no_compilation$'):
+                probe.run(Path('/project'), gpu_check=True)
+        worker.assert_not_called(); build.assert_not_called()
+
+    def test_check_profile_reduces_only_gpu_physical_batch_and_disables_ram_cache(self):
+        baseline = probe.server_args('/binary', '/model', 'MTL0', 12345, TOKEN)
+        candidate = probe.server_args('/binary', '/model', 'MTL0', 12345, TOKEN, gpu_check=True)
+        for flag in ('--ctx-size', '--batch-size', '--flash-attn', '--reasoning', '--model'):
+            self.assertEqual(candidate[candidate.index(flag)+1], baseline[baseline.index(flag)+1])
+        self.assertEqual(candidate[candidate.index('--ubatch-size')+1], '64')
+        self.assertEqual(baseline[baseline.index('--ubatch-size')+1], '512')
+        self.assertEqual(candidate[candidate.index('--cache-ram')+1], '0')
+        self.assertNotIn('--cache-ram', baseline)
+
+    def test_check_profile_requires_final_native_settings_including_cache(self):
+        proof = probe.gpu_check_runtime_proof(GPU_CHECK_LOG)
+        self.assertEqual(proof['effectivePhysicalBatch'], 64)
+        self.assertEqual(proof['effectiveLogicalBatch'], 512)
+        self.assertTrue(proof['settingsConfirmedByNativeLog'])
+        for wrong in (GPU_CHECK_LOG.replace('= 64', '= 512'),
+                      GPU_CHECK_LOG.replace('n_batch               = 512', 'n_batch               = 64'),
+                      GPU_CHECK_LOG.replace('use concurrency    = false', 'use concurrency    = true'),
+                      GPU_CHECK_LOG.replace('use fusion         = false', 'use fusion         = true'),
+                      GPU_CHECK_LOG.replace('use graph optimize = false', 'use graph optimize = true'),
+                      GPU_CHECK_LOG.replace('prompt cache is disabled', 'prompt cache is enabled'),
+                      GPU_CHECK_LOG + LOAD_LOG, LOAD_LOG):
+            with self.subTest(wrong=wrong[-120:]), self.assertRaisesRegex(ValueError, 'no_inference'):
+                probe.gpu_check_runtime_proof(wrong)
+
+    def test_native_timeout_codes_are_bounded_and_do_not_include_other_log_text(self):
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / 'owned-server.log'
+            file.write_text(TIMEOUT_LOG + TIMEOUT_LOG + 'secret '+TOKEN+' and source text\n')
+            proof = probe.native_failure_evidence(file)
+            self.assertEqual(proof['codes'], ['metal_command_buffer_failed', 'gpu_driver_timeout',
+                'metal_backend_error_state', 'graph_compute_failed', 'server_compute_error'])
+            self.assertFalse(proof['rawLogTextIncluded'])
+            self.assertNotIn(TOKEN, json.dumps(proof))
+            file.write_text(TIMEOUT_LOG + 'x' * (probe.MAX_BYTES + 1))
+            proof = probe.native_failure_evidence(file)
+            self.assertTrue(proof['logTailTruncated'])
+            self.assertEqual(proof['codes'], [])
+            file.unlink()
+            self.assertFalse(probe.native_failure_evidence(file)['readAvailable'])
+
     def test_exact_pinned_upstream_version_format_and_identity(self):
         line = 'version: 0.6.0 (build 11461, commit ' + probe.LLAMA_COMMIT + ')\nbuilt with Clang for Darwin x86_64\n'
         version = probe.verified_build_version(line)
@@ -517,6 +593,70 @@ class ReusedBuildTests(unittest.TestCase):
 
 
 class LifecycleTests(unittest.TestCase):
+    def test_single_check_confirms_runtime_and_sets_only_owned_child_environment(self):
+        with tempfile.TemporaryDirectory() as folder:
+            server = probe.OwnedMetalServer('/binary', {'path': '/existing/gguf'}, DEVICE,
+                                             Path(folder), gpu_check=True)
+            child = SimpleNamespace(returncode=None); child.poll = lambda: child.returncode
+            props = {'total_slots': 1, 'model_path': '/existing/gguf', 'chat_template': 'native template',
+                     'default_generation_settings': {'n_ctx': 4096}}
+            def spawn(*args, **kwargs):
+                kwargs['stdout'].write(GPU_CHECK_LOG.encode()); kwargs['stdout'].flush()
+                return child
+            with patch.dict(os.environ, {'GGML_METAL_CONCURRENCY_DISABLE': 'wrong',
+                                         'GGML_METAL_FUSION_DEBUG': '3'}, clear=False), \
+                    patch.object(probe.subprocess, 'Popen', side_effect=spawn) as process, \
+                    patch.object(probe, 'json_request', return_value=props), \
+                    patch.object(probe, 'stop_owned_group', side_effect=lambda c: setattr(c, 'returncode', 0)):
+                before = dict(os.environ)
+                with server:
+                    self.assertEqual(server.proof['requestedPhysicalBatch'], 64)
+                    self.assertTrue(server.proof['compatibilityRuntime']['settingsConfirmedByNativeLog'])
+                self.assertEqual(before, dict(os.environ))
+                for key, value in probe.GPU_CHECK_ENV.items():
+                    self.assertEqual(process.call_args.kwargs['env'][key], value)
+                self.assertNotIn('GGML_METAL_FUSION_DEBUG', process.call_args.kwargs['env'])
+            self.assertTrue(server.closed)
+
+    def test_unconfirmed_compatibility_setting_stops_before_model_request_and_closes_server(self):
+        with tempfile.TemporaryDirectory() as folder:
+            server = probe.OwnedMetalServer('/binary', {'path': '/existing/gguf'}, DEVICE,
+                                             Path(folder), gpu_check=True)
+            child = SimpleNamespace(returncode=None); child.poll = lambda: child.returncode
+            def spawn(*args, **kwargs):
+                kwargs['stdout'].write(GPU_CHECK_LOG.replace('n_ubatch              = 64',
+                                                            'n_ubatch              = 512').encode())
+                kwargs['stdout'].flush()
+                return child
+            props = {'total_slots': 1, 'model_path': '/existing/gguf', 'chat_template': 'template',
+                     'default_generation_settings': {'n_ctx': 4096}}
+            with patch.object(probe.subprocess, 'Popen', side_effect=spawn), \
+                    patch.object(probe, 'json_request', return_value=props), \
+                    patch.object(probe, 'stop_owned_group', side_effect=lambda c: setattr(c, 'returncode', 0)) as stop:
+                with self.assertRaisesRegex(ValueError, 'no_inference'):
+                    server.__enter__()
+            stop.assert_called_once_with(child)
+            self.assertTrue(server.closed)
+            self.assertTrue(server.handle.closed)
+
+    def test_readiness_503_keeps_polling_instead_of_becoming_model_post_error(self):
+        with tempfile.TemporaryDirectory() as folder:
+            server = probe.OwnedMetalServer('/binary', {'path': '/existing/gguf'}, DEVICE, Path(folder))
+            child = SimpleNamespace(returncode=None); child.poll = lambda: child.returncode
+            props = {'total_slots': 1, 'model_path': '/existing/gguf', 'chat_template': 'template',
+                     'default_generation_settings': {'n_ctx': 4096}}
+            def spawn(*args, **kwargs):
+                kwargs['stdout'].write(LOAD_LOG.encode()); kwargs['stdout'].flush()
+                return child
+            error = probe.urllib.error.HTTPError(ENDPOINT+'/props', 503, 'not ready', {}, io.BytesIO(b''))
+            with patch.object(probe.subprocess, 'Popen', side_effect=spawn), \
+                    patch.object(probe, 'json_request', side_effect=[error, props]) as requests, \
+                    patch.object(probe.time, 'sleep'), \
+                    patch.object(probe, 'stop_owned_group', side_effect=lambda c: setattr(c, 'returncode', 0)):
+                with server: pass
+            self.assertEqual(requests.call_count, 2)
+            self.assertTrue(server.closed)
+
     def test_authenticated_model_readiness_proves_context_and_gpu_before_inference(self):
         with tempfile.TemporaryDirectory() as folder:
             server = probe.OwnedMetalServer('/binary', {'path': '/existing/gguf'}, DEVICE, Path(folder))
@@ -670,13 +810,57 @@ class FiniteRunTests(unittest.TestCase):
     def test_existing_build_reuse_keeps_six_calls_without_compiling(self):
         self.check_run(Path('/existing/trial'))
 
-    def check_run(self, reuse_folder):
+    def test_single_gpu_request_success_keeps_one_source_and_never_starts_full_comparison(self):
+        report = self.check_run(Path('/existing/trial'), gpu_check=True)
+        self.assertEqual(report['gpuCheck']['outcome'], 'completed_pending_semantic_review')
+        self.assertFalse(report['gpuCheck']['integrationAllowed'])
+        self.assertFalse(report['gpuCheck']['latencyComparisonCollected'])
+        self.assertFalse(report['gpuCheck']['automaticFullComparisonAfterSuccess'])
+        self.assertNotIn('comparison', report)
+        self.assertNotIn('thresholds', report)
+        self.assertEqual(report['completedModelCalls'], 1)
+
+    def test_single_gpu_timeout_keeps_error_evidence_and_closes_without_retry(self):
+        report = self.check_run(Path('/existing/trial'), gpu_check=True,
+                                worker_error='local_model_http_500_compute_error')
+        self.assertEqual(report['gpuCheck']['outcome'], 'failed_runtime')
+        self.assertEqual(report['rows'][0]['error'], 'local_model_http_500_compute_error')
+        self.assertIn('gpu_driver_timeout', report['nativeRuntimeFailure']['codes'])
+        self.assertEqual(report['completedModelCalls'], 0)
+        self.assertFalse(report['gpuCheck']['integrationAllowed'])
+
+    def test_single_gpu_setup_failure_saves_diagnostic_and_makes_no_model_request(self):
+        report = self.check_run(Path('/existing/trial'), gpu_check=True, startup_failure=True)
+        self.assertEqual(report['gpuCheck']['outcome'], 'failed_setup')
+        self.assertEqual(report['completedModelCalls'], 0)
+        self.assertEqual(report['attemptedModelCalls'], 0)
+        self.assertTrue(report['ownedMetalServerStopped'])
+        self.assertFalse(report['gpuCheck']['integrationAllowed'])
+
+    def test_single_check_preserves_answer_rejection_and_incomplete_response(self):
+        value = row(0, 'llama_metal')
+        value['checks'] = {'outcome': 'rejected', 'claims': []}
+        rejected = probe.gpu_check_outcome([value], True)
+        self.assertEqual(rejected['outcome'], 'completed_but_answer_rejected')
+        self.assertFalse(rejected['integrationAllowed'])
+        value['result']['completed'] = False
+        incomplete = probe.gpu_check_outcome([value], True)
+        self.assertEqual(incomplete['outcome'], 'incomplete_model_response')
+        self.assertFalse(incomplete['integrationAllowed'])
+        self.assertEqual(probe.gpu_check_outcome([row(0, 'llama_metal')], False)['outcome'],
+                         'weights_identity_changed')
+
+    def check_run(self, reuse_folder, gpu_check=False, worker_error=None, startup_failure=False):
         with tempfile.TemporaryDirectory() as folder:
             class Server:
                 url, token = ENDPOINT, TOKEN
                 proof = {'gpuOffloadProven': True}
                 closed = False
-                def __enter__(self): return self
+                def __enter__(self):
+                    if startup_failure:
+                        self.closed = True
+                        raise ValueError('gpu_check_effective_batch_not_confirmed_no_inference')
+                    return self
                 def __exit__(self, *args): self.closed = True
             server = Server(); calls = []
             def worker(project, payload, timeout, observe=False):
@@ -687,6 +871,9 @@ class FiniteRunTests(unittest.TestCase):
                     return {'signature': [1, 2, 3, 4, 5], 'sha256': 'model', 'bytes': 3}, [], True
                 if payload['operation'] == 'read':
                     return page() if payload['case'] == 0 else csv_page(), [], True
+                if worker_error:
+                    (Path(folder) / 'owned-server.log').write_text(TIMEOUT_LOG)
+                    raise ValueError(worker_error)
                 return row(payload['case'], payload['engine']), [], True
             with patch.object(probe.platform, 'system', return_value='Darwin'), \
                     patch.object(probe.platform, 'machine', return_value='x86_64'), \
@@ -697,23 +884,33 @@ class FiniteRunTests(unittest.TestCase):
                     patch.object(probe, 'create_trial_folder', return_value=Path(folder)), \
                     patch.object(probe, 'build_engine', return_value=('/binary', {'device': DEVICE})) as fresh_build, \
                     patch.object(probe, 'reuse_engine', return_value=('/binary', {'device': DEVICE})) as reused_build, \
-                    patch.object(probe, 'OwnedMetalServer', return_value=server):
-                report = probe.run(Path('/project'), lambda *a, **k: None, reuse_folder)
+                    patch.object(probe, 'OwnedMetalServer', return_value=server) as owned_server:
+                if startup_failure:
+                    with self.assertRaisesRegex(ValueError, 'no_inference'):
+                        probe.run(Path('/project'), lambda *a, **k: None, reuse_folder, gpu_check)
+                    report = json.loads((Path(folder) / 'trial-result.json').read_text())
+                else:
+                    report = probe.run(Path('/project'), lambda *a, **k: None, reuse_folder, gpu_check)
+            self.assertEqual(owned_server.call_args.kwargs['gpu_check'], gpu_check)
             if reuse_folder is None:
                 fresh_build.assert_called_once(); reused_build.assert_not_called()
             else:
                 fresh_build.assert_not_called(); reused_build.assert_called_once()
-            self.assertEqual(report['existingBuildReused'], reuse_folder is not None)
-            self.assertEqual(report['isolatedRuntimeBuiltThisRun'], reuse_folder is None)
-            self.assertEqual(report['nativeLogVerbosity'], 4)
-            self.assertEqual([engine for op, engine in calls if op == 'model'], [e for i, e in probe.ORDER])
-            self.assertEqual(sum(op == 'read' for op, _ in calls), 2)
+            if not startup_failure:
+                self.assertEqual(report['existingBuildReused'], reuse_folder is not None)
+                self.assertEqual(report['isolatedRuntimeBuiltThisRun'], reuse_folder is None)
+                self.assertEqual(report['nativeLogVerbosity'], 4)
+            expected = [] if startup_failure else (['llama_metal'] if gpu_check else [e for i, e in probe.ORDER])
+            self.assertEqual([engine for op, engine in calls if op == 'model'], expected)
+            self.assertEqual(sum(op == 'read' for op, _ in calls), 1 if gpu_check else 2)
             self.assertTrue(server.closed)
             self.assertFalse(report['productionModified'])
             self.assertEqual(report['automaticRetries'], 0)
-            self.assertEqual(report['warmupInferenceRequests'], 0)
-            self.assertFalse(report['weightsDownloaded'])
+            if not startup_failure:
+                self.assertEqual(report['warmupInferenceRequests'], 0)
+                self.assertFalse(report['weightsDownloaded'])
             self.assertTrue((Path(folder) / 'trial-result.json').is_file())
+            return report
 
 
 if __name__ == '__main__': unittest.main()

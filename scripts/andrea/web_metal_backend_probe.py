@@ -1,8 +1,8 @@
 """One isolated Intel Mac Metal trial against the installed v9 CPU backend.
 
 Builds or verifies an existing pinned llama.cpp checkout with Metal enabled. Reuses the
-existing verified Ollama GGUF; downloads no new weights. Six fixed requests
-keep v9 evidence, messages, native schema and validators. No answer repair,
+existing verified Ollama GGUF; downloads no new weights. A single GPU check or
+six fixed comparison requests keep v9 evidence, messages, schema and validators. No answer repair,
 retry, production installation or termination of pre-existing processes.
 """
 from __future__ import annotations
@@ -51,6 +51,10 @@ MAX_TOTAL_REGRESSION_PERCENT = 5
 MAX_CACHED_TOKENS = 8
 MODEL_MAX_BYTES = 6 * 1024**3
 LOG_MAX_BYTES = 16 * 1024**2
+GPU_CHECK_UBATCH = 64
+GPU_CHECK_ENV = {'GGML_METAL_CONCURRENCY_DISABLE': '1',
+                 'GGML_METAL_GRAPH_OPTIMIZE_DISABLE': '1',
+                 'GGML_METAL_FUSION_DISABLE': '1'}
 
 def control_audit(checked, selection):
     if checked['outcome'] != 'accepted_pending_semantic_review':
@@ -473,16 +477,20 @@ def reuse_engine(previous, folder, emit=print):
     return binary, proof
 
 
-def server_args(binary, model, device, port, token):
+def server_args(binary, model, device, port, token, gpu_check=False):
     if (not re.fullmatch(r'MTL\d+', device) or type(port) is not int or not 1024 <= port <= 65535
             or not re.fullmatch('[0-9a-f]{64}', token)):
         raise ValueError('invalid_owned_server_arguments')
-    return [str(binary), '--model', str(model), '--alias', MODEL, '--device', device,
+    args = [str(binary), '--model', str(model), '--alias', MODEL, '--device', device,
         '--n-gpu-layers', 'auto', '--fit', 'on', '--fit-target', '1024',
-        '--ctx-size', '4096', '--parallel', '1', '--batch-size', '512', '--ubatch-size', '512',
+        '--ctx-size', '4096', '--parallel', '1', '--batch-size', '512',
+        '--ubatch-size', str(GPU_CHECK_UBATCH if gpu_check else 512),
         '--flash-attn', 'off', '--reasoning', 'off', '--no-cache-prompt', '--no-warmup',
         '--no-webui', '--perf', '--log-verbosity', '4',
         '--host', '127.0.0.1', '--port', str(port), '--api-key', token]
+    if gpu_check:
+        args.extend(['--cache-ram', '0'])
+    return args
 
 
 def offload_proof(log, device):
@@ -511,10 +519,57 @@ def offload_proof(log, device):
             'fullOffload': int(layers[-1][1]) == int(layers[-1][2])}
 
 
+def gpu_check_runtime_proof(log):
+    """Require native confirmation of the final loaded compatibility profile."""
+    layers = list(re.finditer(r'offloaded (\d+)/(\d+) layers to GPU', log))
+    final = log[layers[-1].end():] if layers else ''
+    batches = {}
+    for key, expected in (('n_batch', 512), ('n_ubatch', GPU_CHECK_UBATCH)):
+        values = re.findall(r'\bllama_context:\s*' + key + r'\s*=\s*(\d+)\b', final)
+        if not values or int(values[-1]) != expected:
+            raise ValueError('gpu_check_effective_batch_not_confirmed_no_inference')
+        batches[key] = int(values[-1])
+    for label in ('fusion', 'concurrency', 'graph optimize'):
+        values = re.findall(r'\bggml_metal_init:\s*use ' + label + r'\s*=\s*(true|false)\b', final)
+        if not values or any(value != 'false' for value in values):
+            raise ValueError('gpu_check_effective_metal_settings_not_confirmed_no_inference')
+    if not re.search(r'\bload_model: prompt cache is disabled\b', final):
+        raise ValueError('gpu_check_prompt_cache_not_disabled_no_inference')
+    return {'profile': 'radeon_ubatch64_serial_unfused',
+            'effectiveLogicalBatch': batches['n_batch'], 'effectivePhysicalBatch': batches['n_ubatch'],
+            'fusionEnabled': False, 'concurrencyEnabled': False, 'graphOptimizeEnabled': False,
+            'ramPromptCacheEnabled': False, 'settingsConfirmedByNativeLog': True,
+            'compatibilityAndPerformanceNotYetProven': True}
+
+
+def native_failure_evidence(file):
+    """Return bounded canonical error codes, never arbitrary native log text."""
+    try:
+        if file.is_symlink() or not file.is_file():
+            raise ValueError()
+        with file.open('rb') as handle:
+            size = file.stat().st_size
+            handle.seek(max(0, size - MAX_BYTES))
+            tail = handle.read(MAX_BYTES).decode('utf-8', errors='replace')
+    except (OSError, ValueError):
+        return {'readAvailable': False, 'codes': [], 'tailBytesLimited': MAX_BYTES}
+    patterns = (
+        ('metal_command_buffer_failed', r'\bE ggml_metal_synchronize: error: command buffer \d+ failed with status \d+\b'),
+        ('gpu_driver_timeout', r'\bE error: Caused GPU Timeout Error \([^\n]*kIOAccelCommandBufferCallbackErrorTimeout\)'),
+        ('metal_backend_error_state', r'\bE ggml_metal_graph_compute: backend is in error state\b'),
+        ('graph_compute_failed', r'\bE (?:graph_compute: .*failed with error -\d+|process_ubatch: failed to compute graph)\b'),
+        ('server_compute_error', r'\bE srv\s+(?:decode: Compute error\.|send_error: task id = \d+, error: Compute error\.)'),
+        ('metal_out_of_memory', r'\bE error: Caused (?:Out of Memory|GPU Out of Memory) Error\b'))
+    return {'readAvailable': True, 'codes': [code for code, pattern in patterns if re.search(pattern, tail)],
+            'tailBytesLimited': MAX_BYTES, 'logTailTruncated': size > MAX_BYTES,
+            'rawLogTextIncluded': False}
+
+
 class OwnedMetalServer:
-    def __init__(self, binary, identity, device, folder, emit=print):
+    def __init__(self, binary, identity, device, folder, emit=print, gpu_check=False):
         self.binary, self.identity, self.device = binary, identity, device
         self.folder, self.emit = folder, emit
+        self.gpu_check = gpu_check
         self.child = self.handle = None
         self.token = secrets.token_hex(32)
         self.port = None
@@ -528,8 +583,11 @@ class OwnedMetalServer:
         self.handle = (self.folder / 'owned-server.log').open('xb')
         started = time.monotonic()
         try:
+            env = clean_child_env()
+            if self.gpu_check:
+                env.update(GPU_CHECK_ENV)
             self.child = subprocess.Popen(server_args(self.binary, self.identity['path'],
-                self.device['id'], self.port, self.token), cwd=self.folder, env=clean_child_env(),
+                self.device['id'], self.port, self.token, self.gpu_check), cwd=self.folder, env=env,
                 stdin=subprocess.DEVNULL, stdout=self.handle, stderr=self.handle, start_new_session=True)
             deadline, last_notice = started + 150, started
             while True:
@@ -555,6 +613,8 @@ class OwnedMetalServer:
                         raise ValueError('metal_context_or_model_identity_mismatch')
                     log = (self.folder / 'owned-server.log').read_text(errors='replace')
                     self.proof = offload_proof(log, self.device)
+                    if self.gpu_check:
+                        self.proof['compatibilityRuntime'] = gpu_check_runtime_proof(log)
                     self.proof.update(modelLoadAndMetalInitializationClientMs=round(
                         (time.monotonic() - started) * 1000, 3),
                         nativeChatTemplateSha256=hashlib.sha256(props['chat_template'].encode()).hexdigest(),
@@ -563,7 +623,8 @@ class OwnedMetalServer:
                             if k in {'top_k', 'top_p', 'min_p', 'repeat_penalty', 'presence_penalty',
                                      'frequency_penalty'} and type(v) in (int, float) and math.isfinite(v)},
                         warmupInferenceDisabled=True, contextPerSlot=4096, slots=1,
-                        flashAttention='off', requestedLogicalBatch=512, requestedPhysicalBatch=512)
+                        flashAttention='off', requestedLogicalBatch=512,
+                        requestedPhysicalBatch=GPU_CHECK_UBATCH if self.gpu_check else 512)
                     return self
                 if time.monotonic() - last_notice >= 15:
                     self.emit('Caricamento del modello sulla Radeon ancora in corso…', flush=True)
@@ -643,7 +704,20 @@ def completion_once(engine, messages, schema, endpoint=None, token=None, transpo
     else:
         raise ValueError('invalid_engine')
     started = time.monotonic()
-    response = json_request(url, payload, 90, token, transport)
+    try:
+        response = json_request(url, payload, 90, token, transport)
+    except urllib.error.HTTPError as exc:
+        # Read only a bounded error body. Report a fixed code, not the request,
+        # credential, source, URL or arbitrary text returned by the engine.
+        try:
+            raw = exc.read(4097)
+            compute = len(raw) <= 4096 and b'Compute error.' in raw
+        except OSError:
+            compute = False
+        finally:
+            exc.close()
+        code = exc.code if type(exc.code) is int and 100 <= exc.code <= 599 else 'error'
+        raise ValueError('local_model_http_' + str(code) + ('_compute_error' if compute else '')) from None
     elapsed = round((time.monotonic() - started) * 1000, 3)
     if engine == 'ollama_cpu':
         message = response.get('message')
@@ -794,7 +868,35 @@ def create_trial_folder():
     return Path(tempfile.mkdtemp(prefix='llama-metal-b11461-', dir=base))
 
 
-def run(project, emit=print, reuse_build_folder=None):
+def safe_error_code(exc):
+    value = str(exc)
+    if re.fullmatch(r'[a-z0-9_]{1,120}', value):
+        return value
+    return 'local_model_io_error' if isinstance(exc, OSError) else 'local_trial_stage_failed'
+
+
+def gpu_check_outcome(rows, weights_unchanged):
+    value = rows[0] if len(rows) == 1 else {}
+    if not value or value.get('error'):
+        outcome = 'failed_runtime'
+    elif value.get('result', {}).get('completed') is not True:
+        outcome = 'incomplete_model_response'
+    elif not weights_unchanged:
+        outcome = 'weights_identity_changed'
+    elif expected_shape(value):
+        outcome = 'completed_pending_semantic_review'
+    else:
+        outcome = 'completed_but_answer_rejected'
+    return {'outcome': outcome, 'qualityVerdict': 'pending_review', 'integrationAllowed': False,
+            'decision': 'do_not_adopt_from_single_gpu_check', 'latencyComparisonCollected': False,
+            'browserRendering': 'not_measured', 'firstVisibleResponseLatency': 'not_measured',
+            'cpuModelRequests': 0, 'automaticFullComparisonAfterSuccess': False,
+            'oneRequestDoesNotProveReliability': True}
+
+
+def run(project, emit=print, reuse_build_folder=None, gpu_check=False):
+    if gpu_check and reuse_build_folder is None:
+        raise ValueError('gpu_check_requires_reuse_build_no_compilation')
     if platform.system() != 'Darwin' or platform.machine() != 'x86_64':
         raise ValueError('trial_requires_intel_macos')
     required_tools = ('git',) if reuse_build_folder is not None else ('git', 'cmake', 'make', 'clang')
@@ -808,14 +910,17 @@ def run(project, emit=print, reuse_build_folder=None):
     weights, _, _ = owned_worker(project, {'operation': 'hash', 'identity': identity}, 120)
     # Prove the app is running before spending time on a build.
     pages = {}
-    for index in (0, 1):
+    for index in ((0,) if gpu_check else (0, 1)):
         pages[index], _, _ = owned_worker(project, {'operation': 'read', 'case': index}, 35)
-    pages[2] = pages[1]
-    required = check.CASES[1]['requiredContext']
-    if ' '.join(required.split()) not in ' '.join(pages[1]['text'].split()):
-        raise ValueError('csv_exception_not_in_source_no_inference')
+    if not gpu_check:
+        pages[2] = pages[1]
+        required = check.CASES[1]['requiredContext']
+        if ' '.join(required.split()) not in ' '.join(pages[1]['text'].split()):
+            raise ValueError('csv_exception_not_in_source_no_inference')
     folder = create_trial_folder()
     emit('Cartella separata della prova: ' + str(folder), flush=True)
+    server, rows = None, []
+    order = ((0, 'llama_metal'),) if gpu_check else ORDER
     try:
         if reuse_build_folder is None:
             emit('Prima compilazione con Metal: può richiedere 5–20 minuti. Nessuna installazione in OpenJarvis.', flush=True)
@@ -827,13 +932,15 @@ def run(project, emit=print, reuse_build_folder=None):
         # app's five-minute page IDs for model requests. Both engines receive
         # the identical captured snapshot even if the live page later changes.
         emit('Radeon riconosciuta. Caricamento del modello nel server temporaneo…', flush=True)
-        rows = []
-        server = OwnedMetalServer(binary, identity, build['device'], folder, emit)
+        server = OwnedMetalServer(binary, identity, build['device'], folder, emit, gpu_check=gpu_check)
         with server:
             emit(json.dumps({'effectiveGpuProof': server.proof}, ensure_ascii=False, indent=2), flush=True)
-            emit('Sei richieste, una sola serie (circa 4–8 minuti). Lascia OpenJarvis acceso, senza altre richieste.', flush=True)
-            for number, (index, engine) in enumerate(ORDER, 1):
-                emit(f'Richiesta {number}/6: {check.CASES[index]["id"]}, {engine}…', flush=True)
+            if gpu_check:
+                emit('Una sola richiesta GPU, limite 90 secondi. Nessuna richiesta CPU o serie aggiuntiva.', flush=True)
+            else:
+                emit('Sei richieste, una sola serie (circa 4–8 minuti). Lascia OpenJarvis acceso, senza altre richieste.', flush=True)
+            for number, (index, engine) in enumerate(order, 1):
+                emit(f'Richiesta {number}/{len(order)}: {check.CASES[index]["id"]}, {engine}…', flush=True)
                 if file_signature(Path(identity['path'])) != tuple(weights['signature']):
                     raise ValueError('weights_changed_during_trial')
                 try:
@@ -848,14 +955,16 @@ def run(project, emit=print, reuse_build_folder=None):
                         break
                 except (OSError, ValueError, TypeError) as exc:
                     rows.append({'case': check.CASES[index]['id'], 'engine': engine,
-                                 'error': str(exc), 'result': {}, 'checks': {}, 'qualityVerdict': 'not_evaluated'})
+                                 'error': safe_error_code(exc), 'result': {}, 'checks': {},
+                                 'qualityVerdict': 'not_evaluated'})
                     break
         unchanged = file_signature(Path(identity['path'])) == tuple(weights['signature'])
-        report = {'mode': 'installed_v9_intel_metal_backend_trial', 'contractRevision': 'compact_web_evidence_v9',
+        report = {'mode': 'installed_v9_intel_metal_gpu_check' if gpu_check else 'installed_v9_intel_metal_backend_trial',
+            'contractRevision': 'compact_web_evidence_v9',
             'productionModified': False, 'isolatedRuntimeBuilt': True, 'weightsDownloaded': False,
             'isolatedRuntimeBuiltThisRun': reuse_build_folder is None,
             'existingBuildReused': reuse_build_folder is not None, 'nativeLogVerbosity': 4,
-            'vaultRead': False, 'automaticRetries': 0, 'requestedModelCalls': 6,
+            'vaultRead': False, 'automaticRetries': 0, 'requestedModelCalls': len(order),
             'completedRows': len(rows), 'browserRendering': 'not_measured',
             'existingProcessesTerminated': False, 'ownedMetalServerStopped': server.closed,
             'ollamaVersion': VERSION, 'model': MODEL, 'modelBlobSha256': weights['sha256'],
@@ -863,18 +972,37 @@ def run(project, emit=print, reuse_build_folder=None):
             'ollamaTemplateSha256': identity['ollamaTemplateSha256'], 'build': build,
             'gpuProof': server.proof, 'sourceContractAndSchemaUnchanged': True,
             'cacheMarkerIsDiagnosticNotProduction': True, 'bothBackendsUseFullJsonTransport': True,
-            'publicPageReads': 2, 'capturedSnapshotBeforeBuild': True, 'appPageCacheUsedForModelCalls': False,
+            'publicPageReads': len({i for i, _ in order if i < 2}),
+            'capturedSnapshotBeforeBuild': True, 'appPageCacheUsedForModelCalls': False,
             'threadPolicy': 'automatic_unchanged', 'warmupInferenceRequests': 0,
             'thresholds': {'minimumClientTotalGainPercentForBothPositiveCases': MIN_TOTAL_GAIN_PERCENT,
                            'minimumNativePrefillAndGenerationGainPercentForBothPositiveCases': MIN_TOTAL_GAIN_PERCENT,
                            'maximumClientTotalRegressionPercentForMissingCase': MAX_TOTAL_REGRESSION_PERCENT,
                            'maximumCachedTokens': MAX_CACHED_TOKENS},
-            'comparison': comparison(rows, server.proof, unchanged), 'rows': rows}
+            'nativeRuntimeFailure': native_failure_evidence(folder / 'owned-server.log'), 'rows': rows}
+        if gpu_check:
+            report.pop('thresholds')
+            report.update(gpuCheck=gpu_check_outcome(rows, unchanged), attemptedModelCalls=len(rows),
+                          completedModelCalls=sum(r.get('result', {}).get('completed') is True for r in rows),
+                          compatibilityEnvironmentAppliedOnlyToOwnedServer=copy.deepcopy(GPU_CHECK_ENV))
+        else:
+            report['comparison'] = comparison(rows, server.proof, unchanged)
         (folder / 'trial-result.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
         emit('Server temporaneo chiuso. OpenJarvis continua a usare la sua installazione abituale.', flush=True)
         emit('Risultati salvati anche in: ' + str(folder / 'trial-result.json'), flush=True)
         return report
-    except BaseException:
+    except BaseException as exc:
+        if gpu_check and isinstance(exc, Exception):
+            report = {'mode': 'installed_v9_intel_metal_gpu_check', 'stageFailureCode': safe_error_code(exc),
+                      'productionModified': False, 'automaticRetries': 0, 'requestedModelCalls': 1,
+                      'attemptedModelCalls': len(rows),
+                      'completedModelCalls': sum(r.get('result', {}).get('completed') is True for r in rows),
+                      'gpuCheck': {**gpu_check_outcome([], False), 'outcome': 'failed_setup'},
+                      'nativeRuntimeFailure': native_failure_evidence(folder / 'owned-server.log'),
+                      'ownedMetalServerStopped': server.closed if server is not None else True,
+                      'rows': rows}
+            (folder / 'trial-result.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+            emit(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
         emit('Prova fermata; dettagli della fase nella cartella indicata. Nessun retry automatico.', flush=True)
         raise
 
@@ -885,18 +1013,22 @@ def main():
     parser.add_argument('--worker', action='store_true')
     parser.add_argument('--reuse-build', type=Path,
                         help='Verify and reuse an existing isolated trial build, without recompiling.')
+    parser.add_argument('--gpu-check', action='store_true',
+                        help='One GPU request with the bounded Radeon compatibility profile; requires --reuse-build.')
     args = parser.parse_args()
     try:
         project = args.project.expanduser().resolve(strict=True)
         if args.worker:
             if args.reuse_build is not None:
                 raise ValueError('reuse_build_not_a_worker_argument')
+            if args.gpu_check:
+                raise ValueError('gpu_check_not_a_worker_argument')
             raw = sys.stdin.buffer.read(MAX_BYTES + 1)
             if len(raw) > MAX_BYTES:
                 raise ValueError('worker_input_too_large')
             report = worker(project, json.loads(raw, object_pairs_hook=unique_pairs))
         else:
-            report = run(project, reuse_build_folder=args.reuse_build)
+            report = run(project, reuse_build_folder=args.reuse_build, gpu_check=args.gpu_check)
         print(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
         return 0
     except KeyboardInterrupt:
