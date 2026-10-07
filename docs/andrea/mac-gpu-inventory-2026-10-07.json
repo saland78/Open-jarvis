@@ -1,0 +1,46 @@
+{
+  "mode": "read_only_mac_acceleration_inventory",
+  "architecture": "x86_64",
+  "macosVersion": "26.7.1",
+  "gpuFieldsReported": [
+    {
+      "sppci_model": "Intel UHD Graphics 630",
+      "sppci_vendor": null,
+      "spdisplays_vram": null,
+      "spdisplays_vram_shared": "1536 MB",
+      "spdisplays_metal": null,
+      "spdisplays_mtlgpufamily": null
+    },
+    {
+      "sppci_model": "AMD Radeon Pro 5500M",
+      "sppci_vendor": null,
+      "spdisplays_vram": "4 GB",
+      "spdisplays_vram_shared": null,
+      "spdisplays_metal": null,
+      "spdisplays_mtlgpufamily": null
+    }
+  ],
+  "gpuReadStatus": "read",
+  "commandsPresent": {
+    "git": true,
+    "cmake": true,
+    "clang": true
+  },
+  "commandPresenceDoesNotProveBuildWorks": true,
+  "compatibilityVerdict": "not_determined",
+  "performanceVerdict": "not_measured",
+  "modelInferenceRequests": 0,
+  "automaticRetries": 0,
+  "productionModified": false,
+  "existingProcessesTerminated": false,
+  "review": {
+    "date": "2026-10-07",
+    "reportedRadeonVram": "4 GB",
+    "metalSupportCannotBeInferredFromNullInventoryFields": true,
+    "ollamaInPreviousTrialsUsedCpu": true,
+    "localMetalExecution": "not_measured",
+    "nextIntervention": "pinned_local_metal_build_with_same_gguf_and_six_fixed_comparisons",
+    "upstreamIntelReleaseBinaryHasMetalDisabled": true,
+    "latencyProblemResolved": false
+  }
+}

@@ -1,0 +1,174 @@
+# Intel Mac: isolated Metal backend trial
+
+The latency task remains open. The completed batch and static-prompt comparisons
+did not satisfy their adoption criteria. The hardware inventory now establishes
+that Andrea's Intel Mac has an AMD Radeon Pro 5500M with 4 GB reported video
+memory. Those trials used Ollama 0.35.1 with `size_vram: 0`. A usable AMD Metal
+backend is the next intervention; its compatibility and performance have not yet
+been measured on this Mac.
+
+## Primary sources and the important release limitation
+
+The official OpenJarvis
+[structured-output tests](https://github.com/open-jarvis/OpenJarvis/blob/main/tests/engine/test_structured_output.py)
+were consulted for this task, including exact native JSON-schema forwarding and
+engine-response completion checks. This work extends the existing local profile;
+it does not replace it with an unrelated fresh installation.
+
+The official llama.cpp Intel archive exists, but its
+[pinned release workflow](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/.github/workflows/release.yml)
+explicitly sets `GGML_METAL=OFF` for x64. Installing that archive would not test
+Radeon acceleration. No such binary is downloaded by this trial.
+
+Instead the script builds the unchanged official source at
+`4d756bc72bf00a4aacf410ae15a2d315f3db400d` (release b11461, tree
+`52c0e5f1f920046632632b594b7263ad1b7706cd`) with Metal and Accelerate enabled.
+The pinned
+[Metal build implementation](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/ggml/src/ggml-metal/CMakeLists.txt)
+embeds shader **source** when `GGML_METAL_EMBED_LIBRARY=ON`; the library is then
+compiled by Metal at runtime. This avoids requiring a separate command-line
+Metal shader compiler. It still requires a working Apple compiler and SDK.
+Command presence in the inventory does not prove these will build successfully.
+
+Apple's
+[default-device documentation](https://developer.apple.com/documentation/metal/getting-the-default-gpu)
+describes the discrete GPU as the default on MacBook Pro systems with multiple
+GPUs. The trial nevertheless requires the actual native `MTL*` device description
+to equal `AMD Radeon Pro 5500M`; a hardware inventory name alone is insufficient.
+CoreGraphics is linked explicitly for this command-line application, as specified
+in Apple's
+[Metal default-device API documentation](https://developer.apple.com/documentation/metal/mtlcreatesystemdefaultdevice()).
+
+The native
+[server API and options](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/tools/server/README.md)
+and
+[response-format parser](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/tools/server/server-common.cpp)
+were checked directly. The OpenAI-compatible wrapper passes the original schema
+under `response_format.json_schema.schema`, not as a replacement schema.
+
+## What the single Mac command does
+
+Run `scripts/andrea/web_metal_backend_probe.py` from the **Controlli** Terminal
+window. **OpenJarvis must be running** to read the two public documentation pages.
+Leave it idle during the trial. No Command+R or Control+C is needed for this run.
+
+1. Verify the 24 installed v9 file fingerprints, model name and Ollama version.
+2. Obtain the existing GGUF path from `/api/show`, require the expected Qwen3
+   family and Q4_K_M quantization, and verify the entire blob against its declared
+   SHA-256. No new model, conversion or copy of the weights is performed.
+3. Read the two public Python documentation excerpts through OpenJarvis, including
+   the CSV condition needed by the test. Both engines receive the same captured
+   source bytes. No search provider, vault, memory or conversation is read.
+4. Fetch the one official Git commit over HTTPS into a newly created separate
+   directory under `~/.openjarvis-andrea/local-engines/`. Check the commit, tree
+   and clean working tree. Build only `llama-server`, in Release mode for x86_64,
+   with four compilation jobs, static libraries and embedded Metal shader source.
+   Do not run `cmake install`, install system packages, change Git settings, fetch
+   a UI, or modify the checked-out source.
+5. Check the built version and native GPU inventory. Start an owned server bound
+   to an ephemeral `127.0.0.1` port with a random API credential, the same verified
+   GGUF, context 4096, one slot, requested batch/ubatch 512, automatic model thread
+   count, Flash Attention off, reasoning off and no prompt caching or warmup
+   inference. The fit policy keeps a 1024 MiB margin. Context shrinking is refused.
+6. Require authenticated model readiness, the expected model path, a positive
+   allocation of its tensors on the Radeon and a positive final GPU layer count.
+   Fit-estimation log repetitions are distinguished from the final layer count.
+   Partial offload is reported explicitly. Missing GPU evidence stops the trial
+   before model requests; there is no silent CPU fallback.
+7. Make the six fixed requests below, one per worker. Retain every completed raw
+   answer and every refusal. Run the unchanged v9 preparation, native schema and
+   original validators, followed by the same supplementary control predicate
+   audit on both engines. Do not repair, re-anchor, truncate or drop bad claims.
+8. Close only the owned temporary Metal server, save `trial-result.json` and a
+   build receipt in the trial directory, and leave ordinary OpenJarvis installed
+   as before. Compiled files and logs remain available for reviewing this trial.
+
+| Order | Case | Engine |
+|---|---|---|
+| 1 | Two supported asyncio capabilities | Ollama CPU |
+| 2 | Same captured asyncio source and question | llama.cpp Metal |
+| 3 | CSV default conversion rule and QUOTE_NONNUMERIC exception | llama.cpp Metal |
+| 4 | Same captured CSV source and question | Ollama CPU |
+| 5 | Price absent from the CSV source | Ollama CPU |
+| 6 | Same unsupported price question | llama.cpp Metal |
+
+The missing-price schema continues to permit claims. Empty output must come
+from the model, not from a forced empty schema. A positive-question empty output
+does not count as a successful answer.
+
+The source snapshot is read before compilation. Its five-minute app cache is
+not used or refreshed for these local model requests. Source hashes, complete
+preparation hashes and schema hashes must match within each pair. The original
+source numbering and selected complete rules are preserved.
+
+## Deadlines and cleanup
+
+The first build may take approximately 5–20 minutes. Each long setup stage emits
+progress every 15 seconds. The compile limit is 20 minutes; Git fetch is bounded
+at 150 seconds, configure at 90 seconds, device/version checks at 120 seconds
+each, and owned model initialization at 150 seconds. The overall maximum,
+including all setup and model stages, is approximately 45 minutes.
+
+After setup, six model requests typically occupy 4–8 minutes on the observed CPU,
+but GPU response times are not yet known. Each single POST has a 90-second
+deadline, protected by an owned child worker deadline of 95 seconds. No preload
+inference, extra reset call, automatic retry or second generation is made.
+Completion transport failure stops the remaining series. Validation refusal
+retains the bad answer and continues only the independently planned cases.
+
+Compile and server subprocesses have their own process groups. On cancellation
+or deadline, only the groups created by this script are signalled. Existing
+OpenJarvis and Ollama processes are never terminated. The local GPU endpoint is
+authenticated; the credential is passed to model workers through stdin and is
+not included in reports. Public source instructions do not authorize tools.
+
+## Interpretation and gates established before collection
+
+Both model transports return a complete JSON response. First-token streaming,
+browser rendering, speech stages and audio playback are **not measured**.
+Model loading and Metal initialization have their own reported startup time.
+Ollama reports its load duration per request. These are retained rather than
+presented as a measured complete user-visible latency.
+
+llama.cpp's `prompt_n` is the number of processed tokens, not the total input;
+`prompt_n + cache_n` must align with its usage report. Ollama's input and cached
+counts are normalized separately. A missing or inconsistent timing measurement
+disqualifies the timing comparison while preserving the original model answer.
+
+The two positive cases require at least 20% improvement both in client request
+duration and in native prefill plus generation duration. The second condition
+prevents CPU model loading alone from creating a favorable speed decision.
+The missing-price case must not regress more than 5% in client duration.
+Each request permits at most eight cached tokens after a fresh diagnostic cache
+marker. The marker is not a production prompt change or source evidence.
+
+GPU allocation, unchanged weights, identical source/schema preparation, the
+fixed order and complete transport are also mandatory. Candidate answer shapes
+must be 2, 1 and 0 accepted claims respectively. Even satisfying these gates
+leaves `qualityVerdict: pending_review` and `integrationAllowed: false`.
+Meaning, application integration, startup fairness and browser latency still
+need assessment before adopting the backend.
+
+This compares two backend configurations, including their native chat templates,
+samplers, grammar implementations and build choices. It does not isolate the
+causal contribution of the GPU alone. It is one finite three-case comparison,
+not proof of general reliability or speed across all Jarvis functions.
+
+## Development verification
+
+The adapter tests cover unchanged native schemas and source text, original
+conditional-rule validators, retained raw output, the observed unsupported
+control predicate, genuine abstention, duplicate JSON keys, incomplete/oversized
+answers, token accounting, model hashes, GPU evidence, pinned build flags,
+bounded cleanup of owned processes, six-call order and adoption gates.
+
+These are local program and fixture tests. The Intel SDK compilation, AMD shader
+execution and six model responses require Andrea's Mac and are not claimed as
+completed here. The attached inventory itself also states compatibility unknown
+and performance not measured.
+
+Development result: **260 targeted tests passed**, including 42 tests of the new
+Metal trial adapter and the unchanged production pipeline, source/rule guards,
+previous experiment adapters and inventory filter. Python syntax was checked,
+and the 24 installed-v9 fingerprints still match in the review workspace. This
+does not claim the entire historical repository test suite passes.
