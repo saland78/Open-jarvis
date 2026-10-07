@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "mode": "qualification_compact_wire_existing_production_baseline",
+  "receivedDate": "2026-10-04",
+  "selection": "latest_retained_structured_notes_request",
+  "readerInferences": 0,
+  "readerVaultRead": false,
+  "browserRendering": "not_measured_by_reader",
+  "transportStatus": "completed",
+  "structuredOutcome": "accepted",
+  "readerQualityVerdict": "not_assessed",
+  "priorSemanticReview": "passed_for_previously_reviewed_supported_case",
+  "serverMs": {
+    "retrievalMs": 4.54,
+    "structuredFirstJsonMs": 23684.59,
+    "structuredGenerationMs": 45274.48,
+    "structuredValidationMs": 3.53,
+    "structuredAcceptedTextMs": 45285.07,
+    "firstTextMs": 45285.21,
+    "totalMs": 45285.52
+  },
+  "native": {
+    "source": "ollama_terminal_frame",
+    "durationUnit": "ms",
+    "terminalFrameReceived": true,
+    "totalMs": 45253.159,
+    "loadMs": 5332.582,
+    "promptEvalMs": 18294.775,
+    "evalMs": 21589.931,
+    "promptEvalCount": 951,
+    "promptEvalCachedCount": 0,
+    "evalCount": 142,
+    "evalTokensPerSecond": 6.577
+  },
+  "optimizationAdopted": false,
+  "newABInferenceExecuted": false,
+  "interpretation": "Observed native phases of the existing accepted production request. Cache count is zero; no claim about why it was not reused. No private note text, path, request id or raw terminal history retained."
+}

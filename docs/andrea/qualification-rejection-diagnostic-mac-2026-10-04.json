@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "mode": "single_qualification_rejection_diagnostic",
+  "plannedRequests": 1,
+  "attemptedRequests": 1,
+  "automaticRetries": 0,
+  "interrupted": false,
+  "source": "public_synthetic_markdown",
+  "vaultRead": false,
+  "productionFilesChanged": false,
+  "browserRendering": "not_measured",
+  "serverPathMeasured": false,
+  "previousPerformanceExperiment": "failed_not_reclassified",
+  "productionChangeAdopted": false,
+  "case": "adversarial",
+  "variant": "production",
+  "diagnosticCommit": "22b4739547716694acf0726db176633bd8cf15a6",
+  "row": {
+    "status": "completed",
+    "firstContentClientMs": 16075.498,
+    "totalClientMs": 32696.042,
+    "doneReason": "stop",
+    "native": {
+      "totalMs": 32691.377,
+      "loadMs": 3816.075,
+      "prompt_evalMs": 12225.209,
+      "evalMs": 16620.572,
+      "prompt_eval_count": 799,
+      "prompt_eval_cached_count": 0,
+      "eval_count": 134,
+      "evalTokensPerSecond": 8.062
+    },
+    "technicalOutcome": "valid_structure_pending_semantic_review",
+    "technicalReason": null,
+    "factsCovered": 4
+  },
+  "originalRejectionReproduced": false,
+  "originalRejectionCauseResolved": false,
+  "manualReview": {
+    "countPeriodVariabilityAndDatedLabelsPreserved": true,
+    "persistencePredicateExplicitlyPreserved": false,
+    "fullSemanticEquivalenceCertified": false,
+    "externalTruthVerified": false
+  },
+  "reviewDecision": "diagnostic_completed_original_rejection_not_reproduced_predicate_preservation_gap_remains",
+  "rawDiagnosticAndPrivateTerminalHistoryPublished": false
+}

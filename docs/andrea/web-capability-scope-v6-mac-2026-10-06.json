@@ -1,0 +1,3085 @@
+{
+  "originalAutomaticReport": {
+    "mode": "capability_performance_scope_latency_comparison",
+    "requested": 6,
+    "completed": 6,
+    "pairs": [
+      {
+        "case": "asyncio_scope",
+        "cacheEligible": true,
+        "uncachedInputReductionPercent": 16.743,
+        "nativePrefillReductionPercent": 26.748,
+        "performanceGateMet": true
+      },
+      {
+        "case": "csv_conversion_condition",
+        "cacheEligible": true,
+        "uncachedInputReductionPercent": 62.63,
+        "nativePrefillReductionPercent": 67.746,
+        "performanceGateMet": true
+      }
+    ],
+    "allNativeCacheCountsEligible": true,
+    "technicalCaseShapesMet": false,
+    "performanceOutcome": "gates_not_met",
+    "qualityVerdict": "pending_review",
+    "productionModified": false,
+    "candidateRevision": "capability_evidence_and_performance_scope_v6",
+    "automaticRetries": 0,
+    "browserRendering": "not_measured",
+    "noStatisticalOrUniversalSpeedClaim": true,
+    "fixedGates": {
+      "maxCachedTokens": 8,
+      "minUncachedFraction": 0.98,
+      "minInputReductionPercent": 10,
+      "minPrefillReductionPercent": 10
+    },
+    "integrationAllowedByThisAutomaticReport": false,
+    "attemptedRequests": 6,
+    "completedTransports": 6,
+    "notExecutedRequests": 0,
+    "referencePromptRevision": "full_context_before_api_context_integration",
+    "referenceIsCurrentInstalledPrompt": false,
+    "referenceBasePreparationFrozen": true,
+    "referenceMessagesAndSchemaMayChangeExplicitly": true,
+    "nativeIdentifierPolicySharedByBothVariants": true,
+    "nativeIdentifierSchemaChangedExplicitly": true,
+    "nativeIdentifierChecksAddedExplicitly": true,
+    "previousV2MeasurementsNotReused": true,
+    "previousV3MeasurementsNotReused": true,
+    "previousV4MeasurementsNotReused": true,
+    "previousV5MeasurementsNotReused": true,
+    "sourceCapabilityEvidenceEligibilityChangedExplicitly": true,
+    "sourcePerformanceVocabularyAddedExplicitly": true,
+    "nativePerformanceVocabularyConstraintApplied": false,
+    "freeModelPredicateRequiresSemanticReview": true,
+    "finiteCsvFileAliasChangedExplicitly": true,
+    "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+    "sourceFrequencyQualifierPreservedExplicitly": true,
+    "mandatoryNamesBeforeFreeTextChangedExplicitly": true,
+    "sourceNameLabelsAreNotGeneratedPredicates": true,
+    "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+    "sourceNetworkingInventoryChangedExplicitly": true,
+    "sourceAnchoredDuplicateConversionRuleCheck": true,
+    "sourceAnchoredSignalScopeCheck": true,
+    "sourceSignalScopeInventoryAddedExplicitly": true,
+    "nativeSingleRuleArrayLimitChangedExplicitly": true,
+    "shorterInstructionTextAlsoChanged": true,
+    "ollamaVersion": "0.35.1",
+    "versionUnchanged": true,
+    "sourceSelectionChangedExplicitly": true,
+    "originalQuestionsAndGatesUnchanged": true,
+    "thermalSamplesDoNotProvePhaseOrCausality": true,
+    "noCoolingWaitsOrThermalBasedExclusions": true
+  },
+  "rows": [
+    {
+      "case": "asyncio_scope",
+      "variant": "production",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 628.009,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 10,
+              "mandatoryIdentifiers": [
+                "I/O",
+                "IPC"
+              ],
+              "networkIOQualifierRequired": true,
+              "pattern": "^I/O di rete e IPC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O di rete e IPC: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                9,
+                11,
+                12,
+                13,
+                15,
+                16,
+                19,
+                20
+              ],
+              "forbiddenLeadingLabels": [
+                "API:",
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. AIRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                18
+              ],
+              "forbiddenLeadingLabels": [
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. IRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        },
+        "sourceCapabilityScopePolicy": {
+          "mode": "action_led_source_units_for_capability_question",
+          "active": true,
+          "capabilityQuestionRecognized": true,
+          "eligibleOperationRefs": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            15,
+            16,
+            18,
+            19,
+            20
+          ],
+          "sourceBytesOrNumbersChanged": false,
+          "sourceStillSuppliedAsContext": true,
+          "nativeEvidenceEligibilityChangedExplicitly": true,
+          "nativeArrayMinimumChanged": false,
+          "freeModelPredicatePreserved": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        },
+        "sourcePerformanceScopePolicy": {
+          "mode": "finite_performance_vocabulary_from_own_passage",
+          "sourcePerformanceTerms": {
+            "3": [
+              "high_performance"
+            ],
+            "19": [
+              "efficiency"
+            ]
+          },
+          "nativeSchemaChanged": false,
+          "freeModelPredicatePreserved": true,
+          "sourceBytesOrNumbersChanged": false,
+          "postGenerationCheckAddedExplicitly": true,
+          "wholeAnswerRefusal": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 3342,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "1b63ec0d69e0a3a1b722b606a74493e1a29fdda9387cd1362ada083e375ec8b9",
+      "unisolatedPromptSha256": "e3ca05cb1d2083815259493cbea0f4641925544c39433b4f70affe7ad380951d",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 46766.294,
+        "totalClientMs": 57731.203,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 57727.709,
+          "loadMs": 6615.621,
+          "prompt_evalMs": 40063.683,
+          "evalMs": 10970.079,
+          "prompt_eval_count": 1959,
+          "prompt_eval_cached_count": 0,
+          "eval_count": 78,
+          "evalTokensPerSecond": 7.11
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":10,\"text\":\"I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.\"},{\"passage\":18,\"text\":\"asyncio gestisce event loop per l'asincronia, inclusi subprocessi e gestione segnali dell'OS.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per l'asincronia, inclusi subprocessi e gestione segnali dell'OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per l'asincronia, inclusi subprocessi e gestione segnali dell'OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per l'asincronia, inclusi subprocessi e gestione segnali dell'OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "preCapabilityPerformanceChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per l'asincronia, inclusi subprocessi e gestione segnali dell'OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "capabilityEvidenceEligibilityChangedExplicitly": true,
+      "sourcePerformanceVocabularyAddedExplicitly": true,
+      "nativePerformanceVocabularyConstraintApplied": false,
+      "freeModelPredicateRequiresSemanticReview": true,
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "rejected",
+        "reason": "technical_term_missing_from_passage",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 18,
+          "text": "asyncio gestisce event loop per l'asincronia, inclusi subprocessi e gestione segnali dell'OS.",
+          "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+          "missingConcepts": [
+            "event loop"
+          ],
+          "diagnosticOnly": true
+        }
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1959,
+        "uncachedFraction": 1.0,
+        "reason": null
+      },
+      "validationClientMs": 9.288,
+      "thermalBefore": {
+        "startedMonotonic": 127104.342744359,
+        "finishedMonotonic": 127104.361211453,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6002.936,
+          "finishedWorkerOffsetMs": 6044.281,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18011.752,
+          "finishedWorkerOffsetMs": 18124.792,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36001.938,
+          "finishedWorkerOffsetMs": 36028.258,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 127162.272459884,
+        "finishedMonotonic": 127162.290706397,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "Names two supported operations: network I/O/IPC and management of event loops for asynchronous subprocess and OS-signal APIs. The second point is a partial catalogue summary; no efficiency, universal speedup or parallel execution is added.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "asyncio_scope",
+      "variant": "compact",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 628.009,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [
+          18
+        ],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": [
+          18
+        ],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 10,
+              "mandatoryIdentifiers": [
+                "I/O",
+                "IPC"
+              ],
+              "networkIOQualifierRequired": true,
+              "pattern": "^I/O di rete e IPC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "I/O di rete e IPC: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                9,
+                11,
+                12,
+                13,
+                15,
+                16,
+                19,
+                20
+              ],
+              "forbiddenLeadingLabels": [
+                "API:",
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. AIRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                18
+              ],
+              "forbiddenLeadingLabels": [
+                "I/O di rete e IPC:",
+                "I/O:",
+                "REPL:",
+                "WASI:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. IRW][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I[.]|I[^\"\\\\\\x00-\\x1F\\x7F./][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/[.]|I/[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O[.]|I/O[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O [.]|I/O [^\"\\\\\\x00-\\x1F\\x7F.d][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O d[.]|I/O d[^\"\\\\\\x00-\\x1F\\x7F.i][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di[.]|I/O di[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di [.]|I/O di [^\"\\\\\\x00-\\x1F\\x7F.r][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di r[.]|I/O di r[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di re[.]|I/O di re[^\"\\\\\\x00-\\x1F\\x7F.t][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di ret[.]|I/O di ret[^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete[.]|I/O di rete[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete [.]|I/O di rete [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e[.]|I/O di rete e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e [.]|I/O di rete e [^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e I[.]|I/O di rete e I[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IP[.]|I/O di rete e IP[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|I/O di rete e IPC[.]|I/O di rete e IPC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|R[.]|R[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|RE[.]|RE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REP[.]|REP[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|REPL[.]|REPL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|W[.]|W[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WA[.]|WA[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WAS[.]|WAS[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|WASI[.]|WASI[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        },
+        "sourceCapabilityScopePolicy": {
+          "mode": "action_led_source_units_for_capability_question",
+          "active": true,
+          "capabilityQuestionRecognized": true,
+          "eligibleOperationRefs": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            15,
+            16,
+            18,
+            19,
+            20
+          ],
+          "sourceBytesOrNumbersChanged": false,
+          "sourceStillSuppliedAsContext": true,
+          "nativeEvidenceEligibilityChangedExplicitly": true,
+          "nativeArrayMinimumChanged": false,
+          "freeModelPredicatePreserved": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        },
+        "sourcePerformanceScopePolicy": {
+          "mode": "finite_performance_vocabulary_from_own_passage",
+          "sourcePerformanceTerms": {
+            "3": [
+              "high_performance"
+            ],
+            "19": [
+              "efficiency"
+            ]
+          },
+          "nativeSchemaChanged": false,
+          "freeModelPredicatePreserved": true,
+          "sourceBytesOrNumbersChanged": false,
+          "postGenerationCheckAddedExplicitly": true,
+          "wholeAnswerRefusal": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 2410,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "1b63ec0d69e0a3a1b722b606a74493e1a29fdda9387cd1362ada083e375ec8b9",
+      "unisolatedPromptSha256": "fc0fb7c82b7292676376dd3fe5f5dbc3b61282cf86cb1f1e3b85177105660192",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 29599.416,
+        "totalClientMs": 39030.994,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 39026.371,
+          "loadMs": 1.896,
+          "prompt_evalMs": 29347.288,
+          "evalMs": 9431.379,
+          "prompt_eval_count": 1634,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 70,
+          "evalTokensPerSecond": 7.422
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":10,\"text\":\"I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.\"},{\"passage\":18,\"text\":\"asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "preCapabilityPerformanceChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "I/O di rete e IPC: asyncio permette di eseguire operazioni di rete e comunicazione tra processi.",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.",
+            "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+            "passage": 18
+          }
+        ]
+      },
+      "capabilityEvidenceEligibilityChangedExplicitly": true,
+      "sourcePerformanceVocabularyAddedExplicitly": true,
+      "nativePerformanceVocabularyConstraintApplied": false,
+      "freeModelPredicateRequiresSemanticReview": true,
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "rejected",
+        "reason": "technical_term_missing_from_passage",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 18,
+          "text": "asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.",
+          "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+          "missingConcepts": [
+            "event loop"
+          ],
+          "diagnosticOnly": true
+        }
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1631,
+        "uncachedFraction": 0.998164,
+        "reason": null
+      },
+      "validationClientMs": 1.333,
+      "thermalBefore": {
+        "startedMonotonic": 127162.318890343,
+        "finishedMonotonic": 127162.339804945,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 85,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6003.769,
+          "finishedWorkerOffsetMs": 6093.473,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 60,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18000.579,
+          "finishedWorkerOffsetMs": 18098.101,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36001.195,
+          "finishedWorkerOffsetMs": 36035.145,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 127201.574953269,
+        "finishedMonotonic": 127201.598707866,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": true,
+      "networkingScopeInventoryAddedToPrompt": true,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "Names network I/O/IPC and event-loop support for networking, subprocesses and OS signals, anchored to their own operation passages. No borrowed label, efficiency assertion or unsupported parallelism.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "compact",
+      "question": "Come si comporta csv.reader rispetto alla conversione automatica dei tipi? Conserva l’eventuale condizione.",
+      "criteria": [
+        "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+        "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 673.51,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": false,
+      "selection": {
+        "mode": "complete_api_entries",
+        "reason": "reader_proven_exact_api_match",
+        "selectedRefs": [
+          1,
+          13,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 1481,
+        "omittedSourceCharacters": 4519,
+        "matchedAnchors": [
+          "csv.reader"
+        ],
+        "sourceSignalScopeRefs": [],
+        "outputPolicy": {
+          "mode": "single_csv_conversion_rule",
+          "maxClaims": 1,
+          "reason": "recognized_single_rule_question_and_one_complete_source_rule",
+          "sourceRuleRefs": [
+            24
+          ],
+          "nativeArrayLimitChanged": true
+        },
+        "sourceNetworkingScopeRefs": [],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35
+              ],
+              "forbiddenLeadingLabels": [
+                "CSV:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        },
+        "sourceCapabilityScopePolicy": {
+          "mode": "action_led_source_units_for_capability_question",
+          "active": false,
+          "capabilityQuestionRecognized": false,
+          "eligibleOperationRefs": [],
+          "sourceBytesOrNumbersChanged": false,
+          "sourceStillSuppliedAsContext": true,
+          "nativeEvidenceEligibilityChangedExplicitly": false,
+          "nativeArrayMinimumChanged": false,
+          "freeModelPredicatePreserved": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        },
+        "sourcePerformanceScopePolicy": {
+          "mode": "finite_performance_vocabulary_from_own_passage",
+          "sourcePerformanceTerms": {},
+          "nativeSchemaChanged": false,
+          "freeModelPredicatePreserved": true,
+          "sourceBytesOrNumbersChanged": false,
+          "postGenerationCheckAddedExplicitly": true,
+          "wholeAnswerRefusal": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 1961,
+      "nativeClaimArrayLimit": 1,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "dbd6ab95ca1d867c6529a0025b19c0eebad2c56255d4838f00f57054f5c20caa",
+      "unisolatedPromptSha256": "0d741c4ab0c7ffcfe84f66a2a0c7f150e0c245d39d8754287339d133f6750cc1",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 16750.112,
+        "totalClientMs": 25229.526,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 25225.114,
+          "loadMs": 1.813,
+          "prompt_evalMs": 16557.985,
+          "evalMs": 8479.191,
+          "prompt_eval_count": 1006,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 71,
+          "evalTokensPerSecond": 8.373
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\": [{\"passage\": 24, \"text\": \"csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "preCapabilityPerformanceChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "capabilityEvidenceEligibilityChangedExplicitly": false,
+      "sourcePerformanceVocabularyAddedExplicitly": true,
+      "nativePerformanceVocabularyConstraintApplied": false,
+      "freeModelPredicateRequiresSemanticReview": true,
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1003,
+        "uncachedFraction": 0.997018,
+        "reason": null
+      },
+      "validationClientMs": 3.418,
+      "thermalBefore": {
+        "startedMonotonic": 127201.610423771,
+        "finishedMonotonic": 127201.627888041,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 70,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6002.762,
+          "finishedWorkerOffsetMs": 6026.728,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 68,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18001.172,
+          "finishedWorkerOffsetMs": 18029.713,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 127227.058446914,
+        "finishedMonotonic": 127227.076975019,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "Preserves default absence of automatic conversion, QUOTE_NONNUMERIC, unquoted fields and float conversion.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "csv_conversion_condition",
+      "variant": "production",
+      "question": "Come si comporta csv.reader rispetto alla conversione automatica dei tipi? Conserva l’eventuale condizione.",
+      "criteria": [
+        "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+        "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 673.51,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 1,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 3,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "RFC"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e RFC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e RFC: "
+            },
+            {
+              "passage": 6,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 11,
+              "mandatoryIdentifiers": [
+                "API",
+                "CSV",
+                "PEP"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e CSV e PEP: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e CSV e PEP: "
+            },
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 40,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 44,
+              "mandatoryIdentifiers": [
+                "API",
+                "DB"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e DB: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e DB: "
+            },
+            {
+              "passage": 45,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "NULL",
+                "SQL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e NULL e SQL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e NULL e SQL: "
+            },
+            {
+              "passage": 51,
+              "mandatoryIdentifiers": [
+                "QUOTE_MINIMAL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^QUOTE_MINIMAL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "QUOTE_MINIMAL: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                5,
+                7,
+                9,
+                12,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                43,
+                46,
+                47,
+                49,
+                50,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "CSV:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                24
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        },
+        "sourceCapabilityScopePolicy": {
+          "mode": "action_led_source_units_for_capability_question",
+          "active": false,
+          "capabilityQuestionRecognized": false,
+          "eligibleOperationRefs": [],
+          "sourceBytesOrNumbersChanged": false,
+          "sourceStillSuppliedAsContext": true,
+          "nativeEvidenceEligibilityChangedExplicitly": false,
+          "nativeArrayMinimumChanged": false,
+          "freeModelPredicatePreserved": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        },
+        "sourcePerformanceScopePolicy": {
+          "mode": "finite_performance_vocabulary_from_own_passage",
+          "sourcePerformanceTerms": {
+            "7": [
+              "efficiency"
+            ]
+          },
+          "nativeSchemaChanged": false,
+          "freeModelPredicatePreserved": true,
+          "sourceBytesOrNumbersChanged": false,
+          "postGenerationCheckAddedExplicitly": true,
+          "wholeAnswerRefusal": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 3002,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "9ce524b8835493f998a0a7590cbe48c5dd547a4b38204ce8d3b205e8c4f65451",
+      "unisolatedPromptSha256": "3ef7b8c256f8ef2c81a4ad358eb53e18721a531312146df6a1e147e5bc1a00c8",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 51456.023,
+        "totalClientMs": 62229.383,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 62224.836,
+          "loadMs": 1.926,
+          "prompt_evalMs": 51335.654,
+          "evalMs": 10774.083,
+          "prompt_eval_count": 2687,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 67,
+          "evalTokensPerSecond": 6.219
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":24,\"text\":\"csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "preCapabilityPerformanceChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "capabilityEvidenceEligibilityChangedExplicitly": false,
+      "sourcePerformanceVocabularyAddedExplicitly": true,
+      "nativePerformanceVocabularyConstraintApplied": false,
+      "freeModelPredicateRequiresSemanticReview": true,
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "csv.reader non esegue conversione automatica dei tipi a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+            "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+            "passage": 24
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2684,
+        "uncachedFraction": 0.998884,
+        "reason": null
+      },
+      "validationClientMs": 5.971,
+      "thermalBefore": {
+        "startedMonotonic": 127227.100129124,
+        "finishedMonotonic": 127227.119517089,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 75,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6002.619,
+          "finishedWorkerOffsetMs": 6034.696,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18007.448,
+          "finishedWorkerOffsetMs": 18051.237,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36011.201,
+          "finishedWorkerOffsetMs": 36078.189,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 127289.555484366,
+        "finishedMonotonic": 127289.575964153,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "Preserves default absence of automatic conversion, QUOTE_NONNUMERIC, unquoted fields and float conversion.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "missing_price",
+      "variant": "production",
+      "question": "Qual è il prezzo in euro di un abbonamento mensile al servizio Zefiro secondo questo estratto?",
+      "criteria": [
+        "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+        "Non dichiara assenza di informazioni al di fuori di questo estratto."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 673.51,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 1,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 3,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "RFC"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e RFC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e RFC: "
+            },
+            {
+              "passage": 6,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 11,
+              "mandatoryIdentifiers": [
+                "API",
+                "CSV",
+                "PEP"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e CSV e PEP: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e CSV e PEP: "
+            },
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 40,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 44,
+              "mandatoryIdentifiers": [
+                "API",
+                "DB"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e DB: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e DB: "
+            },
+            {
+              "passage": 45,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "NULL",
+                "SQL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e NULL e SQL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e NULL e SQL: "
+            },
+            {
+              "passage": 51,
+              "mandatoryIdentifiers": [
+                "QUOTE_MINIMAL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^QUOTE_MINIMAL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "QUOTE_MINIMAL: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                5,
+                7,
+                9,
+                12,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                43,
+                46,
+                47,
+                49,
+                50,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "CSV:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                24
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        },
+        "sourceCapabilityScopePolicy": {
+          "mode": "action_led_source_units_for_capability_question",
+          "active": false,
+          "capabilityQuestionRecognized": false,
+          "eligibleOperationRefs": [],
+          "sourceBytesOrNumbersChanged": false,
+          "sourceStillSuppliedAsContext": true,
+          "nativeEvidenceEligibilityChangedExplicitly": false,
+          "nativeArrayMinimumChanged": false,
+          "freeModelPredicatePreserved": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        },
+        "sourcePerformanceScopePolicy": {
+          "mode": "finite_performance_vocabulary_from_own_passage",
+          "sourcePerformanceTerms": {
+            "7": [
+              "efficiency"
+            ]
+          },
+          "nativeSchemaChanged": false,
+          "freeModelPredicatePreserved": true,
+          "sourceBytesOrNumbersChanged": false,
+          "postGenerationCheckAddedExplicitly": true,
+          "wholeAnswerRefusal": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 3002,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "9ce524b8835493f998a0a7590cbe48c5dd547a4b38204ce8d3b205e8c4f65451",
+      "unisolatedPromptSha256": "bd96aa501fea1f0120ebbe852df8073891082efa506bdbd935b21b959f05ab83",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 51207.425,
+        "totalClientMs": 51853.461,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 51847.748,
+          "loadMs": 2.186,
+          "prompt_evalMs": 50894.362,
+          "evalMs": 645.728,
+          "prompt_eval_count": 2688,
+          "prompt_eval_cached_count": 4,
+          "eval_count": 5,
+          "evalTokensPerSecond": 7.743
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[]}"
+      },
+      "checks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "originalApplicationChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "preCapabilityPerformanceChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "capabilityEvidenceEligibilityChangedExplicitly": false,
+      "sourcePerformanceVocabularyAddedExplicitly": true,
+      "nativePerformanceVocabularyConstraintApplied": false,
+      "freeModelPredicateRequiresSemanticReview": true,
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "abstained",
+        "claims": []
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2684,
+        "uncachedFraction": 0.998512,
+        "reason": null
+      },
+      "validationClientMs": 0.443,
+      "thermalBefore": {
+        "startedMonotonic": 127289.608112459,
+        "finishedMonotonic": 127289.629203517,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 85,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6003.416,
+          "finishedWorkerOffsetMs": 6051.597,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18004.305,
+          "finishedWorkerOffsetMs": 18026.839,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36000.921,
+          "finishedWorkerOffsetMs": 36031.264,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 127341.714659053,
+        "finishedMonotonic": 127341.738792703,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 72,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "favorable",
+        "reason": "The model itself returns an empty claims array for the requested price not documented in this excerpt. No zero or external-absence assertion.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    },
+    {
+      "case": "missing_price",
+      "variant": "compact",
+      "question": "Qual è il prezzo in euro di un abbonamento mensile al servizio Zefiro secondo questo estratto?",
+      "criteria": [
+        "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+        "Non dichiara assenza di informazioni al di fuori di questo estratto."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/csv.html",
+      "readMs": 673.51,
+      "inputCharacters": 6000,
+      "partial": true,
+      "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ],
+        "sourceCharacters": 6000,
+        "modelSourceCharacters": 6000,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": [],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_names_before_free_predicate",
+          "rules": [
+            {
+              "passage": 3,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "RFC"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e RFC: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e RFC: "
+            },
+            {
+              "passage": 6,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 11,
+              "mandatoryIdentifiers": [
+                "API",
+                "CSV",
+                "PEP"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e CSV e PEP: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e CSV e PEP: "
+            },
+            {
+              "passage": 20,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 40,
+              "mandatoryIdentifiers": [
+                "CSV"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV: "
+            },
+            {
+              "passage": 44,
+              "mandatoryIdentifiers": [
+                "API",
+                "DB"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^API e DB: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "API e DB: "
+            },
+            {
+              "passage": 45,
+              "mandatoryIdentifiers": [
+                "CSV",
+                "NULL",
+                "SQL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^CSV e NULL e SQL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "CSV e NULL e SQL: "
+            },
+            {
+              "passage": 51,
+              "mandatoryIdentifiers": [
+                "QUOTE_MINIMAL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^QUOTE_MINIMAL: [^\"\\\\\\x00-\\x1F\\x7F]*[.]$",
+              "requiredStart": "QUOTE_MINIMAL: "
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true,
+          "unboundedTextBeforeMandatoryNames": false,
+          "fixedNameOrderChangedExplicitly": true,
+          "sourceNameLabelsAreNotGeneratedPredicates": true
+        },
+        "sourceLabelScopePolicy": {
+          "mode": "leading_labels_licensed_by_own_source",
+          "guardBranches": [
+            {
+              "passages": [
+                2,
+                5,
+                7,
+                9,
+                12,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                21,
+                22,
+                23,
+                25,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                43,
+                46,
+                47,
+                49,
+                50,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "CSV:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. :][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            },
+            {
+              "passages": [
+                8,
+                24
+              ],
+              "forbiddenLeadingLabels": [
+                "API e CSV e PEP:",
+                "API e DB:",
+                "CSV e NULL e SQL:",
+                "CSV e RFC:",
+                "QUOTE_MINIMAL:"
+              ],
+              "pattern": "^[ ]*(?:[.]|[^\"\\\\\\x00-\\x1F\\x7F. ACQ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|A[.]|A[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|AP[.]|AP[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API[.]|API[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API [.]|API [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e[.]|API e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e [.]|API e [^\"\\\\\\x00-\\x1F\\x7F.CD][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e C[.]|API e C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CS[.]|API e CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV[.]|API e CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV [.]|API e CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e[.]|API e CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e [.]|API e CSV e [^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e P[.]|API e CSV e P[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PE[.]|API e CSV e PE[^\"\\\\\\x00-\\x1F\\x7F.P][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e CSV e PEP[.]|API e CSV e PEP[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e D[.]|API e D[^\"\\\\\\x00-\\x1F\\x7F.B][^\"\\\\\\x00-\\x1F\\x7F]*[.]|API e DB[.]|API e DB[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|C[.]|C[^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CS[.]|CS[^\"\\\\\\x00-\\x1F\\x7F.V][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV[.]|CSV[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV [.]|CSV [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e[.]|CSV e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e [.]|CSV e [^\"\\\\\\x00-\\x1F\\x7F.NR][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e N[.]|CSV e N[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NU[.]|CSV e NU[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NUL[.]|CSV e NUL[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL[.]|CSV e NULL[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL [.]|CSV e NULL [^\"\\\\\\x00-\\x1F\\x7F.e][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e[.]|CSV e NULL e[^\"\\\\\\x00-\\x1F\\x7F. ][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e [.]|CSV e NULL e [^\"\\\\\\x00-\\x1F\\x7F.S][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e S[.]|CSV e NULL e S[^\"\\\\\\x00-\\x1F\\x7F.Q][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQ[.]|CSV e NULL e SQ[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e NULL e SQL[.]|CSV e NULL e SQL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e R[.]|CSV e R[^\"\\\\\\x00-\\x1F\\x7F.F][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RF[.]|CSV e RF[^\"\\\\\\x00-\\x1F\\x7F.C][^\"\\\\\\x00-\\x1F\\x7F]*[.]|CSV e RFC[.]|CSV e RFC[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.]|Q[.]|Q[^\"\\\\\\x00-\\x1F\\x7F.U][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QU[.]|QU[^\"\\\\\\x00-\\x1F\\x7F.O][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUO[.]|QUO[^\"\\\\\\x00-\\x1F\\x7F.T][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOT[.]|QUOT[^\"\\\\\\x00-\\x1F\\x7F.E][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE[.]|QUOTE[^\"\\\\\\x00-\\x1F\\x7F._][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_[.]|QUOTE_[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_M[.]|QUOTE_M[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MI[.]|QUOTE_MI[^\"\\\\\\x00-\\x1F\\x7F.N][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MIN[.]|QUOTE_MIN[^\"\\\\\\x00-\\x1F\\x7F.I][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINI[.]|QUOTE_MINI[^\"\\\\\\x00-\\x1F\\x7F.M][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIM[.]|QUOTE_MINIM[^\"\\\\\\x00-\\x1F\\x7F.A][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMA[.]|QUOTE_MINIMA[^\"\\\\\\x00-\\x1F\\x7F.L][^\"\\\\\\x00-\\x1F\\x7F]*[.]|QUOTE_MINIMAL[.]|QUOTE_MINIMAL[^\"\\\\\\x00-\\x1F\\x7F.:][^\"\\\\\\x00-\\x1F\\x7F]*[.])$"
+            }
+          ],
+          "sourceFrequencyRefs": [],
+          "sourceCsvFileAliasRefs": [
+            24
+          ],
+          "finiteCsvFileAliasChangedExplicitly": true,
+          "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+          "nativeFrequencyPrefixAddedExplicitly": true,
+          "postGenerationChecksRequired": true,
+          "noOutputRepair": true
+        },
+        "sourceCapabilityScopePolicy": {
+          "mode": "action_led_source_units_for_capability_question",
+          "active": false,
+          "capabilityQuestionRecognized": false,
+          "eligibleOperationRefs": [],
+          "sourceBytesOrNumbersChanged": false,
+          "sourceStillSuppliedAsContext": true,
+          "nativeEvidenceEligibilityChangedExplicitly": false,
+          "nativeArrayMinimumChanged": false,
+          "freeModelPredicatePreserved": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        },
+        "sourcePerformanceScopePolicy": {
+          "mode": "finite_performance_vocabulary_from_own_passage",
+          "sourcePerformanceTerms": {
+            "7": [
+              "efficiency"
+            ]
+          },
+          "nativeSchemaChanged": false,
+          "freeModelPredicatePreserved": true,
+          "sourceBytesOrNumbersChanged": false,
+          "postGenerationCheckAddedExplicitly": true,
+          "wholeAnswerRefusal": true,
+          "semanticEntailmentCertified": false,
+          "noOutputRepair": true
+        }
+      },
+      "definitionRanges": [
+        {
+          "anchors": [
+            "csv.reader"
+          ],
+          "range": [
+            1534,
+            2963
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.writer"
+          ],
+          "range": [
+            2964,
+            4521
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.register_dialect"
+          ],
+          "range": [
+            4522,
+            4916
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.unregister_dialect"
+          ],
+          "range": [
+            4917,
+            5073
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.get_dialect"
+          ],
+          "range": [
+            5074,
+            5241
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.list_dialects"
+          ],
+          "range": [
+            5242,
+            5306
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.field_size_limit"
+          ],
+          "range": [
+            5307,
+            5474
+          ],
+          "complete": true
+        },
+        {
+          "anchors": [
+            "csv.DictReader"
+          ],
+          "range": [
+            5521,
+            6000
+          ],
+          "complete": false
+        }
+      ],
+      "headingRanges": [
+        [
+          0,
+          34
+        ],
+        [
+          1470,
+          1485
+        ]
+      ],
+      "systemCharacters": 1790,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "2eda3ba17e72471646f12666491d6941743865235a17306df82307a15218b1a9",
+      "unisolatedPromptSha256": "cae672063fbc8461d01327b4b1c2610550494cd3d83f1b068df2b34ce65feff4",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 43150.403,
+        "totalClientMs": 62103.088,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 62098.366,
+          "loadMs": 4.445,
+          "prompt_evalMs": 42818.591,
+          "evalMs": 18953.038,
+          "prompt_eval_count": 2300,
+          "prompt_eval_cached_count": 3,
+          "eval_count": 123,
+          "evalTokensPerSecond": 6.49
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[\n{\"passage\":3,\"text\":\"CSV: Il formato CSV (Comma Separated Values) è il formato più comune per l'import e l'esportazione di dati nei fogli di calcolo e nei database.\"},\n{\"passage\":24,\"text\":\"CSV: Ogni riga letta dal file CSV viene restituita come una lista di stringhe; se l'opzione QUOTE_NONNUMERIC è attiva, i campi non racchiusi tra virgolette vengono convertiti in numeri decimali.\"}\n]}"
+      },
+      "checks": {
+        "outcome": "rejected",
+        "reason": "converted_field_type_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 24,
+          "text": "CSV: Ogni riga letta dal file CSV viene restituita come una lista di stringhe; se l'opzione QUOTE_NONNUMERIC è attiva, i campi non racchiusi tra virgolette vengono convertiti in numeri decimali.",
+          "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+          "requiredConvertedType": "float",
+          "diagnosticOnly": true
+        }
+      },
+      "originalApplicationChecks": {
+        "outcome": "rejected",
+        "reason": "source_identifiers_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 24,
+          "text": "CSV: Ogni riga letta dal file CSV viene restituita come una lista di stringhe; se l'opzione QUOTE_NONNUMERIC è attiva, i campi non racchiusi tra virgolette vengono convertiti in numeri decimali.",
+          "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+          "missingIdentifiers": [],
+          "addedIdentifiers": [
+            "CSV"
+          ],
+          "diagnosticOnly": true
+        }
+      },
+      "finiteAliasApplicationChecks": {
+        "outcome": "rejected",
+        "reason": "converted_field_type_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 24,
+          "text": "CSV: Ogni riga letta dal file CSV viene restituita come una lista di stringhe; se l'opzione QUOTE_NONNUMERIC è attiva, i campi non racchiusi tra virgolette vengono convertiti in numeri decimali.",
+          "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+          "requiredConvertedType": "float",
+          "diagnosticOnly": true
+        }
+      },
+      "preCapabilityPerformanceChecks": {
+        "outcome": "rejected",
+        "reason": "converted_field_type_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 24,
+          "text": "CSV: Ogni riga letta dal file CSV viene restituita come una lista di stringhe; se l'opzione QUOTE_NONNUMERIC è attiva, i campi non racchiusi tra virgolette vengono convertiti in numeri decimali.",
+          "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+          "requiredConvertedType": "float",
+          "diagnosticOnly": true
+        }
+      },
+      "capabilityEvidenceEligibilityChangedExplicitly": false,
+      "sourcePerformanceVocabularyAddedExplicitly": true,
+      "nativePerformanceVocabularyConstraintApplied": false,
+      "freeModelPredicateRequiresSemanticReview": true,
+      "finiteCsvFileAliasChangedExplicitly": true,
+      "nativeForeignLeadingLabelGuardAddedExplicitly": true,
+      "sourceFrequencyQualifierPreservedExplicitly": true,
+      "archivedBaselinePolicyChecks": {
+        "outcome": "rejected",
+        "reason": "source_identifiers_not_preserved",
+        "claims": [],
+        "details": {
+          "claimIndex": 2,
+          "passage": 24,
+          "text": "CSV: Ogni riga letta dal file CSV viene restituita come una lista di stringhe; se l'opzione QUOTE_NONNUMERIC è attiva, i campi non racchiusi tra virgolette vengono convertiti in numeri decimali.",
+          "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+          "missingIdentifiers": [],
+          "addedIdentifiers": [
+            "CSV"
+          ],
+          "diagnosticOnly": true
+        }
+      },
+      "caseShapeMet": false,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 2297,
+        "uncachedFraction": 0.998696,
+        "reason": null
+      },
+      "validationClientMs": 1.276,
+      "thermalBefore": {
+        "startedMonotonic": 127341.764693677,
+        "finishedMonotonic": 127341.786132377,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 72,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6001.184,
+          "finishedWorkerOffsetMs": 6025.832,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18010.008,
+          "finishedWorkerOffsetMs": 18067.165,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36001.883,
+          "finishedWorkerOffsetMs": 36026.248,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 127404.124246453,
+        "finishedMonotonic": 127404.143144131,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured",
+      "manualReview": {
+        "verdict": "unfavorable",
+        "reason": "Fails abstention: answers with two CSV facts instead of the requested Zefiro price. The second point also changes float into decimal numbers; the original type refusal is preserved. Rejection is not a successful model abstention.",
+        "reviewer": "Codex",
+        "reviewedAgainstOwnPassagesAndOriginalQuestion": true,
+        "automaticOutcomeNotRewritten": true
+      }
+    }
+  ],
+  "schema": 1,
+  "date": "2026-10-06",
+  "candidateRevision": "capability_evidence_and_performance_scope_v6",
+  "reportScope": "latest six v6 rows from this attachment, without terminal history",
+  "originalTechnicalShapeCounts": {
+    "met": 5,
+    "notMet": 1
+  },
+  "manualReviewCounts": {
+    "favorable": 5,
+    "unfavorable": 1
+  },
+  "overallReview": "not_passed_no_adoption",
+  "allRawModelAnswersPreserved": true,
+  "originalAutomaticReportPreserved": true,
+  "productionModified": false,
+  "automaticIntegrationAllowed": false,
+  "browserRendering": "not_measured",
+  "noStatisticalOrUniversalSpeedClaim": true
+}

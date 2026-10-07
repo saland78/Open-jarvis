@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "kind": "staged_compact_v9_consolidation",
+  "targetedTestsRun": 8,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "previousV9LocalTests": 726,
+  "previousV9SuiteRepeated": false,
+  "actualV9TechnicalShapes": {
+    "passed": 6,
+    "failed": 0
+  },
+  "actualV9MeaningReview": {
+    "favorable": 5,
+    "unfavorable": 1
+  },
+  "actualV9CompactMeaningReview": {
+    "favorable": 3,
+    "unfavorable": 0
+  },
+  "originalSixAnswerAdoptionGateMet": false,
+  "originalAutomaticReportPreserved": true,
+  "messagesAndSchemaExactCompactV9": true,
+  "modelOptionsChanged": false,
+  "newModelRequests": 0,
+  "newProbeOrInstallerIssued": false,
+  "liveContractModified": false,
+  "productionIntegration": "not_performed",
+  "generalSemanticCorrectnessCertified": false,
+  "stagedModuleSha256": "891a7532511da5f2728e440096da083d5d96fdb1eca95bee0cb5191557af4926"
+}

@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "mode": "qualification_sentence_fix_mac_review",
+  "observedDate": "2026-10-04",
+  "source": "one_user_supplied_synthetic_probe_result",
+  "plannedRequests": 1,
+  "attemptedRequests": 1,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "productionFilesChangedByProbe": false,
+  "productionIntegrationMac": "pending",
+  "browserRendering": "not_measured",
+  "serverPathMeasured": false,
+  "technicalOutcome": "valid_structure_pending_semantic_review",
+  "automatedQualityVerdict": "pending_review",
+  "manualSemanticReview": "passed_for_this_case_only",
+  "fullCaseVerdict": "passed_for_this_case_only",
+  "streamCompleted": true,
+  "doneReason": "stop",
+  "factsCovered": 4,
+  "literalSourceFactIds": [
+    "F3"
+  ],
+  "modelSynthesisFields": [
+    "F1",
+    "F2",
+    "F4"
+  ],
+  "sentencePreserved": true,
+  "consultationPreserved": true,
+  "generatedTextRepaired": false,
+  "manualCriteria": {
+    "reportedCount": true,
+    "periodVariability": true,
+    "distinctDatedQualifications": true,
+    "sourceScope": true,
+    "completeConsultationPrerequisites": true,
+    "noInventedExternalVerificationOrAmount": true,
+    "literalVsModelOriginDeclared": true
+  },
+  "timings": {
+    "firstContentClientMs": 19023.333,
+    "totalClientMs": 35777.602,
+    "native": {
+      "totalMs": 35773.374,
+      "loadMs": 4320.931,
+      "prompt_evalMs": 14668.919,
+      "evalMs": 16754.208,
+      "prompt_eval_count": 956,
+      "prompt_eval_cached_count": 0,
+      "eval_count": 144,
+      "evalTokensPerSecond": 8.595
+    }
+  },
+  "previousPrefixExperiment": "semantic_failure_consultation_omitted_not_reclassified",
+  "performanceComparison": "not_established_different_load_and_cache_observations",
+  "limitations": [
+    "not_all_free_paraphrase",
+    "not_general_semantic_entailment",
+    "not_external_truth_verification",
+    "real_note_and_UI_not_yet_verified"
+  ]
+}

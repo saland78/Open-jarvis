@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "mode": "concise_qualification_text_probe",
+  "plannedRequests": 4,
+  "attemptedRequests": 4,
+  "automaticRetries": 0,
+  "interrupted": false,
+  "vaultRead": false,
+  "productionFilesChanged": false,
+  "browserRendering": "not_measured",
+  "serverPathMeasured": false,
+  "forcedWarmup": false,
+  "forcedUnload": false,
+  "referenceCommit": "7246999dc87cabc46ce5366d38941d0f894bc077",
+  "source": "public_synthetic_markdown",
+  "rows": [
+    {
+      "status": "completed",
+      "firstContentClientMs": 16029.227,
+      "totalClientMs": 30865.637,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 30862.099,
+        "loadMs": 4069.437,
+        "prompt_evalMs": 11929.883,
+        "evalMs": 14836.539,
+        "prompt_eval_count": 794,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 136,
+        "evalTokensPerSecond": 9.167
+      },
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "position": 1,
+      "case": "ordinary",
+      "variant": "production",
+      "manualReviewCategory": "favorable_for_bounded_declared_criteria"
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 7767.614,
+      "totalClientMs": 22730.116,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 22728.785,
+        "loadMs": 1.826,
+        "prompt_evalMs": 7647.928,
+        "evalMs": 14962.566,
+        "prompt_eval_count": 867,
+        "prompt_eval_cached_count": 374,
+        "eval_count": 136,
+        "evalTokensPerSecond": 9.089
+      },
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "position": 2,
+      "case": "ordinary",
+      "variant": "concise",
+      "manualReviewCategory": "favorable_for_bounded_declared_criteria"
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 5299.369,
+      "totalClientMs": 20107.749,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 20106.474,
+        "loadMs": 2.411,
+        "prompt_evalMs": 5262.48,
+        "evalMs": 14808.403,
+        "prompt_eval_count": 872,
+        "prompt_eval_cached_count": 528,
+        "eval_count": 134,
+        "evalTokensPerSecond": 9.049
+      },
+      "technicalOutcome": "valid_structure_pending_semantic_review",
+      "technicalReason": null,
+      "factsCovered": 4,
+      "position": 3,
+      "case": "adversarial",
+      "variant": "concise",
+      "manualReviewCategory": "predicate_nuance_not_certified"
+    },
+    {
+      "status": "completed",
+      "firstContentClientMs": 5378.108,
+      "totalClientMs": 19751.192,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 19749.773,
+        "loadMs": 2.804,
+        "prompt_evalMs": 5226.492,
+        "evalMs": 14373.091,
+        "prompt_eval_count": 799,
+        "prompt_eval_cached_count": 455,
+        "eval_count": 131,
+        "evalTokensPerSecond": 9.114
+      },
+      "technicalOutcome": "rejected",
+      "technicalReason": "unsupported_value_update",
+      "factsCovered": null,
+      "position": 4,
+      "case": "adversarial",
+      "variant": "production",
+      "manualReviewCategory": "not_reviewable_discarded_raw_json"
+    }
+  ],
+  "comparison": {
+    "minimumReductionPercentPerPair": 10,
+    "pairs": [
+      {
+        "case": "ordinary",
+        "bothTransportsAndContractsValid": true,
+        "nativeTokenReductionPercent": 0.0,
+        "nativeDecodeTimeReductionPercent": -0.849,
+        "exploratoryGateMet": false
+      },
+      {
+        "case": "adversarial",
+        "bothTransportsAndContractsValid": false,
+        "nativeTokenReductionPercent": -2.29,
+        "nativeDecodeTimeReductionPercent": -3.029,
+        "exploratoryGateMet": false
+      }
+    ],
+    "allExploratoryGatesMet": false
+  },
+  "decision": "candidate_not_adopted_performance_gate_failed",
+  "referenceRejection": "unsupported_value_update_original_raw_json_not_retained",
+  "externalTruthVerified": false
+}

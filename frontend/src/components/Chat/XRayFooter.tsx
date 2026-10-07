@@ -67,7 +67,8 @@ export function XRayFooter({ usage, telemetry, isResearch = false }: Props) {
     });
   }
   if (telemetry?.suggested_max_tokens) {
-    rows.push({ label: 'Token budget', value: `${telemetry.suggested_max_tokens}` });
+    // Personal fork: this is a classifier suggestion, not the applied engine limit.
+    rows.push({ label: 'Suggested budget', value: `${telemetry.suggested_max_tokens}` });
   }
   if (telemetry?.tokens_per_sec) {
     rows.push({ label: 'Speed', value: `${Math.round(telemetry.tokens_per_sec)} tok/s` });

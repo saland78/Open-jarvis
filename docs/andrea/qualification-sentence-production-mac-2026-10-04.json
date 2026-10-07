@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "mode": "selected_note_qualification_sentence_production_review",
+  "date": "2026-10-04",
+  "timezone": "Europe/Rome",
+  "evidence": "user_supplied_installation_log_build_log_browser_screenshot_and_answer",
+  "installerPublishedRevision": "aab8d0fabebfb463d07d270fba362ad51af8b68e",
+  "installedPayloadRevision": "ef604a5ef4a57cf12568ec8d4e792fd997136add",
+  "installation": {
+    "status": "completed_reported_by_user",
+    "files": 4,
+    "backupCreated": true
+  },
+  "macBuild": {
+    "status": "passed_from_log",
+    "command": "tsc -b && vite build",
+    "pwaGenerated": true
+  },
+  "browser": {
+    "page": "local_notes",
+    "selectedNoteAction": true,
+    "responseDisplayed": true,
+    "transportCompleted": true
+  },
+  "technicalOutcome": "accepted",
+  "automatedSemanticVerdict": "pending_review",
+  "manualSemanticReview": "passed_for_this_observed_case",
+  "defectResolution": "complete_current_qualification_and_consultation_preserved_for_supported_case",
+  "sourceAlignmentCriteria": {
+    "reportedCount": true,
+    "periodVariability": true,
+    "separateCurrentAndHistoricalQualifications": true,
+    "originalContextDates": true,
+    "currentQualificationLimitedToNote": true,
+    "fullConsultationWithPeriodTitleMarketplace": true,
+    "originalPassagesAndCitations": true,
+    "literalVsModelOriginDeclared": true,
+    "noZeroOrAmountOrExternalVerificationInvented": true
+  },
+  "factsCovered": 4,
+  "literalField": "F3",
+  "modelSynthesisFields": [
+    "F1",
+    "F2",
+    "F4"
+  ],
+  "timings": {
+    "transport": "completed",
+    "technicalOutcome": "accepted",
+    "manualSemanticReview": "passed_for_this_case_only",
+    "literalSourceOriginDeclared": true,
+    "browser": {
+      "firstContentMs": 45288,
+      "firstResponseUpdateMs": 45290,
+      "streamEndMs": 45288,
+      "finalUpdateMs": 45290
+    },
+    "server": {
+      "retrievalMs": 5,
+      "firstTextMs": 45285,
+      "firstJsonMs": 23685,
+      "generationMs": 45274,
+      "validationMs": 4,
+      "acceptedTextMs": 45285,
+      "totalMs": 45286
+    },
+    "nativePhases": "not_supplied",
+    "actualScreenPaint": "not_measured",
+    "externalTruthVerified": false
+  },
+  "modelChangedByUpdate": false,
+  "sourceNotesChangedByUpdate": false,
+  "externalTruthVerified": false,
+  "rawNotesPublished": false,
+  "screenshotsPublished": false,
+  "terminalHistoryPublished": false,
+  "previousFailedExperimentsReclassified": false,
+  "performanceImprovementEstablished": false,
+  "closure": "no_additional_test_needed_to_close_this_case",
+  "nextTask": "reduce_latency_while_preserving_the_same_information_and_controls"
+}
+

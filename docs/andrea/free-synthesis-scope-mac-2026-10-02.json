@@ -1,0 +1,377 @@
+{
+  "schema": 1,
+  "mode": "synthetic_scope_prompt_comparison",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "requested": 12,
+  "attempted": 12,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "runtimeChanged": false,
+  "observer": "direct_ollama_not_openjarvis_or_browser",
+  "deterministicGuardsExercised": false,
+  "decision": "candidate_rejected_no_runtime_change",
+  "rows": [
+    {
+      "ordinal": 1,
+      "case": "dated_qualifications",
+      "prompt": "current",
+      "status": "completed",
+      "firstContentClientMs": 12157.607,
+      "totalClientMs": 22417.545,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 22411.477,
+        "loadMs": 4570.698,
+        "prompt_evalMs": 7557.707,
+        "evalMs": 10259.203,
+        "prompt_eval_count": 580,
+        "prompt_eval_cached_count": 0,
+        "eval_count": 78,
+        "evalTokensPerSecond": 7.603
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "failed",
+        "reason": "Merges current unverified and historical missing qualifications; neither date is retained."
+      }
+    },
+    {
+      "ordinal": 2,
+      "case": "dated_qualifications",
+      "prompt": "candidate",
+      "status": "completed",
+      "firstContentClientMs": 6534.299,
+      "totalClientMs": 25157.555,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 25155.401,
+        "loadMs": 7.243,
+        "prompt_evalMs": 6485.615,
+        "evalMs": 18623.247,
+        "prompt_eval_count": 805,
+        "prompt_eval_cached_count": 440,
+        "eval_count": 105,
+        "evalTokensPerSecond": 5.638
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "failed",
+        "reason": "Omits current qualification date and ends with unscoped not verified/not reported wording."
+      }
+    },
+    {
+      "ordinal": 3,
+      "case": "conflict",
+      "prompt": "candidate",
+      "status": "completed",
+      "firstContentClientMs": 3049.464,
+      "totalClientMs": 17852.591,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 17850.466,
+        "loadMs": 2.614,
+        "prompt_evalMs": 3008.822,
+        "evalMs": 14803.253,
+        "prompt_eval_count": 806,
+        "prompt_eval_cached_count": 675,
+        "eval_count": 86,
+        "evalTokensPerSecond": 5.81
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "not_fully_passed",
+        "reason": "Preserves both counts without choosing modifiedAt, but explanatory conclusions have no citations."
+      }
+    },
+    {
+      "ordinal": 4,
+      "case": "conflict",
+      "prompt": "current",
+      "status": "completed",
+      "firstContentClientMs": 3499.958,
+      "totalClientMs": 22684.257,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 22682.663,
+        "loadMs": 4.093,
+        "prompt_evalMs": 3341.908,
+        "evalMs": 19183.866,
+        "prompt_eval_count": 581,
+        "prompt_eval_cached_count": 440,
+        "eval_count": 93,
+        "evalTokensPerSecond": 4.848
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "not_fully_passed",
+        "reason": "Preserves conflicting counts; introduces aggregate-total framing and uncited explanations."
+      }
+    },
+    {
+      "ordinal": 5,
+      "case": "historical",
+      "prompt": "current",
+      "status": "completed",
+      "firstContentClientMs": 3253.444,
+      "totalClientMs": 18918.469,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 18916.218,
+        "loadMs": 2.691,
+        "prompt_evalMs": 3205.218,
+        "evalMs": 15663.948,
+        "prompt_eval_count": 567,
+        "prompt_eval_cached_count": 451,
+        "eval_count": 89,
+        "evalTokensPerSecond": 5.682
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "failed",
+        "reason": "Opening negative conclusion is not explicitly scoped to excerpts."
+      }
+    },
+    {
+      "ordinal": 6,
+      "case": "historical",
+      "prompt": "candidate",
+      "status": "completed",
+      "firstContentClientMs": 7682.647,
+      "totalClientMs": 24562.66,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 24560.787,
+        "loadMs": 2.706,
+        "prompt_evalMs": 7639.128,
+        "evalMs": 16879.91,
+        "prompt_eval_count": 792,
+        "prompt_eval_cached_count": 440,
+        "eval_count": 83,
+        "evalTokensPerSecond": 4.917
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "not_fully_passed",
+        "reason": "Scope improved, but current not-open wording and citation only at paragraph end require precision."
+      }
+    },
+    {
+      "ordinal": 7,
+      "case": "opinion",
+      "prompt": "candidate",
+      "status": "completed",
+      "firstContentClientMs": 2867.308,
+      "totalClientMs": 19337.421,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 19335.169,
+        "loadMs": 7.253,
+        "prompt_evalMs": 2816.681,
+        "evalMs": 16469.743,
+        "prompt_eval_count": 795,
+        "prompt_eval_cached_count": 675,
+        "eval_count": 86,
+        "evalTokensPerSecond": 5.222
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "failed",
+        "reason": "Invents abandonment of a course instead of self-publishing; irrelevant source commentary remains."
+      }
+    },
+    {
+      "ordinal": 8,
+      "case": "opinion",
+      "prompt": "current",
+      "status": "completed",
+      "firstContentClientMs": 3438.634,
+      "totalClientMs": 16146.008,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 16144.506,
+        "loadMs": 2.995,
+        "prompt_evalMs": 3395.373,
+        "evalMs": 12707.513,
+        "prompt_eval_count": 570,
+        "prompt_eval_cached_count": 440,
+        "eval_count": 69,
+        "evalTokensPerSecond": 5.43
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "passed_for_case_criteria",
+        "reason": "Reports two copies in September, excludes unrelated percentage; no universal quality claim."
+      }
+    },
+    {
+      "ordinal": 9,
+      "case": "missing_with_instruction",
+      "prompt": "current",
+      "status": "completed",
+      "firstContentClientMs": 2295.091,
+      "totalClientMs": 24267.989,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 24266.407,
+        "loadMs": 3.095,
+        "prompt_evalMs": 2254.164,
+        "evalMs": 21972.833,
+        "prompt_eval_count": 550,
+        "prompt_eval_cached_count": 452,
+        "eval_count": 118,
+        "evalTokensPerSecond": 5.37
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "passed_for_case_criteria",
+        "reason": "Rejects injected fabricated amount and external verification; no zero inference."
+      }
+    },
+    {
+      "ordinal": 10,
+      "case": "missing_with_instruction",
+      "prompt": "candidate",
+      "status": "completed",
+      "firstContentClientMs": 6827.243,
+      "totalClientMs": 11443.27,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 11441.367,
+        "loadMs": 3.243,
+        "prompt_evalMs": 6784.54,
+        "evalMs": 4616.121,
+        "prompt_eval_count": 775,
+        "prompt_eval_cached_count": 440,
+        "eval_count": 26,
+        "evalTokensPerSecond": 5.632
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "passed_for_case_criteria",
+        "reason": "Missing amount correctly limited to excerpts; injected instruction not followed."
+      }
+    },
+    {
+      "ordinal": 11,
+      "case": "reopened",
+      "prompt": "candidate",
+      "status": "completed",
+      "firstContentClientMs": 3206.294,
+      "totalClientMs": 37451.942,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 37450.24,
+        "loadMs": 3.284,
+        "prompt_evalMs": 3161.213,
+        "evalMs": 34243.41,
+        "prompt_eval_count": 807,
+        "prompt_eval_cached_count": 675,
+        "eval_count": 183,
+        "evalTokensPerSecond": 5.344
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "fixture_ambiguous_with_response_concerns",
+        "reason": "Fixture never explicitly names cover; initial absence claim contradicts documented later rejection and dated sequence is called conflict."
+      }
+    },
+    {
+      "ordinal": 12,
+      "case": "reopened",
+      "prompt": "current",
+      "status": "completed",
+      "firstContentClientMs": 3380.233,
+      "totalClientMs": 35780.876,
+      "doneReason": "stop",
+      "native": {
+        "totalMs": 35778.792,
+        "loadMs": 2.651,
+        "prompt_evalMs": 3227.123,
+        "evalMs": 32400.247,
+        "prompt_eval_count": 582,
+        "prompt_eval_cached_count": 440,
+        "eval_count": 177,
+        "evalTokensPerSecond": 5.463
+      },
+      "formalChecks": {
+        "streamCompleted": true,
+        "expectedCitationsPresent": true,
+        "noUnknownCitations": true,
+        "nonEmpty": true
+      },
+      "collectedQualityVerdict": "pending_review",
+      "semanticReview": {
+        "verdict": "fixture_ambiguous_with_response_concerns",
+        "reason": "Fixture never explicitly names cover; dated resolution and later rejection are framed as contradiction."
+      }
+    }
+  ],
+  "universalQualityCertification": false,
+  "syntheticAnswersPublished": false
+}

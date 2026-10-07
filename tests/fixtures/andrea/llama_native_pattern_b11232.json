@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "ollamaVersion": "0.35.1",
+  "llamaCppTag": "b11232",
+  "ollamaPinURL": "https://github.com/ollama/ollama/blob/v0.35.1/LLAMA_CPP_VERSION",
+  "license": "MIT",
+  "fullSchemaDecoderOrInferenceMeasured": false,
+  "localHarnessOnly": "Inputs use exact upstream _pattern_to_rule and its supporting methods. Unsupported or invalid patterns return nonzero instead of the native outer converter fallback. This harness does not execute the full JSON-schema converter, grammar sampler or model.",
+  "sources": [
+    {
+      "name": "converter",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/b11232/common/json-schema-to-grammar.cpp",
+      "characters": 43518,
+      "sha256": "d5a82fff5d611abd1198ff27c328b20376ffe9f110b4771d579c8bd20c70541f"
+    },
+    {
+      "name": "helpers",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/b11232/common/common.cpp",
+      "characters": 79012,
+      "sha256": "727619fe7705a6137e82f40dc7f9003aaae9d4c957f1946d820d87ec7289eb96"
+    }
+  ],
+  "excerpts": [
+    {
+      "source": "converter",
+      "start": "static std::string build_repetition(const std::string & item_rule, int min_items, int max_items, const std::string & separator_rule = \"\") {",
+      "characters": 938,
+      "sha256": "c76e5f7a3db1fabee4440e59fbadea9524475d58f36ed975d5a16b40dcba2734"
+    },
+    {
+      "source": "helpers",
+      "start": "std::string string_join(const std::vector<std::string> & values, const std::string & separator) {",
+      "characters": 746,
+      "sha256": "489c5da02330b7947a533a158c0cfb3da3a38ce1e059a883fd8f944a7c4f46c5"
+    },
+    {
+      "source": "converter",
+      "start": "static const int MAX_PATTERN_DEPTH = 100;",
+      "characters": 300,
+      "sha256": "2c833f9c10e5dbab770eab51a4f01da5e3e40e76f94153ff44b30abc65eecf53"
+    },
+    {
+      "source": "converter",
+      "start": "static size_t gbnf_escape_length(const std::string & pattern, size_t pos) {",
+      "characters": 859,
+      "sha256": "fac2db4fc1fc94e86fde419099e5dddcd233baeb8c674330fdbf1d9207a92c41"
+    },
+    {
+      "source": "converter",
+      "start": "    std::string _add_rule(const std::string & name, const std::string & rule) {",
+      "characters": 597,
+      "sha256": "1411a0750d8708d548d76d5dd6600f88eaee297e69d4e209fbf7478ddd4426d1"
+    },
+    {
+      "source": "converter",
+      "start": "    // thrown when the pattern is a valid regex with no grammar equivalent",
+      "characters": 358,
+      "sha256": "dc70dc7e36db4989318d2743b6eb4c3ca9a3c5095dfa88566c817eff49ae6640"
+    },
+    {
+      "source": "converter",
+      "start": "    std::string _pattern_to_rule(const std::string & pattern, const std::string & name) {",
+      "characters": 10194,
+      "sha256": "ea6211821d7286681d01d7732954b8fb744f15d7147031bd1cad00402f8328d6"
+    }
+  ]
+}

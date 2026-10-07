@@ -3,6 +3,7 @@ import { Send, Square, Paperclip, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppStore, generateId } from '../../lib/store';
 import { streamChat, streamResearch } from '../../lib/sse';
+import { ChatMeasurement } from '../../lib/andrea-chat-metrics';
 import { fetchSavings, getBase } from '../../lib/api';
 import { listConnectors, getSyncStatus } from '../../lib/connectors-api';
 import { serializeToolCallArguments } from '../../lib/tool-call';
@@ -84,6 +85,14 @@ export function InputArea() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => () => {
+    // Local measurements and requests must not outlive the chat page.
+    if (import.meta.env.VITE_ANDREA_LOCAL === 'true') {
+      abortRef.current?.abort();
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+  }, []);
 
   const activeId = useAppStore((s) => s.activeId);
   const selectedModel = useAppStore((s) => s.selectedModel);
@@ -219,6 +228,20 @@ export function InputArea() {
 
     const controller = new AbortController();
     abortRef.current = controller;
+    const measured = import.meta.env.VITE_ANDREA_LOCAL === 'true' && !deepResearch;
+    const observation = measured ? new ChatMeasurement(convId, assistantMsg.id, undefined, document.visibilityState === 'visible') : null;
+    const visibility = () => observation?.visibility(document.visibilityState === 'visible');
+    const cancelled = () => observation?.finish('cancelled');
+    const unsubscribeOwner = observation ? useAppStore.subscribe(state => observation.owner(state.activeId, convId)) : () => {};
+    if (observation) {
+      document.addEventListener('visibilitychange', visibility);
+      controller.signal.addEventListener('abort', cancelled, { once: true });
+    }
+    const releaseObservation = () => {
+      unsubscribeOwner();
+      document.removeEventListener('visibilitychange', visibility);
+      controller.signal.removeEventListener('abort', cancelled);
+    };
 
     let accumulatedContent = '';
     let usage: TokenUsage | undefined;
@@ -378,7 +401,9 @@ export function InputArea() {
       for await (const sseEvent of streamChat(
         { model: selectedModel, messages: apiMessages, stream: true, temperature, max_tokens: maxTokens },
         controller.signal,
+        observation ? { headers: id => observation.headers(id), done: () => observation.ended() } : undefined,
       )) {
+        if (measured && (controller.signal.aborted || abortRef.current !== controller)) throw new DOMException('Generation stopped', 'AbortError');
         const eventName = sseEvent.event;
 
         if (eventName === 'agent_turn_start') {
@@ -434,6 +459,7 @@ export function InputArea() {
             if (data.complexity) complexity = data.complexity;
             routedEngine = engineFromCompletionChunk(data) ?? routedEngine;
             if (delta?.content) {
+              observation?.content();
               if (!ttftMs) ttftMs = Date.now() - startTime;
               accumulatedContent += delta.content;
               setStreamState({ content: accumulatedContent, phase: '' });
@@ -448,12 +474,16 @@ export function InputArea() {
                 lastFlush = now;
               }
             }
-            if (data.choices?.[0]?.finish_reason === 'stop') break;
+            observation?.finishReason(data.choices?.[0]?.finish_reason);
+            // The local observer distinguishes finish_reason from an actual [DONE].
+            if (!observation && data.choices?.[0]?.finish_reason === 'stop') break;
           } catch {}
         }
       }
       }
+      observation?.finish(controller.signal.aborted ? 'cancelled' : 'success');
     } catch (err: any) {
+      observation?.finish(err.name === 'AbortError' ? 'cancelled' : 'error');
       if (err.name === 'AbortError') {
         // User cancelled or model switch — keep whatever was accumulated
         if (!accumulatedContent) accumulatedContent = '(Generation stopped)';
@@ -470,6 +500,15 @@ export function InputArea() {
       // numbers don't get stuck on the last sample.
       useAppStore.getState().setLiveEnergy(null);
     } finally {
+      // A stopped request may finish after a new one has started. It must not
+      // overwrite the new placeholder or reset that request's stream state.
+      if (measured && abortRef.current !== controller) { releaseObservation(); return; }
+      if (observation && !controller.signal.aborted) {
+        void fetch(`${getBase()}/api/andrea/metrics`, { cache: 'no-store' })
+          .then(response => response.ok ? response.json() : null)
+          .then(data => { if (data) observation.correlate(data.records); })
+          .catch(() => {});
+      }
       if (!accumulatedContent) {
         accumulatedContent = 'No response was generated. Please try again.';
       }
@@ -497,7 +536,7 @@ export function InputArea() {
       // Check if the response has digest audio available
       let audioMeta: { url: string } | undefined;
       try {
-        const digestRes = await fetch(`${getBase()}/api/digest`);
+        const digestRes = await fetch(`${getBase()}/api/digest`, measured ? { signal: controller.signal } : undefined);
         if (digestRes.ok) {
           const digest = await digestRes.json();
           if (digest.audio_available) {
@@ -508,6 +547,8 @@ export function InputArea() {
         // Not a digest response or server unavailable — skip
       }
 
+      if (measured && abortRef.current !== controller) { releaseObservation(); return; }
+      observation?.owner(useAppStore.getState().activeId, convId);
       updateLastAssistant(
         convId,
         accumulatedContent,
@@ -528,6 +569,7 @@ export function InputArea() {
         message: `Response: ${accumulatedContent.length} chars`,
       });
       abortRef.current = null;
+      releaseObservation();
 
       // Research path updates session counters optimistically from the
       // `done` event's usage payload — re-fetching here would overwrite

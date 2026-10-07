@@ -1,0 +1,679 @@
+{
+  "schema": 1,
+  "mode": "review_native_identifier_v3_interrupted_mac",
+  "date": "2026-10-06",
+  "candidateCommit": "b16b0c77523fe46cc93bc8efb8000daba3c7085a",
+  "rows": [
+    {
+      "case": "asyncio_scope",
+      "variant": "production",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 2420.488,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "full_context_before_api_context_integration",
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "full_context_before_api_context_integration",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_native_identifiers",
+          "rules": [
+            {
+              "passage": 1,
+              "mandatoryIdentifiers": [
+                "I/O"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*(?:I/O|IO|input/output)[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "I/O"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*(?:I/O|IO|input/output)[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 10,
+              "mandatoryIdentifiers": [
+                "I/O",
+                "IPC"
+              ],
+              "networkIOQualifierRequired": true,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*(?:(?:I/O|IO|input/output)[ ]+(?:di|in)[ ]+rete|network[ ]+(?:I/O|IO|input/output))[^\"\\\\\\x00-\\x1F\\x7F]*IPC[^\"\\\\\\x00-\\x1F\\x7F]*|[^\"\\\\\\x00-\\x1F\\x7F]*IPC[^\"\\\\\\x00-\\x1F\\x7F]*(?:(?:I/O|IO|input/output)[ ]+(?:di|in)[ ]+rete|network[ ]+(?:I/O|IO|input/output))[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 21,
+              "mandatoryIdentifiers": [
+                "WASI"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*WASI[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 24,
+              "mandatoryIdentifiers": [
+                "REPL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*REPL[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 56,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*API[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 57,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*API[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 2286,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "fdd2b0ae48181b030a35f031d9670afb119a8f9972777d0714d6c81284f74232",
+      "unisolatedPromptSha256": "4868e6703913b87adcbe697594cad6a4108ac3b0313da5ee82985826efbe29ed",
+      "result": {
+        "status": "completed",
+        "firstContentClientMs": 38251.174,
+        "totalClientMs": 46986.12,
+        "doneReason": "stop",
+        "native": {
+          "totalMs": 46981.039,
+          "loadMs": 7874.303,
+          "prompt_evalMs": 30296.678,
+          "evalMs": 8737.056,
+          "prompt_eval_count": 1699,
+          "prompt_eval_cached_count": 0,
+          "eval_count": 63,
+          "evalTokensPerSecond": 7.211
+        },
+        "qualityVerdict": "pending_review",
+        "modelAnswer": "{\"claims\":[{\"passage\":10,\"text\":\"asyncio permette di eseguire operazioni di I/O di rete e di comunicazione tra processi (IPC).\"},{\"passage\":11,\"text\":\"asyncio consente il controllo dei sottoprocessi.\"}]}"
+      },
+      "checks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "asyncio permette di eseguire operazioni di I/O di rete e di comunicazione tra processi (IPC).",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio consente il controllo dei sottoprocessi.",
+            "quote": "control subprocesses;\n",
+            "passage": 11
+          }
+        ]
+      },
+      "originalApplicationChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "asyncio permette di eseguire operazioni di I/O di rete e di comunicazione tra processi (IPC).",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio consente il controllo dei sottoprocessi.",
+            "quote": "control subprocesses;\n",
+            "passage": 11
+          }
+        ]
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "accepted_pending_semantic_review",
+        "claims": [
+          {
+            "text": "asyncio permette di eseguire operazioni di I/O di rete e di comunicazione tra processi (IPC).",
+            "quote": "perform network IO and IPC;\n",
+            "passage": 10
+          },
+          {
+            "text": "asyncio consente il controllo dei sottoprocessi.",
+            "quote": "control subprocesses;\n",
+            "passage": 11
+          }
+        ]
+      },
+      "caseShapeMet": true,
+      "cacheQualification": {
+        "eligible": true,
+        "uncachedTokens": 1699,
+        "uncachedFraction": 1.0,
+        "reason": null
+      },
+      "validationClientMs": 5.645,
+      "thermalBefore": {
+        "startedMonotonic": 113974.556495384,
+        "finishedMonotonic": 113974.575358467,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6007.214,
+          "finishedWorkerOffsetMs": 6037.945,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18003.606,
+          "finishedWorkerOffsetMs": 18027.389,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 64,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36004.473,
+          "finishedWorkerOffsetMs": 36054.469,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 114021.726650908,
+        "finishedMonotonic": 114021.745789079,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": false,
+      "networkingScopeInventoryAddedToPrompt": false,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    },
+    {
+      "case": "asyncio_scope",
+      "variant": "compact",
+      "question": "A cosa serve asyncio secondo questo estratto? Riassumi due funzionalità.",
+      "criteria": [
+        "Due punti pertinenti e fedeli ai propri passaggi.",
+        "Non promette accelerazioni universali o parallelismo non documentato."
+      ],
+      "sourceURL": "https://docs.python.org/3/library/asyncio.html",
+      "readMs": 2420.488,
+      "inputCharacters": 2551,
+      "partial": false,
+      "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+      "sourceSnapshotUnchanged": true,
+      "auditSourceFullyPreserved": true,
+      "fullSourceSuppliedToModel": true,
+      "selection": {
+        "mode": "full_context",
+        "selectedRefs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "sourceCharacters": 2551,
+        "modelSourceCharacters": 2551,
+        "omittedSourceCharacters": 0,
+        "matchedAnchors": [],
+        "reason": "no_explicit_qualified_api_name",
+        "sourceSignalScopeRefs": [
+          18
+        ],
+        "outputPolicy": {
+          "mode": "ordinary_two_claims",
+          "maxClaims": 2,
+          "reason": "no_complete_single_reader_entry",
+          "sourceRuleRefs": [],
+          "nativeArrayLimitChanged": false
+        },
+        "sourceNetworkingScopeRefs": [
+          18
+        ],
+        "nativeIdentifierPolicy": {
+          "mode": "own_passage_native_identifiers",
+          "rules": [
+            {
+              "passage": 4,
+              "mandatoryIdentifiers": [
+                "I/O"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*(?:I/O|IO|input/output)[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 10,
+              "mandatoryIdentifiers": [
+                "I/O",
+                "IPC"
+              ],
+              "networkIOQualifierRequired": true,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*(?:(?:I/O|IO|input/output)[ ]+(?:di|in)[ ]+rete|network[ ]+(?:I/O|IO|input/output))[^\"\\\\\\x00-\\x1F\\x7F]*IPC[^\"\\\\\\x00-\\x1F\\x7F]*|[^\"\\\\\\x00-\\x1F\\x7F]*IPC[^\"\\\\\\x00-\\x1F\\x7F]*(?:(?:I/O|IO|input/output)[ ]+(?:di|in)[ ]+rete|network[ ]+(?:I/O|IO|input/output))[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 21,
+              "mandatoryIdentifiers": [
+                "WASI"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*WASI[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 24,
+              "mandatoryIdentifiers": [
+                "REPL"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*REPL[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 56,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*API[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            },
+            {
+              "passage": 57,
+              "mandatoryIdentifiers": [
+                "API"
+              ],
+              "networkIOQualifierRequired": false,
+              "pattern": "^(?:[^\"\\\\\\x00-\\x1F\\x7F]*API[^\"\\\\\\x00-\\x1F\\x7F]*)$"
+            }
+          ],
+          "notEncodedNativeRefs": [],
+          "maxIdentifiersPerBranch": 3,
+          "unmodifiedApplicationValidationRequired": true
+        }
+      },
+      "definitionRanges": [],
+      "headingRanges": [
+        [
+          0,
+          26
+        ]
+      ],
+      "systemCharacters": 1354,
+      "nativeClaimArrayLimit": 2,
+      "nativeIdentifierConstraintApplied": true,
+      "nativeIdentifierSchemaChangedExplicitly": true,
+      "nativeIdentifierPolicySharedByBothVariants": true,
+      "referenceMessagesExactArchived": false,
+      "nativeSchemaSha256": "991b3b34da96f98792701927a5f9a578c04161a27ec665bc32c2c24f99104f70",
+      "unisolatedPromptSha256": "3a775b8a858545903ab01bcd6abf3eab180c77aa746022d366cb1bae7dddcd27",
+      "result": {
+        "status": "error",
+        "firstContentClientMs": 25995.896,
+        "totalClientMs": 90117.091,
+        "doneReason": null,
+        "native": {
+          "totalMs": null,
+          "loadMs": null,
+          "prompt_evalMs": null,
+          "evalMs": null,
+          "prompt_eval_count": null,
+          "prompt_eval_cached_count": null,
+          "eval_count": null,
+          "evalTokensPerSecond": null
+        },
+        "qualityVerdict": "pending_review",
+        "errorKind": "timeout",
+        "partialAnswerDiagnosticOnly": true,
+        "modelAnswer": "{\"claims\":[{\"passage\":10,\"text\":\"asyncio permette di eseguire operazioni di rete e di comunicazione tra processi (IPC).”},{'passage':18,'text':'asyncio gestisce event loop per networking, subprocessi e segnali dell’OS.'}]}**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**.**."
+      },
+      "checks": {
+        "outcome": "rejected",
+        "reason": "stream_incomplete",
+        "claims": []
+      },
+      "originalApplicationChecks": {
+        "outcome": "rejected",
+        "reason": "stream_incomplete",
+        "claims": []
+      },
+      "archivedBaselinePolicyChecks": {
+        "outcome": "rejected",
+        "reason": "stream_incomplete",
+        "claims": []
+      },
+      "caseShapeMet": false,
+      "cacheQualification": {
+        "eligible": false,
+        "uncachedTokens": null,
+        "uncachedFraction": null,
+        "reason": "missing_or_invalid_native_counts"
+      },
+      "validationClientMs": 0.06,
+      "thermalBefore": {
+        "startedMonotonic": 114021.765970212,
+        "finishedMonotonic": 114021.785895682,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "thermalDuring": [
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 97,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 6,
+          "startedWorkerOffsetMs": 6004.855,
+          "finishedWorkerOffsetMs": 6033.178,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 62,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 18,
+          "startedWorkerOffsetMs": 18001.042,
+          "finishedWorkerOffsetMs": 18072.688,
+          "nativePrefillPhaseProven": false
+        },
+        {
+          "thermalLimits": {
+            "CPU_Speed_Limit": 100,
+            "CPU_Scheduler_Limit": 100,
+            "CPU_Available_CPUs": 16
+          },
+          "unavailableQueries": [],
+          "scheduledWorkerOffsetSeconds": 36,
+          "startedWorkerOffsetMs": 36003.541,
+          "finishedWorkerOffsetMs": 36026.815,
+          "nativePrefillPhaseProven": false
+        }
+      ],
+      "thermalAfter": {
+        "startedMonotonic": 114112.101265539,
+        "finishedMonotonic": 114112.128757687,
+        "thermalLimits": {
+          "CPU_Speed_Limit": 100,
+          "CPU_Scheduler_Limit": 100,
+          "CPU_Available_CPUs": 16
+        },
+        "unavailableQueries": []
+      },
+      "observerCleanupCompleted": true,
+      "thermalObservationErrors": [],
+      "sameSourceAnchoredTypeScopeAndMechanismChecks": true,
+      "sourceAnchoredDuplicateConversionRuleCheck": true,
+      "sourceAnchoredSignalScopeCheck": true,
+      "signalScopeInventoryAddedToPrompt": true,
+      "networkingScopeInventoryAddedToPrompt": true,
+      "referencePromptRevision": "full_context_before_api_context_integration",
+      "installedProjectRevision": "complete_api_entries_signal_scope_v1",
+      "qualityVerdict": "pending_review",
+      "productionModified": false,
+      "modelOptionsChanged": false,
+      "automaticRetries": 0,
+      "vaultRead": false,
+      "browserRendering": "not_measured"
+    }
+  ],
+  "originalAutomaticReport": {
+    "mode": "first_request_type_fidelity_latency_comparison",
+    "requested": 6,
+    "completed": 2,
+    "pairs": [
+      {
+        "case": "asyncio_scope",
+        "cacheEligible": false,
+        "uncachedInputReductionPercent": null,
+        "nativePrefillReductionPercent": null,
+        "performanceGateMet": false
+      },
+      {
+        "case": "csv_conversion_condition",
+        "cacheEligible": false,
+        "uncachedInputReductionPercent": null,
+        "nativePrefillReductionPercent": null,
+        "performanceGateMet": false
+      }
+    ],
+    "allNativeCacheCountsEligible": false,
+    "technicalCaseShapesMet": false,
+    "performanceOutcome": "inconclusive_cache_or_metrics",
+    "qualityVerdict": "pending_review",
+    "productionModified": false,
+    "candidateRevision": "own_passage_native_identifier_v3",
+    "automaticRetries": 0,
+    "browserRendering": "not_measured",
+    "noStatisticalOrUniversalSpeedClaim": true,
+    "fixedGates": {
+      "maxCachedTokens": 8,
+      "minUncachedFraction": 0.98,
+      "minInputReductionPercent": 10,
+      "minPrefillReductionPercent": 10
+    },
+    "integrationAllowedByThisAutomaticReport": false
+  },
+  "manualReview": [
+    {
+      "case": "asyncio_scope",
+      "variant": "production",
+      "verdict": "favorable",
+      "reason": "Both complete points preserve own-source network I/O and IPC, and subprocess control. No universal speedup or unsupported parallelism is introduced."
+    },
+    {
+      "case": "asyncio_scope",
+      "variant": "compact",
+      "verdict": "failed_incomplete",
+      "reason": "The raw diagnostic is not a completed answer. It omits I/O, uses a curly closing quotation while still inside the constrained JSON string, and repeats markdown-like punctuation until the unchanged 90-second deadline."
+    }
+  ],
+  "manualReviewCounts": {
+    "favorable": 1,
+    "failedIncomplete": 1,
+    "notExecuted": 4
+  },
+  "overallReview": "not_passed_no_adoption",
+  "latencyComparison": "inconclusive_no_native_completion_metrics_for_candidate",
+  "originalAutomaticChecksPreserved": true,
+  "terminalHistoryExcluded": true,
+  "installedProjectModified": false,
+  "browserRendering": "not_measured",
+  "thermalCausality": "unknown_observations_do_not_establish_cause"
+}

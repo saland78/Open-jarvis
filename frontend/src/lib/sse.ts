@@ -7,11 +7,15 @@ export interface ChatRequest {
   stream: true;
   temperature?: number;
   max_tokens?: number;
+  notes_query?: string;
+  notes_brief?: boolean;
+  notes_structured?: boolean;
 }
 
 export async function* streamChat(
   request: ChatRequest,
   signal?: AbortSignal,
+  observer?: { headers?: (requestId: string | null) => void; done?: () => void },
 ): AsyncGenerator<SSEEvent> {
   const base = getBase();
   const response = await fetch(`${base}/v1/chat/completions`, {
@@ -21,13 +25,18 @@ export async function* streamChat(
     signal,
   });
 
+  observer?.headers?.(response.headers.get('x-openjarvis-request-id'));
+
   if (!response.ok) {
-    throw new Error(`Chat request failed: ${response.status}`);
+    let detail = '';
+    try { detail = (await response.json()).detail || ''; } catch { /* Non-JSON failure. */ }
+    throw new Error(detail || `Chat request failed: ${response.status}`);
   }
 
   const reader = response.body!.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
+  let currentEvent: string | undefined;
 
   try {
     while (true) {
@@ -38,14 +47,18 @@ export async function* streamChat(
       const lines = buffer.split('\n');
       buffer = lines.pop() || '';
 
-      let currentEvent: string | undefined;
-
       for (const line of lines) {
         if (line.startsWith('event: ')) {
           currentEvent = line.slice(7).trim();
         } else if (line.startsWith('data: ')) {
           const data = line.slice(6);
-          if (data === '[DONE]') return;
+          if (data === '[DONE]') { observer?.done?.(); return; }
+          // Local timeouts and upstream failures must reach the chat's error UI.
+          let parsed: { error?: { message?: string } | string } | undefined;
+          try { parsed = JSON.parse(data); } catch { /* Keep non-JSON events. */ }
+          if (parsed?.error) {
+            throw new Error(typeof parsed.error === 'string' ? parsed.error : parsed.error.message || 'Generation failed');
+          }
           yield { event: currentEvent, data };
           currentEvent = undefined;
         } else if (line.trim() === '') {
@@ -54,6 +67,7 @@ export async function* streamChat(
       }
     }
   } finally {
+    await reader.cancel().catch(() => {});
     reader.releaseLock();
   }
 }

@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "date": "2026-10-02",
+  "mode": "production_structured_check",
+  "requested": 6,
+  "automaticRetries": 0,
+  "vaultRead": false,
+  "overallFunctionalVerdict": "failed",
+  "rows": [
+    {
+      "case": "dated_qualifications",
+      "transportCompleted": true,
+      "answerMode": "structured_refused",
+      "inferenceUsed": true,
+      "structuredOutcome": "rejected",
+      "firstTextClientMs": 39044.03,
+      "totalClientMs": 39044.58,
+      "server": {
+        "firstTextMs": 39017.41,
+        "totalMs": 39017.65,
+        "structuredFirstJsonMs": 23165.96,
+        "structuredGenerationMs": 39015.6,
+        "structuredValidationMs": 0.08,
+        "structuredAcceptedTextMs": null
+      },
+      "qualityVerdict": "pending_review",
+      "manualCriteriaReview": "not_fulfilled_refusal"
+    },
+    {
+      "case": "reopened",
+      "transportCompleted": true,
+      "answerMode": "structured_refused",
+      "inferenceUsed": true,
+      "structuredOutcome": "rejected",
+      "firstTextClientMs": 14444.64,
+      "totalClientMs": 14444.78,
+      "server": {
+        "firstTextMs": 14442.58,
+        "totalMs": 14442.81,
+        "structuredFirstJsonMs": 2947.02,
+        "structuredGenerationMs": 14440.88,
+        "structuredValidationMs": 0.06,
+        "structuredAcceptedTextMs": null
+      },
+      "qualityVerdict": "pending_review",
+      "manualCriteriaReview": "not_fulfilled_refusal"
+    },
+    {
+      "case": "opinion",
+      "transportCompleted": true,
+      "answerMode": "explicit_fields",
+      "inferenceUsed": false,
+      "structuredOutcome": null,
+      "firstTextClientMs": 4.08,
+      "totalClientMs": 4.16,
+      "server": {
+        "firstTextMs": 2.45,
+        "totalMs": 2.63,
+        "structuredFirstJsonMs": null,
+        "structuredGenerationMs": null,
+        "structuredValidationMs": null,
+        "structuredAcceptedTextMs": null
+      },
+      "qualityVerdict": "pending_review",
+      "manualCriteriaReview": "passed"
+    },
+    {
+      "case": "missing_with_instruction",
+      "transportCompleted": true,
+      "answerMode": "structured_refused",
+      "inferenceUsed": true,
+      "structuredOutcome": "rejected",
+      "firstTextClientMs": 6870.22,
+      "totalClientMs": 6870.34,
+      "server": {
+        "firstTextMs": 6868.39,
+        "totalMs": 6868.57,
+        "structuredFirstJsonMs": 1941.2,
+        "structuredGenerationMs": 6867.27,
+        "structuredValidationMs": 0.02,
+        "structuredAcceptedTextMs": null
+      },
+      "qualityVerdict": "pending_review",
+      "manualCriteriaReview": "not_fulfilled_refusal"
+    },
+    {
+      "case": "conflict",
+      "transportCompleted": true,
+      "answerMode": "explicit_fields",
+      "inferenceUsed": false,
+      "structuredOutcome": null,
+      "firstTextClientMs": 2.85,
+      "totalClientMs": 2.94,
+      "server": {
+        "firstTextMs": 1.41,
+        "totalMs": 1.6,
+        "structuredFirstJsonMs": null,
+        "structuredGenerationMs": null,
+        "structuredValidationMs": null,
+        "structuredAcceptedTextMs": null
+      },
+      "qualityVerdict": "pending_review",
+      "manualCriteriaReview": "passed"
+    },
+    {
+      "case": "historical",
+      "transportCompleted": true,
+      "answerMode": "structured_refused",
+      "inferenceUsed": true,
+      "structuredOutcome": "rejected",
+      "firstTextClientMs": 6727.85,
+      "totalClientMs": 6727.97,
+      "server": {
+        "firstTextMs": 6726.37,
+        "totalMs": 6726.62,
+        "structuredFirstJsonMs": 2028.0,
+        "structuredGenerationMs": 6725.14,
+        "structuredValidationMs": 0.04,
+        "structuredAcceptedTextMs": null
+      },
+      "qualityVerdict": "pending_review",
+      "manualCriteriaReview": "not_fulfilled_refusal"
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "testModules": [
+    "test_andrea_web_signal_scope",
+    "test_andrea_web_single_rule_budget",
+    "test_andrea_web_definition_context",
+    "test_andrea_web_request_resources",
+    "test_andrea_latency_resources",
+    "test_andrea_web_mechanism_latency",
+    "test_andrea_web_type_latency",
+    "test_andrea_web_heading_latency",
+    "test_andrea_web_scoped_latency",
+    "test_andrea_web_short_retention",
+    "test_andrea_web_short_instructions",
+    "test_andrea_web_sentence_probe",
+    "test_andrea_web_sentence_production",
+    "test_andrea_web_sentence_update",
+    "test_andrea_web_concurrency_probe",
+    "test_andrea_web_concurrency_update",
+    "test_andrea_web_indexed",
+    "test_andrea_web_pages",
+    "test_andrea_web_page_polish",
+    "test_andrea_web_disconnect",
+    "test_andrea_web_indexed_update",
+    "test_andrea_web_page_polish_update",
+    "test_andrea_web_pages_update",
+    "test_andrea_web_search_local",
+    "test_andrea_web_provider_probe",
+    "test_andrea_native_metrics",
+    "test_andrea_web_read_diagnostics",
+    "test_andrea_web_read_diagnostics_update",
+    "test_andrea_web_reliability_check",
+    "test_andrea_web_language_alias_update",
+    "test_andrea_web_prose_context_update",
+    "test_andrea_web_identifier_probe",
+    "test_andrea_web_identifier_update",
+    "test_andrea_web_identifier_production",
+    "test_andrea_web_prompt_prefix",
+    "test_andrea_web_literal_prefix",
+    "test_andrea_web_alias_prefix",
+    "test_andrea_web_qualified_prefix",
+    "test_andrea_web_prefix_production",
+    "test_andrea_web_prefix_update",
+    "test_andrea_web_prefix_check",
+    "test_andrea_web_api_context",
+    "test_andrea_web_api_context_update",
+    "test_andrea_web_api_context_check",
+    "test_andrea_web_search_update",
+    "test_andrea_web_networking_scope",
+    "test_andrea_web_native_identifiers",
+    "test_andrea_web_native_prefix",
+    "test_andrea_web_source_label_scope",
+    "test_andrea_web_capability_scope",
+    "test_andrea_web_question_focus",
+    "test_andrea_web_operation_predicate",
+    "test_andrea_web_native_operation_verb",
+    "test_andrea_web_candidate_pipeline",
+    "test_andrea_web_compact_integration",
+    "test_andrea_web_compact_update"
+  ],
+  "testsRun": 754,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "wallMs": 10960.7,
+  "allPassed": true,
+  "date": "2026-10-07",
+  "contractRevision": "compact_web_evidence_v9",
+  "installationOnMac": "pending",
+  "installedApiAcceptance": "pending",
+  "browserRendering": "not_measured",
+  "newModelRequests": 0,
+  "historicalBenchmarkMeaning": "5_favorable_1_unfavorable_unchanged",
+  "compactV9RecordedMeaning": "3_favorable_0_unfavorable",
+  "oldSixAnswerGate": "unmet_unchanged",
+  "newAcceptanceProtocol": "installed_candidate_three_same_questions_plus_manual_review",
+  "payload": [
+    {
+      "path": "scripts/andrea/web_networking_scope.py",
+      "sha256": "89c520a842da155daaf77c90dbfb4fbca4999b2a77dd14c9f78ef305d9f0467f",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_native_identifier_schema.py",
+      "sha256": "0d18ccd5dfaed159b5e7d81522441bb098a56806a43c465ffff2a2f7089181af",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_native_identifier_prefix.py",
+      "sha256": "b4161128a6de05f6001eecaab5779c0b6f245407f26eaa35c93d8604daa08fb0",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_source_label_scope.py",
+      "sha256": "933719fe18b883528dafd0f134d42d15629ec4504b52a0e04bbf511c67e5363b",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_capability_evidence.py",
+      "sha256": "becb32b3303e11ed948c64053d3d4164daaccdfaa848a58545922874b3f92eef",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_source_performance_scope.py",
+      "sha256": "24596c0fb49d9186ffc212607b52dda3e6ec772db22b3d682b1e571cb412ea59",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_question_focus.py",
+      "sha256": "e5b31aa66ec4b6892147b97ba683ff2c3f7d29a04b50915f4ccd962170a2d7d6",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_operation_predicate_scope.py",
+      "sha256": "48b0c3fbe673fdd57b4a07878c48a45177518ebf47dd919770fea8d676067721",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_native_operation_verb.py",
+      "sha256": "293f6b141d1759d1c033c7fff5b22417fd6bf17a225529c5abd52f8e07e8e685",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_candidate_pipeline.py",
+      "sha256": "aee11a0ea16fdef06e53f3a280080507b9c202e2b044a54adde15c4bcf043322",
+      "new": true
+    },
+    {
+      "path": "scripts/andrea/web_page_context_contract.py",
+      "sha256": "449fc775485d52095c9830a482d75df96044732aa110cc2671f93eb1eed97f31",
+      "before": "a7fa689865126891912e5f9c280ef9afc8b68771770ee5b7902cc46eac7b02e1"
+    },
+    {
+      "path": "scripts/andrea/check_web_compact_v9.py",
+      "sha256": "b9508c930f086506976d723bbe87a7c789354444e0d969396853b8208ed60c21",
+      "new": true
+    }
+  ],
+  "broadDiscoveryAttempt": {
+    "testsRun": 1241,
+    "failures": 30,
+    "errors": 29,
+    "outcome": "not_passed",
+    "scope": "historical_non_web_and_stdin_spawn_included"
+  }
+}
