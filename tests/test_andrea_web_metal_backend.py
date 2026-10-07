@@ -89,6 +89,27 @@ def row(index, engine, total=None):
 
 
 class RequestContractTests(unittest.TestCase):
+    def test_direct_or_wrapped_socket_timeout_has_explicit_code_with_one_post(self):
+        for error in (TimeoutError('timed out '+TOKEN),
+                      probe.urllib.error.URLError(TimeoutError('timed out '+TOKEN))):
+            for engine in ('ollama_cpu', 'llama_metal'):
+                transport = SimpleNamespace(open=Mock(side_effect=error))
+                with self.subTest(engine=engine, error=type(error).__name__), \
+                        self.assertRaisesRegex(ValueError, '^local_model_response_timeout_no_retry$'):
+                    probe.completion_once(engine, [], {}, ENDPOINT if engine == 'llama_metal' else None,
+                                          TOKEN if engine == 'llama_metal' else None, transport)
+                transport.open.assert_called_once()
+                self.assertEqual(transport.open.call_args.kwargs['timeout'], 90)
+
+    def test_connection_failures_never_expose_reason_endpoint_or_credential(self):
+        for error, code in ((probe.urllib.error.URLError('connection failed '+TOKEN),
+                             'local_model_connection_failed'),
+                            (ConnectionResetError('reset '+TOKEN), 'local_model_io_error')):
+            transport = SimpleNamespace(open=Mock(side_effect=error))
+            with self.subTest(code=code), self.assertRaisesRegex(ValueError, '^'+code+'$'):
+                probe.completion_once('llama_metal', [], {}, ENDPOINT, TOKEN, transport)
+            transport.open.assert_called_once()
+
     def test_http_compute_failure_reports_fixed_code_and_never_retries_or_exposes_body(self):
         error_body = b'{"error":{"message":"Compute error. secret '+TOKEN.encode()+b'"}}'
         transport = SimpleNamespace(open=Mock(side_effect=probe.urllib.error.HTTPError(
@@ -713,6 +734,13 @@ class LifecycleTests(unittest.TestCase):
                                 poll=Mock(return_value=1), returncode=1)
         with patch.object(probe.subprocess, 'Popen', return_value=child):
             with self.assertRaisesRegex(ValueError, '^invalid_llama_choice$'):
+                probe.owned_worker(Path('/project'), {'token': TOKEN}, 1)
+
+    def test_worker_signal_is_recorded_without_assuming_oom_or_driver_failure(self):
+        child = SimpleNamespace(communicate=Mock(return_value=(b'', b'unrelated private text '+TOKEN.encode())),
+                                poll=Mock(return_value=-9), returncode=-9)
+        with patch.object(probe.subprocess, 'Popen', return_value=child):
+            with self.assertRaisesRegex(ValueError, '^owned_worker_signal_9$'):
                 probe.owned_worker(Path('/project'), {'token': TOKEN}, 1)
 
     def test_build_deadline_terminates_only_new_session_process(self):

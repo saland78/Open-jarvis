@@ -4,9 +4,12 @@ The latency task remains open. The completed batch and static-prompt comparisons
 did not satisfy their adoption criteria. The hardware inventory now establishes
 that Andrea's Intel Mac has an AMD Radeon Pro 5500M with 4 GB reported video
 memory. Those trials used Ollama 0.35.1 with `size_vram: 0`. A usable AMD Metal
-backend is the next intervention. Native GPU initialization is now confirmed,
-but the first GPU request failed with a driver timeout. A complete GPU answer,
-its quality and its latency have not yet been measured on this Mac.
+backend was tested in two isolated runtime profiles. Native GPU initialization
+is confirmed, but the original request failed with a driver timeout and the
+conservative single-request profile was canceled after about 90 seconds without
+returning an answer. Neither profile is eligible for adoption. This Metal trial
+is concluded with a negative result; the web-summary latency objective remains
+open. No complete GPU-answer quality or successful GPU latency is established.
 
 ## Observed Mac initialization and diagnostic correction
 
@@ -110,6 +113,50 @@ and runtime failures remain explicit. Every single-check outcome has
 `integrationAllowed: false`, `latencyComparisonCollected: false` and
 `automaticFullComparisonAfterSuccess: false`. No adoption decision or full
 application latency measurement follows from this one request.
+
+## Completed single-request result: no response within the deadline
+
+The v3 reused-build check ran in
+`~/.openjarvis-andrea/local-engines/llama-metal-b11461-_zi_2t7v`. The native log
+confirmed physical batch 64, logical batch 512, context 4096, all three disabled
+Metal optimizations and disabled RAM prompt cache. The final load reported
+37/37 layers offloaded, model GPU allocation 2375.91 MiB, GPU KV allocation
+576 MiB and GPU compute allocation 38 MiB. Initialization took 2601.186 ms.
+The existing executable, model weights and native template were verified; no
+CPU model request or new compilation was performed.
+
+The server received one 1861-token asyncio prompt at log time `0.02.711.772`.
+It recorded `cancel task, id_task = 0` at `1.33.118.201`, an interval of
+90.406429 seconds. The submitted log contains neither a prompt-progress
+checkpoint nor completion timings. The result retains `owned_worker_failed`,
+an empty result, zero completed model calls and `failed_runtime`. Its temporary
+server was stopped. The attached log has no native GPU-timeout or compute-error
+line for this execution; that absence does not prove the GPU was making progress
+or that driver compatibility is fixed.
+
+The timing coincides with the existing 90-second HTTP deadline. A client response
+timeout is therefore the likely explanation for cancellation. The worker stderr
+was not retained, so the historical generic failure is preserved rather than
+rewritten as a conclusively identified exception. The script's diagnostic defect
+is independently confirmed: direct socket timeouts and timeouts wrapped by
+`URLError` escaped as exception messages such as `timed out`, which its parent
+recognized only as `owned_worker_failed`.
+
+The diagnostic correction now emits `local_model_response_timeout_no_retry`
+for either timeout form. Connection and other I/O failures also use fixed codes,
+and an externally signaled worker records its signal number without inferring
+out-of-memory or a GPU-driver cause. Worker exception output is sanitized. The
+90/95-second bounds, model, request, schema, validators, GPU profile and no-retry
+policy are unchanged. These are local diagnostic changes, not a performance fix;
+they require no repeat Mac inference to establish this negative trial result.
+
+The decision is to stop this isolated Metal trial and retain the installed v9
+CPU backend. The conservative profile failed its bounded response check, and
+the original profile had a native driver error. Neither produced a completed
+GPU answer. No six-case speed comparison or application integration is performed
+from these failures, and this result does not establish that every possible AMD
+GPU configuration is unusable. The original latency task remains unresolved by
+this intervention.
 
 ## Primary sources and the important release limitation
 
@@ -290,4 +337,12 @@ child-environment isolation, safe HTTP error reporting, unchanged readiness
 polling, bounded native timeout evidence, cleanup on failure, saved setup
 diagnostics, retained rejection and the absence of automatic comparison or
 adoption. Python syntax and the 24 installed-v9 fingerprints still pass.
-The smaller-batch Radeon execution itself remains to be tested on the Mac.
+The smaller-batch Radeon execution was still pending at that development
+checkpoint; its subsequent Mac failure is recorded above.
+
+Post-run diagnostics: **200 relevant local tests passed**, including 72
+Metal-adapter tests and three further regression cases for direct/wrapped socket
+timeouts, sanitized connection failures and worker termination signals. Installed
+v9 fingerprints and Python syntax still pass. These tests establish error
+reporting and the unchanged request contract; the real Mac result above remains
+a failed single request, not a successful latency measurement.

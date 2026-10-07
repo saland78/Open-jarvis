@@ -192,7 +192,9 @@ def owned_worker(project, payload, timeout, observe=False):
             # source text, model answers or the ephemeral server credential.
             diagnostic = error.decode('utf-8', errors='replace')
             match = re.search(r'Prova fermata: ([a-z0-9_]+)\.', diagnostic)
-            raise ValueError(match[1] if match else 'owned_worker_failed')
+            code = (match[1] if match else 'owned_worker_signal_' + str(-child.returncode)
+                    if child.returncode < 0 else 'owned_worker_failed')
+            raise ValueError(code)
         value = json.loads(output, object_pairs_hook=unique_pairs)
         if not isinstance(value, dict):
             raise ValueError('owned_worker_invalid')
@@ -718,6 +720,14 @@ def completion_once(engine, messages, schema, endpoint=None, token=None, transpo
             exc.close()
         code = exc.code if type(exc.code) is int and 100 <= exc.code <= 599 else 'error'
         raise ValueError('local_model_http_' + str(code) + ('_compute_error' if compute else '')) from None
+    except TimeoutError:
+        raise ValueError('local_model_response_timeout_no_retry') from None
+    except urllib.error.URLError as exc:
+        code = ('local_model_response_timeout_no_retry' if isinstance(exc.reason, TimeoutError)
+                else 'local_model_connection_failed')
+        raise ValueError(code) from None
+    except OSError:
+        raise ValueError('local_model_io_error') from None
     elapsed = round((time.monotonic() - started) * 1000, 3)
     if engine == 'ollama_cpu':
         message = response.get('message')
@@ -1035,7 +1045,7 @@ def main():
         print('Prova interrotta con Control+C; server temporaneo chiuso.', file=sys.stderr)
         return 130
     except (OSError, ValueError, TypeError, subprocess.TimeoutExpired) as exc:
-        print('Prova fermata: ' + str(exc) + '. Nessun retry o modifica del progetto.', file=sys.stderr)
+        print('Prova fermata: ' + safe_error_code(exc) + '. Nessun retry o modifica del progetto.', file=sys.stderr)
         return 1
 
 
