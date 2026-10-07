@@ -497,6 +497,121 @@ class BuildAndDeviceTests(unittest.TestCase):
             self.assertTrue(all('install' not in str(call.args[0]) for call in calls.call_args_list))
 
 
+class PrivateMemoryRepairTests(unittest.TestCase):
+    def test_exact_upstream_transfer_excerpt_and_copy_completion_order(self):
+        fixture = json.loads((ROOT / 'tests/fixtures/andrea_metal_private_transfers.json').read_text())
+        self.assertEqual(fixture['upstreamCommit'], probe.LLAMA_COMMIT)
+        before, after = fixture['before'].encode(), fixture['after'].encode()
+        with patch.object(probe, 'PRIVATE_TRANSFER_BEFORE', hashlib.sha256(before).hexdigest()), \
+                patch.object(probe, 'PRIVATE_TRANSFER_AFTER', hashlib.sha256(after).hexdigest()):
+            self.assertEqual(probe.private_transfer_patch(before), after)
+            with self.assertRaisesRegex(ValueError, 'source_hash_mismatch'):
+                probe.private_transfer_patch(before + b'\n')
+            with patch.object(probe, 'PRIVATE_TRANSFER_AFTER', '0' * 64), \
+                    self.assertRaisesRegex(ValueError, 'result_hash_mismatch'):
+                probe.private_transfer_patch(before)
+        text = after.decode()
+        self.assertNotIn('newBufferWithBytesNoCopy', text)
+        set_part, get_part = text.split('void ggml_metal_buffer_get_tensor(', 1)
+        self.assertLess(set_part.index('memcpy([buf_src contents]'), set_part.index('[cmd_buf commit]'))
+        self.assertLess(set_part.index('dispatch_semaphore_wait'), set_part.index('[buf_src release]'))
+        self.assertLess(get_part.index('[cmd_buf waitUntilCompleted]'), get_part.index('memcpy(data, [buf_dst contents]'))
+        self.assertLess(get_part.index('MTLCommandBufferStatusCompleted'), get_part.index('memcpy(data, [buf_dst contents]'))
+        self.assertLess(get_part.index('memcpy(data, [buf_dst contents]'), get_part.index('[buf_dst release]'))
+
+    def test_patch_rejects_other_revision_without_writing(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source = Path(folder); file = source / probe.PRIVATE_TRANSFER_FILE
+            file.parent.mkdir(parents=True); file.write_bytes(b'other source revision')
+            with self.assertRaisesRegex(ValueError, 'source_hash_mismatch'):
+                probe.apply_private_transfer_patch(source)
+            self.assertEqual(file.read_bytes(), b'other source revision')
+            target = source / 'outside'; target.write_bytes(b'leave untouched')
+            file.unlink(); file.symlink_to(target)
+            with self.assertRaisesRegex(ValueError, 'not_regular'):
+                probe.apply_private_transfer_patch(source)
+            self.assertEqual(target.read_bytes(), b'leave untouched')
+
+    def test_private_loading_disables_both_host_mapping_paths(self):
+        args = probe.server_args('/binary', '/model', 'MTL0', 12345, TOKEN, True, True)
+        self.assertEqual(args[args.index('--load-mode') + 1], 'none')
+        self.assertEqual(args[args.index('--lazy-mode') + 1], 'off')
+        self.assertEqual(args[args.index('--ubatch-size') + 1], '64')
+        baseline = probe.server_args('/binary', '/model', 'MTL0', 12345, TOKEN, True)
+        self.assertNotIn('--load-mode', baseline)
+        with self.assertRaisesRegex(ValueError, 'requires_gpu_check'):
+            probe.server_args('/binary', '/model', 'MTL0', 12345, TOKEN, False, True)
+
+    def test_private_allocation_proof_cannot_use_mapped_or_earlier_estimate(self):
+        private = GPU_CHECK_LOG.replace('MTL0 model', 'MTL0_Private model')
+        proof = probe.private_vram_runtime_proof(LOAD_LOG + private, DEVICE)
+        self.assertTrue(proof['privateModelBuffersConfirmed'])
+        self.assertEqual(proof['modelPrivateBufferMiB'], 2500)
+        for bad in (LOAD_LOG, private.replace('_Private', '_Mapped'), private + LOAD_LOG,
+                    private.replace('2500.00', '0.00'), private.replace('MTL0_Private', 'MTL1_Private'),
+                    private + 'load_tensors: MTL0_Mapped model buffer size = 20.00 MiB\n'):
+            with self.subTest(bad=bad[-70:]), self.assertRaisesRegex(ValueError, 'no_inference'):
+                probe.private_vram_runtime_proof(bad, DEVICE)
+
+    def test_repair_needs_original_build_and_gpu_mode_before_requests(self):
+        with patch.object(probe, 'owned_worker') as worker, patch.object(probe, 'repair_private_engine') as repair:
+            for previous, gpu_check in ((None, False), (None, True), (Path('/old'), False)):
+                with self.assertRaisesRegex(ValueError, 'requires_gpu_check_and_original_build'):
+                    probe.run(Path('/project'), reuse_build_folder=previous, gpu_check=gpu_check,
+                              repair_private_vram=True)
+        worker.assert_not_called(); repair.assert_not_called()
+
+    def test_original_verification_failure_prevents_recompilation(self):
+        with patch.object(probe, 'reuse_engine', side_effect=ValueError('reused_binary_hash_mismatch')), \
+                patch.object(probe, 'build_engine') as build:
+            with self.assertRaisesRegex(ValueError, 'hash_mismatch'):
+                probe.repair_private_engine(Path('/old'), Path('/new'))
+        build.assert_not_called()
+
+    def test_repair_preserves_original_receipt_and_builds_into_new_folder(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); old = root / 'old'; old.mkdir(); new = root / 'new'; new.mkdir()
+            original = {'builtServerSha256': 'a' * 64, 'sourceModified': False}
+            (old / 'build-receipt.json').write_text(json.dumps(original))
+            def verified(previous, destination, emit):
+                self.assertEqual(previous, old); self.assertEqual(destination, new)
+                (new / 'build-receipt.json').write_text(json.dumps(original))
+                return old / 'build/bin/llama-server', original
+            with patch.object(probe, 'reuse_engine', side_effect=verified), \
+                    patch.object(probe, 'build_engine', return_value=(new / 'binary', {'sourceModified': True})) as build:
+                _, result = probe.repair_private_engine(old, new)
+            self.assertEqual(build.call_args.args[0], new)
+            self.assertEqual(build.call_args.kwargs['local_source'], old / 'source')
+            self.assertFalse(result['existingBinaryReused'])
+            self.assertEqual(json.loads((old / 'build-receipt.json').read_text()), original)
+            self.assertEqual(json.loads((new / 'original-build-receipt.json').read_text()), original)
+            self.assertTrue(json.loads((new / 'build-receipt.json').read_text())['sourceModified'])
+
+    def test_patched_build_fetches_only_local_checkout_and_records_modified_source(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); (root / 'build/bin').mkdir(parents=True)
+            binary = root / 'build/bin/llama-server'; binary.write_bytes(b'new binary'); binary.chmod(0o700)
+            (root / 'build/CMakeCache.txt').write_text('GGML_METAL:BOOL=ON\nGGML_METAL_EMBED_LIBRARY:BOOL=ON\nGGML_ACCELERATE:BOOL=ON\n')
+            def stage(args, work, timeout, name, emit):
+                content = {'git-commit': probe.LLAMA_COMMIT, 'git-tree': probe.LLAMA_TREE,
+                           'private-diff-files': probe.PRIVATE_TRANSFER_FILE,
+                           'llama-version': 'version: 0.6.0 (build 11461, commit ' + probe.LLAMA_COMMIT + ')',
+                           'metal-devices': '  MTL0: AMD Radeon Pro 5500M (4096 MiB, 3500 MiB free)'}
+                (work / (name + '.log')).write_text(content.get(name, ''))
+                return {'stage': name}
+            with patch.object(probe, 'logged_command', side_effect=stage) as calls, \
+                    patch.object(probe, 'apply_private_transfer_patch', return_value={'afterSha256': probe.PRIVATE_TRANSFER_AFTER}) as patcher:
+                _, result = probe.build_engine(root, local_source=Path('/verified/source'))
+            patcher.assert_called_once_with(root / 'source')
+            fetch = next(c.args[0] for c in calls.call_args_list if 'fetch' in c.args[0])
+            self.assertIn('/verified/source', fetch)
+            self.assertNotIn(probe.LLAMA_REPOSITORY, fetch)
+            self.assertIn('protocol.file.allow=always', fetch)
+            self.assertTrue(result['sourceModified'])
+            self.assertTrue(result['compilationPerformedThisRun'])
+            self.assertEqual(result['privateTransferPatch']['afterSha256'], probe.PRIVATE_TRANSFER_AFTER)
+
+
 class ReusedBuildTests(unittest.TestCase):
     def setUp(self):
         self.workspace = tempfile.TemporaryDirectory()
@@ -614,6 +729,31 @@ class ReusedBuildTests(unittest.TestCase):
 
 
 class LifecycleTests(unittest.TestCase):
+    def test_private_memory_guard_closes_server_before_inference_if_weights_remain_mapped(self):
+        for allocation, succeeds in (('MTL0_Private', True), ('MTL0_Mapped', False)):
+            with self.subTest(allocation=allocation), tempfile.TemporaryDirectory() as folder:
+                server = probe.OwnedMetalServer('/binary', {'path': '/existing/gguf'}, DEVICE,
+                    Path(folder), gpu_check=True, private_vram=True)
+                child = SimpleNamespace(returncode=None); child.poll = lambda: child.returncode
+                def spawn(*args, **kwargs):
+                    kwargs['stdout'].write(GPU_CHECK_LOG.replace('MTL0 model', allocation + ' model').encode())
+                    kwargs['stdout'].flush()
+                    return child
+                props = {'total_slots': 1, 'model_path': '/existing/gguf', 'chat_template': 'template',
+                         'default_generation_settings': {'n_ctx': 4096}}
+                with patch.object(probe.subprocess, 'Popen', side_effect=spawn) as process, \
+                        patch.object(probe, 'json_request', return_value=props), \
+                        patch.object(probe, 'stop_owned_group', side_effect=lambda c: setattr(c, 'returncode', 0)):
+                    if succeeds:
+                        with server:
+                            self.assertTrue(server.proof['privateMemoryRuntime']['privateModelBuffersConfirmed'])
+                    else:
+                        with self.assertRaisesRegex(ValueError, 'private_vram_weights_not_confirmed_no_inference'):
+                            server.__enter__()
+                self.assertTrue(server.closed)
+                self.assertTrue(server.handle.closed)
+                self.assertIn('--load-mode', process.call_args.args[0])
+
     def test_single_check_confirms_runtime_and_sets_only_owned_child_environment(self):
         with tempfile.TemporaryDirectory() as folder:
             server = probe.OwnedMetalServer('/binary', {'path': '/existing/gguf'}, DEVICE,
@@ -878,7 +1018,14 @@ class FiniteRunTests(unittest.TestCase):
         self.assertEqual(probe.gpu_check_outcome([row(0, 'llama_metal')], False)['outcome'],
                          'weights_identity_changed')
 
-    def check_run(self, reuse_folder, gpu_check=False, worker_error=None, startup_failure=False):
+    def test_private_repair_runs_once_on_gpu_and_reports_new_build(self):
+        report = self.check_run(Path('/existing/trial'), gpu_check=True, private_vram=True)
+        self.assertTrue(report['privateVramRepairRequested'])
+        self.assertTrue(report['isolatedRuntimeBuiltThisRun'])
+        self.assertFalse(report['existingBuildReused'])
+        self.assertEqual(report['attemptedModelCalls'], 1)
+
+    def check_run(self, reuse_folder, gpu_check=False, worker_error=None, startup_failure=False, private_vram=False):
         with tempfile.TemporaryDirectory() as folder:
             class Server:
                 url, token = ENDPOINT, TOKEN
@@ -912,21 +1059,25 @@ class FiniteRunTests(unittest.TestCase):
                     patch.object(probe, 'create_trial_folder', return_value=Path(folder)), \
                     patch.object(probe, 'build_engine', return_value=('/binary', {'device': DEVICE})) as fresh_build, \
                     patch.object(probe, 'reuse_engine', return_value=('/binary', {'device': DEVICE})) as reused_build, \
+                    patch.object(probe, 'repair_private_engine', return_value=('/binary', {'device': DEVICE})) as repaired_build, \
                     patch.object(probe, 'OwnedMetalServer', return_value=server) as owned_server:
                 if startup_failure:
                     with self.assertRaisesRegex(ValueError, 'no_inference'):
-                        probe.run(Path('/project'), lambda *a, **k: None, reuse_folder, gpu_check)
+                        probe.run(Path('/project'), lambda *a, **k: None, reuse_folder, gpu_check, private_vram)
                     report = json.loads((Path(folder) / 'trial-result.json').read_text())
                 else:
-                    report = probe.run(Path('/project'), lambda *a, **k: None, reuse_folder, gpu_check)
+                    report = probe.run(Path('/project'), lambda *a, **k: None, reuse_folder, gpu_check, private_vram)
             self.assertEqual(owned_server.call_args.kwargs['gpu_check'], gpu_check)
-            if reuse_folder is None:
+            self.assertEqual(owned_server.call_args.kwargs['private_vram'], private_vram)
+            if private_vram:
+                repaired_build.assert_called_once(); fresh_build.assert_not_called(); reused_build.assert_not_called()
+            elif reuse_folder is None:
                 fresh_build.assert_called_once(); reused_build.assert_not_called()
             else:
                 fresh_build.assert_not_called(); reused_build.assert_called_once()
             if not startup_failure:
-                self.assertEqual(report['existingBuildReused'], reuse_folder is not None)
-                self.assertEqual(report['isolatedRuntimeBuiltThisRun'], reuse_folder is None)
+                self.assertEqual(report['existingBuildReused'], reuse_folder is not None and not private_vram)
+                self.assertEqual(report['isolatedRuntimeBuiltThisRun'], reuse_folder is None or private_vram)
                 self.assertEqual(report['nativeLogVerbosity'], 4)
             expected = [] if startup_failure else (['llama_metal'] if gpu_check else [e for i, e in probe.ORDER])
             self.assertEqual([engine for op, engine in calls if op == 'model'], expected)

@@ -55,6 +55,74 @@ GPU_CHECK_UBATCH = 64
 GPU_CHECK_ENV = {'GGML_METAL_CONCURRENCY_DISABLE': '1',
                  'GGML_METAL_GRAPH_OPTIMIZE_DISABLE': '1',
                  'GGML_METAL_FUSION_DISABLE': '1'}
+PRIVATE_TRANSFER_FILE = 'ggml/src/ggml-metal/ggml-metal-device.m'
+PRIVATE_TRANSFER_BEFORE = '3f520d505e99ece2eac65607dd7e9e670c93ca77e32b5d31c766359f57204cdd'
+PRIVATE_TRANSFER_AFTER = '92c85605038ef9a26a813fcabbfb0bc7c7a4545cdb2e6217ae0caa55b58e261e'
+
+
+def private_transfer_patch(raw):
+    """Patch only the exact pinned source's two synchronous private-buffer copies.
+
+    Metal's bytesNoCopy requires page-aligned pointers and allocation lengths.
+    ggml's set/get callbacks accept arbitrary byte ranges, so use Metal-owned
+    shared staging buffers and wait for the blit before reading/releasing them.
+    """
+    if hashlib.sha256(raw).hexdigest() != PRIVATE_TRANSFER_BEFORE:
+        raise ValueError('private_transfer_source_hash_mismatch')
+    text = raw.decode('utf-8')
+    begin = text.index('void ggml_metal_buffer_set_tensor(')
+    middle = text.index('void ggml_metal_buffer_get_tensor(', begin)
+    end = text.index('bool ggml_metal_buffer_cpy_tensor(', middle)
+    set_part, get_part = text[begin:middle], text[middle:end]
+
+    def once(part, old, new):
+        if part.count(old) != 1:
+            raise ValueError('private_transfer_patch_context_mismatch')
+        return part.replace(old, new, 1)
+
+    set_part = once(set_part,
+        '        void * data_ptr = (void *)(uintptr_t) data; // "const cast" the src data\n'
+        '        id<MTLBuffer> buf_src = [buf->dev->mtl_device newBufferWithBytesNoCopy:data_ptr\n'
+        '                                                               length:size\n'
+        '                                                              options:MTLResourceStorageModeShared\n'
+        '                                                          deallocator:nil];',
+        '        id<MTLBuffer> buf_src = [buf->dev->mtl_device newBufferWithLength:size\n'
+        '                                                              options:MTLResourceStorageModeShared];')
+    set_part = once(set_part, '        GGML_ASSERT(buf_src);',
+        '        GGML_ASSERT(buf_src);\n        memcpy([buf_src contents], data, size);')
+    set_part = once(set_part, '        //[cmd_buf waitUntilCompleted];',
+        '        GGML_ASSERT([cmd_buf status] == MTLCommandBufferStatusCompleted);')
+    get_part = once(get_part,
+        '        id<MTLBuffer> buf_dst = [buf->dev->mtl_device newBufferWithBytesNoCopy:data\n'
+        '                                                               length:size\n'
+        '                                                              options:MTLResourceStorageModeShared\n'
+        '                                                          deallocator:nil];',
+        '        id<MTLBuffer> buf_dst = [buf->dev->mtl_device newBufferWithLength:size\n'
+        '                                                              options:MTLResourceStorageModeShared];')
+    get_part = once(get_part, '        [cmd_buf waitUntilCompleted];',
+        '        [cmd_buf waitUntilCompleted];\n'
+        '        GGML_ASSERT([cmd_buf status] == MTLCommandBufferStatusCompleted);\n'
+        '        memcpy(data, [buf_dst contents], size);')
+    result = (text[:begin] + set_part + get_part + text[end:]).encode('utf-8')
+    if hashlib.sha256(result).hexdigest() != PRIVATE_TRANSFER_AFTER:
+        raise ValueError('private_transfer_result_hash_mismatch')
+    return result
+
+
+def apply_private_transfer_patch(source):
+    relative = Path(PRIVATE_TRANSFER_FILE)
+    file = source / relative
+    if (any(source.joinpath(*relative.parts[:i]).is_symlink()
+            for i in range(1, len(relative.parts) + 1)) or not file.is_file()):
+        raise ValueError('private_transfer_source_not_regular')
+    patched = private_transfer_patch(file.read_bytes())
+    file.write_bytes(patched)
+    if hashlib.sha256(file.read_bytes()).hexdigest() != PRIVATE_TRANSFER_AFTER:
+        raise ValueError('private_transfer_written_hash_mismatch')
+    return {'file': PRIVATE_TRANSFER_FILE, 'beforeSha256': PRIVATE_TRANSFER_BEFORE,
+            'afterSha256': PRIVATE_TRANSFER_AFTER,
+            'method': 'metal_owned_staging_for_arbitrary_host_ranges',
+            'synchronousCopiesAndCommandStatusChecked': True}
 
 def control_audit(checked, selection):
     if checked['outcome'] != 'accepted_pending_semantic_review':
@@ -376,13 +444,19 @@ def verified_build_version(text):
     return {'semanticVersion': match[1], 'build': int(match[2]), 'commit': match[3]}
 
 
-def build_engine(folder, emit=print):
+def build_engine(folder, emit=print, local_source=None):
     source, build = folder / 'source', folder / 'build'
     stages = []
+    # The private-memory repair fetches only the verified retained checkout.
+    # File transport is enabled for this single absolute local-source fetch.
+    fetch = (git_args('-c', 'protocol.file.allow=always', '-C', source, 'fetch',
+                      '--depth', '1', '--no-tags', str(local_source), LLAMA_COMMIT)
+             if local_source is not None else
+             git_args('-C', source, '-c', 'http.sslVerify=true', 'fetch', '--depth', '1',
+                      '--no-tags', LLAMA_REPOSITORY, LLAMA_COMMIT))
     for args, timeout, name in (
         (git_args('-c', 'init.templateDir=', 'init', source), 12, 'git-init'),
-        (git_args('-C', source, '-c', 'http.sslVerify=true', 'fetch', '--depth', '1',
-                  '--no-tags', LLAMA_REPOSITORY, LLAMA_COMMIT), 150, 'git-fetch'),
+        (fetch, 150, 'git-fetch'),
         (git_args('-C', source, 'checkout', '--detach', 'FETCH_HEAD'), 20, 'git-checkout'),
         (git_args('-C', source, 'rev-parse', 'HEAD'), 8, 'git-commit'),
         (git_args('-C', source, 'rev-parse', 'HEAD^{tree}'), 8, 'git-tree'),
@@ -393,6 +467,15 @@ def build_engine(folder, emit=print):
             or (folder / 'git-tree.log').read_text().strip() != LLAMA_TREE
             or (folder / 'git-clean.log').read_text().strip()):
         raise ValueError('official_checkout_identity_mismatch')
+    patch_proof = None
+    if local_source is not None:
+        patch_proof = apply_private_transfer_patch(source)
+        stages.append(logged_command(git_args('-C', source, 'diff', '--check'),
+                                     folder, 8, 'private-diff-check', emit))
+        stages.append(logged_command(git_args('-C', source, 'diff', '--name-only'),
+                                     folder, 8, 'private-diff-files', emit))
+        if (folder / 'private-diff-files.log').read_text().strip() != PRIVATE_TRANSFER_FILE:
+            raise ValueError('private_transfer_unexpected_changed_files')
     stages.append(logged_command(configure_args(source, build), folder, 90, 'cmake-configure', emit))
     cache = (build / 'CMakeCache.txt').read_text()
     for key in ('GGML_METAL', 'GGML_METAL_EMBED_LIBRARY', 'GGML_ACCELERATE'):
@@ -410,12 +493,16 @@ def build_engine(folder, emit=print):
     stages.append(logged_command([str(binary), '--list-devices'], folder, 120, 'metal-devices', emit))
     device = selected_device((folder / 'metal-devices.log').read_text())
     proof = {'sourceCommit': LLAMA_COMMIT, 'sourceTree': LLAMA_TREE,
-             'sourceModified': False, 'releaseIntelBinaryMetalDisabled': True,
-             'buildMethod': 'local_pinned_source_with_embedded_metal_sources',
+             'sourceModified': local_source is not None, 'releaseIntelBinaryMetalDisabled': True,
+             'buildMethod': ('local_verified_source_private_transfer_patch' if local_source is not None
+                             else 'local_pinned_source_with_embedded_metal_sources'),
              'nativeVersion': verified_version,
              'builtServerSha256': hashlib.sha256(binary.read_bytes()).hexdigest(),
              'buildParallelJobs': 4, 'compilationIsNotModelInference': True,
              'device': device, 'stages': stages}
+    if patch_proof is not None:
+        proof.update(privateTransferPatch=patch_proof, sourceReusedFrom=str(local_source),
+                     compilationPerformedThisRun=True, upstreamBaseVersionOnly=True)
     (folder / 'build-receipt.json').write_text(json.dumps(proof, indent=2) + '\n')
     return binary, proof
 
@@ -479,7 +566,20 @@ def reuse_engine(previous, folder, emit=print):
     return binary, proof
 
 
-def server_args(binary, model, device, port, token, gpu_check=False):
+def repair_private_engine(previous, folder, emit=print):
+    """Verify the original, then build a separately patched checkout from it."""
+    _, original = reuse_engine(previous, folder, emit)
+    (folder / 'build-receipt.json').rename(folder / 'original-build-receipt.json')
+    binary, proof = build_engine(folder, emit, local_source=Path(previous).expanduser() / 'source')
+    proof.update(originalBuildSha256=original['builtServerSha256'], originalBuildLeftUnchanged=True,
+                 existingBinaryReused=False)
+    (folder / 'build-receipt.json').write_text(json.dumps(proof, indent=2) + '\n')
+    return binary, proof
+
+
+def server_args(binary, model, device, port, token, gpu_check=False, private_vram=False):
+    if private_vram and not gpu_check:
+        raise ValueError('private_vram_requires_gpu_check')
     if (not re.fullmatch(r'MTL\d+', device) or type(port) is not int or not 1024 <= port <= 65535
             or not re.fullmatch('[0-9a-f]{64}', token)):
         raise ValueError('invalid_owned_server_arguments')
@@ -492,6 +592,9 @@ def server_args(binary, model, device, port, token, gpu_check=False):
         '--host', '127.0.0.1', '--port', str(port), '--api-key', token]
     if gpu_check:
         args.extend(['--cache-ram', '0'])
+    if private_vram:
+        # The mapped-host loader bypasses the Radeon's default Private buffer.
+        args.extend(['--load-mode', 'none', '--lazy-mode', 'off'])
     return args
 
 
@@ -544,6 +647,16 @@ def gpu_check_runtime_proof(log):
             'compatibilityAndPerformanceNotYetProven': True}
 
 
+def private_vram_runtime_proof(log, device):
+    proof = offload_proof(log, device)
+    allocations = proof['modelGpuBufferAllocations']
+    if any(a['name'] != device['id'] + '_Private' for a in allocations):
+        raise ValueError('private_vram_weights_not_confirmed_no_inference')
+    return {'privateModelBuffersConfirmed': True, 'hostMappedModelBuffersPresent': False,
+            'modelPrivateBufferMiB': proof['modelGpuBufferMiB'],
+            'proofSource': 'final_native_model_allocations_after_last_fit_estimate'}
+
+
 def native_failure_evidence(file):
     """Return bounded canonical error codes, never arbitrary native log text."""
     try:
@@ -568,10 +681,11 @@ def native_failure_evidence(file):
 
 
 class OwnedMetalServer:
-    def __init__(self, binary, identity, device, folder, emit=print, gpu_check=False):
+    def __init__(self, binary, identity, device, folder, emit=print, gpu_check=False, private_vram=False):
         self.binary, self.identity, self.device = binary, identity, device
         self.folder, self.emit = folder, emit
         self.gpu_check = gpu_check
+        self.private_vram = private_vram
         self.child = self.handle = None
         self.token = secrets.token_hex(32)
         self.port = None
@@ -589,7 +703,7 @@ class OwnedMetalServer:
             if self.gpu_check:
                 env.update(GPU_CHECK_ENV)
             self.child = subprocess.Popen(server_args(self.binary, self.identity['path'],
-                self.device['id'], self.port, self.token, self.gpu_check), cwd=self.folder, env=env,
+                self.device['id'], self.port, self.token, self.gpu_check, self.private_vram), cwd=self.folder, env=env,
                 stdin=subprocess.DEVNULL, stdout=self.handle, stderr=self.handle, start_new_session=True)
             deadline, last_notice = started + 150, started
             while True:
@@ -617,6 +731,8 @@ class OwnedMetalServer:
                     self.proof = offload_proof(log, self.device)
                     if self.gpu_check:
                         self.proof['compatibilityRuntime'] = gpu_check_runtime_proof(log)
+                    if self.private_vram:
+                        self.proof['privateMemoryRuntime'] = private_vram_runtime_proof(log, self.device)
                     self.proof.update(modelLoadAndMetalInitializationClientMs=round(
                         (time.monotonic() - started) * 1000, 3),
                         nativeChatTemplateSha256=hashlib.sha256(props['chat_template'].encode()).hexdigest(),
@@ -904,12 +1020,15 @@ def gpu_check_outcome(rows, weights_unchanged):
             'oneRequestDoesNotProveReliability': True}
 
 
-def run(project, emit=print, reuse_build_folder=None, gpu_check=False):
+def run(project, emit=print, reuse_build_folder=None, gpu_check=False, repair_private_vram=False):
+    if repair_private_vram and (not gpu_check or reuse_build_folder is None):
+        raise ValueError('private_vram_repair_requires_gpu_check_and_original_build')
     if gpu_check and reuse_build_folder is None:
         raise ValueError('gpu_check_requires_reuse_build_no_compilation')
     if platform.system() != 'Darwin' or platform.machine() != 'x86_64':
         raise ValueError('trial_requires_intel_macos')
-    required_tools = ('git',) if reuse_build_folder is not None else ('git', 'cmake', 'make', 'clang')
+    required_tools = (('git',) if reuse_build_folder is not None and not repair_private_vram
+                      else ('git', 'cmake', 'make', 'clang'))
     missing = [name for name in required_tools if not shutil.which(name)]
     if missing:
         raise ValueError('required_build_tools_missing_' + '_'.join(missing))
@@ -932,7 +1051,10 @@ def run(project, emit=print, reuse_build_folder=None, gpu_check=False):
     server, rows = None, []
     order = ((0, 'llama_metal'),) if gpu_check else ORDER
     try:
-        if reuse_build_folder is None:
+        if repair_private_vram:
+            emit('Correzione dei trasferimenti Radeon e compilazione separata dai sorgenti locali verificati…', flush=True)
+            binary, build = repair_private_engine(reuse_build_folder, folder, emit)
+        elif reuse_build_folder is None:
             emit('Prima compilazione con Metal: può richiedere 5–20 minuti. Nessuna installazione in OpenJarvis.', flush=True)
             binary, build = build_engine(folder, emit)
         else:
@@ -942,7 +1064,8 @@ def run(project, emit=print, reuse_build_folder=None, gpu_check=False):
         # app's five-minute page IDs for model requests. Both engines receive
         # the identical captured snapshot even if the live page later changes.
         emit('Radeon riconosciuta. Caricamento del modello nel server temporaneo…', flush=True)
-        server = OwnedMetalServer(binary, identity, build['device'], folder, emit, gpu_check=gpu_check)
+        server = OwnedMetalServer(binary, identity, build['device'], folder, emit,
+                                  gpu_check=gpu_check, private_vram=repair_private_vram)
         with server:
             emit(json.dumps({'effectiveGpuProof': server.proof}, ensure_ascii=False, indent=2), flush=True)
             if gpu_check:
@@ -972,8 +1095,9 @@ def run(project, emit=print, reuse_build_folder=None, gpu_check=False):
         report = {'mode': 'installed_v9_intel_metal_gpu_check' if gpu_check else 'installed_v9_intel_metal_backend_trial',
             'contractRevision': 'compact_web_evidence_v9',
             'productionModified': False, 'isolatedRuntimeBuilt': True, 'weightsDownloaded': False,
-            'isolatedRuntimeBuiltThisRun': reuse_build_folder is None,
-            'existingBuildReused': reuse_build_folder is not None, 'nativeLogVerbosity': 4,
+            'isolatedRuntimeBuiltThisRun': reuse_build_folder is None or repair_private_vram,
+            'existingBuildReused': reuse_build_folder is not None and not repair_private_vram,
+            'privateVramRepairRequested': repair_private_vram, 'nativeLogVerbosity': 4,
             'vaultRead': False, 'automaticRetries': 0, 'requestedModelCalls': len(order),
             'completedRows': len(rows), 'browserRendering': 'not_measured',
             'existingProcessesTerminated': False, 'ownedMetalServerStopped': server.closed,
@@ -1004,6 +1128,7 @@ def run(project, emit=print, reuse_build_folder=None, gpu_check=False):
     except BaseException as exc:
         if gpu_check and isinstance(exc, Exception):
             report = {'mode': 'installed_v9_intel_metal_gpu_check', 'stageFailureCode': safe_error_code(exc),
+                      'privateVramRepairRequested': repair_private_vram,
                       'productionModified': False, 'automaticRetries': 0, 'requestedModelCalls': 1,
                       'attemptedModelCalls': len(rows),
                       'completedModelCalls': sum(r.get('result', {}).get('completed') is True for r in rows),
@@ -1025,10 +1150,14 @@ def main():
                         help='Verify and reuse an existing isolated trial build, without recompiling.')
     parser.add_argument('--gpu-check', action='store_true',
                         help='One GPU request with the bounded Radeon compatibility profile; requires --reuse-build.')
+    parser.add_argument('--repair-private-vram', action='store_true',
+                        help='Build the guarded private-memory fix from verified local sources; requires --gpu-check and --reuse-build.')
     args = parser.parse_args()
     try:
         project = args.project.expanduser().resolve(strict=True)
         if args.worker:
+            if args.repair_private_vram:
+                raise ValueError('private_vram_repair_not_a_worker_argument')
             if args.reuse_build is not None:
                 raise ValueError('reuse_build_not_a_worker_argument')
             if args.gpu_check:
@@ -1038,7 +1167,8 @@ def main():
                 raise ValueError('worker_input_too_large')
             report = worker(project, json.loads(raw, object_pairs_hook=unique_pairs))
         else:
-            report = run(project, reuse_build_folder=args.reuse_build, gpu_check=args.gpu_check)
+            report = run(project, reuse_build_folder=args.reuse_build, gpu_check=args.gpu_check,
+                         repair_private_vram=args.repair_private_vram)
         print(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
         return 0
     except KeyboardInterrupt:

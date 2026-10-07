@@ -7,9 +7,63 @@ memory. Those trials used Ollama 0.35.1 with `size_vram: 0`. A usable AMD Metal
 backend was tested in two isolated runtime profiles. Native GPU initialization
 is confirmed, but the original request failed with a driver timeout and the
 conservative single-request profile was canceled after about 90 seconds without
-returning an answer. Neither profile is eligible for adoption. This Metal trial
-is concluded with a negative result; the web-summary latency objective remains
-open. No complete GPU-answer quality or successful GPU latency is established.
+returning an answer. Neither profile is eligible for adoption. Their negative
+results are retained. A concrete private-memory loader and transfer correction
+is now prepared; its Mac execution is pending. The web-summary latency objective
+remains open. No complete GPU-answer quality or successful GPU latency is established.
+
+## Private-memory correction prepared after the negative runs
+
+The previous final model allocations were `MTL0_Mapped`, including the 37/37
+v3 offload. The pinned Metal implementation creates these mapped buffers with
+`MTLResourceStorageModeShared` over host pointers. Layer assignment to a GPU
+does not establish that its weights occupy private video memory. On this
+discrete Radeon, mapped host weights may incur repeated host/GPU traffic. This
+is a concrete overlooked loading path, not a proven sole cause of the earlier
+driver timeout or 90-second nonresponse.
+
+Upstream reports
+[26949](https://github.com/ggml-org/llama.cpp/issues/26949) and
+[15228](https://github.com/ggml-org/llama.cpp/issues/15228) describe the analogous
+private-buffer alignment failure and mapped-host limitation on other Intel/AMD
+Mac hardware. Their speed numbers are not measurements of Andrea's machine.
+The exact pinned loader supports `--load-mode none --lazy-mode off`; this
+bypasses both host-mapping paths and selects the Radeon's default Private
+allocation. The existing native proof is extended to require only positive
+`MTLn_Private` model allocations for the selected GPU after the final load.
+Mapped, mixed, stale-fit, wrong-device or zero allocations stop before inference.
+
+Switching to Private also exposes two bugs present in the pinned
+`ggml-metal-device.m`: its synchronous set/get callbacks wrap arbitrary host
+pointers and lengths using `newBufferWithBytesNoCopy`, which requires page
+alignment. The guarded correction allocates Metal-owned Shared staging buffers,
+copies the host input before the upload, and copies the readback after GPU
+completion. Both directions check successful command-buffer status and retain
+the staging buffers until completion. The general mapped-buffer implementation,
+kernels and model loader source are not patched.
+
+`--repair-private-vram --gpu-check --reuse-build ORIGINAL_TRIAL_FOLDER` first
+verifies the retained original executable and clean pinned checkout. It then
+fetches that absolute local checkout into a fresh isolated source directory,
+without downloading another upstream revision, and applies the patch only if
+the entire source file matches SHA-256
+`3f520d505e99ece2eac65607dd7e9e670c93ca77e32b5d31c766359f57204cdd`.
+The resulting entire file must match
+`92c85605038ef9a26a813fcabbfb0bc7c7a4545cdb2e6217ae0caa55b58e261e`.
+Only that one file may appear in the resulting Git diff. Metal is rebuilt into
+the new directory; the original binary, source and receipt are retained. The
+new receipt states `sourceModified: true`, records both file hashes and the
+base commit/tree, and identifies the reported native version as the upstream
+base version. It cannot pass the unchanged-source reuse validator.
+
+The repair mode retains the v3 serial, unfused physical-batch-64 profile and
+one-request/90-second boundary, the same existing weights, source, messages,
+JSON schema, output limit and validators. It makes no CPU request, answer repair
+or automatic retry. A completed answer still needs semantic review and does
+not by itself approve production integration or establish general latency.
+Hardware compilation, Private allocation and completed inference require the
+Mac run. The development tests and exact-source patch verification establish
+the prepared implementation only.
 
 ## Observed Mac initialization and diagnostic correction
 
@@ -150,13 +204,14 @@ out-of-memory or a GPU-driver cause. Worker exception output is sanitized. The
 policy are unchanged. These are local diagnostic changes, not a performance fix;
 they require no repeat Mac inference to establish this negative trial result.
 
-The decision is to stop this isolated Metal trial and retain the installed v9
+The decision at that checkpoint was to stop those Metal profiles and retain the installed v9
 CPU backend. The conservative profile failed its bounded response check, and
 the original profile had a native driver error. Neither produced a completed
 GPU answer. No six-case speed comparison or application integration is performed
 from these failures, and this result does not establish that every possible AMD
 GPU configuration is unusable. The original latency task remains unresolved by
-this intervention.
+that intervention. The later private-memory correction above is a distinct
+code and loading change; it does not rewrite either failed result.
 
 ## Primary sources and the important release limitation
 
@@ -346,3 +401,14 @@ timeouts, sanitized connection failures and worker termination signals. Installe
 v9 fingerprints and Python syntax still pass. These tests establish error
 reporting and the unchanged request contract; the real Mac result above remains
 a failed single request, not a successful latency measurement.
+
+Private-memory repair preparation: **210 relevant local tests passed**, including
+82 Metal-adapter tests. The new cases cover the exact pinned transfer excerpt,
+input/output identity guards, readback-after-completion order, rejection of
+mapped/stale native allocations, readiness failure cleanup, verified local
+source rebuilding and truthful modified-source receipts. The exact patch also
+ran against the complete pinned upstream file and produced the recorded output
+hash. A real Git smoke check successfully fetched a pinned commit from a local
+shallow detached checkout into a separate checkout using the repair's transport
+settings. Python syntax and all 24 installed-v9 fingerprints pass. Mac SDK
+compilation, actual VRAM placement and response speed remain pending.
