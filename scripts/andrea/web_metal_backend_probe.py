@@ -1,6 +1,6 @@
 """One isolated Intel Mac Metal trial against the installed v9 CPU backend.
 
-Builds a pinned, unmodified llama.cpp checkout with Metal enabled. Reuses the
+Builds or verifies an existing pinned llama.cpp checkout with Metal enabled. Reuses the
 existing verified Ollama GGUF; downloads no new weights. Six fixed requests
 keep v9 evidence, messages, native schema and validators. No answer repair,
 retry, production installation or termination of pre-existing processes.
@@ -414,6 +414,65 @@ def build_engine(folder, emit=print):
     return binary, proof
 
 
+def reuse_engine(previous, folder, emit=print):
+    """Verify a retained trial build; never fetch, compile, install or overwrite it."""
+    base = Path.home() / '.openjarvis-andrea/local-engines'
+    previous = Path(previous).expanduser()
+    if (not previous.is_absolute() or previous.parent != base
+            or not re.fullmatch(r'llama-metal-b11461-[A-Za-z0-9_-]+', previous.name)):
+        raise ValueError('reused_build_not_in_original_trial_folder')
+    source, build = previous / 'source', previous / 'build'
+    binary, cache_file = build / 'bin/llama-server', build / 'CMakeCache.txt'
+    receipt_file = previous / 'build-receipt.json'
+    if any(path.is_symlink() for path in (base.parent, base, previous, source,
+            source / '.git', build, build / 'bin', binary, cache_file, receipt_file)):
+        raise ValueError('reused_build_contains_symlink')
+    if (not source.is_dir() or not (source / '.git').is_dir() or not binary.is_file()
+            or not os.access(binary, os.X_OK) or not receipt_file.is_file()
+            or not cache_file.is_file() or receipt_file.stat().st_size > MAX_BYTES
+            or cache_file.stat().st_size > MAX_BYTES):
+        raise ValueError('reused_build_files_missing_or_invalid')
+    receipt = json.loads(receipt_file.read_bytes(), object_pairs_hook=unique_pairs)
+    if (not isinstance(receipt, dict) or receipt.get('sourceCommit') != LLAMA_COMMIT
+            or receipt.get('sourceTree') != LLAMA_TREE or receipt.get('sourceModified') is not False
+            or receipt.get('compilationIsNotModelInference') is not True
+            or not isinstance(receipt.get('builtServerSha256'), str)
+            or not re.fullmatch(r'[0-9a-f]{64}', receipt['builtServerSha256'])):
+        raise ValueError('reused_build_receipt_identity_mismatch')
+    with binary.open('rb') as handle:
+        binary_hash = hashlib.file_digest(handle, 'sha256').hexdigest()
+    if binary_hash != receipt['builtServerSha256']:
+        raise ValueError('reused_binary_hash_mismatch')
+    cache = cache_file.read_text()
+    for key in ('GGML_METAL', 'GGML_METAL_EMBED_LIBRARY', 'GGML_ACCELERATE'):
+        if not re.search(r'^' + key + r':BOOL=ON$', cache, re.M):
+            raise ValueError('reused_metal_build_flag_not_effective')
+    if not re.search(r'^CMAKE_OSX_ARCHITECTURES:(?:STRING|UNINITIALIZED)=x86_64$', cache, re.M):
+        raise ValueError('reused_build_architecture_mismatch')
+    stages = []
+    for args, timeout, name in (
+        (git_args('-C', source, 'rev-parse', 'HEAD'), 8, 'reuse-git-commit'),
+        (git_args('-C', source, 'rev-parse', 'HEAD^{tree}'), 8, 'reuse-git-tree'),
+        (git_args('-C', source, 'status', '--porcelain'), 8, 'reuse-git-clean'),
+        ([str(binary), '--version'], 120, 'reuse-llama-version'),
+        ([str(binary), '--list-devices'], 120, 'reuse-metal-devices'),
+    ):
+        stages.append(logged_command(args, folder, timeout, name, emit))
+    if ((folder / 'reuse-git-commit.log').read_text().strip() != LLAMA_COMMIT
+            or (folder / 'reuse-git-tree.log').read_text().strip() != LLAMA_TREE
+            or (folder / 'reuse-git-clean.log').read_text().strip()):
+        raise ValueError('reused_official_checkout_identity_mismatch')
+    version = verified_build_version((folder / 'reuse-llama-version.log').read_text())
+    if receipt.get('nativeVersion') != version:
+        raise ValueError('reused_binary_version_mismatch')
+    device = selected_device((folder / 'reuse-metal-devices.log').read_text())
+    proof = copy.deepcopy(receipt)
+    proof.update(reusedBuildFrom=str(previous), reusedBinaryHashVerified=True,
+                 compilationPerformedThisRun=False, device=device, reuseStages=stages)
+    (folder / 'build-receipt.json').write_text(json.dumps(proof, indent=2) + '\n')
+    return binary, proof
+
+
 def server_args(binary, model, device, port, token):
     if (not re.fullmatch(r'MTL\d+', device) or type(port) is not int or not 1024 <= port <= 65535
             or not re.fullmatch('[0-9a-f]{64}', token)):
@@ -422,24 +481,34 @@ def server_args(binary, model, device, port, token):
         '--n-gpu-layers', 'auto', '--fit', 'on', '--fit-target', '1024',
         '--ctx-size', '4096', '--parallel', '1', '--batch-size', '512', '--ubatch-size', '512',
         '--flash-attn', 'off', '--reasoning', 'off', '--no-cache-prompt', '--no-warmup',
-        '--no-webui', '--perf', '--host', '127.0.0.1', '--port', str(port), '--api-key', token]
+        '--no-webui', '--perf', '--log-verbosity', '4',
+        '--host', '127.0.0.1', '--port', str(port), '--api-key', token]
 
 
 def offload_proof(log, device):
     selected = re.findall(r'using device (MTL\d+) \(([^)]+)\)', log)
-    layers = re.findall(r'offloaded (\d+)/(\d+) layers to GPU', log)
+    layers = list(re.finditer(r'offloaded (\d+)/(\d+) layers to GPU', log))
     # --fit may inspect the same model several times before its final load.
     # Authenticated /props readiness is also mandatory; use the final load's
     # layer count and require positive model-buffer allocation on this device.
-    buffers = re.findall(r'\b' + re.escape(device['id']) + r' model buffer size\s*=\s*([0-9.]+) MiB', log)
+    # The pinned Metal backend names the allocations MTLn, MTLn_Private and
+    # MTLn_Mapped. Only model allocations after the final offload report count;
+    # an earlier --fit estimate cannot supply proof for the loaded model.
+    final_load = log[layers[-1].end():] if layers else ''
+    buffers = re.findall(r'\b(' + re.escape(device['id'])
+        + r'(?:_Private|_Mapped)?) model buffer size\s*=\s*([0-9.]+) MiB', final_load)
+    amounts = [float(size) for _, size in buffers]
     if (not selected or any(value != (device['id'], GPU_NAME) for value in selected)
-            or not layers or not 0 < int(layers[-1][0]) <= int(layers[-1][1])
-            or not buffers or not math.isfinite(float(buffers[-1])) or float(buffers[-1]) <= 0):
+            or not layers or not 0 < int(layers[-1][1]) <= int(layers[-1][2])
+            or not buffers or any(not math.isfinite(size) or size < 0 for size in amounts)
+            or not math.isfinite(sum(amounts)) or sum(amounts) <= 0):
         raise ValueError('effective_radeon_offload_not_proven_no_inference')
     return {'selectedDevice': device['id'], 'selectedGpu': GPU_NAME,
-            'offloadedLayers': int(layers[-1][0]), 'totalLayers': int(layers[-1][1]),
-            'modelGpuBufferMiB': float(buffers[-1]), 'gpuOffloadProven': True,
-            'fullOffload': int(layers[-1][0]) == int(layers[-1][1])}
+            'offloadedLayers': int(layers[-1][1]), 'totalLayers': int(layers[-1][2]),
+            'modelGpuBufferMiB': round(sum(amounts), 2),
+            'modelGpuBufferAllocations': [{'name': name, 'sizeMiB': float(size)} for name, size in buffers],
+            'gpuOffloadProven': True,
+            'fullOffload': int(layers[-1][1]) == int(layers[-1][2])}
 
 
 class OwnedMetalServer:
@@ -725,10 +794,11 @@ def create_trial_folder():
     return Path(tempfile.mkdtemp(prefix='llama-metal-b11461-', dir=base))
 
 
-def run(project, emit=print):
+def run(project, emit=print, reuse_build_folder=None):
     if platform.system() != 'Darwin' or platform.machine() != 'x86_64':
         raise ValueError('trial_requires_intel_macos')
-    missing = [name for name in ('git', 'cmake', 'make', 'clang') if not shutil.which(name)]
+    required_tools = ('git',) if reuse_build_folder is not None else ('git', 'cmake', 'make', 'clang')
+    missing = [name for name in required_tools if not shutil.which(name)]
     if missing:
         raise ValueError('required_build_tools_missing_' + '_'.join(missing))
     check, _ = load_project(project)
@@ -746,9 +816,13 @@ def run(project, emit=print):
         raise ValueError('csv_exception_not_in_source_no_inference')
     folder = create_trial_folder()
     emit('Cartella separata della prova: ' + str(folder), flush=True)
-    emit('Prima compilazione con Metal: può richiedere 5–20 minuti. Nessuna installazione in OpenJarvis.', flush=True)
     try:
-        binary, build = build_engine(folder, emit)
+        if reuse_build_folder is None:
+            emit('Prima compilazione con Metal: può richiedere 5–20 minuti. Nessuna installazione in OpenJarvis.', flush=True)
+            binary, build = build_engine(folder, emit)
+        else:
+            emit('Verifica e riuso del motore già compilato. Nessuna ricompilazione.', flush=True)
+            binary, build = reuse_engine(reuse_build_folder, folder, emit)
         # We prepare locally from the captured bytes; do not use or refresh the
         # app's five-minute page IDs for model requests. Both engines receive
         # the identical captured snapshot even if the live page later changes.
@@ -779,6 +853,8 @@ def run(project, emit=print):
         unchanged = file_signature(Path(identity['path'])) == tuple(weights['signature'])
         report = {'mode': 'installed_v9_intel_metal_backend_trial', 'contractRevision': 'compact_web_evidence_v9',
             'productionModified': False, 'isolatedRuntimeBuilt': True, 'weightsDownloaded': False,
+            'isolatedRuntimeBuiltThisRun': reuse_build_folder is None,
+            'existingBuildReused': reuse_build_folder is not None, 'nativeLogVerbosity': 4,
             'vaultRead': False, 'automaticRetries': 0, 'requestedModelCalls': 6,
             'completedRows': len(rows), 'browserRendering': 'not_measured',
             'existingProcessesTerminated': False, 'ownedMetalServerStopped': server.closed,
@@ -807,16 +883,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('project', type=Path)
     parser.add_argument('--worker', action='store_true')
+    parser.add_argument('--reuse-build', type=Path,
+                        help='Verify and reuse an existing isolated trial build, without recompiling.')
     args = parser.parse_args()
     try:
         project = args.project.expanduser().resolve(strict=True)
         if args.worker:
+            if args.reuse_build is not None:
+                raise ValueError('reuse_build_not_a_worker_argument')
             raw = sys.stdin.buffer.read(MAX_BYTES + 1)
             if len(raw) > MAX_BYTES:
                 raise ValueError('worker_input_too_large')
             report = worker(project, json.loads(raw, object_pairs_hook=unique_pairs))
         else:
-            report = run(project)
+            report = run(project, reuse_build_folder=args.reuse_build)
         print(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
         return 0
     except KeyboardInterrupt:

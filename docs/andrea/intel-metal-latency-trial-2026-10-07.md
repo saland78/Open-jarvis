@@ -7,6 +7,49 @@ memory. Those trials used Ollama 0.35.1 with `size_vram: 0`. A usable AMD Metal
 backend is the next intervention; its compatibility and performance have not yet
 been measured on this Mac.
 
+## Observed Mac initialization and diagnostic correction
+
+The first submitted command failed with `owned_worker_failed` before compilation.
+The subsequent run compiled the pinned server, exposed the Radeon through its
+native device list, and loaded the existing model. Its server log reports
+`verbosity = 3`, followed by model readiness. The trial then stopped with
+`effective_radeon_offload_not_proven_no_inference`, before any of the six model
+requests. No CPU/Metal timing comparison was collected, and no GPU model
+allocation can be inferred from that short log. The installed app was unchanged.
+
+The trial had a logging defect. In the exact pinned source, the
+[library callback](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/common/log.cpp)
+maps library INFO messages to trace verbosity. The
+[definitions](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/common/log.h)
+set trace to 4 and the application default to 3. The
+[CLI](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/common/arg.cpp)
+supports `--log-verbosity`. Consequently the default suppressed the native
+device, layer-offload and model-allocation lines required by the trial's guard.
+The corrected trial explicitly requests verbosity 4, rather than weakening the
+GPU evidence requirement.
+
+The pinned
+[Metal allocation implementation](https://github.com/ggml-org/llama.cpp/blob/4d756bc72bf00a4aacf410ae15a2d315f3db400d/ggml/src/ggml-metal/ggml-metal.cpp)
+uses `MTLn`, `MTLn_Private` and `MTLn_Mapped` buffer names. The guard recognizes
+those exact forms for the selected device, sums their model allocations after
+the final layer-offload report, and still rejects zero allocation, a different
+device, missing native evidence or CPU-only loading. Earlier fit estimates are
+not evidence for the final loaded model.
+
+To preserve the successful compilation, `--reuse-build` accepts the original
+isolated trial folder. It checks the retained build receipt, executable SHA-256,
+source commit and tree, clean checkout, effective Metal flags, x86_64 build
+setting, native version and actual device inventory. It performs no fetch or
+compilation. New runtime logs and results go to a fresh trial folder; the old
+receipt and failed log are retained. A mismatch stops the run without silently
+rebuilding. Without this option the original bounded first-build route remains
+available.
+
+This corrects trial initialization diagnostics. Successful execution on the
+Radeon, model-answer quality, latency improvement and application integration
+remain unmeasured. The model, weights, source preparation, schema, validators,
+six-request order and original adoption thresholds are unchanged.
+
 ## Primary sources and the important release limitation
 
 The official OpenJarvis
@@ -69,7 +112,8 @@ Leave it idle during the trial. No Command+R or Control+C is needed for this run
    to an ephemeral `127.0.0.1` port with a random API credential, the same verified
    GGUF, context 4096, one slot, requested batch/ubatch 512, automatic model thread
    count, Flash Attention off, reasoning off and no prompt caching or warmup
-   inference. The fit policy keeps a 1024 MiB margin. Context shrinking is refused.
+   inference. Native trace logging (verbosity 4) exposes the evidence required
+   for GPU verification. The fit policy keeps a 1024 MiB margin. Context shrinking is refused.
 6. Require authenticated model readiness, the expected model path, a positive
    allocation of its tensors on the Radeon and a positive final GPU layer count.
    Fit-estimation log repetitions are distinguished from the final layer count.
@@ -172,3 +216,8 @@ Metal trial adapter and the unchanged production pipeline, source/rule guards,
 previous experiment adapters and inventory filter. Python syntax was checked,
 and the 24 installed-v9 fingerprints still match in the review workspace. This
 does not claim the entire historical repository test suite passes.
+
+Logging/reuse correction: **184 relevant local tests passed**, including 56
+Metal-adapter tests and 14 new regression cases. The installed-v9 fingerprints
+still match. This result covers trial setup and the unchanged answer pipeline;
+it is not a Mac inference or latency measurement.

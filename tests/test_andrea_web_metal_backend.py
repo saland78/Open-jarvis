@@ -325,6 +325,31 @@ class BuildAndDeviceTests(unittest.TestCase):
         self.assertEqual(proof['offloadedLayers'], 25)
         self.assertEqual(proof['modelGpuBufferMiB'], 1500)
 
+    def test_native_private_and_mapped_model_allocations_are_counted(self):
+        log = LOAD_LOG.replace('MTL0 model', 'MTL0_Private model')
+        log += '0.05.100 I load_tensors: MTL0_Mapped model buffer size = 100.00 MiB\n'
+        proof = probe.offload_proof(log, DEVICE)
+        self.assertEqual(proof['modelGpuBufferMiB'], 2600)
+        self.assertEqual([item['name'] for item in proof['modelGpuBufferAllocations']],
+                         ['MTL0_Private', 'MTL0_Mapped'])
+
+    def test_final_load_cannot_borrow_allocation_from_a_fit_estimate(self):
+        for final in ('load_tensors: offloaded 25/37 layers to GPU\n',
+                      'load_tensors: offloaded 25/37 layers to GPU\n'
+                      'load_tensors: MTL0_Private model buffer size = 0.00 MiB\n',
+                      'load_tensors: offloaded 25/37 layers to GPU\n'
+                      'load_tensors: MTL1_Private model buffer size = 1500.00 MiB\n'):
+            with self.subTest(final=final), self.assertRaisesRegex(ValueError, 'not_proven'):
+                probe.offload_proof(LOAD_LOG + final, DEVICE)
+
+    def test_private_buffer_without_matching_gpu_or_layers_is_rejected(self):
+        log = LOAD_LOG.replace('MTL0 model', 'MTL0_Private model')
+        for wrong in (log.replace('37/37', '0/37'), log.replace('5500M', '5300M'),
+                      log.replace('MTL0_Private', 'MTL1_Private'),
+                      log.replace('MTL0_Private', 'MTL0_Private_Other')):
+            with self.subTest(wrong=wrong), self.assertRaisesRegex(ValueError, 'not_proven'):
+                probe.offload_proof(wrong, DEVICE)
+
     def test_child_override_removal_does_not_modify_user_environment(self):
         values = {'PATH': '/usr/bin', 'LLAMA_ARG_DEVICE': 'CPU', 'GGML_METAL_DEVICES': '2',
                   'GIT_CONFIG_COUNT': '1', 'HF_UI_VERSION': 'external'}
@@ -338,7 +363,7 @@ class BuildAndDeviceTests(unittest.TestCase):
     def test_runtime_explicit_offload_context_and_zero_warmup(self):
         args = probe.server_args('/binary', '/existing/model', 'MTL0', 12345, TOKEN)
         for flag, value in (('--device', 'MTL0'), ('--ctx-size', '4096'), ('--parallel', '1'),
-                            ('--flash-attn', 'off'), ('--reasoning', 'off')):
+                            ('--flash-attn', 'off'), ('--reasoning', 'off'), ('--log-verbosity', '4')):
             self.assertEqual(args[args.index(flag) + 1], value)
         for flag in ('--no-warmup', '--no-cache-prompt', '--no-webui'):
             self.assertIn(flag, args)
@@ -373,6 +398,122 @@ class BuildAndDeviceTests(unittest.TestCase):
             with patch.object(probe, 'logged_command', side_effect=stage) as calls:
                 with self.assertRaisesRegex(ValueError, 'radeon_not_exposed'): probe.build_engine(p)
             self.assertTrue(all('install' not in str(call.args[0]) for call in calls.call_args_list))
+
+
+class ReusedBuildTests(unittest.TestCase):
+    def setUp(self):
+        self.workspace = tempfile.TemporaryDirectory()
+        self.addCleanup(self.workspace.cleanup)
+        self.home = Path(self.workspace.name)
+        self.previous = self.home / '.openjarvis-andrea/local-engines/llama-metal-b11461-existing'
+        self.source = self.previous / 'source'
+        (self.source / '.git').mkdir(parents=True)
+        self.binary = self.previous / 'build/bin/llama-server'
+        self.binary.parent.mkdir(parents=True)
+        self.binary.write_bytes(b'verified original trial binary')
+        self.binary.chmod(0o700)
+        self.cache = self.previous / 'build/CMakeCache.txt'
+        self.cache.write_text('GGML_METAL:BOOL=ON\nGGML_METAL_EMBED_LIBRARY:BOOL=ON\n'
+                              'GGML_ACCELERATE:BOOL=ON\nCMAKE_OSX_ARCHITECTURES:STRING=x86_64\n')
+        self.receipt = {'sourceCommit': probe.LLAMA_COMMIT, 'sourceTree': probe.LLAMA_TREE,
+                        'sourceModified': False, 'compilationIsNotModelInference': True,
+                        'builtServerSha256': hashlib.sha256(self.binary.read_bytes()).hexdigest(),
+                        'nativeVersion': {'semanticVersion': '0.6.0', 'build': probe.LLAMA_BUILD,
+                                          'commit': probe.LLAMA_COMMIT},
+                        'device': DEVICE, 'stages': [{'stage': 'original-build'}]}
+        self.receipt_file = self.previous / 'build-receipt.json'
+        self.receipt_file.write_text(json.dumps(self.receipt))
+        self.output = self.home / 'new-trial'; self.output.mkdir()
+        self.stage_text = {
+            'reuse-git-commit': probe.LLAMA_COMMIT, 'reuse-git-tree': probe.LLAMA_TREE,
+            'reuse-git-clean': '',
+            'reuse-llama-version': 'version: 0.6.0 (build 11461, commit ' + probe.LLAMA_COMMIT + ')\n',
+            'reuse-metal-devices': 'Available devices:\n  MTL0: AMD Radeon Pro 5500M (4096 MiB, 3500 MiB free)\n'}
+
+    def stage(self, args, folder, timeout, name, emit):
+        (folder / (name + '.log')).write_text(self.stage_text[name])
+        return {'stage': name}
+
+    def run_reuse(self):
+        with patch.object(probe.Path, 'home', return_value=self.home), \
+                patch.object(probe, 'logged_command', side_effect=self.stage) as stages:
+            result = probe.reuse_engine(self.previous, self.output)
+            return result, stages.call_args_list
+
+    def test_reuses_verified_binary_without_fetch_compile_or_old_log_overwrite(self):
+        old_log = self.previous / 'owned-server.log'; old_log.write_text('retained failed initialization')
+        (binary, proof), calls = self.run_reuse()
+        self.assertEqual(binary, self.binary)
+        self.assertTrue(proof['reusedBinaryHashVerified'])
+        self.assertFalse(proof['compilationPerformedThisRun'])
+        self.assertEqual(proof['reusedBuildFrom'], str(self.previous))
+        self.assertEqual(len(calls), 5)
+        self.assertTrue(all('cmake' not in str(call.args[0]) and 'fetch' not in call.args[0]
+                            and 'install' not in call.args[0] for call in calls))
+        self.assertEqual(old_log.read_text(), 'retained failed initialization')
+        self.assertEqual(json.loads(self.receipt_file.read_text()), self.receipt)
+        self.assertTrue((self.output / 'build-receipt.json').is_file())
+
+    def test_changed_binary_refused_before_execution(self):
+        self.binary.write_bytes(b'changed executable')
+        with patch.object(probe, 'logged_command') as stages, \
+                self.assertRaisesRegex(ValueError, 'binary_hash_mismatch'):
+            self.run_reuse()
+        stages.assert_not_called()
+
+    def test_receipt_commit_tree_and_original_build_attestation_required(self):
+        for key, value in [('sourceCommit', '0' * 40), ('sourceTree', '0' * 40),
+                           ('sourceModified', True), ('compilationIsNotModelInference', False)]:
+            self.receipt_file.write_text(json.dumps({**self.receipt, key: value}))
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, 'receipt_identity'):
+                self.run_reuse()
+
+    def test_cpu_build_or_wrong_architecture_refused(self):
+        original = self.cache.read_text()
+        for wrong in (original.replace('GGML_METAL:BOOL=ON', 'GGML_METAL:BOOL=OFF'),
+                      original.replace('x86_64', 'arm64')):
+            self.cache.write_text(wrong)
+            with self.subTest(wrong=wrong), self.assertRaisesRegex(ValueError, 'build_flag|architecture'):
+                self.run_reuse()
+
+    def test_binary_symlink_refused(self):
+        actual = self.binary.with_name('different-binary'); self.binary.rename(actual)
+        self.binary.symlink_to(actual)
+        with self.assertRaisesRegex(ValueError, 'contains_symlink'):
+            self.run_reuse()
+
+    def test_untyped_cmake_cli_architecture_is_still_verified(self):
+        self.cache.write_text(self.cache.read_text().replace('ARCHITECTURES:STRING=',
+                                                             'ARCHITECTURES:UNINITIALIZED='))
+        (_, proof), _ = self.run_reuse()
+        self.assertTrue(proof['reusedBinaryHashVerified'])
+
+    def test_receipt_symlink_refused(self):
+        actual = self.receipt_file.with_name('different-receipt.json'); self.receipt_file.rename(actual)
+        self.receipt_file.symlink_to(actual)
+        with self.assertRaisesRegex(ValueError, 'contains_symlink'):
+            self.run_reuse()
+
+    def test_changed_checkout_refused(self):
+        for stage, wrong in [('reuse-git-commit', '0' * 40), ('reuse-git-tree', '0' * 40),
+                             ('reuse-git-clean', ' M src/llama.cpp\n')]:
+            original = dict(self.stage_text); self.stage_text[stage] = wrong
+            with self.subTest(stage=stage), self.assertRaisesRegex(ValueError, 'checkout_identity'):
+                self.run_reuse()
+            self.stage_text = original
+
+    def test_unconfirmed_native_version_or_radeon_refused(self):
+        for stage, wrong in [('reuse-llama-version', self.stage_text['reuse-llama-version'].replace('11461', '1')),
+                             ('reuse-metal-devices', self.stage_text['reuse-metal-devices'].replace('5500M', '5300M'))]:
+            original = dict(self.stage_text); self.stage_text[stage] = wrong
+            with self.subTest(stage=stage), self.assertRaisesRegex(ValueError, 'version_mismatch|radeon_not'):
+                self.run_reuse()
+            self.stage_text = original
+
+    def test_arbitrary_folder_outside_original_trial_location_refused(self):
+        with patch.object(probe.Path, 'home', return_value=self.home), \
+                self.assertRaisesRegex(ValueError, 'original_trial_folder'):
+            probe.reuse_engine(self.home, self.output)
 
 
 class LifecycleTests(unittest.TestCase):
@@ -524,6 +665,12 @@ class ComparisonTests(unittest.TestCase):
 
 class FiniteRunTests(unittest.TestCase):
     def test_exact_six_model_calls_two_public_reads_owned_server_cleanup_and_no_install(self):
+        self.check_run(None)
+
+    def test_existing_build_reuse_keeps_six_calls_without_compiling(self):
+        self.check_run(Path('/existing/trial'))
+
+    def check_run(self, reuse_folder):
         with tempfile.TemporaryDirectory() as folder:
             class Server:
                 url, token = ENDPOINT, TOKEN
@@ -548,9 +695,17 @@ class FiniteRunTests(unittest.TestCase):
                     patch.object(probe, 'owned_worker', side_effect=worker), \
                     patch.object(probe, 'file_signature', return_value=(1, 2, 3, 4, 5)), \
                     patch.object(probe, 'create_trial_folder', return_value=Path(folder)), \
-                    patch.object(probe, 'build_engine', return_value=('/binary', {'device': DEVICE})), \
+                    patch.object(probe, 'build_engine', return_value=('/binary', {'device': DEVICE})) as fresh_build, \
+                    patch.object(probe, 'reuse_engine', return_value=('/binary', {'device': DEVICE})) as reused_build, \
                     patch.object(probe, 'OwnedMetalServer', return_value=server):
-                report = probe.run(Path('/project'), lambda *a, **k: None)
+                report = probe.run(Path('/project'), lambda *a, **k: None, reuse_folder)
+            if reuse_folder is None:
+                fresh_build.assert_called_once(); reused_build.assert_not_called()
+            else:
+                fresh_build.assert_not_called(); reused_build.assert_called_once()
+            self.assertEqual(report['existingBuildReused'], reuse_folder is not None)
+            self.assertEqual(report['isolatedRuntimeBuiltThisRun'], reuse_folder is None)
+            self.assertEqual(report['nativeLogVerbosity'], 4)
             self.assertEqual([engine for op, engine in calls if op == 'model'], [e for i, e in probe.ORDER])
             self.assertEqual(sum(op == 'read' for op, _ in calls), 2)
             self.assertTrue(server.closed)
