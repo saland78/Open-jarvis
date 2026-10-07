@@ -88,3 +88,79 @@ Riferimenti consultati per questo task:
 L'approccio mantiene schema e validazione distinti dal giudizio di significato.
 Non si cambiano backend, modelli o hardware sulla base di risultati di altri
 computer. Per questo task non è richiesta una nuova installazione del motore.
+
+## Risultato effettivo sul Mac: confronto non superato
+
+Il report allegato il 7 ottobre è conservato integralmente, limitatamente al
+JSON di questa prova, in `web-static-prompt-mac-2026-10-07.json`. La cronologia
+del Terminale e gli altri esperimenti non fanno parte della pubblicazione.
+La comparazione è stata ricalcolata dai sei risultati originali e coincide
+con il report: tutti i trasporti completati, tutte le coppie confrontabili,
+soglie numeriche complessive non superate e forma tecnica candidata non superata.
+
+| Caso | Tempo v9 | Tempo contratto statico | Token v9 → statico | Esito numerico |
+|---|---:|---:|---:|---|
+| Due funzionalità asyncio | 55,002 s | 51,860 s | 1862 → 1497 | fallito: prefill 35,793 → 35,806 s |
+| Conversione CSV | 32,990 s | 27,822 s | 1076 → 906 | superato: prefill −20,533%, totale −15,666% |
+| Prezzo non documentato | 51,288 s | 62,172 s | 2368 → 2233 | fallito: totale +21,221% |
+
+Il contesto in token è più corto in tutti e tre i casi; il risparmio non si
+traduce in un miglioramento uniforme dei tempi. La variante asyncio supera
+la soglia sui token ma non quella sul prefill. Il prezzo non documentato
+resta un'astensione genuina, ma impiega circa 10,9 secondi in più.
+
+Revisione manuale: quattro risposte favorevoli e due sfavorevoli. Entrambe le
+risposte asyncio contengono un'aggiunta non sostenuta dal proprio passaggio:
+
+- V9: il passaggio 18 documenta `running subprocesses`; il secondo punto
+  afferma invece controllo dei sottoprocessi e aggiunge una relazione generale
+  fra segnali OS, networking e comunicazione. Il controllo supplementare
+  rifiuta l'intera risposta, senza cambiare fonte o predicato.
+- Contratto statico: il passaggio 11 dice soltanto `control subprocesses`;
+  il secondo punto aggiunge esecuzione di comandi esterni in modo asincrono.
+  Il rifiuto originale `technical_term_missing_from_passage` resta conservato;
+  non si elimina il punto né lo si modifica per far superare il caso.
+
+Le due regole CSV conservano comportamento predefinito, eccezione e campo di
+applicazione. I due prezzi mancanti sono `claims` vuoti prodotti dal modello.
+La variante candidata ha quindi due casi semanticamente favorevoli su tre,
+insufficienti per l'adozione. `pending_review` nel report automatico resta
+inalterato; la revisione manuale è un campo distinto.
+
+Decisione: nessuna installazione del contratto statico, nessun cambio del
+batch, nessuna nuova generazione. Questo confronto è chiuso senza successo
+e non viene ripetuto per cercare un risultato favorevole. La latenza resta
+aperta; il precedente collaudo installato non diventa una garanzia universale.
+
+I sei campioni riportano `sizeVram: 0`. Durante le richieste il limite
+`CPU_Speed_Limit` scende fino a 60–68 in vari campioni. È un limite operativo
+riportato dal sistema, non una temperatura misurata né la prova di una causa
+termica esclusiva. Il costo di prefill è ancora predominante. Prima di
+un'eventuale prova di backend locale accelerato occorrono GPU, VRAM, supporto
+Metal e versione macOS effettivi; questi dati non sono nel report ricevuto.
+
+La documentazione ufficiale di llama.cpp descrive il backend Metal su macOS
+e Accelerate per il prefill CPU. L'issue upstream #19431 documenta una prova
+su un altro Mac Intel/AMD: è un segnale di compatibilità da verificare, non
+una promessa di velocità sul Mac di Andrea. Nessun backend è stato installato
+o selezionato sulla base di questa issue.
+
+- [llama.cpp: build e backend](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md)
+- [llama.cpp: segnalazione Intel/AMD Metal #19431](https://github.com/ggml-org/llama.cpp/issues/19431)
+- [Ollama: supporto hardware](https://docs.ollama.com/gpu)
+
+### Prossima lettura necessaria, senza altre inferenze
+
+`scripts/andrea/mac_acceleration_inventory.py` legge una volta
+`system_profiler -json SPDisplaysDataType`, con un limite di 20 secondi.
+Stampa solo i campi della GPU: modello, vendor, VRAM e qualifiche Metal
+riportate dal sistema. Aggiunge versione macOS, architettura e presenza dei
+comandi git/cmake/clang; la presenza non dimostra che la compilazione funzioni.
+Non riporta nomi, seriali o identificativi dei monitor, né l'ambiente del
+processo. Non legge il vault o i file del modello e non contatta Ollama.
+
+OpenJarvis può restare acceso durante questa lettura. Non occorre interrompere
+il server o premere Command+R. Il risultato non stabilisce ancora compatibilità
+o velocità di un nuovo backend e non installa nulla. Sette test del filtro e
+del timeout sono superati, insieme ai 30 del confronto statico. Nessuna nuova
+generazione è stata eseguita durante la revisione del risultato allegato.
