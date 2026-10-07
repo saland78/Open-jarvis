@@ -1,0 +1,602 @@
+{
+  "mode": "manual_review_of_installed_v9_cpu_batch_comparison",
+  "reviewDate": "2026-10-07",
+  "originalAutomaticReport": {
+    "mode": "installed_v9_cpu_batch_comparison",
+    "contractRevision": "compact_web_evidence_v9",
+    "productionModified": false,
+    "vaultRead": false,
+    "automaticRetries": 0,
+    "requested": 6,
+    "completedRows": 6,
+    "metadata": {
+      "version": "0.35.1",
+      "loadedModelCount": 0,
+      "expectedCpuModelLoaded": false
+    },
+    "onlyExperimentalOption": "num_batch",
+    "referenceBatch": 512,
+    "candidateBatch": 128,
+    "threadPolicy": "unchanged_automatic",
+    "cacheMarkerIsDiagnosticNotProduction": true,
+    "modelOptionsPersistent": false,
+    "loadedRunnerMayReloadOrRetainLastRequestOptions": true,
+    "nextOrdinaryRequestUsesOrdinarySettings": true,
+    "thresholds": {
+      "minimumPrefillGainPercentForBothPositiveCases": 10,
+      "maximumClientTotalRegressionPercentPerCase": 5,
+      "maximumCachedTokensPerRequest": 8
+    },
+    "comparison": {
+      "completeFixedOrder": true,
+      "pairs": [
+        {
+          "case": "asyncio_scope",
+          "eligible": true,
+          "prefillGainPercent": -3.367,
+          "rawPrefillGainPercent": -3.312,
+          "clientTotalChangePercent": -0.003,
+          "numericGatesMet": false
+        },
+        {
+          "case": "csv_conversion_condition",
+          "eligible": true,
+          "prefillGainPercent": -21.495,
+          "rawPrefillGainPercent": -21.608,
+          "clientTotalChangePercent": 5.998,
+          "numericGatesMet": false
+        },
+        {
+          "case": "missing_price",
+          "eligible": true,
+          "prefillGainPercent": -27.494,
+          "rawPrefillGainPercent": -27.333,
+          "clientTotalChangePercent": 36.62,
+          "numericGatesMet": false
+        }
+      ],
+      "numericGatesMet": false,
+      "decision": "do_not_adopt",
+      "performanceVerdict": "not_demonstrated",
+      "qualityVerdict": "pending_review",
+      "integrationAllowed": false,
+      "browserRendering": "not_measured",
+      "historicalBenchmarksChanged": false
+    },
+    "rows": [
+      {
+        "case": "asyncio_scope",
+        "numBatchRequested": 512,
+        "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+        "messagesBeforeCacheMarkerSha256": "0268fd09385a3262a01fd2326ef7713799fa1ad1c10d809de7e5db6ae64c6c74",
+        "nativeSchemaSha256": "e6ee0c8eb928f948b5b30b4ae85aa2047cd21105d834aa793a01fd4e0dfe42ff",
+        "modelSourceCharacters": 2551,
+        "result": {
+          "raw": "{\"claims\":[{\"passage\":10,\"text\":\"I/O di rete e IPC: esegue operazioni di input/output su rete e comunicazione tra processi.\"},{\"passage\":18,\"text\":\"Permette di controllare subprocessi, event loop e gestisce segnali dell’OS e networking.\"}]}",
+          "completed": true,
+          "doneReason": "stop",
+          "firstJsonClientMs": 46086.312,
+          "totalClientMs": 61591.492,
+          "native": {
+            "total_duration": 61578370473,
+            "load_duration": 5082092244,
+            "prompt_eval_duration": 40928468000,
+            "eval_duration": 15511471000,
+            "prompt_eval_count": 1863,
+            "prompt_eval_cached_count": 0,
+            "eval_count": 74
+          }
+        },
+        "checks": {
+          "outcome": "accepted_pending_semantic_review",
+          "claims": [
+            {
+              "text": "I/O di rete e IPC: esegue operazioni di input/output su rete e comunicazione tra processi.",
+              "quote": "perform network IO and IPC;\n",
+              "passage": 10
+            },
+            {
+              "text": "Permette di controllare subprocessi, event loop e gestisce segnali dell’OS e networking.",
+              "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+              "passage": 18
+            }
+          ]
+        },
+        "criteria": [
+          "Due punti pertinenti e fedeli ai propri passaggi.",
+          "Non promette accelerazioni universali o parallelismo non documentato."
+        ],
+        "residency": {
+          "expectedModelLoaded": true,
+          "sizeVram": 0,
+          "phase": "after_request_not_effective_batch_confirmation"
+        },
+        "qualityVerdict": "pending_review",
+        "thermalObservations": [
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 100,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 54.638,
+            "scheduledWorkerOffsetSeconds": 6,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 60,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 33.851,
+            "scheduledWorkerOffsetSeconds": 18,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 62,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 24.53,
+            "scheduledWorkerOffsetSeconds": 36,
+            "nativePrefillPhaseProven": false
+          }
+        ],
+        "observerClosed": true
+      },
+      {
+        "case": "asyncio_scope",
+        "numBatchRequested": 128,
+        "sourceTextSha256": "db58150c8bd0490e2344cea1c0ad51099dbca7160ea49286f276d20565529c01",
+        "messagesBeforeCacheMarkerSha256": "0268fd09385a3262a01fd2326ef7713799fa1ad1c10d809de7e5db6ae64c6c74",
+        "nativeSchemaSha256": "e6ee0c8eb928f948b5b30b4ae85aa2047cd21105d834aa793a01fd4e0dfe42ff",
+        "modelSourceCharacters": 2551,
+        "result": {
+          "raw": "{\"claims\":[{\"passage\":10,\"text\":\"I/O di rete e IPC: esegue operazioni di input/output su rete e comunicazione tra processi.\"},{\"passage\":18,\"text\":\"Permette di controllare i subprocessi, gestisce event loop e segnali dell’OS, e fornisce API per networking e comunicazione.\"}]}",
+          "completed": true,
+          "doneReason": "stop",
+          "firstJsonClientMs": 47748.714,
+          "totalClientMs": 61589.637,
+          "native": {
+            "total_duration": 61570845710,
+            "load_duration": 5402636647,
+            "prompt_eval_duration": 42283997000,
+            "eval_duration": 13840922000,
+            "prompt_eval_count": 1862,
+            "prompt_eval_cached_count": 0,
+            "eval_count": 84
+          }
+        },
+        "checks": {
+          "outcome": "accepted_pending_semantic_review",
+          "claims": [
+            {
+              "text": "I/O di rete e IPC: esegue operazioni di input/output su rete e comunicazione tra processi.",
+              "quote": "perform network IO and IPC;\n",
+              "passage": 10
+            },
+            {
+              "text": "Permette di controllare i subprocessi, gestisce event loop e segnali dell’OS, e fornisce API per networking e comunicazione.",
+              "quote": "create and manage event loops, which provide asynchronous APIs for networking, running subprocesses, handling OS signals, etc;\n",
+              "passage": 18
+            }
+          ]
+        },
+        "criteria": [
+          "Due punti pertinenti e fedeli ai propri passaggi.",
+          "Non promette accelerazioni universali o parallelismo non documentato."
+        ],
+        "residency": {
+          "expectedModelLoaded": true,
+          "sizeVram": 0,
+          "phase": "after_request_not_effective_batch_confirmation"
+        },
+        "qualityVerdict": "pending_review",
+        "thermalObservations": [
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 100,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 53.498,
+            "scheduledWorkerOffsetSeconds": 6,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 54,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 33.186,
+            "scheduledWorkerOffsetSeconds": 18,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 62,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 42.633,
+            "scheduledWorkerOffsetSeconds": 36,
+            "nativePrefillPhaseProven": false
+          }
+        ],
+        "observerClosed": true
+      },
+      {
+        "case": "csv_conversion_condition",
+        "numBatchRequested": 128,
+        "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+        "messagesBeforeCacheMarkerSha256": "1783907e58e505ffbd8212a5ca5453aa3cdd182061ef229bd36af5cba381287f",
+        "nativeSchemaSha256": "dfa13a0ddc504dd936da4617efd6d6a7d0cf0c128b526489907f4e1b15c4a8bc",
+        "modelSourceCharacters": 1481,
+        "result": {
+          "raw": "{\"claims\":[{\"passage\":24,\"text\":\"csv.reader restituisce ogni riga come lista di stringhe senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}",
+          "completed": true,
+          "doneReason": "stop",
+          "firstJsonClientMs": 23723.632,
+          "totalClientMs": 40242.544,
+          "native": {
+            "total_duration": 40224506263,
+            "load_duration": 1992139,
+            "prompt_eval_duration": 23470050000,
+            "eval_duration": 16519526000,
+            "prompt_eval_count": 1074,
+            "prompt_eval_cached_count": 3,
+            "eval_count": 78
+          }
+        },
+        "checks": {
+          "outcome": "accepted_pending_semantic_review",
+          "claims": [
+            {
+              "text": "csv.reader restituisce ogni riga come lista di stringhe senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+              "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+              "passage": 24
+            }
+          ]
+        },
+        "criteria": [
+          "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+          "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+        ],
+        "residency": {
+          "expectedModelLoaded": true,
+          "sizeVram": 0,
+          "phase": "after_request_not_effective_batch_confirmation"
+        },
+        "qualityVerdict": "pending_review",
+        "thermalObservations": [
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 97,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 34.413,
+            "scheduledWorkerOffsetSeconds": 6,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 62,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 40.366,
+            "scheduledWorkerOffsetSeconds": 18,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 100,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 36.631,
+            "scheduledWorkerOffsetSeconds": 36,
+            "nativePrefillPhaseProven": false
+          }
+        ],
+        "observerClosed": true
+      },
+      {
+        "case": "csv_conversion_condition",
+        "numBatchRequested": 512,
+        "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+        "messagesBeforeCacheMarkerSha256": "1783907e58e505ffbd8212a5ca5453aa3cdd182061ef229bd36af5cba381287f",
+        "nativeSchemaSha256": "dfa13a0ddc504dd936da4617efd6d6a7d0cf0c128b526489907f4e1b15c4a8bc",
+        "modelSourceCharacters": 1481,
+        "result": {
+          "raw": "{\"claims\":[{\"passage\":24,\"text\":\"csv.reader restituisce ogni riga come lista di stringhe senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.\"}]}",
+          "completed": true,
+          "doneReason": "stop",
+          "firstJsonClientMs": 24518.798,
+          "totalClientMs": 37965.243,
+          "native": {
+            "total_duration": 37946352745,
+            "load_duration": 5162165014,
+            "prompt_eval_duration": 19299735000,
+            "eval_duration": 13446566000,
+            "prompt_eval_count": 1070,
+            "prompt_eval_cached_count": 0,
+            "eval_count": 78
+          }
+        },
+        "checks": {
+          "outcome": "accepted_pending_semantic_review",
+          "claims": [
+            {
+              "text": "csv.reader restituisce ogni riga come lista di stringhe senza conversione automatica dei tipi, a meno che non sia specificato l'opzione QUOTE_NONNUMERIC, in cui i campi non racchiusi tra virgolette vengono trasformati in float.",
+              "quote": "Each row read from the csv file is returned as a list of strings. No automatic data type conversion is performed unless the QUOTE_NONNUMERIC format option is specified (in which case unquoted fields are transformed into floats).\n",
+              "passage": 24
+            }
+          ]
+        },
+        "criteria": [
+          "Conserva l’assenza di conversione automatica predefinita e l’eccezione QUOTE_NONNUMERIC.",
+          "Non attribuisce la conversione a tutti i campi o a ogni configurazione."
+        ],
+        "residency": {
+          "expectedModelLoaded": true,
+          "sizeVram": 0,
+          "phase": "after_request_not_effective_batch_confirmation"
+        },
+        "qualityVerdict": "pending_review",
+        "thermalObservations": [
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 100,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 22.303,
+            "scheduledWorkerOffsetSeconds": 6,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 60,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 20.642,
+            "scheduledWorkerOffsetSeconds": 18,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 100,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 44.98,
+            "scheduledWorkerOffsetSeconds": 36,
+            "nativePrefillPhaseProven": false
+          }
+        ],
+        "observerClosed": true
+      },
+      {
+        "case": "missing_price",
+        "numBatchRequested": 512,
+        "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+        "messagesBeforeCacheMarkerSha256": "189fc2e0cd859ac5823145420973c6a33838a5346f9bc5505577f061c2b5a1e1",
+        "nativeSchemaSha256": "cfcce9d33a3e87ec511cafc0abcca16d9a097248dd8455860d3b2ac16dcba59a",
+        "modelSourceCharacters": 6000,
+        "result": {
+          "raw": "{\"claims\":[]}",
+          "completed": true,
+          "doneReason": "stop",
+          "firstJsonClientMs": 46124.309,
+          "totalClientMs": 46761.182,
+          "native": {
+            "total_duration": 46747658316,
+            "load_duration": 2142168,
+            "prompt_eval_duration": 45970819000,
+            "eval_duration": 636794000,
+            "prompt_eval_count": 2372,
+            "prompt_eval_cached_count": 3,
+            "eval_count": 5
+          }
+        },
+        "checks": {
+          "outcome": "abstained",
+          "claims": []
+        },
+        "criteria": [
+          "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+          "Non dichiara assenza di informazioni al di fuori di questo estratto."
+        ],
+        "residency": {
+          "expectedModelLoaded": true,
+          "sizeVram": 0,
+          "phase": "after_request_not_effective_batch_confirmation"
+        },
+        "qualityVerdict": "pending_review",
+        "thermalObservations": [
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 85,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 32.094,
+            "scheduledWorkerOffsetSeconds": 6,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 60,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 29.068,
+            "scheduledWorkerOffsetSeconds": 18,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 62,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 62.474,
+            "scheduledWorkerOffsetSeconds": 36,
+            "nativePrefillPhaseProven": false
+          }
+        ],
+        "observerClosed": true
+      },
+      {
+        "case": "missing_price",
+        "numBatchRequested": 128,
+        "sourceTextSha256": "f7a791129dc9ce62e6c623a5ba990c009a0e45010981c5effdefe1e49fc3f215",
+        "messagesBeforeCacheMarkerSha256": "189fc2e0cd859ac5823145420973c6a33838a5346f9bc5505577f061c2b5a1e1",
+        "nativeSchemaSha256": "cfcce9d33a3e87ec511cafc0abcca16d9a097248dd8455860d3b2ac16dcba59a",
+        "modelSourceCharacters": 6000,
+        "result": {
+          "raw": "{\"claims\":[]}",
+          "completed": true,
+          "doneReason": "stop",
+          "firstJsonClientMs": 63185.593,
+          "totalClientMs": 63885.201,
+          "native": {
+            "total_duration": 63865152307,
+            "load_duration": 4579267696,
+            "prompt_eval_duration": 58535872000,
+            "eval_duration": 699467000,
+            "prompt_eval_count": 2366,
+            "prompt_eval_cached_count": 0,
+            "eval_count": 5
+          }
+        },
+        "checks": {
+          "outcome": "abstained",
+          "claims": []
+        },
+        "criteria": [
+          "Si astiene: claims vuoto, senza inventare prezzo o zero.",
+          "Non dichiara assenza di informazioni al di fuori di questo estratto."
+        ],
+        "residency": {
+          "expectedModelLoaded": true,
+          "sizeVram": 0,
+          "phase": "after_request_not_effective_batch_confirmation"
+        },
+        "qualityVerdict": "pending_review",
+        "thermalObservations": [
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 93,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 26.084,
+            "scheduledWorkerOffsetSeconds": 6,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 60,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 36.422,
+            "scheduledWorkerOffsetSeconds": 18,
+            "nativePrefillPhaseProven": false
+          },
+          {
+            "reportedLimits": {
+              "CPU_Speed_Limit": 62,
+              "CPU_Scheduler_Limit": 100,
+              "CPU_Available_CPUs": 16
+            },
+            "available": true,
+            "readMs": 38.201,
+            "scheduledWorkerOffsetSeconds": 36,
+            "nativePrefillPhaseProven": false
+          }
+        ],
+        "observerClosed": true
+      }
+    ]
+  },
+  "manualReviews": [
+    {
+      "ordinal": 1,
+      "case": "asyncio_scope",
+      "numBatchRequested": 512,
+      "manualMeaningVerdict": "unfavorable",
+      "reason": "The first point is supported by its own network IO/IPC passage. The second point attributes subprocess control to passage 18, which documents event-loop creation/management and APIs for running subprocesses. That chosen passage does not explicitly document subprocess control; another passage cannot license this predicate. The row is therefore not a favorable own-passage fidelity result."
+    },
+    {
+      "ordinal": 2,
+      "case": "asyncio_scope",
+      "numBatchRequested": 128,
+      "manualMeaningVerdict": "unfavorable",
+      "reason": "The first point is supported by its own network IO/IPC passage. The second point attributes subprocess control to passage 18, which documents event-loop creation/management and APIs for running subprocesses. That chosen passage does not explicitly document subprocess control; another passage cannot license this predicate. The row is therefore not a favorable own-passage fidelity result."
+    },
+    {
+      "ordinal": 3,
+      "case": "csv_conversion_condition",
+      "numBatchRequested": 128,
+      "manualMeaningVerdict": "favorable",
+      "reason": "Preserves lack of default type conversion, QUOTE_NONNUMERIC exception, unquoted field qualifier and float type."
+    },
+    {
+      "ordinal": 4,
+      "case": "csv_conversion_condition",
+      "numBatchRequested": 512,
+      "manualMeaningVerdict": "favorable",
+      "reason": "Preserves lack of default type conversion, QUOTE_NONNUMERIC exception, unquoted field qualifier and float type."
+    },
+    {
+      "ordinal": 5,
+      "case": "missing_price",
+      "numBatchRequested": 512,
+      "manualMeaningVerdict": "favorable",
+      "reason": "Actual model-generated empty claims: no invented price or zero and no claim about information outside the excerpt."
+    },
+    {
+      "ordinal": 6,
+      "case": "missing_price",
+      "numBatchRequested": 128,
+      "manualMeaningVerdict": "favorable",
+      "reason": "Actual model-generated empty claims: no invented price or zero and no claim about information outside the excerpt."
+    }
+  ],
+  "manualReviewCounts": {
+    "favorable": 4,
+    "unfavorable": 2
+  },
+  "adoptionDecision": "retain_existing_production_settings_no_batch_128_adoption",
+  "experimentStatus": "closed_unsuccessful_no_repeat",
+  "latencyObjective": "open",
+  "installedAcceptanceHistory": "previous_three_case_pass_unchanged_not_universal_quality_certification",
+  "productionModified": false,
+  "newModelRequests": 0,
+  "browserRendering": "not_measured"
+}

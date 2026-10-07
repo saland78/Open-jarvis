@@ -109,3 +109,50 @@ The next step is exactly one six-call Mac collection. If it fails these gates,
 128 is not adopted and this finite experiment is closed as unsuccessful. The
 latency objective stays open; the failed experiment is not rerun merely to obtain
 favorable numbers. The installed v9 acceptance remains passed.
+
+## Mac collection reviewed: batch 128 is not adopted
+
+The single six-call collection completed. All streams ended with stop; source,
+pre-marker message and schema hashes match within their pairs. Cached prompt
+tokens are 0 or 3, so every pair is eligible under the predeclared cache limit.
+The selected model has size_vram=0 after each request. This residency observation
+and requested batch values do not certify effective runtime batch flags.
+Independent replay reproduces every original numeric verdict exactly.
+
+| Case | Batch 512 client total | Batch 128 client total | Batch 512 prefill | Batch 128 prefill | 128 total change |
+| --- | --- | --- | --- | --- | --- |
+| asyncio | 61.591 s | 61.590 s | 40.928 s | 42.284 s | -0.003% |
+| CSV conversion | 37.965 s | 40.243 s | 19.300 s | 23.470 s | +5.998% |
+| Missing price | 46.761 s | 63.885 s | 45.971 s | 58.536 s | +36.620% |
+
+All three numeric gates fail. Normalized prefill cost worsens by 3.367%,
+21.495% and 27.494%, respectively. Neither the 10% gain in both positive cases
+nor the per-case total-time bound is met. The missing-price comparison includes
+0.002 s reference load versus 4.579 s candidate load; even after distinguishing
+loading, candidate native prefill is slower in this sample. Fixed order, one
+sample per setting/case, changing output lengths, unforced loading and varying
+CPU limits prevent a causal or statistically general performance claim.
+
+Reported CPU speed limits near 18 seconds are 60, 54, 62, 60, 60 and 60 in
+request order, with later readings 62 or 100. Lowering the batch did not provide
+evidence of removing those limits. These are reported constraints, not Celsius
+temperatures or measurements of actual CPU frequency throughout the request.
+
+Manual review is favorable for both CSV answers and both genuine missing-price
+abstentions, but unfavorable for both asyncio rows. Their first network IO/IPC
+point is supported. Their second point says subprocess control, while its
+chosen passage 18 describes APIs for **running** subprocesses plus creation and
+management of event loops. The separate control-subprocess passage cannot
+support a point attributed to passage 18. Native/application acceptance is
+therefore not a meaning pass. The original program pending_review flags and raw
+outputs are preserved in web-cpu-batch-mac-2026-10-07.json; no failed point is
+reworded, moved to another quote or deleted to produce a pass.
+
+The experiment is closed unsuccessfully. Batch 128 is not installed; existing
+production settings remain. No further inference, automatic retry, restoration
+request or repeated batch experiment is needed. The earlier installed v9
+three-case manual pass remains a historical finite pass, rather than being
+promoted to a guarantee about every possible output. The larger latency task
+remains open, as does the observed source-predicate limitation in this trial.
+Any further optimization must address the dominant CPU context/generation cost
+and preserve source fidelity; it cannot be justified by this failed batch change.
